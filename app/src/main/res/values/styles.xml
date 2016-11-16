@@ -1,0 +1,56 @@
+<resources>
+
+    <!-- Base application theme. -->
+
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="TranslucentTheme" parent="AppTheme">
+        <!--在Android 4.4之前的版本上运行，直接跟随系统主题-->
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="TextSmall" parent="@android:style/TextAppearance">
+        <item name="android:textSize">12.0sp</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+    <style name="TextMedium" parent="@android:style/TextAppearance">
+        <item name="android:textSize">20.0sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="TextRegular" parent="@android:style/TextAppearance">
+        <item name="android:textSize">14.0sp</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+    <style name="Button" parent="@android:style/Widget.Button">
+        <item name="android:textAppearance">@style/TextRegular</item>
+        <item name="android:paddingLeft">0.0dip</item>
+        <item name="android:paddingTop">0.0dip</item>
+        <item name="android:paddingRight">0.0dip</item>
+        <item name="android:paddingBottom">0.0dip</item>
+        <item name="android:minWidth">@dimen/button_default_width</item>
+        <item name="android:minHeight">@dimen/button_default_height</item>
+    </style>
+    <style name="Button.Action" parent="@style/Button">
+        <item name="android:textAppearance">@style/TextMedium</item>
+        <item name="android:textColor">@color/sell_action_button_pressed_light</item>
+        <item name="android:layout_gravity">bottom|center</item>
+        <item name="android:background">@color/sell_action_button_pressed_dark</item>
+        <item name="android:paddingLeft">@dimen/space_big</item>
+        <item name="android:paddingRight">@dimen/space_big</item>
+        <item name="android:minWidth">@dimen/action_button_width</item>
+        <item name="android:minHeight">@dimen/action_button_height</item>
+    </style>
+    </resources>
