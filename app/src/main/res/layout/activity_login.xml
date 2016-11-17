@@ -95,7 +95,7 @@
         android:visibility="invisible" />
 
     <Button
-        android:id="@+id/login_button"
+        android:id="@+id/b_login_button"
         style="@style/Button.Action"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
