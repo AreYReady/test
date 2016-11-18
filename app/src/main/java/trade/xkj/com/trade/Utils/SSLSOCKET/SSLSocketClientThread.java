@@ -2,10 +2,6 @@ package trade.xkj.com.trade.Utils.SSLSOCKET;
 
 import android.content.Context;
 
-import com.dqwl.optiontrade.BuildConfig;
-import com.dqwl.optiontrade.bean.BeanUserLoginLogin;
-import com.dqwl.optiontrade.constant.ServerIP;
-import com.dqwl.optiontrade.util.SocketUtil;
 import com.google.gson.Gson;
 
 import java.io.DataOutputStream;
@@ -19,6 +15,15 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
+import trade.xkj.com.trade.Utils.SocketUtil;
+import trade.xkj.com.trade.bean.BeanUserLoginData;
+import trade.xkj.com.trade.constant.ServerIP;
+
+//import com.dqwl.optiontrade.BuildConfig;
+//import com.dqwl.optiontrade.bean.BeanUserLoginLogin;
+//import com.dqwl.optiontrade.constant.ServerIP;
+//import com.dqwl.optiontrade.util.SocketUtil;
 
 public class SSLSocketClientThread implements Runnable {
     private Context mContext;
@@ -67,15 +72,17 @@ public class SSLSocketClientThread implements Runnable {
         try {
             SSLContext sc = SSLContext.getInstance(CLIENT_AGREEMENT);
             sc.init(null, trustAllCerts, new java.security.SecureRandom());
-            sslSocket = (SSLSocket) sc.getSocketFactory().createSocket(BuildConfig.API_URL, ServerIP.PORT);
+//            sslSocket = (SSLSocket) sc.getSocketFactory().createSocket(BuildConfig.API_URL, ServerIP.PORT);
+            sslSocket = (SSLSocket) sc.getSocketFactory().createSocket(ServerIP.API_URL_MGF, ServerIP.PORT_MGF);
+
             sslSocket.addHandshakeCompletedListener(new HandshakeCompletedListener() {
                 @Override
                 public void handshakeCompleted(HandshakeCompletedEvent event) {
                     new ReceiveThread(sslSocket).start();
                 }
             });
-            BeanUserLoginLogin userLogin = new BeanUserLoginLogin(Integer.valueOf(userName), password);
-            String loginStr = new Gson().toJson(userLogin, BeanUserLoginLogin.class);
+            BeanUserLoginData userLogin = new BeanUserLoginData(Integer.valueOf(userName), password);
+            String loginStr = new Gson().toJson(userLogin, BeanUserLoginData.class);
             outputStream = new DataOutputStream(sslSocket.getOutputStream());
             outputStream.write(SocketUtil.writePureByte(loginStr));
         } catch (Exception e) {

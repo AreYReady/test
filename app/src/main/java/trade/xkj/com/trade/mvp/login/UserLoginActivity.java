@@ -7,10 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import org.greenrobot.eventbus.EventBus;
-
 import trade.xkj.com.trade.Base.BaseActivity;
 import trade.xkj.com.trade.R;
+import trade.xkj.com.trade.Utils.AesEncryptionUtil;
 import trade.xkj.com.trade.Utils.ToashUtil;
 import trade.xkj.com.trade.bean.BeanUserLoginData;
 import trade.xkj.com.trade.mvp.MainActivity;
@@ -22,23 +21,13 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
     private Button bEnter;
     private UserLoginPresenter mUserLoginPresenter;
     @Override
-    public void cleanPassword() {
-        etUserPassWord.setText("");
-    }
-
-    @Override
-    public void cleanUserName() {
-        etUserName.setText("");
-    }
-
-    @Override
     public void toMainActivity() {
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 
     @Override
-    public void showFaidPromt() {
+    public void showFaidPromt(UserLoginModelImpl.ResultEnum resultEnum) {
         ToashUtil.showShort(this,"登入有问题");
     }
 
@@ -55,8 +44,7 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
     }
 
     @Override
-    protected void initRegister() {
-        EventBus.getDefault().register(this);
+    public void initRegister() {
     }
 
     @Override
@@ -69,7 +57,7 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.b_login_button:
-                mUserLoginPresenter.login(new BeanUserLoginData(Integer.valueOf(etUserName.getText().toString()),etUserPassWord.getText().toString()));
+                mUserLoginPresenter.login(new BeanUserLoginData(Integer.valueOf(etUserName.getText().toString()), AesEncryptionUtil.encrypt(etUserPassWord.getText().toString())));
         }
     }
 
@@ -80,6 +68,8 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
         etUserPassWord=(EditText)findViewById(R.id.et_login_password);
         bEnter=(Button)findViewById(R.id.b_login_button);
         bEnter.setOnClickListener(this);
+        etUserName.setText("83047938");
+        etUserPassWord.setText("abcd8888");
     }
 
 }

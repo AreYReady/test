@@ -8,9 +8,7 @@ import android.content.Context;
  */
 
 public interface UserLoginActivityInterface {
-    void cleanPassword();
-    void cleanUserName();
     void toMainActivity();
-    void showFaidPromt();
+    void showFaidPromt(UserLoginModelImpl.ResultEnum resultEnum);
     Context getContext();
 }

@@ -7,6 +7,8 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -20,7 +22,10 @@ import trade.xkj.com.trade.Utils.SSLSOCKET.Encoder;
 import trade.xkj.com.trade.Utils.SSLSOCKET.SSLDecoderImp;
 import trade.xkj.com.trade.Utils.SSLSOCKET.SSLEncodeImp;
 import trade.xkj.com.trade.Utils.SSLSOCKET.SSLSocketChannel;
+import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.bean.BeanUserLoginData;
+import trade.xkj.com.trade.bean.ResponseEvent;
+import trade.xkj.com.trade.constant.MessageType;
 import trade.xkj.com.trade.constant.ServerIP;
 import trade.xkj.com.trade.handler.HandlerSend;
 import trade.xkj.com.trade.handler.HandlerWrite;
@@ -32,6 +37,7 @@ import trade.xkj.com.trade.handler.HandlerWrite;
 public class UserLoginModelImpl implements UserLoginModel {
     private String mUserName;
     private String mUserPassword;
+    private String TAG= SystemUtil.getTAG(this);
     public static final String THREAD_READ = "threadRead";
     public static final String SSL_SOCKET = "sslSocket";
     public static final String HANDLER_WRITE = "handler_write";
@@ -39,7 +45,9 @@ public class UserLoginModelImpl implements UserLoginModel {
     private SSLSocketChannel<String> mSSLSocketChannel;
     private HandlerWrite mHandlerWrite;
     private ResultEnum mResultEnum;
-    public UserLoginModelImpl(){
+    private UserLoginPresenter mUserLoginPresenter;
+    public UserLoginModelImpl(UserLoginPresenter mUserLoginPresenter){
+        this.mUserLoginPresenter=mUserLoginPresenter;
         EventBus.getDefault().register(this);
     }
     @Override
@@ -97,10 +105,8 @@ public class UserLoginModelImpl implements UserLoginModel {
             Log.i("123", "doLogin: Receiving response");
             mHandlerWrite.sendEmptyMessage(0);
         } catch (IOException e) {
-            mResultEnum=ResultEnum.erro;
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
-            mResultEnum=ResultEnum.erro;
             e.printStackTrace();
         }
     }
@@ -108,8 +114,24 @@ public class UserLoginModelImpl implements UserLoginModel {
         succ,
         erroEmpty,
         erroName,
-        erroPassword,
+        erroNet,//网络出错
         erro;//各种错误
 
     }
+    @Subscribe(threadMode=ThreadMode.MAIN)
+    public void loginResult(ResponseEvent responseEvent){
+        Log.i(TAG, "loginResult:responseEvent "+responseEvent.toString());
+        int result_code = responseEvent.getResult_code();
+        if(responseEvent==null||(responseEvent.getMsg_type()!= MessageType.TYPE_BINARY_LOGIN_RESULT)){
+            mResultEnum=ResultEnum.erro;
+        }else if(result_code==100){
+            mResultEnum=ResultEnum.erroNet;
+        }else if(result_code==0){
+            mResultEnum=ResultEnum.succ;
+        }else{
+            mResultEnum=ResultEnum.erro;
+        }
+        mUserLoginPresenter.loginResult(mResultEnum);
+    }
+
 }

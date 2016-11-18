@@ -32,4 +32,8 @@ public class ResponseEvent{
         this.result_code = result_code;
     }
 
+    @Override
+    public String toString() {
+        return "msg_type:"+String.valueOf(msg_type)+"| result_code:"+String.valueOf(result_code);
+    }
 }

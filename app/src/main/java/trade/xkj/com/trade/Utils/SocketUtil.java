@@ -339,7 +339,7 @@ public class SocketUtil {
         SSLSocketChannel<String> sslSocketChannel = null;
         //网路地址:暂用mgf:mm.mgfoption.com
 //        final SocketAddress address = new InetSocketAddress(BuildConfig.API_URL, ServerIP.PORT);
-        final SocketAddress address = new InetSocketAddress("mgf:mm.mgfoption.com", ServerIP.PORT);
+        final SocketAddress address = new InetSocketAddress(ServerIP.API_URL_MGF, ServerIP.PORT_MGF);
         Encoder<String> encoder = new SSLEncodeImp();
         Decoder<String> decoder = new SSLDecoderImp();
         Log.i("123", "doLogin: Opening channel");
@@ -349,7 +349,7 @@ public class SocketUtil {
             Log.i("123", "doLogin: Sending request");
             String [] user = CacheUtil.getUserInfo(context);
             //暂时不用配置文件的端口号
-            BeanUserLoginData userLogin = new BeanUserLoginData(Integer.valueOf(user[0]), user[1],9988);
+            BeanUserLoginData userLogin = new BeanUserLoginData(Integer.valueOf(user[0]), user[1]);
             String loginStr = new Gson().toJson(userLogin, BeanUserLoginData.class);
             sslSocketChannel.send(loginStr);
             Log.i("123", "doLogin: Receiving response");

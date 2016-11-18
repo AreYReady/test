@@ -2,9 +2,6 @@ package trade.xkj.com.trade.Utils.SSLSOCKET;
 
 import android.util.Log;
 
-import com.dqwl.optiontrade.BuildConfig;
-import com.dqwl.optiontrade.constant.ServerIP;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -20,6 +17,11 @@ import javax.net.ssl.SSLEngineResult;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
+import trade.xkj.com.trade.constant.ServerIP;
+
+//import com.dqwl.optiontrade.BuildConfig;
+//import com.dqwl.optiontrade.constant.ServerIP;
 
 /**
  * @author xjunda
@@ -70,7 +72,9 @@ public class SSLEngineClientRunnable {
         // Create a nonblocking socket channel
         SocketChannel socketChannel = SocketChannel.open();
         socketChannel.configureBlocking(false);
-        socketChannel.connect(new InetSocketAddress(BuildConfig.API_URL, ServerIP.PORT));
+//        socketChannel.connect(new InetSocketAddress(BuildConfig.API_URL, ServerIP.PORT));
+        socketChannel.connect(new InetSocketAddress(ServerIP.API_URL_MGF, ServerIP.PORT_MGF));
+
 
 // Complete connection
         while (!socketChannel.finishConnect()) {

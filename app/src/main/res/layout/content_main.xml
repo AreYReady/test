@@ -5,16 +5,62 @@
     android:id="@+id/content_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="trade.xkj.com.trade.MainActivity"
+    tools:context="trade.xkj.com.trade.mvp.MainActivity"
     tools:showIn="@layout/app_bar_main">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:background="@color/brand_color_light"
+        android:layout_height="match_parent"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/brand_color_dark"
+            android:text="黄顺超"/>  <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/brand_color_dark"
+            android:text="黄顺超"/>  <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/brand_color_dark"
+            android:text="黄顺超"/>
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <trade.xkj.com.trade.mvp.PullViewDragLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dragLayout"
+            android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+            <TextView
+                android:id="@+id/header"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:fontFamily="sans-serif-thin"
+                android:textSize="25sp"
+
+                android:text="Drag me to the bottom"
+                android:tag="text"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:background="#AD78CC"/>
+
+            <TextView
+                android:id="@+id/desc"
+                android:tag="desc"
+                android:textSize="35sp"
+                android:gravity="center"
+                android:text="Loreum Loreum Loreum Loreum Loreum Loreum LoreumLoreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum Loreum"
+                android:textColor="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FF00FF"/>
+
+        </trade.xkj.com.trade.mvp.PullViewDragLayout>
+    </FrameLayout>
 </RelativeLayout>

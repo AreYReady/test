@@ -72,62 +72,62 @@ public class SSLDecoderImp implements Decoder<String> {
                     EventBus.getDefault().post(responseEvent);
                     Log.i(TAG, "handleResult: 登入"+resultMessage);
                     break;
-//                case MessageType.TYPE_BINARY_ALL_SYMBOL://所有产品列表
-//                    Log.i(TAG, "handleResult:所有产品列表=  "+resultMessage);
+                case MessageType.TYPE_BINARY_ALL_SYMBOL://所有产品列表
+                    Log.i(TAG, "handleResult:所有产品列表=  "+resultMessage);
 //                    EventBusAllSymbol allSymbol = new Gson().fromJson(resultMessage, EventBusAllSymbol.class);
 //                    EventBus.getDefault().post(allSymbol);
-//                    break;
-//                case MessageType.TYPE_BINARY_SYMBOLE_SHOW://要展示的产品
+                    break;
+                case MessageType.TYPE_BINARY_SYMBOLE_SHOW://要展示的产品
 //                    BeanSymbolConfig symbolShow = new Gson().fromJson(resultMessage, BeanSymbolConfig.class);
-//                    Log.i(TAG, "handleResult:要展示的产品=  "+resultMessage);
+                    Log.i(TAG, "handleResult:要展示的产品=  "+resultMessage);
 //                    EventBus.getDefault().postSticky(symbolShow);
-//                    break;
-//                case MessageType.TYPE_BINARY_ACTIVE_ORDER_LIST://进行中订单
-//                    Log.i(TAG, "handleResult:进行中订单=  "+resultMessage);
+                    break;
+                case MessageType.TYPE_BINARY_ACTIVE_ORDER_LIST://进行中订单
+                    Log.i(TAG, "handleResult:进行中订单=  "+resultMessage);
 //                    BeanOrderRecord orderRecord = new Gson().fromJson(resultMessage, BeanOrderRecord.class);
 //                    EventBus.getDefault().postSticky(orderRecord);
-//                    break;
-//                case MessageType.TYPE_BINARY_HISTORY_RESULT://历史已完成订单
+                    break;
+                case MessageType.TYPE_BINARY_HISTORY_RESULT://历史已完成订单
 //                    EventBus.getDefault().postSticky(new DataEvent(resultMessage, MessageType.TYPE_BINARY_HISTORY_RESULT));
-//                    Log.i(TAG, "handleResult:历史已完成订单=  "+resultMessage);
-//                    break;
-//                case MessageType.TYPE_BINARY_TRADE_NOTIFY://订单通知结果
+                    Log.i(TAG, "handleResult:历史已完成订单=  "+resultMessage);
+                    break;
+                case MessageType.TYPE_BINARY_TRADE_NOTIFY://订单通知结果
 //                    EventBus.getDefault().post(new DataEvent(resultMessage, MessageType.TYPE_BINARY_TRADE_NOTIFY));
-//                    Log.i(TAG, "handleResult:订单通知结果=  "+resultMessage);
-//                break;
-//                case MessageType.TYPE_BINARY_REAL_TIME_LIST://发送实时数据
+                    Log.i(TAG, "handleResult:订单通知结果=  "+resultMessage);
+                break;
+                case MessageType.TYPE_BINARY_REAL_TIME_LIST://发送实时数据
 //                    RealTimeDataList realTimeDataList = new Gson().fromJson(resultMessage, RealTimeDataList.class);
-//                    Log.i(TAG, "handleResult:发送实时数据=  "+resultMessage);
+                    Log.i(TAG, "handleResult:发送实时数据=  "+resultMessage);
 //                    EventBus.getDefault().post(realTimeDataList);
-//                    break;
-//                case MessageType.TYPE_BINARY_HISTORY_LIST://发送历史数据，画图
-//                    Log.i(TAG, "handleResult:发送历史数据，画图=  "+resultMessage);
+                    break;
+                case MessageType.TYPE_BINARY_HISTORY_LIST://发送历史数据，画图
+                    Log.i(TAG, "handleResult:发送历史数据，画图=  "+resultMessage);
 //                    EventBus.getDefault().post(new DataEvent(resultMessage, MessageType.TYPE_BINARY_HISTORY_LIST));
 //                    Log.i("123", "handleResult: historyffffff");
-//                    break;
-//                case MessageType.TYPE_BINARY_ORDER_RESPONSE://下订单是否成功
-//                    Log.i(TAG, "handleResult:TYPE_BINARY_ORDER_RESPONSE=  "+resultMessage);
+                    break;
+                case MessageType.TYPE_BINARY_ORDER_RESPONSE://下订单是否成功
+                    Log.i(TAG, "handleResult:TYPE_BINARY_ORDER_RESPONSE=  "+resultMessage);
 //                    BeanOrderResponse orderResponse = new Gson().fromJson(resultMessage, BeanOrderResponse.class);
 //                    EventBus.getDefault().post(orderResponse);
-//                    break;
-//                case MessageType.TYPE_BINARY_HEART_BEAT_REQUEST://心跳请求，每30秒服务器请求客服端一次
-//                    Log.i(TAG, "handleResult:心跳请求，每30秒服务器请求客服端一次=  "+resultMessage);
+                    break;
+                case MessageType.TYPE_BINARY_HEART_BEAT_REQUEST://心跳请求，每30秒服务器请求客服端一次
+                    Log.i(TAG, "handleResult:心跳请求，每30秒服务器请求客服端一次=  "+resultMessage);
 //                    EventBus.getDefault().post(HEART_BEAT);
-//                    break;
-//                case MessageType.TYPE_BINARY_HEART_BEAT_RESPONSE://心跳响应
-//                    Log.i(TAG, "handleResult:心跳响应=  "+resultMessage);
-////                    EventBus.getDefault().post(new BeanMinaSessionEvent(session));
-//                    break;
-//                case MessageType.TYPE_BINARY_USER_INFO://用户信息
-//                    Log.i(TAG, "handleResult:用户信息=  "+resultMessage);
+                    break;
+                case MessageType.TYPE_BINARY_HEART_BEAT_RESPONSE://心跳响应
+                    Log.i(TAG, "handleResult:心跳响应=  "+resultMessage);
+//                    EventBus.getDefault().post(new BeanMinaSessionEvent(session));
+                    break;
+                case MessageType.TYPE_BINARY_USER_INFO://用户信息
+                    Log.i(TAG, "handleResult:用户信息=  "+resultMessage);
 //                    BeanUserInfo userInfo = new Gson().fromJson(resultMessage, BeanUserInfo.class);
 //                    EventBus.getDefault().postSticky(userInfo);
-//                    break;
-//                case MessageType.TYPE_BINARY_SERVER_TIME://服务器时间
-//                    Log.i(TAG, "handleResult:服务器时间=  "+resultMessage);
+                    break;
+                case MessageType.TYPE_BINARY_SERVER_TIME://服务器时间
+                    Log.i(TAG, "handleResult:服务器时间=  "+resultMessage);
 //                    BeanServerTime serverTime = new Gson().fromJson(resultMessage, BeanServerTime.class);
 //                    EventBus.getDefault().post(serverTime);
-//                    break;
+                    break;
             }
         }
     }

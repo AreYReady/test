@@ -1,8 +1,10 @@
 package trade.xkj.com.trade.mvp.login;
 
 import android.os.HandlerThread;
+import android.util.Log;
 
 import trade.xkj.com.trade.Utils.SSLSOCKET.SSLSocketChannel;
+import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.bean.BeanUserLoginData;
 import trade.xkj.com.trade.handler.HandlerWrite;
 
@@ -15,6 +17,7 @@ public class UserLoginPresenter {
     public static final String THREAD_READ = "threadRead";
     public static final String SSL_SOCKET = "sslSocket";
     public static final String HANDLER_WRITE = "handler_write";
+    private String TAG= SystemUtil.getTAG(this);
     HandlerThread mHandlerThread;
     private SSLSocketChannel<String> mSSLSocketChannel;
     private HandlerWrite mHandlerWrite;
@@ -22,14 +25,21 @@ public class UserLoginPresenter {
     private UserLoginActivityInterface mLoginActivityInterface;
     private int result;
     public UserLoginPresenter(UserLoginActivityInterface mLoginActivityInterface){
-        mUserLoginModel=new UserLoginModelImpl();
+        mUserLoginModel=new UserLoginModelImpl(this);
         this.mLoginActivityInterface=mLoginActivityInterface;
     }
     public void login(BeanUserLoginData beanLoginData){
        result=mUserLoginModel.login(beanLoginData);
-        if(result==0){
+    }
+    //登入结果处理
+    public void loginResult(UserLoginModelImpl.ResultEnum mResultEnum){
+        Log.i(TAG, "loginResult: 执行了");
+        if(mResultEnum== UserLoginModelImpl.ResultEnum.succ){
             mLoginActivityInterface.toMainActivity();
+        }else {
+            mLoginActivityInterface.showFaidPromt(mResultEnum);
         }
+
     }
 
 
