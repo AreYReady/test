@@ -223,23 +223,16 @@ public class PullViewDragLayout extends ViewGroup {
 
     @Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-			int initLayout=0;
-
 		mDragRange = getHeight() - mHeaderView.getHeight();
-		if(mInitialMotionX==0){
-			initLayout=mDragRange;
-		}else{
-			initLayout=0;
-		}
         mHeaderView.layout(
                 0,
-                mTop+initLayout,
+                mTop,
                 r,
                 mTop + mHeaderView.getMeasuredHeight());
 
         mDescView.layout(
                 0,
-                mTop + mHeaderView.getMeasuredHeight()+initLayout,
+                mTop + mHeaderView.getMeasuredHeight(),
                 r,
                 mTop  + b);
 	}

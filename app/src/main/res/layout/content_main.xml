@@ -9,28 +9,12 @@
     tools:context="trade.xkj.com.trade.mvp.MainActivity"
     tools:showIn="@layout/app_bar_main">
     <FrameLayout
+        android:id="@+id/fl_main_trade_content"
         android:layout_width="match_parent"
-        android:background="@color/brand_color_light"
+        android:background="@color/content_black"
         android:layout_height="match_parent"
-        >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColor="@color/brand_color_dark"
-            android:text="黄顺超"/>  <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColor="@color/brand_color_dark"
-            android:text="黄顺超"/>  <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColor="@color/brand_color_dark"
-            android:text="黄顺超"/>
-    </FrameLayout>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+
+        />
         <trade.xkj.com.trade.mvp.PullViewDragLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,7 +32,7 @@
                 android:tag="text"
                 android:gravity="center"
                 android:textColor="@android:color/white"
-                android:background="#AD78CC"/>
+                android:background="@color/toolbars_title_dark"/>
 
             <TextView
                 android:id="@+id/desc"
@@ -59,8 +43,7 @@
                 android:textColor="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#FF00FF"/>
+                android:background="@color/content_black"/>
 
         </trade.xkj.com.trade.mvp.PullViewDragLayout>
-    </FrameLayout>
 </RelativeLayout>

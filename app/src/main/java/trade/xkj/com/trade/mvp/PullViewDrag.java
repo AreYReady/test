@@ -33,7 +33,6 @@ public class PullViewDrag extends Activity {
                 youtubeLayout.maximize();
             }
         });
-
         listView.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {

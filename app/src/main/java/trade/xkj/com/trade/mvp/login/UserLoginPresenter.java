@@ -29,11 +29,13 @@ public class UserLoginPresenter {
         this.mLoginActivityInterface=mLoginActivityInterface;
     }
     public void login(BeanUserLoginData beanLoginData){
+//        mLoginActivityInterface.showLoading();
        result=mUserLoginModel.login(beanLoginData);
     }
     //登入结果处理
     public void loginResult(UserLoginModelImpl.ResultEnum mResultEnum){
         Log.i(TAG, "loginResult: 执行了");
+        mLoginActivityInterface.hintLoading();
         if(mResultEnum== UserLoginModelImpl.ResultEnum.succ){
             mLoginActivityInterface.toMainActivity();
         }else {

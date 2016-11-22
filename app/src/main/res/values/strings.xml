@@ -554,4 +554,7 @@
     <string name="your_account_number_is">你的账号是%s</string>
     <string name="your_demo_account_number_is">您的模拟账号是%s</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

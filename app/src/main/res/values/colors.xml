@@ -225,4 +225,11 @@
     <color name="vpi__bright_foreground_inverse_holo_dark">@color/vpi__bright_foreground_holo_light</color>
     <color name="vpi__bright_foreground_inverse_holo_light">@color/vpi__bright_foreground_holo_dark</color>
     <color name="yellow">#ffffff00</color>
+    <color name="toolbars_title_dark">#ff292b37</color>
+    <color name="content_black">#ff070304</color>
+    <color name="menu_black">#ff110A0B</color>
+    <color name="menu_dark">#ff292b37</color>
+
+
+
 </resources>

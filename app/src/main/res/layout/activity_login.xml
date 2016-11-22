@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
     android:background="@color/brand_color_dark"
+    android:orientation="vertical"
     android:paddingLeft="@dimen/space_xxbig"
     android:paddingRight="@dimen/space_xxbig">
 
@@ -134,4 +135,5 @@
             android:textAppearance="@style/TextSmall"
             android:textColor="@color/error_color_dark" />
     </LinearLayout>
+
 </LinearLayout>

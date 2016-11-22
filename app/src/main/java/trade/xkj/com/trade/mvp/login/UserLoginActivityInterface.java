@@ -10,5 +10,7 @@ import android.content.Context;
 public interface UserLoginActivityInterface {
     void toMainActivity();
     void showFaidPromt(UserLoginModelImpl.ResultEnum resultEnum);
+    void hintLoading();
+    void showLoading();
     Context getContext();
 }
