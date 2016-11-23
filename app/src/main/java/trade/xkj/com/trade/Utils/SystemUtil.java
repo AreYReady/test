@@ -1,5 +1,6 @@
 package trade.xkj.com.trade.Utils;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.KeyguardManager;
 import android.content.ComponentName;
@@ -8,6 +9,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 import android.text.InputFilter;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.widget.TextView;
 
 import java.lang.reflect.Field;
@@ -139,5 +142,63 @@ public class SystemUtil {
     }
     public static String getTAG(Object object){
         return "hsc : "+ object.getClass().getSimpleName();
+    }
+    public static int[] getScrren(Activity activity){
+        DisplayMetrics metric = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(metric);
+        int width = metric.widthPixels; // 屏幕宽度（像素）
+        int height = metric.heightPixels; // 屏幕高度（像素）
+        int[] i=new int[]{width,height};
+        return i;
+    }
+    /**
+     * dp转px
+     *
+     * @param context
+     * @param
+     * @return
+     */
+    public static int dp2px(Context context, float dpVal)
+    {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dpVal, context.getResources().getDisplayMetrics());
+    }
+
+    /**
+     * sp转px
+     *
+     * @param context
+     * @param
+     * @return
+     */
+    public static int sp2px(Context context, float spVal)
+    {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
+                spVal, context.getResources().getDisplayMetrics());
+    }
+
+    /**
+     * px转dp
+     *
+     * @param context
+     * @param pxVal
+     * @return
+     */
+    public static float px2dp(Context context, float pxVal)
+    {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (pxVal / scale);
+    }
+
+    /**
+     * px转sp
+     *
+     * @param
+     * @param pxVal
+     * @return
+     */
+    public static float px2sp(Context context, float pxVal)
+    {
+        return (pxVal / context.getResources().getDisplayMetrics().scaledDensity);
     }
 }

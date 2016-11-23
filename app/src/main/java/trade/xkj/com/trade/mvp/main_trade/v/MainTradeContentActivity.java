@@ -1,6 +1,5 @@
-package trade.xkj.com.trade.mvp;
+package trade.xkj.com.trade.mvp.main_trade.v;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -16,13 +15,15 @@ import android.view.View;
 
 import trade.xkj.com.trade.Base.BaseActivity;
 import trade.xkj.com.trade.R;
+import trade.xkj.com.trade.Utils.View.PullViewDragLayout;
 import trade.xkj.com.trade.Utils.View.SwitchButton;
-import trade.xkj.com.trade.mvp.main_trade.MainTradeContentFrag;
 
-public class MainActivity extends BaseActivity
+public class MainTradeContentActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private PullViewDragLayout mPullViewDragLayout;
     private SwitchButton mSitchButton;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,7 @@ public class MainActivity extends BaseActivity
 //        });
         fragmentManager = getFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(new MainTradeContentFrag(),"1");
+        fragmentTransaction.replace(R.id.fl_main_trade_content,new MainTradeContentFrag(),"1");
         fragmentTransaction.commit();
     }
 
@@ -111,14 +112,6 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
-    private FragmentManager fragmentManager;
-    private FragmentTransaction fragmentTransaction;
 
-    public void replaceFragment(Fragment fragment, String tag) {
-        if (fragmentManager == null)
-            fragmentManager = getFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fl_main_trade_content, fragment, tag);
-        fragmentTransaction.commit();
-    }
+
 }

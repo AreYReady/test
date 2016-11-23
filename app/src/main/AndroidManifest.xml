@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="trade.xkj.com.trade">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name=".Base.MyApplication"
         android:allowBackup="true"
@@ -21,7 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".mvp.MainActivity" android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".mvp.main_trade.v.MainTradeContentActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ScrollviewShow" />
     </application>
 
 </manifest>

@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 
 import trade.xkj.com.trade.Utils.SocketUtil;
 import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.bean.DataEvent;
 import trade.xkj.com.trade.bean.ResponseEvent;
 import trade.xkj.com.trade.constant.MessageType;
 
@@ -20,7 +21,7 @@ import trade.xkj.com.trade.constant.MessageType;
 public class SSLDecoderImp implements Decoder<String> {
 
     public static final String HEART_BEAT = "HEART_BEAT";
-    private String TAG= SystemUtil.getTAG(this.getClass());
+    private String TAG = SystemUtil.getTAG(this.getClass());
 
     @Override
     public String decode(ByteBuffer in) throws DecoderException {
@@ -33,8 +34,8 @@ public class SSLDecoderImp implements Decoder<String> {
 
             //包体数据长度
             int len = SocketUtil.byteArrayToInt(l);//将byte转成int
-            if(len>300)
-            Log.i("123", "lennnnnnnnnnnnnfffffff: " + len);
+            if (len > 300)
+                Log.i("123", "lennnnnnnnnnnnnfffffff: " + len);
             //注意上面的get操作会导致下面的remaining()值发生变化
             if (in.remaining() < len) {
                 //如果消息内容不够，则重置恢复position位置到操作前,进入下一轮, 接收新数据，以拼凑成完整数据
@@ -53,78 +54,77 @@ public class SSLDecoderImp implements Decoder<String> {
 //                    Log.i("123", "decode:dddddd " + result);
 //                    return null;
 //                }else {
-                    if(sumlen > 300)
-                        Log.i("123", "decodefffff: " + result);
-                    result = SocketUtil.handReceviceData(packArr);
-                    handleResult(result);
-                    Log.i("123", "decode: " + result);
+                if (sumlen > 300)
+                    Log.i("123", "decodefffff: " + result);
+                result = SocketUtil.handReceviceData(packArr);
+                handleResult(result);
+                Log.i("123", "decode: " + result);
 //                }
             }
         }
         return result;//处理成功，让父类进行接收下个包
     }
 
-    private void handleResult(String resultMessage){
+    private void handleResult(String resultMessage) {
         ResponseEvent responseEvent = new Gson().fromJson(resultMessage, ResponseEvent.class);
         if (responseEvent != null) {
             switch (responseEvent.getMsg_type()) {
                 case MessageType.TYPE_BINARY_LOGIN_RESULT://登录结果信息
                     EventBus.getDefault().post(responseEvent);
-                    Log.i(TAG, "handleResult: 登入"+resultMessage);
+                    Log.i(TAG, "handleResult: 登入" + resultMessage);
                     break;
                 case MessageType.TYPE_BINARY_ALL_SYMBOL://所有产品列表
-                    Log.i(TAG, "handleResult:所有产品列表=  "+resultMessage);
+                    Log.i(TAG, "handleResult:所有产品列表=  " + resultMessage);
 //                    EventBusAllSymbol allSymbol = new Gson().fromJson(resultMessage, EventBusAllSymbol.class);
 //                    EventBus.getDefault().post(allSymbol);
                     break;
                 case MessageType.TYPE_BINARY_SYMBOLE_SHOW://要展示的产品
 //                    BeanSymbolConfig symbolShow = new Gson().fromJson(resultMessage, BeanSymbolConfig.class);
-                    Log.i(TAG, "handleResult:要展示的产品=  "+resultMessage);
+                    Log.i(TAG, "handleResult:要展示的产品=  " + resultMessage);
 //                    EventBus.getDefault().postSticky(symbolShow);
                     break;
                 case MessageType.TYPE_BINARY_ACTIVE_ORDER_LIST://进行中订单
-                    Log.i(TAG, "handleResult:进行中订单=  "+resultMessage);
+                    Log.i(TAG, "handleResult:进行中订单=  " + resultMessage);
 //                    BeanOrderRecord orderRecord = new Gson().fromJson(resultMessage, BeanOrderRecord.class);
 //                    EventBus.getDefault().postSticky(orderRecord);
                     break;
                 case MessageType.TYPE_BINARY_HISTORY_RESULT://历史已完成订单
 //                    EventBus.getDefault().postSticky(new DataEvent(resultMessage, MessageType.TYPE_BINARY_HISTORY_RESULT));
-                    Log.i(TAG, "handleResult:历史已完成订单=  "+resultMessage);
+                    Log.i(TAG, "handleResult:历史已完成订单=  " + resultMessage);
                     break;
                 case MessageType.TYPE_BINARY_TRADE_NOTIFY://订单通知结果
 //                    EventBus.getDefault().post(new DataEvent(resultMessage, MessageType.TYPE_BINARY_TRADE_NOTIFY));
-                    Log.i(TAG, "handleResult:订单通知结果=  "+resultMessage);
-                break;
+                    Log.i(TAG, "handleResult:订单通知结果=  " + resultMessage);
+                    break;
                 case MessageType.TYPE_BINARY_REAL_TIME_LIST://发送实时数据
 //                    RealTimeDataList realTimeDataList = new Gson().fromJson(resultMessage, RealTimeDataList.class);
-                    Log.i(TAG, "handleResult:发送实时数据=  "+resultMessage);
+                    Log.i(TAG, "handleResult:发送实时数据=  " + resultMessage);
 //                    EventBus.getDefault().post(realTimeDataList);
                     break;
                 case MessageType.TYPE_BINARY_HISTORY_LIST://发送历史数据，画图
-                    Log.i(TAG, "handleResult:发送历史数据，画图=  "+resultMessage);
-//                    EventBus.getDefault().post(new DataEvent(resultMessage, MessageType.TYPE_BINARY_HISTORY_LIST));
-//                    Log.i("123", "handleResult: historyffffff");
+                    Log.i(TAG, "handleResult:发送历史数据，画图=  " + resultMessage);
+                    EventBus.getDefault().post(new DataEvent(resultMessage, MessageType.TYPE_BINARY_HISTORY_LIST));
                     break;
                 case MessageType.TYPE_BINARY_ORDER_RESPONSE://下订单是否成功
-                    Log.i(TAG, "handleResult:TYPE_BINARY_ORDER_RESPONSE=  "+resultMessage);
+                    Log.i(TAG, "handleResult:TYPE_BINARY_ORDER_RESPONSE=  " + resultMessage);
 //                    BeanOrderResponse orderResponse = new Gson().fromJson(resultMessage, BeanOrderResponse.class);
 //                    EventBus.getDefault().post(orderResponse);
                     break;
                 case MessageType.TYPE_BINARY_HEART_BEAT_REQUEST://心跳请求，每30秒服务器请求客服端一次
-                    Log.i(TAG, "handleResult:心跳请求，每30秒服务器请求客服端一次=  "+resultMessage);
+                    Log.i(TAG, "handleResult:心跳请求，每30秒服务器请求客服端一次=  " + resultMessage);
 //                    EventBus.getDefault().post(HEART_BEAT);
                     break;
                 case MessageType.TYPE_BINARY_HEART_BEAT_RESPONSE://心跳响应
-                    Log.i(TAG, "handleResult:心跳响应=  "+resultMessage);
+                    Log.i(TAG, "handleResult:心跳响应=  " + resultMessage);
 //                    EventBus.getDefault().post(new BeanMinaSessionEvent(session));
                     break;
                 case MessageType.TYPE_BINARY_USER_INFO://用户信息
-                    Log.i(TAG, "handleResult:用户信息=  "+resultMessage);
+                    Log.i(TAG, "handleResult:用户信息=  " + resultMessage);
 //                    BeanUserInfo userInfo = new Gson().fromJson(resultMessage, BeanUserInfo.class);
 //                    EventBus.getDefault().postSticky(userInfo);
                     break;
                 case MessageType.TYPE_BINARY_SERVER_TIME://服务器时间
-                    Log.i(TAG, "handleResult:服务器时间=  "+resultMessage);
+                    Log.i(TAG, "handleResult:服务器时间=  " + resultMessage);
 //                    BeanServerTime serverTime = new Gson().fromJson(resultMessage, BeanServerTime.class);
 //                    EventBus.getDefault().post(serverTime);
                     break;

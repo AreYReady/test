@@ -6,19 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="trade.xkj.com.trade.mvp.MainActivity"
+    tools:context="trade.xkj.com.trade.mvp.main_trade.v.MainTradeContentActivity"
     tools:showIn="@layout/app_bar_main">
-    <FrameLayout
+        <FrameLayout
         android:id="@+id/fl_main_trade_content"
         android:layout_width="match_parent"
         android:background="@color/content_black"
-        android:layout_height="match_parent"
-
-        />
-        <trade.xkj.com.trade.mvp.PullViewDragLayout
+        android:layout_height="match_parent" />
+        <trade.xkj.com.trade.Utils.View.PullViewDragLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/dragLayout"
+            android:visibility="gone"
             android:orientation="vertical">
 
             <TextView
@@ -45,5 +44,5 @@
                 android:layout_height="match_parent"
                 android:background="@color/content_black"/>
 
-        </trade.xkj.com.trade.mvp.PullViewDragLayout>
+        </trade.xkj.com.trade.Utils.View.PullViewDragLayout>
 </RelativeLayout>

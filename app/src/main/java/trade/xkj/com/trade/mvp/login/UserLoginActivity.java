@@ -15,7 +15,7 @@ import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.Utils.ToashUtil;
 import trade.xkj.com.trade.Utils.View.LoadingDialog;
 import trade.xkj.com.trade.bean.BeanUserLoginData;
-import trade.xkj.com.trade.mvp.MainActivity;
+import trade.xkj.com.trade.mvp.main_trade.v.MainTradeContentActivity;
 
 public class UserLoginActivity extends BaseActivity implements UserLoginActivityInterface,View.OnClickListener{
 
@@ -28,7 +28,7 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
     private String TAG= SystemUtil.getTAG(this);
     @Override
     public void toMainActivity() {
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, MainTradeContentActivity.class));
         finish();
     }
 
@@ -51,13 +51,14 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
 
     }
 
+    public static int[] scrren;
     @Override
     public void initRegister() {
     }
-
     @Override
     public void initData() {
         mUserLoginPresenter=new UserLoginPresenter(this);
+       scrren = SystemUtil.getScrren(this);
 
     }
 
