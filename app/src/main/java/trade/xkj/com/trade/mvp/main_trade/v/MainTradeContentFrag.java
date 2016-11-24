@@ -2,15 +2,16 @@ package trade.xkj.com.trade.mvp.main_trade.v;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
 
 import org.greenrobot.eventbus.EventBus;
 
 import trade.xkj.com.trade.Base.BaseFragment;
 import trade.xkj.com.trade.R;
+import trade.xkj.com.trade.Utils.View.HistoryTradeView;
 import trade.xkj.com.trade.bean.HistoryDataList;
 import trade.xkj.com.trade.mvp.main_trade.p.MainTradeContentPre;
 import trade.xkj.com.trade.mvp.main_trade.p.MainTradeContentPreImpl;
@@ -22,7 +23,8 @@ import trade.xkj.com.trade.mvp.main_trade.p.MainTradeContentPreImpl;
 public class MainTradeContentFrag extends BaseFragment implements MainTradeContentLFragListener {
     private View view;
     private MainTradeContentPre mMainTradeContentPre;
-    private HorizontalScrollView mHScrollView;
+//    private HorizontalScrollView mHScrollView;
+    private HistoryTradeView mHistoryTradeView;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,11 +35,11 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mHScrollView=(HorizontalScrollView)view.findViewById(R.id.hsv_trade);
-        ViewGroup childAt = (ViewGroup)mHScrollView.getChildAt(0);
-        View childAt1 = childAt.getChildAt(0);
-        initScrollView();
 
+//        mHScrollView=(HorizontalScrollView)view.findViewById(R.id.hsv_trade);
+//        ViewGroup childAt = (ViewGroup)mHScrollView.getChildAt(0);
+//        View childAt1 = childAt.getChildAt(0);
+//        initScrollView();
     }
 
     @Override
@@ -47,6 +49,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
 
     @Override
     protected void initData() {
+        mHistoryTradeView=(HistoryTradeView)view.findViewById(R.id.htv_trade_view);
         EventBus.getDefault().register(this);
         mMainTradeContentPre=new MainTradeContentPreImpl(this,mHandler);
         mMainTradeContentPre.loading();
@@ -55,16 +58,18 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
 
 
 
-    @Override
-    public void freshView(HistoryDataList data) {
 
+    @Override
+    public void freshView(final HistoryDataList data) {
+                Log.i(TAG, "freshView: ");
+                mHistoryTradeView.setHistoryData(data);
     }
-    private void initScrollView(){
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mHScrollView.smoothScrollTo(5000,0);
-            }
-        },1000);
-    }
+//    private void initScrollView(){
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                mHScrollView.smoothScrollTo(5000,0);
+//            }
+//        },1000);
+//    }
 }

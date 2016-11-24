@@ -19,7 +19,6 @@ public  abstract class BaseFragment extends Fragment {
     protected Handler mHandler;
     protected final String TAG= SystemUtil.getTAG(this);
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -31,7 +30,7 @@ public  abstract class BaseFragment extends Fragment {
 
     protected abstract void initData();
     @Subscribe(sticky = true)
-    public void getHandler(Handler handler){
+    public void getHander(Handler handler){
         Log.i(TAG, "getHandler: ");
         mHandler=handler;
     }

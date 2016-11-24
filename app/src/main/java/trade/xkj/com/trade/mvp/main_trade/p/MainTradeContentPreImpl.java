@@ -1,6 +1,7 @@
 package trade.xkj.com.trade.mvp.main_trade.p;
 
 import android.os.Handler;
+import android.util.Log;
 
 import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.bean.HistoryDataList;

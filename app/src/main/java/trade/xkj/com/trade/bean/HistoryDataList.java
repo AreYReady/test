@@ -115,7 +115,7 @@ public class HistoryDataList implements Serializable, IHistoryDataList {
     public double[] getPrice() {
         return price;
     }
-
+    //最高价[1]，最低价[0]
     public void setPrice(double[] price) {
         this.price = price;
     }

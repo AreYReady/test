@@ -10,6 +10,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -42,6 +43,7 @@ public class MainTradeContentActivity extends BaseActivity
 
     @Override
     public void initView() {
+        Log.i(TAG, "initView: ");
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mPullViewDragLayout = (PullViewDragLayout) findViewById(R.id.dragLayout);

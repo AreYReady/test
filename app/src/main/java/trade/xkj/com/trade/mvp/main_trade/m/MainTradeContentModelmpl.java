@@ -11,6 +11,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import trade.xkj.com.trade.Utils.DataUtil;
 import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.bean.BeanHistoryRequest;
 import trade.xkj.com.trade.bean.DataEvent;
@@ -41,6 +42,8 @@ public class MainTradeContentModelmpl implements MainTradeContentModel {
         if (dataEvent.getType() == MessageType.TYPE_BINARY_HISTORY_LIST) {//绘制历史数据
             dataList = new Gson().fromJson(dataEvent.getResult(), new TypeToken<HistoryDataList>() {
             }.getType());
+            int digits = dataList.getDigits();//当前页面产品的小数位
+            DataUtil.calcMaxMinPrice(dataList,digits);
             mMainTradeContentPre.refreshView(dataList);
         }
 
