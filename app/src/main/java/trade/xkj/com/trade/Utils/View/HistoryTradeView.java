@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import trade.xkj.com.trade.R;
@@ -33,8 +32,8 @@ public class HistoryTradeView extends View {
     private Context mContext;
     private Paint mBluePaint;
     private Paint mGarkPaint;
-    //两个数据绘图的空隙
-    private int dataViewSpace;
+    //两个数据绘图的空隙,默认1dip
+    private int dataViewSpace=1;
 
     //右部价格空间
     private int rightPriceSpace = 200;
@@ -61,7 +60,7 @@ public class HistoryTradeView extends View {
         mGarkPaint.setColor(getResources().getColor(R.color.text_color_primary_dark_with_opacity));
         mGarkPaint.setStrokeWidth(3);
         screenWidth = UserLoginActivity.scrren[0];
-        dataViewSpace=SystemUtil.dp2px(mContext,50);
+        dataViewSpace=SystemUtil.dp2px(mContext,2);
     }
 
 
@@ -71,6 +70,7 @@ public class HistoryTradeView extends View {
         Log.i(TAG, "onLayout: width" + getMeasuredWidth() + "hergh" + getMeasuredHeight());
 
     }
+
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -85,6 +85,7 @@ public class HistoryTradeView extends View {
 //        //根据数据多少和一屏幕显示多少数据,计算view的宽度,这里扣除右侧的价格空间
 //        widthSize = (int)(dataSize / showDatasize) * (screenWidth-SystemUtil.dp2px(mContext,rightPriceSpace));
 //        setMeasuredDimension(widthSize, heightSize);
+//        Log.i(TAG, "onLayout: width" + widthMeasureSpec + "hergh" + heightMeasureSpec);
     }
 
     @Override
@@ -119,9 +120,9 @@ public class HistoryTradeView extends View {
                 int yBottom=SystemUtil.dp2px(mContext, (float) ((minPrice - price[0]) / unit));
                 int x=(5 * getMeasuredWidth() / 6)/showDatasize;
                 if(Double.valueOf(oPrice[3])>0){
-                    canvas.drawRect(i*x+dataViewSpace,yBottom,i*x+x+dataViewSpace,yTop,mBluePaint);
+                    canvas.drawRect(i*x,yBottom,i*x+x-dataViewSpace,yTop,mBluePaint);
                 }else{
-                    canvas.drawRect(i*x+dataViewSpace,yBottom,i*x+x+dataViewSpace,yTop,mRedPaint);
+                    canvas.drawRect(i*x,yBottom,i*x+x-dataViewSpace,yTop,mRedPaint);
                 }
             }
         }
@@ -176,41 +177,41 @@ public class HistoryTradeView extends View {
             unit = blance / SystemUtil.px2dp(mContext, getMeasuredHeight());
         }
     }
-    float lastX;
-    float lastY;
-    float rawX;
-    float rawY;
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        Log.i(TAG, "onTouchEvent: ");
-        switch (event.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                Log.i(TAG, "onTouchEvent: ACTION_DOWN");
-                lastX=event.getRawX();
-                lastY=event.getRawY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                Log.i(TAG, "onTouchEvent: ACTION_MOVE");
-                rawX=event.getRawX();
-                rawY=event.getRawY();
-                //通过View.layout来设置左上右下坐标位置
-                //获得当前的left等坐标并加上相应偏移量
-//                layout(getLeft() + (int)offsetX,
-//                        getTop() + offsetY,
-//                        getRight() + offsetX,
-//                        getBottom() + offsetY);
-                //移动过后，更新lastX与lastY
-                Log.i(TAG, "onTouchEvent: "+(rawX-lastX));
-                if(rawX-lastX>0){
-                    lastX = rawX;
-                    lastY = rawY;
-                    dataViewSpace++;
-                    postInvalidate();
-                }
-                break;
-        }
-
-
-        return true;
-    }
+//    float lastX;
+//    float lastY;
+//    float rawX;
+//    float rawY;
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        Log.i(TAG, "onTouchEvent: ");
+//        switch (event.getAction()){
+//            case MotionEvent.ACTION_DOWN:
+//                Log.i(TAG, "onTouchEvent: ACTION_DOWN");
+//                lastX=event.getRawX();
+//                lastY=event.getRawY();
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                Log.i(TAG, "onTouchEvent: ACTION_MOVE");
+//                rawX=event.getRawX();
+//                rawY=event.getRawY();
+//                //通过View.layout来设置左上右下坐标位置
+//                //获得当前的left等坐标并加上相应偏移量
+////                layout(getLeft() + (int)offsetX,
+////                        getTop() + offsetY,
+////                        getRight() + offsetX,
+////                        getBottom() + offsetY);
+//                //移动过后，更新lastX与lastY
+//                Log.i(TAG, "onTouchEvent: "+(rawX-lastX));
+//                if(rawX-lastX>0){
+//                    lastX = rawX;
+//                    lastY = rawY;
+//                    dataViewSpace++;
+//                    postInvalidate();
+//                }
+//                break;
+//        }
+//
+//
+//        return true;
+//    }
 }

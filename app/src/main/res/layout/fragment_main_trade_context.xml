@@ -5,29 +5,35 @@
     <FrameLayout
         android:id="@+id/fl_trade_indicator"
         android:layout_width="match_parent"
-        android:layout_height="150dip">
-    </FrameLayout>
+        android:layout_height="150dip"></FrameLayout>
 
-    <!--<HorizontalScrollView-->
-        <!--android:layout_width="300dip"-->
-        <!--android:id="@+id/hsv_trade"-->
-        <!--android:layout_height="200dip"-->
-        <!--android:layout_below="@id/fl_trade_indicator"-->
-        <!--&gt;-->
+    <LinearLayout
+        android:layout_below="@id/fl_trade_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="150dip"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/ll"
-            android:layout_width="wrap_content"
-            android:layout_height="200dip"
-            android:orientation="horizontal"
-            android:layout_below="@id/fl_trade_indicator"
-            >
-             <trade.xkj.com.trade.Utils.View.HistoryTradeView
-                android:id="@+id/htv_trade_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/text_color_primary_light"
-                />
-        </LinearLayout>
-    <!--</HorizontalScrollView>-->
+        <HorizontalScrollView
+            android:id="@+id/hsv_trade"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:background="@color/brand_color_dark">
+
+            <LinearLayout
+                android:id="@+id/ll"
+                android:layout_width="wrap_content"
+                android:layout_height="200dip"
+                android:layout_below="@id/fl_trade_indicator"
+                android:orientation="horizontal">
+            </LinearLayout>
+        </HorizontalScrollView>
+        <View
+            android:id="@+id/imageVi"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:background="@color/color_tertiary_dark_inverse_with_opacity"
+            android:layout_weight="1">
+        </View>
+    </LinearLayout>
 </RelativeLayout>
