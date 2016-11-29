@@ -20,21 +20,21 @@
             android:background="@color/toolbars_title_dark"
             app:popupTheme="@style/AppTheme.PopupOverlay" >
 
-            <trade.xkj.com.trade.Utils.View.SwitchButton
-                android:id="@+id/sb_change_content"
-                style="@style/Switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="3dip"
-                android:clickable="true"
-                />
-            <Button
-                android:id="@+id/b_money"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="点击"
-                android:textColor="@color/red"/>
+            <!--<trade.xkj.com.trade.Utils.View.SwitchButton-->
+                <!--android:id="@+id/sb_change_content"-->
+                <!--style="@style/Switch"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:layout_marginTop="3dip"-->
+                <!--android:clickable="true"-->
+                <!--/>-->
+            <!--<Button-->
+                <!--android:id="@+id/b_money"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="点击"-->
+                <!--android:textColor="@color/red"/>-->
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

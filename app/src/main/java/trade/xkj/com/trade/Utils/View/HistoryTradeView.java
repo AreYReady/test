@@ -12,6 +12,7 @@ import trade.xkj.com.trade.Utils.DataUtil;
 import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.bean.HistoryData;
 import trade.xkj.com.trade.bean.HistoryDataList;
+import trade.xkj.com.trade.constant.KLineChartConstant;
 import trade.xkj.com.trade.mvp.login.UserLoginActivity;
 
 /**
@@ -33,10 +34,9 @@ public class HistoryTradeView extends View {
     private Paint mBluePaint;
     private Paint mGarkPaint;
     //两个数据绘图的空隙,默认1dip
-    private int dataViewSpace=1;
+    private int dataViewSpace=3;
 
     //右部价格空间
-    private int rightPriceSpace = 200;
 
     public HistoryTradeView(Context context) {
         this(context, null);
@@ -60,7 +60,7 @@ public class HistoryTradeView extends View {
         mGarkPaint.setColor(getResources().getColor(R.color.text_color_primary_dark_with_opacity));
         mGarkPaint.setStrokeWidth(3);
         screenWidth = UserLoginActivity.scrren[0];
-        dataViewSpace=SystemUtil.dp2px(mContext,2);
+        dataViewSpace=SystemUtil.dp2px(mContext, KLineChartConstant.jianju);
     }
 
 
@@ -75,25 +75,39 @@ public class HistoryTradeView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-//        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-//        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-//        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-//        int width;
-//        int height ;
-//        Log.i(TAG, "onMeasure:screenWidth "+screenWidth+"heightSize"+heightSize+"rightPriceSpace:"+rightPriceSpace);
-//        //根据数据多少和一屏幕显示多少数据,计算view的宽度,这里扣除右侧的价格空间
-//        widthSize = (int)(dataSize / showDatasize) * (screenWidth-SystemUtil.dp2px(mContext,rightPriceSpace));
-//        setMeasuredDimension(widthSize, heightSize);
-//        Log.i(TAG, "onLayout: width" + widthMeasureSpec + "hergh" + heightMeasureSpec);
+       int width = getMySize(100, widthMeasureSpec);
+       int height = getMySize(100, heightMeasureSpec);
+        Log.i(TAG, "onMeasure: width"+width+" height"+height);
+        setMeasuredDimension(width, height);
     }
+    private int getMySize(int defaultSize, int measureSpec) {
+        int mySize = defaultSize;
 
+        int mode = MeasureSpec.getMode(measureSpec);
+        int size = MeasureSpec.getSize(measureSpec);
+
+        switch (mode) {
+            case MeasureSpec.UNSPECIFIED: {//如果没有指定大小，就设置为默认大小
+                mySize = defaultSize;
+                break;
+            }
+            case MeasureSpec.AT_MOST: {//如果测量模式是最大取值为size
+                //我们将大小取最大值,你也可以取其他值
+                mySize = size;
+                break;
+            }
+            case MeasureSpec.EXACTLY: {//如果是固定的大小，那就不要去改变它
+                mySize = size;
+                break;
+            }
+        }
+        return mySize;
+    }
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         drawLine(canvas);
         drawRect(canvas);
-        canvas.drawRect(60, 60, 80, 80, mRedPaint);// 正方形
     }
 
     private int moveSpace;
@@ -104,11 +118,10 @@ public class HistoryTradeView extends View {
             price = DataUtil.calcMaxMinPrice(data, data.getDigits(), data.getItems().size() - showDatasize, data.getItems().size());
             double blance = price[1] - price[0];
             unit = blance / SystemUtil.px2dp(mContext, getMeasuredHeight());
-            int beginDataIndex = data.getItems().size() - showDatasize - moveSpace;
             HistoryData historyData;
             long t;
-            for (int i = 0; i < showDatasize; i++) {
-                historyData = data.getItems().get(beginDataIndex + i);
+            for (int i = 0; i < data.getCount(); i++) {
+                historyData = data.getItems().get( i);
                 if(i==0){
                      t = historyData.getT();
                 }
@@ -118,11 +131,12 @@ public class HistoryTradeView extends View {
 
                 int yTop=SystemUtil.dp2px(mContext, (float) ((maxPrice - price[0]) / unit));
                 int yBottom=SystemUtil.dp2px(mContext, (float) ((minPrice - price[0]) / unit));
-                int x=(5 * getMeasuredWidth() / 6)/showDatasize;
+//                int x=getMeasurdWidth()/showDatasize;
+                int x=SystemUtil.dp2px(mContext,KLineChartConstant.juli);
                 if(Double.valueOf(oPrice[3])>0){
-                    canvas.drawRect(i*x,yBottom,i*x+x-dataViewSpace,yTop,mBluePaint);
+                    canvas.drawRect(i*x+dataViewSpace,yBottom,i*x+x,yTop,mBluePaint);
                 }else{
-                    canvas.drawRect(i*x,yBottom,i*x+x-dataViewSpace,yTop,mRedPaint);
+                    canvas.drawRect(i*x+dataViewSpace,yBottom,i*x+x,yTop,mRedPaint);
                 }
             }
         }
@@ -134,11 +148,8 @@ public class HistoryTradeView extends View {
     //画线
     private void drawLine(Canvas canvas) {
         if (data != null) {
-            int i = getMeasuredHeight() / 4;
-            int y = 5 * getMeasuredWidth() / 6;
-            if (unit == 0.00) {
-
-            }
+            int i = getMeasuredHeight()/6 ;
+            int y =getMeasuredWidth()*5;
             canvas.drawLine(0, 0, y, 0, mGarkPaint);
             canvas.drawLine(0, i, y, i, mGarkPaint);
             canvas.drawLine(0, i * 2, y, i * 2, mGarkPaint);

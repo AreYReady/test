@@ -3,6 +3,8 @@ package trade.xkj.com.trade.mvp.main_trade.v;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +15,13 @@ import android.widget.LinearLayout;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import trade.xkj.com.trade.Base.BaseFragment;
 import trade.xkj.com.trade.R;
+import trade.xkj.com.trade.Utils.GalleryAdapter;
 import trade.xkj.com.trade.Utils.View.HistoryTradeView;
 import trade.xkj.com.trade.bean.HistoryDataList;
 import trade.xkj.com.trade.mvp.main_trade.p.MainTradeContentPre;
@@ -34,10 +41,14 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     private View imView;
     private int h;
     private int w;
+    private RecyclerView mRecyclerView;
+    private GalleryAdapter mAdapter;
+    private List<Integer> mDatas;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-         view=inflater.inflate(R.layout.fragment_main_trade_context,container,false);
+        view = inflater.inflate(R.layout.fragment_main_trade_context, container, false);
         return view;
     }
 
@@ -45,39 +56,37 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mHScrollView=(HorizontalScrollView)view.findViewById(R.id.hsv_trade);
-        imView=view.findViewById(R.id.imageVi);
-        ll=(LinearLayout)view.findViewById(R.id.ll);
-        context=this.getActivity();
-
-//        ViewGroup childAt = (ViewGroup)mHScrollView.getChildAt(0);
-//        View childAt1 = childAt.getChildAt(0);
-//        initScrollView();
+        mHScrollView = (HorizontalScrollView) view.findViewById(R.id.hsv_trade);
+        imView = view.findViewById(R.id.imageVi);
+        ll = (LinearLayout) view.findViewById(R.id.ll);
+        context = this.getActivity();
         ViewTreeObserver vto = mHScrollView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             public void onGlobalLayout() {
-                 h = mHScrollView.getHeight();
-                 w=mHScrollView.getWidth();
+                h = mHScrollView.getHeight();
+                w = mHScrollView.getWidth();
                 Log.i(TAG, "Height=" + h); // 得到正确结果
-                mHistoryTradeView=new HistoryTradeView(context);
-                // 成功调用一次后，移除 Hook 方法，防止被反复调用
-                // removeGlobalOnLayoutListener() 方法在 API 16 后不再使用
-                // 使用新方法 removeOnGlobalLayoutListener() 代替
-
-                ViewGroup.LayoutParams layoutParams=new ViewGroup.LayoutParams(w,h);
-                mHistoryTradeView.setLayoutParams(new ViewGroup.LayoutParams(w,h));
-                mHistoryTradeView.setBackgroundColor(getResources().getColor(R.color.brand_color_dark));
+                mHistoryTradeView = new HistoryTradeView(context);
+                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(w * 5, h);
+                mHistoryTradeView.setLayoutParams(layoutParams);
                 ll.addView(mHistoryTradeView);
-                mHScrollView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                mHScrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.id_recyclerview_horizontal);
+        //设置布局管理器
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        //设置适配器
+        mAdapter = new GalleryAdapter(context, mDatas);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
     }
-
 
 
     @Override
@@ -88,26 +97,28 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     @Override
     protected void initData() {
         EventBus.getDefault().register(this);
-        mMainTradeContentPre=new MainTradeContentPreImpl(this,mHandler);
+        mMainTradeContentPre = new MainTradeContentPreImpl(this, mHandler);
         mMainTradeContentPre.loading();
-
+        mDatas = new ArrayList<Integer>(Arrays.asList(R.mipmap.ic_launcher,
+                R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher,
+                R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher));
     }
-
-
-
-
+    HistoryDataList data;
     @Override
     public void freshView(final HistoryDataList data) {
-                Log.i(TAG, "freshView: ");
+        Log.i(TAG, "freshView: ");
+        this.data = data;
 
-        mHistoryTradeView.setHistoryData(data);
+        initScrollView();
     }
-//    private void initScrollView(){
-//        mHandler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mHScrollView.smoothScrollTo(5000,0);
-//            }
-//        },1000);
-//    }
+
+    private void initScrollView() {
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mHScrollView.scrollTo(w * 5, 0);
+                mHistoryTradeView.setHistoryData(data);
+            }
+        }, 1000);
+    }
 }

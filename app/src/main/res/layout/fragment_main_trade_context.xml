@@ -5,12 +5,20 @@
     <FrameLayout
         android:id="@+id/fl_trade_indicator"
         android:layout_width="match_parent"
-        android:layout_height="150dip"></FrameLayout>
+        android:layout_height="150dip">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/id_recyclerview_horizontal"
+            android:scrollbars="vertical"
+            android:background="@color/order_radio_button_background_dark"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
 
     <LinearLayout
         android:layout_below="@id/fl_trade_indicator"
         android:layout_width="match_parent"
         android:layout_height="150dip"
+        android:background="@color/bright_foreground_inverse_material_dark"
         android:orientation="horizontal">
 
         <HorizontalScrollView
@@ -18,7 +26,7 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="5"
-            android:background="@color/brand_color_dark">
+            >
 
             <LinearLayout
                 android:id="@+id/ll"
@@ -32,7 +40,6 @@
             android:id="@+id/imageVi"
             android:layout_width="0dip"
             android:layout_height="match_parent"
-            android:background="@color/color_tertiary_dark_inverse_with_opacity"
             android:layout_weight="1">
         </View>
     </LinearLayout>
