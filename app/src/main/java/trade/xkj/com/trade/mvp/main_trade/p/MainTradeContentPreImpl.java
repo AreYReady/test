@@ -1,10 +1,10 @@
 package trade.xkj.com.trade.mvp.main_trade.p;
 
 import android.os.Handler;
-import android.util.Log;
 
 import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.bean.HistoryDataList;
+import trade.xkj.com.trade.constant.KLineChartConstant;
 import trade.xkj.com.trade.mvp.main_trade.m.MainTradeContentModel;
 import trade.xkj.com.trade.mvp.main_trade.m.MainTradeContentModelmpl;
 import trade.xkj.com.trade.mvp.main_trade.v.MainTradeContentLFragListener;
@@ -24,7 +24,7 @@ public class MainTradeContentPreImpl implements MainTradeContentPre {
 
     @Override
     public void loading() {
-        mMainTradeContentModel.sendHistoryRequest("AUDCAD",1000);
+        mMainTradeContentModel.sendHistoryRequest("AUDCAD", KLineChartConstant.count);
     }
 
 

@@ -21,7 +21,7 @@
         android:background="@color/bright_foreground_inverse_material_dark"
         android:orientation="horizontal">
 
-        <HorizontalScrollView
+        <trade.xkj.com.trade.Utils.View.MyHorizontalScrollView
             android:id="@+id/hsv_trade"
             android:layout_width="0dip"
             android:layout_height="match_parent"
@@ -35,7 +35,7 @@
                 android:layout_below="@id/fl_trade_indicator"
                 android:orientation="horizontal">
             </LinearLayout>
-        </HorizontalScrollView>
+        </trade.xkj.com.trade.Utils.View.MyHorizontalScrollView>
         <View
             android:id="@+id/imageVi"
             android:layout_width="0dip"

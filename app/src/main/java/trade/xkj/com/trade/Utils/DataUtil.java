@@ -1,5 +1,7 @@
 package trade.xkj.com.trade.Utils;
 
+import android.util.Log;
+
 import java.math.BigDecimal;
 
 import trade.xkj.com.trade.bean.HistoryDataList;
@@ -25,7 +27,7 @@ public class DataUtil {
         BigDecimal minP, maxP;
         int size = historyDataList.getItems().size();
         if (size > 0&&beginIndex>=0&&beginIndex<size&&stopIndex<=size) {
-            for (int i = beginIndex; i < size; i++) {
+            for (int i = beginIndex; i < stopIndex; i++) {
                 String price[] = historyDataList.getItems().get(i).getO().split("\\|");
                 if (i == 0||i==beginIndex) {
 //                    minPrice = MoneyUtil.addPrice(price[0], price[2], digits);
@@ -59,6 +61,19 @@ public class DataUtil {
             historyDataList.setPrice(result);
         }
         return result;
+    }
+    public static int[] drawLineCount(int digits,double maxPrice,double minPrice ){
+        int i = (int)(maxPrice-minPrice) * digits * 10;
+        Log.i("DataUtil:hsc", "drawLineCount: i"+i+"        digits" +digits );
+        int[] data=new int[2];
+        if(i<6*digits*10){
+            data[0]=5;
+            data[1]= i/5;
+        }else{
+            data[0]=6;
+            data[1]=i/6;
+        }
+        return data;
     }
 
 }

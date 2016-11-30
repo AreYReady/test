@@ -66,13 +66,10 @@ public class UserLoginModelImpl implements UserLoginModel {
             public void run() {
                 try {
                     Log.i("123", "run: sslTest");
-                    Thread.sleep(1000);
                     sslTest(String.valueOf(beanLoginData.getLogin()), beanLoginData.getPassword_hash());
                 } catch (KeyManagementException e) {
                     e.printStackTrace();
                     mResultEnum=ResultEnum.erro;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
                 super.run();
             }

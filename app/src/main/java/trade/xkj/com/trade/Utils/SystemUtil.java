@@ -160,8 +160,13 @@ public class SystemUtil {
      */
     public static int dp2px(Context context, float dpVal)
     {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                dpVal, context.getResources().getDisplayMetrics());
+        return (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dpVal, context.getResources().getDisplayMetrics()));
+    }
+    public static float dp2pxFloat(Context context, float dpVal)
+    {
+        return  (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dpVal, context.getResources().getDisplayMetrics()));
     }
 
     /**
@@ -173,8 +178,8 @@ public class SystemUtil {
      */
     public static int sp2px(Context context, float spVal)
     {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
-                spVal, context.getResources().getDisplayMetrics());
+        return (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
+                spVal, context.getResources().getDisplayMetrics()));
     }
 
     /**
@@ -201,4 +206,5 @@ public class SystemUtil {
     {
         return (pxVal / context.getResources().getDisplayMetrics().scaledDensity);
     }
+
 }

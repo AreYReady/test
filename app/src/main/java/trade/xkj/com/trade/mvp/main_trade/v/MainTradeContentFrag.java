@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -22,8 +21,11 @@ import java.util.List;
 import trade.xkj.com.trade.Base.BaseFragment;
 import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.Utils.GalleryAdapter;
+import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.Utils.View.HistoryTradeView;
+import trade.xkj.com.trade.Utils.View.MyHorizontalScrollView;
 import trade.xkj.com.trade.bean.HistoryDataList;
+import trade.xkj.com.trade.constant.KLineChartConstant;
 import trade.xkj.com.trade.mvp.main_trade.p.MainTradeContentPre;
 import trade.xkj.com.trade.mvp.main_trade.p.MainTradeContentPreImpl;
 
@@ -34,13 +36,14 @@ import trade.xkj.com.trade.mvp.main_trade.p.MainTradeContentPreImpl;
 public class MainTradeContentFrag extends BaseFragment implements MainTradeContentLFragListener {
     private View view;
     private MainTradeContentPre mMainTradeContentPre;
-    private HorizontalScrollView mHScrollView;
+    private MyHorizontalScrollView mHScrollView;
     private HistoryTradeView mHistoryTradeView;
     private LinearLayout ll;
     private Context context;
     private View imView;
     private int h;
     private int w;
+    private int wChild;
     private RecyclerView mRecyclerView;
     private GalleryAdapter mAdapter;
     private List<Integer> mDatas;
@@ -56,7 +59,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mHScrollView = (HorizontalScrollView) view.findViewById(R.id.hsv_trade);
+        mHScrollView = (MyHorizontalScrollView) view.findViewById(R.id.hsv_trade);
         imView = view.findViewById(R.id.imageVi);
         ll = (LinearLayout) view.findViewById(R.id.ll);
         context = this.getActivity();
@@ -67,7 +70,8 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
                 w = mHScrollView.getWidth();
                 Log.i(TAG, "Height=" + h); // 得到正确结果
                 mHistoryTradeView = new HistoryTradeView(context);
-                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(w * 5, h);
+                 wChild=KLineChartConstant.count*(SystemUtil.dp2px(context,KLineChartConstant.juli+KLineChartConstant.jianju));
+                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(wChild, h);
                 mHistoryTradeView.setLayoutParams(layoutParams);
                 ll.addView(mHistoryTradeView);
                 mHScrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -81,6 +85,24 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
         //设置适配器
         mAdapter = new GalleryAdapter(context, mDatas);
         mRecyclerView.setAdapter(mAdapter);
+
+        mHScrollView.setScrollViewListener(new MyHorizontalScrollView.ScrollViewListener() {
+            int mX=0;
+            int mY=0;
+            int z=SystemUtil.dp2px(context,KLineChartConstant.juli+KLineChartConstant.jianju);
+            @Override
+            public void onScrollChanged(MyHorizontalScrollView scrollView, int x, int y, int oldx, int oldy) {
+                if(x!=oldx){
+                    if(Math.abs(x-mX)>=z){
+                        mX=x;
+                        mHistoryTradeView.postInvalidate(x,0,x+w,h);
+                    }
+                }else{
+                    mX=x;
+                    mY=y;
+                }
+            }
+        });
     }
 
     @Override
@@ -116,9 +138,10 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mHScrollView.scrollTo(w * 5, 0);
-                mHistoryTradeView.setHistoryData(data);
+                mHScrollView.scrollTo(wChild, 0);
+                mHistoryTradeView.setHistoryData(data,wChild-w,wChild);
             }
         }, 1000);
     }
+
 }

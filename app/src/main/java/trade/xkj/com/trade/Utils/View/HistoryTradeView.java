@@ -13,30 +13,49 @@ import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.bean.HistoryData;
 import trade.xkj.com.trade.bean.HistoryDataList;
 import trade.xkj.com.trade.constant.KLineChartConstant;
-import trade.xkj.com.trade.mvp.login.UserLoginActivity;
 
 /**
  * Created by admin on 2016-11-23.
  */
 
 public class HistoryTradeView extends View {
-    //屏幕的宽度
-    private int screenWidth;
-    private String TAG = SystemUtil.getTAG(this);
-    //数据条数
-    private int dataSize = 1000;
-    //同一时间显示的数据条数
-    private int showDatasize = 60;
 
-    private int childViewWidth;
+    private String TAG = SystemUtil.getTAG(this);
     private Paint mRedPaint;
     private Context mContext;
     private Paint mBluePaint;
     private Paint mGarkPaint;
-    //两个数据绘图的空隙,默认1dip
-    private int dataViewSpace=3;
-
-    //右部价格空间
+    /**
+     * @param data
+     */
+    private long dataBeginTime;
+    /**
+     *     0是最小,1是最大
+     */
+    private double[] price;
+    /**
+     * 单位dip的价格差
+     */
+    private double unit;
+    private HistoryDataList data;
+    private HistoryDataList showData;
+    //两个数据绘图的空隙,默认3dip
+    private float dataViewSpace = 3;
+    private int width = 0;
+    private int height = 0;
+    private int showLeftX;
+    private int showRightX;
+    private double openPrice;
+    private double closePrice;
+    private double maxPrice;
+    private double minPrice;
+    private float yTop;
+    private float yBottom;
+    private float yMaxTop;
+    private float yMinBottom;
+    private float startX;
+    private float stopX;
+    private int digits;
 
     public HistoryTradeView(Context context) {
         this(context, null);
@@ -59,8 +78,7 @@ public class HistoryTradeView extends View {
         mGarkPaint = new Paint();
         mGarkPaint.setColor(getResources().getColor(R.color.text_color_primary_dark_with_opacity));
         mGarkPaint.setStrokeWidth(3);
-        screenWidth = UserLoginActivity.scrren[0];
-        dataViewSpace=SystemUtil.dp2px(mContext, KLineChartConstant.jianju);
+        dataViewSpace = SystemUtil.dp2pxFloat(mContext, KLineChartConstant.jianju);
     }
 
 
@@ -75,11 +93,12 @@ public class HistoryTradeView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-       int width = getMySize(100, widthMeasureSpec);
-       int height = getMySize(100, heightMeasureSpec);
-        Log.i(TAG, "onMeasure: width"+width+" height"+height);
+        width = getMySize(100, widthMeasureSpec);
+        height = getMySize(100, heightMeasureSpec);
+        Log.i(TAG, "onMeasure: width" + width + " height" + height);
         setMeasuredDimension(width, height);
     }
+
     private int getMySize(int defaultSize, int measureSpec) {
         int mySize = defaultSize;
 
@@ -103,11 +122,15 @@ public class HistoryTradeView extends View {
         }
         return mySize;
     }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        drawLine(canvas);
-        drawRect(canvas);
+        if (data != null) {
+            devodeHistoryData();
+            drawLine(canvas);
+            drawRect(canvas);
+        }
     }
 
     private int moveSpace;
@@ -115,78 +138,104 @@ public class HistoryTradeView extends View {
     //画矩形
     private void drawRect(Canvas canvas) {
         if (data != null) {
-            price = DataUtil.calcMaxMinPrice(data, data.getDigits(), data.getItems().size() - showDatasize, data.getItems().size());
-            double blance = price[1] - price[0];
-            unit = blance / SystemUtil.px2dp(mContext, getMeasuredHeight());
             HistoryData historyData;
             long t;
-            for (int i = 0; i < data.getCount(); i++) {
-                historyData = data.getItems().get( i);
-                if(i==0){
-                     t = historyData.getT();
+            for (int i = startIndex; i < endIndex; i++) {
+                historyData = data.getItems().get(i);
+                if (i == 0) {
+                    t = historyData.getT();
                 }
                 String oPrice[] = historyData.getO().split("\\|");
-                double minPrice = Double.valueOf(oPrice[0]) + Double.valueOf(oPrice[2]);
-                double maxPrice = Double.valueOf(oPrice[0]) + Double.valueOf(oPrice[1]);
+                openPrice = Double.valueOf(oPrice[0]);
+                closePrice = Double.valueOf(oPrice[0]) + Double.valueOf(oPrice[3]);
+                maxPrice = Double.valueOf(oPrice[0])+Double.valueOf(oPrice[1]);
+                minPrice = Double.valueOf(oPrice[0])+Double.valueOf(oPrice[2]);
 
-                int yTop=SystemUtil.dp2px(mContext, (float) ((maxPrice - price[0]) / unit));
-                int yBottom=SystemUtil.dp2px(mContext, (float) ((minPrice - price[0]) / unit));
-//                int x=getMeasurdWidth()/showDatasize;
-                int x=SystemUtil.dp2px(mContext,KLineChartConstant.juli);
-                if(Double.valueOf(oPrice[3])>0){
-                    canvas.drawRect(i*x+dataViewSpace,yBottom,i*x+x,yTop,mBluePaint);
-                }else{
-                    canvas.drawRect(i*x+dataViewSpace,yBottom,i*x+x,yTop,mRedPaint);
+                yTop = (float) (Math.abs(price[1] - openPrice) / unit);
+                yBottom = (float)(Math.abs(price[1] - closePrice) / unit);
+                yMaxTop = (float) (Math.abs(price[1] - maxPrice) / unit);
+                yMinBottom = (float) (Math.abs(price[1] - minPrice) / unit);
+//                float x = SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju);
+//                float i1 =showLeftX+(i-startIndex)*SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju);
+//                float i2 = showLeftX+(i-startIndex)*SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju)-dataViewSpace;
+                startX = showLeftX + (i - startIndex) * SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju);
+                stopX = startX + SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju) - dataViewSpace;
+                if (Double.valueOf(oPrice[3]) > 0) {
+                    canvas.drawRect(startX, yBottom, stopX, yTop, mBluePaint);
+                    canvas.drawLine(startX +(stopX - startX)/2, yMinBottom, startX +(stopX - startX)/2, yMaxTop,mBluePaint);
+                } else {
+                    canvas.drawRect(startX, yTop, stopX, yBottom, mRedPaint);
+                    canvas.drawLine(startX +(stopX - startX)/2, yMaxTop, startX +(stopX - startX)/2, yMinBottom,mRedPaint);
                 }
             }
         }
-
     }
-
 
 
     //画线
     private void drawLine(Canvas canvas) {
         if (data != null) {
-            int i = getMeasuredHeight()/6 ;
-            int y =getMeasuredWidth()*5;
-            canvas.drawLine(0, 0, y, 0, mGarkPaint);
-            canvas.drawLine(0, i, y, i, mGarkPaint);
-            canvas.drawLine(0, i * 2, y, i * 2, mGarkPaint);
-            canvas.drawLine(0, i * 3, y, i * 3, mGarkPaint);
-            canvas.drawLine(0, i * 4, y, i * 4, mGarkPaint);
+            int[] ints = DataUtil.drawLineCount(digits, price[1], price[0]);
+            int h = getMeasuredHeight() / ints[0];
+            for(int i=0;i<ints[0];i++){
+                canvas.drawLine(0,h*i,getMeasuredWidth()*5,h*i,mGarkPaint);
+            }
+//            canvas.drawLine(0, 0, getMeasuredWidth() * 5, 0, mGarkPaint);
+//            canvas.drawLine(0, 0, getMeasuredWidth() * 5, 0, mGarkPaint);
+//            canvas.drawLine(0, 0, getMeasuredWidth() * 5, 0, mGarkPaint);
+//            canvas.drawLine(0, h, getMeasuredWidth() * 5, h, mGarkPaint);
+//            canvas.drawLine(0, h * 2, getMeasuredWidth() * 5, h * 2, mGarkPaint);
+//            canvas.drawLine(0, h * 3, getMeasuredWidth() * 5, h * 3, mGarkPaint);
+//            canvas.drawLine(0, h * 4, getMeasuredWidth() * 5, h * 4, mGarkPaint);
         }
     }
 
-    /**
-     * @param data
-     */
-    private long dataBeginTime;
-    //0是最小,1是最大
-    private double[] price;
-    /**
-     * 单位dip的价格差
-     */
-    private double unit;
-    private HistoryDataList data;
 
-    public void setHistoryData(HistoryDataList data) {
+
+
+    public void setHistoryData(HistoryDataList data, int left, int right) {
         if (data != null) {
             this.data = data;
             dataBeginTime = data.getItems().get(0).getT();
+            digits=data.getDigits();
         }
-        postInvalidate();
+        postInvalidate(left, 0, right, getMeasuredHeight());
     }
+
+    @Override
+    public void postInvalidate(int left, int top, int right, int bottom) {
+        showLeftX = left;
+        showRightX = right;
+        super.postInvalidate(left, top, right, bottom);
+    }
+
 
     /**
      * 数据处理,我们要拿到最高价,最低价price[],每单元dp代表的差价unit,数据的开始时间时间dataBeginTime,
      */
+    private int startIndex;
+    private int endIndex;
+
     private void devodeHistoryData() {
-        if (data != null) {
-            price = DataUtil.calcMaxMinPrice(data, data.getDigits(), data.getItems().size() - showDatasize, data.getItems().size());
-            double blance = price[1] - price[0];
-            unit = blance / SystemUtil.px2dp(mContext, getMeasuredHeight());
-        }
+        int i = SystemUtil.dp2px(mContext, KLineChartConstant.jianju + KLineChartConstant.juli);
+        int i1 = SystemUtil.dp2px(mContext, KLineChartConstant.jianju + KLineChartConstant.juli);
+        startIndex = Math.abs(showLeftX / SystemUtil.dp2px(mContext, KLineChartConstant.jianju + KLineChartConstant.juli));
+        endIndex = Math.abs(showRightX / SystemUtil.dp2px(mContext, KLineChartConstant.jianju + KLineChartConstant.juli));
+        price = DataUtil.calcMaxMinPrice(data, data.getDigits(), startIndex, endIndex);
+        Log.i(TAG, "devodeHistoryData: statIndex"+startIndex+"   endIndex"+endIndex);
+        double blance = price[1] - price[0];
+        unit = blance / (getMeasuredHeight()-SystemUtil.dp2pxFloat(mContext,KLineChartConstant.kongbaiqu));
+    }
+
+    private void postInvalidate(int x, int y) {
+        devodeHistoryData();
+        postInvalidate();
+    }
+
+    @Override
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+        super.onScrollChanged(l, t, oldl, oldt);
+        Log.i(TAG, "onScrollChanged: " + l + "   " + t + "       " + oldl + "     " + oldt);
     }
 //    float lastX;
 //    float lastY;
@@ -225,4 +274,6 @@ public class HistoryTradeView extends View {
 //
 //        return true;
 //    }
+
+
 }
