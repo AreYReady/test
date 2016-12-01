@@ -1,7 +1,5 @@
 package trade.xkj.com.trade.Utils;
 
-import android.util.Log;
-
 import java.math.BigDecimal;
 
 import trade.xkj.com.trade.bean.HistoryDataList;
@@ -47,9 +45,10 @@ public class DataUtil {
                     }
                 }
             }
-//            double offset = MoneyUtil.mulPrice(MoneyUtil.subPrice(maxPrice, minPrice), 0.1);
-//            maxPrice = MoneyUtil.addPrice(maxPrice, offset);//最大值上面部分的空间
-//            minPrice = MoneyUtil.subPrice(maxPrice, offset);//最小值下面部分的空间
+            double offset = MoneyUtil.mulPrice(MoneyUtil.subPrice(maxPrice,minPrice),0.1);
+
+            maxPrice = MoneyUtil.addPrice(maxPrice, offset);//最大值上面部分的空间
+            minPrice = MoneyUtil.subPrice(minPrice, offset);//最小值下面部分的空间
 //            maxPrice = maxPrice + (maxPrice - minPrice) * 0.1;
 //            minPrice = minPrice - (maxPrice - minPrice) * 0.1;
 //            minP = new BigDecimal(minPrice).movePointLeft(digits);
@@ -63,17 +62,23 @@ public class DataUtil {
         return result;
     }
     public static int[] drawLineCount(int digits,double maxPrice,double minPrice ){
-        int i = (int)(maxPrice-minPrice) * digits * 10;
-        Log.i("DataUtil:hsc", "drawLineCount: i"+i+"        digits" +digits );
+        int i = (int)(maxPrice-minPrice);
         int[] data=new int[2];
-        if(i<6*digits*10){
-            data[0]=5;
-            data[1]= i/5;
-        }else{
-            data[0]=6;
-            data[1]=i/6;
+        if(i<100){
+            data[0]=20;
+            data[1]=5;
+        }else if(i<300){
+            data[0]=50;
+            data[1]=6;
+        }else if(i<600){
+            data[0]=100;
+            data[1]=6;
+        }else {
+            data[0]=200;
+            data[1]=6;
         }
+//        Log.i("DataUtil:hsc", "drawLineCount"+i );
+
         return data;
     }
-
 }

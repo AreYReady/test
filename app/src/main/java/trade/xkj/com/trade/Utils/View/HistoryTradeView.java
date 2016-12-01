@@ -5,10 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.Utils.DataUtil;
+import trade.xkj.com.trade.Utils.DateUtils;
+import trade.xkj.com.trade.Utils.MoneyUtil;
 import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.bean.HistoryData;
 import trade.xkj.com.trade.bean.HistoryDataList;
@@ -29,6 +32,7 @@ public class HistoryTradeView extends View {
      * @param data
      */
     private long dataBeginTime;
+    private long dataStopTime;
     /**
      *     0是最小,1是最大
      */
@@ -56,6 +60,17 @@ public class HistoryTradeView extends View {
     private float startX;
     private float stopX;
     private int digits;
+    //放大倍数,默认1为正常
+    private double scaleSize=1;
+    /**
+     * 每单位px的秒数
+     *
+     */
+    private long unitSecond;
+    /**
+     * 展示数据的区域高度
+     */
+    private float showDataHeight;
 
     public HistoryTradeView(Context context) {
         this(context, null);
@@ -128,8 +143,19 @@ public class HistoryTradeView extends View {
         super.onDraw(canvas);
         if (data != null) {
             devodeHistoryData();
+            drawVertical(canvas);
             drawLine(canvas);
             drawRect(canvas);
+        }
+    }
+
+    private void drawVertical(Canvas canvas) {
+        //每13个data的时间单位的px
+        int l = (int)(data.getPeriod() * 60 * 13/unitSecond);
+        int i = (getMeasuredWidth() - showLeftX) % l;
+        for(int x=0;x<10;x++){
+            canvas.drawLine(showLeftX+i+l*x,0,showLeftX+i+l*x,showDataHeight,mGarkPaint);
+            canvas.drawText(DateUtils.getShowTimeNoTimeZone(dataStopTime),showLeftX+i+l*x,showDataHeight+KLineChartConstant.showTimeSpace/2,mGarkPaint);
         }
     }
 
@@ -176,17 +202,19 @@ public class HistoryTradeView extends View {
     private void drawLine(Canvas canvas) {
         if (data != null) {
             int[] ints = DataUtil.drawLineCount(digits, price[1], price[0]);
-            int h = getMeasuredHeight() / ints[0];
-            for(int i=0;i<ints[0];i++){
-                canvas.drawLine(0,h*i,getMeasuredWidth()*5,h*i,mGarkPaint);
+            //注意,这里还缺少划线数都是整数,所以需要计算.曲余数,+100;
+            int wholeNumber=((int)(price[1]/100))*100;
+            while (wholeNumber>price[1]){
+                wholeNumber=wholeNumber-ints[0];
             }
-//            canvas.drawLine(0, 0, getMeasuredWidth() * 5, 0, mGarkPaint);
-//            canvas.drawLine(0, 0, getMeasuredWidth() * 5, 0, mGarkPaint);
-//            canvas.drawLine(0, 0, getMeasuredWidth() * 5, 0, mGarkPaint);
-//            canvas.drawLine(0, h, getMeasuredWidth() * 5, h, mGarkPaint);
-//            canvas.drawLine(0, h * 2, getMeasuredWidth() * 5, h * 2, mGarkPaint);
-//            canvas.drawLine(0, h * 3, getMeasuredWidth() * 5, h * 3, mGarkPaint);
-//            canvas.drawLine(0, h * 4, getMeasuredWidth() * 5, h * 4, mGarkPaint);
+            canvas.drawLine(showLeftX,0,showRightX,0,mGarkPaint);
+            canvas.drawLine(showLeftX,getMeasuredHeight()-SystemUtil.dp2pxFloat(mContext,KLineChartConstant.showTimeSpace),showRightX,getMeasuredHeight()-SystemUtil.dp2pxFloat(mContext,KLineChartConstant.showTimeSpace),mGarkPaint);
+            for(int i=0;i<ints[1];i++){
+                if((int)(((price[1]-wholeNumber)+ints[0]*i)/unit)<showDataHeight)
+                canvas.drawLine(showLeftX,(int)(((price[1]-wholeNumber)+ints[0]*i)/unit),showRightX,(int)(((price[1]-wholeNumber)+ints[0]*i)/unit),mGarkPaint);
+//                Log.i(TAG, "drawLine:ys "+(int)(ints[0]/unit*i)+"   ye  "+ (int)(ints[0]/unit*i)+"   "+ints[0]+"  "+ints[1]+ "  unit"+unit);
+            }
+
         }
     }
 
@@ -197,6 +225,7 @@ public class HistoryTradeView extends View {
         if (data != null) {
             this.data = data;
             dataBeginTime = data.getItems().get(0).getT();
+            dataStopTime=dataBeginTime+data.getItems().get(data.getItems().size()-1).getT()*1000;
             digits=data.getDigits();
         }
         postInvalidate(left, 0, right, getMeasuredHeight());
@@ -223,8 +252,10 @@ public class HistoryTradeView extends View {
         endIndex = Math.abs(showRightX / SystemUtil.dp2px(mContext, KLineChartConstant.jianju + KLineChartConstant.juli));
         price = DataUtil.calcMaxMinPrice(data, data.getDigits(), startIndex, endIndex);
         Log.i(TAG, "devodeHistoryData: statIndex"+startIndex+"   endIndex"+endIndex);
-        double blance = price[1] - price[0];
-        unit = blance / (getMeasuredHeight()-SystemUtil.dp2pxFloat(mContext,KLineChartConstant.kongbaiqu));
+        double blance = MoneyUtil.subPrice(price[1],price[0]);
+        unit = blance / (getMeasuredHeight()-SystemUtil.dp2pxFloat(mContext,KLineChartConstant.showTimeSpace));
+        unitSecond =  data.getItems().get(data.getItems().size()-1).getT()/width;
+        showDataHeight = getMeasuredHeight() - SystemUtil.dp2pxFloat(mContext, KLineChartConstant.showTimeSpace);
     }
 
     private void postInvalidate(int x, int y) {
@@ -237,43 +268,85 @@ public class HistoryTradeView extends View {
         super.onScrollChanged(l, t, oldl, oldt);
         Log.i(TAG, "onScrollChanged: " + l + "   " + t + "       " + oldl + "     " + oldt);
     }
-//    float lastX;
-//    float lastY;
-//    float rawX;
-//    float rawY;
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        Log.i(TAG, "onTouchEvent: ");
-//        switch (event.getAction()){
-//            case MotionEvent.ACTION_DOWN:
-//                Log.i(TAG, "onTouchEvent: ACTION_DOWN");
-//                lastX=event.getRawX();
-//                lastY=event.getRawY();
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                Log.i(TAG, "onTouchEvent: ACTION_MOVE");
-//                rawX=event.getRawX();
-//                rawY=event.getRawY();
-//                //通过View.layout来设置左上右下坐标位置
-//                //获得当前的left等坐标并加上相应偏移量
-////                layout(getLeft() + (int)offsetX,
-////                        getTop() + offsetY,
-////                        getRight() + offsetX,
-////                        getBottom() + offsetY);
-//                //移动过后，更新lastX与lastY
-//                Log.i(TAG, "onTouchEvent: "+(rawX-lastX));
-//                if(rawX-lastX>0){
-//                    lastX = rawX;
-//                    lastY = rawY;
-//                    dataViewSpace++;
-//                    postInvalidate();
+    public void getPriceDrawinfo(){
+
+    }
+    private MODE mode=MODE.NONE;
+    private double downDistance;
+    private double moveDistance;
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        /** 处理单点、多点触摸 **/
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_DOWN");
+//                onTouchDown(event);
+                break;
+            // 多点触摸
+            case MotionEvent.ACTION_POINTER_DOWN:
+                if(mode==MODE.NONE) {
+                    mode = MODE.YES;
+                    downDistance= getDistance(event);
+                }
+//                onPointerDown(event);
+                onScaleDraw();
+                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_POINTER_DOWN");
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_MOVE");
+                if(mode==MODE.YES){
+                    moveDistance=getDistance(event);
+                    if(scaleSize>=2){
+                        scaleSize=2;
+                    }else if(scaleSize<=1&&scaleSize>0.5){
+                    scaleSize=MoneyUtil.addPrice(scaleSize,(MoneyUtil.subPrice(moveDistance,downDistance)/100));
+                    }else if(scaleSize<=0.5){
+                        scaleSize=0.5;
+                    }else{
+                    scaleSize=MoneyUtil.addPrice(scaleSize,(MoneyUtil.subPrice(moveDistance,downDistance)/100));
+                    }
+                    downDistance=moveDistance;
+                }
+                Log.i(TAG, "onTouchEvent: scaleSize"+scaleSize);
+//                onTouchMove(event);
+                break;
+            case MotionEvent.ACTION_UP:
+                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_UP");
+                break;
+
+            // 多点松开
+            case MotionEvent.ACTION_POINTER_UP:
+                if(mode==MODE.YES) {
+                    mode = MODE.NONE;
+                }
+
+                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_POINTER_UP");
+//                mode = MODE.NONE;
+                /** 执行缩放还原 **/
+//                if (isScaleAnim) {
+//                    doScaleAnim();
 //                }
-//                break;
-//        }
-//
-//
-//        return true;
-//    }
+                break;
+        }
+        Log.i(TAG, "onTouchEvent: event.getRawX()"+event.getRawX()+" event.getRawX()  "+event.getX());
+        return true;
+    }
 
+    private void onScaleDraw() {
 
+    }
+
+    public enum MODE{
+        NONE,
+        YES;
+    }
+    /** 获取两点的距离 **/
+    double getDistance(MotionEvent event) {
+        float x = event.getX(0) - event.getX(1);
+        float y = event.getY(0) - event.getY(1);
+        float sqrt = (float) Math.sqrt(x * x + y * y);
+        Log.i(TAG, "getDistance: sqrt"+sqrt);
+        return  Math.sqrt(x * x + y * y);
+    }
 }
