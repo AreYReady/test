@@ -40,7 +40,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     private HistoryTradeView mHistoryTradeView;
     private LinearLayout ll;
     private Context context;
-    private View imView;
     private int h;
     private int w;
     private int wChild;
@@ -60,7 +59,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
         super.onActivityCreated(savedInstanceState);
 
         mHScrollView = (MyHorizontalScrollView) view.findViewById(R.id.hsv_trade);
-        imView = view.findViewById(R.id.imageVi);
         ll = (LinearLayout) view.findViewById(R.id.ll);
         context = this.getActivity();
         ViewTreeObserver vto = mHScrollView.getViewTreeObserver();

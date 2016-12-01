@@ -18,8 +18,7 @@ import java.util.TimeZone;
  * Created by huangsc on 2016-12-01.
  * TODO:时间格式工具类
  */
-public class DateUtils {
-
+public class DateUtils{
     public static String getXTime(long time) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone(getCurrentTimeZone()));
@@ -104,12 +103,24 @@ public class DateUtils {
     /**
      * @author huangsc...1936
      * 获取当前时间格式没有时区
+     * 如果不是以1970.1.1:00.00.00开始,修正偏正值
      */
     public static String getShowTimeNoTimeZone(long time) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return sdf.format(new Date(time));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-d HH:mm:ss");
+        return sdf.format(new Date(time+xiuzhenTime()));
     }
 
+    /**
+     * 如果初始时间不是1970年。
+     * @return
+     */
+    public static long xiuzhenTime(){
+     if(getOrderStartTimeNoTimeZone("1970-01-01 00:00:00")!=0){
+         return getOrderStartTimeNoTimeZone("1970-01-01 00:00:00");
+     }
+        long orderStartTimeNoTimeZone = getOrderStartTimeNoTimeZone("1970-01-01 00:00:00");
+        return 0;
+    };
     /**
      * 获取订单开始时间
      *
@@ -136,6 +147,7 @@ public class DateUtils {
     public static long getOrderStartTimeNoTimeZone(String open_time) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
+            long time = sdf.parse(open_time).getTime();
             return sdf.parse(open_time).getTime();
         } catch (ParseException e) {
             e.printStackTrace();

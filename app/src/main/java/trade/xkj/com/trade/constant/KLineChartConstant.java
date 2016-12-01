@@ -20,5 +20,9 @@ public class KLineChartConstant {
      * 下面时间的显示空间
      */
     public static int showTimeSpace=20;
+    /**
+     * 左边显示价格的空间大小dip
+     */
+    public static int showPriceSpace=60;
 
 }

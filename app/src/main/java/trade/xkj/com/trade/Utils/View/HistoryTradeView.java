@@ -47,8 +47,8 @@ public class HistoryTradeView extends View {
     private float dataViewSpace = 3;
     private int width = 0;
     private int height = 0;
-    private int showLeftX;
-    private int showRightX;
+    private int showDataLeftX;
+    private int showDataRightX;
     private double openPrice;
     private double closePrice;
     private double maxPrice;
@@ -59,18 +59,24 @@ public class HistoryTradeView extends View {
     private float yMinBottom;
     private float startX;
     private float stopX;
+    private float showPriceSpace;
     private int digits;
     //放大倍数,默认1为正常
     private double scaleSize=1;
+    private long showBeginTime;
     /**
      * 每单位px的秒数
      *
      */
-    private long unitSecond;
+    private float unitSecond;
     /**
      * 展示数据的区域高度
      */
     private float showDataHeight;
+    /**
+     * 最高价和最低价
+     */
+    private double blance;
 
     public HistoryTradeView(Context context) {
         this(context, null);
@@ -93,6 +99,8 @@ public class HistoryTradeView extends View {
         mGarkPaint = new Paint();
         mGarkPaint.setColor(getResources().getColor(R.color.text_color_primary_dark_with_opacity));
         mGarkPaint.setStrokeWidth(3);
+        mGarkPaint.setTextAlign(Paint.Align.CENTER);
+        mGarkPaint.setTextSize(SystemUtil.dp2pxFloat(mContext,10));
         dataViewSpace = SystemUtil.dp2pxFloat(mContext, KLineChartConstant.jianju);
     }
 
@@ -110,7 +118,6 @@ public class HistoryTradeView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         width = getMySize(100, widthMeasureSpec);
         height = getMySize(100, heightMeasureSpec);
-        Log.i(TAG, "onMeasure: width" + width + " height" + height);
         setMeasuredDimension(width, height);
     }
 
@@ -151,11 +158,16 @@ public class HistoryTradeView extends View {
 
     private void drawVertical(Canvas canvas) {
         //每13个data的时间单位的px
-        int l = (int)(data.getPeriod() * 60 * 13/unitSecond);
-        int i = (getMeasuredWidth() - showLeftX) % l;
+        int size=13;
+        int l = (int)(data.getPeriod() * 60 * size/unitSecond);
+        int i =(getMeasuredWidth() - (int)showPriceSpace-showDataLeftX) % l;
+
+
         for(int x=0;x<10;x++){
-            canvas.drawLine(showLeftX+i+l*x,0,showLeftX+i+l*x,showDataHeight,mGarkPaint);
-            canvas.drawText(DateUtils.getShowTimeNoTimeZone(dataStopTime),showLeftX+i+l*x,showDataHeight+KLineChartConstant.showTimeSpace/2,mGarkPaint);
+            if(showDataLeftX +i+l*x<=showDataRightX) {
+                canvas.drawLine(showDataLeftX + i + l * x, 0, showDataLeftX + i + l * x, showDataHeight, mGarkPaint);
+                canvas.drawText(DateUtils.getShowTimeNoTimeZone(showBeginTime * (1000+size*x+size-i)*data.getPeriod()*60*1000), showDataLeftX + i + l * x, showDataHeight + KLineChartConstant.showTimeSpace / 2 + SystemUtil.dp2pxFloat(mContext, 10), mGarkPaint);
+            }
         }
     }
 
@@ -182,9 +194,9 @@ public class HistoryTradeView extends View {
                 yMaxTop = (float) (Math.abs(price[1] - maxPrice) / unit);
                 yMinBottom = (float) (Math.abs(price[1] - minPrice) / unit);
 //                float x = SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju);
-//                float i1 =showLeftX+(i-startIndex)*SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju);
-//                float i2 = showLeftX+(i-startIndex)*SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju)-dataViewSpace;
-                startX = showLeftX + (i - startIndex) * SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju);
+//                float i1 =showDataLeftX+(i-startIndex)*SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju);
+//                float i2 = showDataLeftX+(i-startIndex)*SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju)-dataViewSpace;
+                startX = showDataLeftX + (i - startIndex) * SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju);
                 stopX = startX + SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju) - dataViewSpace;
                 if (Double.valueOf(oPrice[3]) > 0) {
                     canvas.drawRect(startX, yBottom, stopX, yTop, mBluePaint);
@@ -207,11 +219,12 @@ public class HistoryTradeView extends View {
             while (wholeNumber>price[1]){
                 wholeNumber=wholeNumber-ints[0];
             }
-            canvas.drawLine(showLeftX,0,showRightX,0,mGarkPaint);
-            canvas.drawLine(showLeftX,getMeasuredHeight()-SystemUtil.dp2pxFloat(mContext,KLineChartConstant.showTimeSpace),showRightX,getMeasuredHeight()-SystemUtil.dp2pxFloat(mContext,KLineChartConstant.showTimeSpace),mGarkPaint);
+            canvas.drawLine(showDataLeftX,0, showDataRightX,0,mGarkPaint);
+            canvas.drawLine(showDataLeftX,getMeasuredHeight()-SystemUtil.dp2pxFloat(mContext,KLineChartConstant.showTimeSpace), showDataRightX,getMeasuredHeight()-SystemUtil.dp2pxFloat(mContext,KLineChartConstant.showTimeSpace),mGarkPaint);
             for(int i=0;i<ints[1];i++){
                 if((int)(((price[1]-wholeNumber)+ints[0]*i)/unit)<showDataHeight)
-                canvas.drawLine(showLeftX,(int)(((price[1]-wholeNumber)+ints[0]*i)/unit),showRightX,(int)(((price[1]-wholeNumber)+ints[0]*i)/unit),mGarkPaint);
+                canvas.drawLine(showDataLeftX,(int)(((price[1]-wholeNumber)+ints[0]*i)/unit), showDataRightX,(int)(((price[1]-wholeNumber)+ints[0]*i)/unit),mGarkPaint);
+                canvas.drawText(String.valueOf((MoneyUtil.subPrice(price[1],((price[1]*data.getDigits())%ints[0])/data.getDigits())+ints[0])/data.getDigits()),showDataRightX,(int)(((price[1]-wholeNumber)+ints[0]*i)/unit),mGarkPaint);
 //                Log.i(TAG, "drawLine:ys "+(int)(ints[0]/unit*i)+"   ye  "+ (int)(ints[0]/unit*i)+"   "+ints[0]+"  "+ints[1]+ "  unit"+unit);
             }
 
@@ -225,7 +238,8 @@ public class HistoryTradeView extends View {
         if (data != null) {
             this.data = data;
             dataBeginTime = data.getItems().get(0).getT();
-            dataStopTime=dataBeginTime+data.getItems().get(data.getItems().size()-1).getT()*1000;
+            dataStopTime=dataBeginTime+data.getItems().get(data.getItems().size()-1).getT();
+            showBeginTime=dataBeginTime+data.getItems().get(endIndex).getT();
             digits=data.getDigits();
         }
         postInvalidate(left, 0, right, getMeasuredHeight());
@@ -233,8 +247,10 @@ public class HistoryTradeView extends View {
 
     @Override
     public void postInvalidate(int left, int top, int right, int bottom) {
-        showLeftX = left;
-        showRightX = right;
+        showDataLeftX = left;
+        showDataRightX = right-SystemUtil.dp2px(mContext,KLineChartConstant.showPriceSpace);
+        int showPriceLeftX=left;
+        int showPriceRightX=right;
         super.postInvalidate(left, top, right, bottom);
     }
 
@@ -248,14 +264,15 @@ public class HistoryTradeView extends View {
     private void devodeHistoryData() {
         int i = SystemUtil.dp2px(mContext, KLineChartConstant.jianju + KLineChartConstant.juli);
         int i1 = SystemUtil.dp2px(mContext, KLineChartConstant.jianju + KLineChartConstant.juli);
-        startIndex = Math.abs(showLeftX / SystemUtil.dp2px(mContext, KLineChartConstant.jianju + KLineChartConstant.juli));
-        endIndex = Math.abs(showRightX / SystemUtil.dp2px(mContext, KLineChartConstant.jianju + KLineChartConstant.juli));
+        startIndex = Math.abs(showDataLeftX / SystemUtil.dp2px(mContext, KLineChartConstant.jianju + KLineChartConstant.juli));
+        endIndex = Math.abs(showDataRightX / SystemUtil.dp2px(mContext, KLineChartConstant.jianju + KLineChartConstant.juli));
         price = DataUtil.calcMaxMinPrice(data, data.getDigits(), startIndex, endIndex);
-        Log.i(TAG, "devodeHistoryData: statIndex"+startIndex+"   endIndex"+endIndex);
-        double blance = MoneyUtil.subPrice(price[1],price[0]);
+        blance = MoneyUtil.subPrice(price[1],price[0]);
         unit = blance / (getMeasuredHeight()-SystemUtil.dp2pxFloat(mContext,KLineChartConstant.showTimeSpace));
-        unitSecond =  data.getItems().get(data.getItems().size()-1).getT()/width;
+        unitSecond =  (float)data.getItems().get(data.getItems().size()-1).getT()/width;
         showDataHeight = getMeasuredHeight() - SystemUtil.dp2pxFloat(mContext, KLineChartConstant.showTimeSpace);
+        showPriceSpace =SystemUtil.dp2pxFloat(mContext,KLineChartConstant.showPriceSpace);
+
     }
 
     private void postInvalidate(int x, int y) {
@@ -263,11 +280,7 @@ public class HistoryTradeView extends View {
         postInvalidate();
     }
 
-    @Override
-    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
-        super.onScrollChanged(l, t, oldl, oldt);
-        Log.i(TAG, "onScrollChanged: " + l + "   " + t + "       " + oldl + "     " + oldt);
-    }
+
     public void getPriceDrawinfo(){
 
     }
