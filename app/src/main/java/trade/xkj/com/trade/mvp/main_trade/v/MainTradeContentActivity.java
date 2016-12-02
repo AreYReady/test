@@ -14,10 +14,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import trade.xkj.com.trade.Base.BaseActivity;
+import trade.xkj.com.trade.base.BaseActivity;
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.View.PullViewDragLayout;
-import trade.xkj.com.trade.Utils.View.SwitchButton;
+import trade.xkj.com.trade.Utils.view.PullViewDragLayout;
+import trade.xkj.com.trade.Utils.view.SwitchButton;
 
 public class MainTradeContentActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {

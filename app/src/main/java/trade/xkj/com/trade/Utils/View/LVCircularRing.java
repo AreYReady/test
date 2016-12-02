@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.View;
+package trade.xkj.com.trade.Utils.view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

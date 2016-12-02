@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package trade.xkj.com.trade.Utils.SSLSOCKET;
+package trade.xkj.com.trade.Utils.sslsocket;
 
 import org.greenrobot.eventbus.EventBus;
 import org.slf4j.Logger;

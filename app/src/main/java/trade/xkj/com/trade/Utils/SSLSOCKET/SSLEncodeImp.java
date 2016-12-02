@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.SSLSOCKET;
+package trade.xkj.com.trade.Utils.sslsocket;
 
 import android.util.Log;
 

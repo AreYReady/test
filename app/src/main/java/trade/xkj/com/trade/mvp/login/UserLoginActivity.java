@@ -8,12 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import trade.xkj.com.trade.Base.BaseActivity;
+import trade.xkj.com.trade.base.BaseActivity;
 import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.Utils.AesEncryptionUtil;
 import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.Utils.ToashUtil;
-import trade.xkj.com.trade.Utils.View.LoadingDialog;
+import trade.xkj.com.trade.Utils.view.LoadingDialog;
 import trade.xkj.com.trade.bean.BeanUserLoginData;
 import trade.xkj.com.trade.mvp.main_trade.v.MainTradeContentActivity;
 

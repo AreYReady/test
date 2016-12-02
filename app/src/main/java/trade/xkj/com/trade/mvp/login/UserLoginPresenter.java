@@ -3,7 +3,7 @@ package trade.xkj.com.trade.mvp.login;
 import android.os.HandlerThread;
 import android.util.Log;
 
-import trade.xkj.com.trade.Utils.SSLSOCKET.SSLSocketChannel;
+import trade.xkj.com.trade.Utils.sslsocket.SSLSocketChannel;
 import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.bean.BeanUserLoginData;
 import trade.xkj.com.trade.handler.HandlerWrite;

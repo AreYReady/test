@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import trade.xkj.com.trade.R;
+import trade.xkj.com.trade.adapter.GalleryAdapter;
 
 public class test extends AppCompatActivity {
 

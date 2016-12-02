@@ -1,8 +1,10 @@
-package trade.xkj.com.trade.Utils.View;
+package trade.xkj.com.trade.Utils.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.HorizontalScrollView;
+
+import trade.xkj.com.trade.Utils.SystemUtil;
 
 /**
  * Created by huangsc on 2016-11-30.
@@ -11,6 +13,7 @@ import android.widget.HorizontalScrollView;
 
 public class MyHorizontalScrollView extends HorizontalScrollView {
     private ScrollViewListener mScrollViewListener;
+    private String TAG= SystemUtil.getTAG(this);
     public MyHorizontalScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }

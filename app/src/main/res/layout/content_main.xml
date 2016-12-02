@@ -12,7 +12,7 @@
         android:id="@+id/fl_main_trade_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-        <trade.xkj.com.trade.Utils.View.PullViewDragLayout
+        <trade.xkj.com.trade.Utils.view.PullViewDragLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/dragLayout"
@@ -43,5 +43,5 @@
                 android:layout_height="match_parent"
                 android:background="@color/content_black"/>
 
-        </trade.xkj.com.trade.Utils.View.PullViewDragLayout>
+        </trade.xkj.com.trade.Utils.view.PullViewDragLayout>
 </RelativeLayout>

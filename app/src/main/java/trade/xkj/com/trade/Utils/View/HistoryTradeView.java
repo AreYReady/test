@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.View;
+package trade.xkj.com.trade.Utils.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,11 +8,15 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.Utils.DataUtil;
 import trade.xkj.com.trade.Utils.DateUtils;
 import trade.xkj.com.trade.Utils.MoneyUtil;
 import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.bean.BeanDrawPriceData;
 import trade.xkj.com.trade.bean.HistoryData;
 import trade.xkj.com.trade.bean.HistoryDataList;
 import trade.xkj.com.trade.constant.KLineChartConstant;
@@ -28,6 +32,7 @@ public class HistoryTradeView extends View {
     private Context mContext;
     private Paint mBluePaint;
     private Paint mGarkPaint;
+    private List<BeanDrawPriceData> mDrawPriceDataList;
     /**
      * @param data
      */
@@ -45,10 +50,12 @@ public class HistoryTradeView extends View {
     private HistoryDataList showData;
     //两个数据绘图的空隙,默认3dip
     private float dataViewSpace = 3;
+    //单个数据所占的空间
+    private float simpleDataSpace=0;
     private int width = 0;
     private int height = 0;
-    private int showDataLeftX;
-    private int showDataRightX;
+    private float showDataLeftX;
+    private float showDataRightX;
     private double openPrice;
     private double closePrice;
     private double maxPrice;
@@ -59,10 +66,9 @@ public class HistoryTradeView extends View {
     private float yMinBottom;
     private float startX;
     private float stopX;
-    private float showPriceSpace;
     private int digits;
     //放大倍数,默认1为正常
-    private double scaleSize=1;
+    private float scaleSize=1;
     private long showBeginTime;
     /**
      * 每单位px的秒数
@@ -77,7 +83,7 @@ public class HistoryTradeView extends View {
      * 最高价和最低价
      */
     private double blance;
-
+    private DrawPriceListeren mDrawPriceListeren;
     public HistoryTradeView(Context context) {
         this(context, null);
     }
@@ -85,7 +91,13 @@ public class HistoryTradeView extends View {
     public HistoryTradeView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
-
+    public void setDrawPriceListeren(DrawPriceListeren drawPriceListeren){
+        mDrawPriceListeren=drawPriceListeren;
+    }
+    public interface DrawPriceListeren{
+        void drawPriceData(List<BeanDrawPriceData> drawPriceData);
+    }
+    private BeanDrawPriceData mBeanDrawPriceData;
 
     public HistoryTradeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -101,7 +113,9 @@ public class HistoryTradeView extends View {
         mGarkPaint.setStrokeWidth(3);
         mGarkPaint.setTextAlign(Paint.Align.CENTER);
         mGarkPaint.setTextSize(SystemUtil.dp2pxFloat(mContext,10));
-        dataViewSpace = SystemUtil.dp2pxFloat(mContext, KLineChartConstant.jianju);
+
+        mDrawPriceDataList =new ArrayList<>();
+
     }
 
 
@@ -118,7 +132,8 @@ public class HistoryTradeView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         width = getMySize(100, widthMeasureSpec);
         height = getMySize(100, heightMeasureSpec);
-        setMeasuredDimension(width, height);
+        setMeasuredDimension((int)(width*scaleSize), height);
+        Log.i(TAG, "onMeasure: "+(int)(width*scaleSize));
     }
 
     private int getMySize(int defaultSize, int measureSpec) {
@@ -160,13 +175,11 @@ public class HistoryTradeView extends View {
         //每13个data的时间单位的px
         int size=13;
         int l = (int)(data.getPeriod() * 60 * size/unitSecond);
-        int i =(getMeasuredWidth() - (int)showPriceSpace-showDataLeftX) % l;
-
-
+        int i =l-((int)showDataLeftX) % l;
         for(int x=0;x<10;x++){
             if(showDataLeftX +i+l*x<=showDataRightX) {
                 canvas.drawLine(showDataLeftX + i + l * x, 0, showDataLeftX + i + l * x, showDataHeight, mGarkPaint);
-                canvas.drawText(DateUtils.getShowTimeNoTimeZone(showBeginTime * (1000+size*x+size-i)*data.getPeriod()*60*1000), showDataLeftX + i + l * x, showDataHeight + KLineChartConstant.showTimeSpace / 2 + SystemUtil.dp2pxFloat(mContext, 10), mGarkPaint);
+                canvas.drawText(DateUtils.getShowTimeNoTimeZone(showBeginTime *1000), showDataLeftX + i + l * x, showDataHeight + KLineChartConstant.showTimeSpace / 2 + SystemUtil.dp2pxFloat(mContext, 10), mGarkPaint);
             }
         }
     }
@@ -196,8 +209,8 @@ public class HistoryTradeView extends View {
 //                float x = SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju);
 //                float i1 =showDataLeftX+(i-startIndex)*SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju);
 //                float i2 = showDataLeftX+(i-startIndex)*SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju)-dataViewSpace;
-                startX = showDataLeftX + (i - startIndex) * SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju);
-                stopX = startX + SystemUtil.dp2pxFloat(mContext, KLineChartConstant.juli+KLineChartConstant.jianju) - dataViewSpace;
+                startX = showDataLeftX + (i - startIndex) * (simpleDataSpace+dataViewSpace);
+                stopX = startX + simpleDataSpace;
                 if (Double.valueOf(oPrice[3]) > 0) {
                     canvas.drawRect(startX, yBottom, stopX, yTop, mBluePaint);
                     canvas.drawLine(startX +(stopX - startX)/2, yMinBottom, startX +(stopX - startX)/2, yMaxTop,mBluePaint);
@@ -222,12 +235,20 @@ public class HistoryTradeView extends View {
             canvas.drawLine(showDataLeftX,0, showDataRightX,0,mGarkPaint);
             canvas.drawLine(showDataLeftX,getMeasuredHeight()-SystemUtil.dp2pxFloat(mContext,KLineChartConstant.showTimeSpace), showDataRightX,getMeasuredHeight()-SystemUtil.dp2pxFloat(mContext,KLineChartConstant.showTimeSpace),mGarkPaint);
             for(int i=0;i<ints[1];i++){
-                if((int)(((price[1]-wholeNumber)+ints[0]*i)/unit)<showDataHeight)
-                canvas.drawLine(showDataLeftX,(int)(((price[1]-wholeNumber)+ints[0]*i)/unit), showDataRightX,(int)(((price[1]-wholeNumber)+ints[0]*i)/unit),mGarkPaint);
-                canvas.drawText(String.valueOf((MoneyUtil.subPrice(price[1],((price[1]*data.getDigits())%ints[0])/data.getDigits())+ints[0])/data.getDigits()),showDataRightX,(int)(((price[1]-wholeNumber)+ints[0]*i)/unit),mGarkPaint);
+                if((int)(((price[1]-wholeNumber)+ints[0]*i)/unit)<showDataHeight) {
+                    int i1 = (int) (((price[1] - wholeNumber) + ints[0] * i) / unit);
+                    String s = String.valueOf((MoneyUtil.subPrice(price[1], ((price[1] * data.getDigits()) % ints[0]) / data.getDigits()) + ints[0]) / data.getDigits());
+                    canvas.drawLine(showDataLeftX, (int) (((price[1] - wholeNumber) + ints[0] * i) / unit), showDataRightX, (int) (((price[1] - wholeNumber) + ints[0] * i) / unit), mGarkPaint);
+//                canvas.drawText(String.valueOf((MoneyUtil.subPrice(price[1],((price[1]*data.getDigits())%ints[0])/data.getDigits())+ints[0])/data.getDigits()),showDataRightX,(int)(((price[1]-wholeNumber)+ints[0]*i)/unit),mGarkPaint);
 //                Log.i(TAG, "drawLine:ys "+(int)(ints[0]/unit*i)+"   ye  "+ (int)(ints[0]/unit*i)+"   "+ints[0]+"  "+ints[1]+ "  unit"+unit);
+                    mBeanDrawPriceData=new BeanDrawPriceData();
+                    mBeanDrawPriceData.setPriceY(i1);
+                    mBeanDrawPriceData.setPriceString(s);
+                    mDrawPriceDataList.add(mBeanDrawPriceData);
+                }
             }
-
+            if(mDrawPriceListeren!=null)
+            mDrawPriceListeren.drawPriceData(mDrawPriceDataList);
         }
     }
 
@@ -237,18 +258,14 @@ public class HistoryTradeView extends View {
     public void setHistoryData(HistoryDataList data, int left, int right) {
         if (data != null) {
             this.data = data;
-            dataBeginTime = data.getItems().get(0).getT();
-            dataStopTime=dataBeginTime+data.getItems().get(data.getItems().size()-1).getT();
-            showBeginTime=dataBeginTime+data.getItems().get(endIndex).getT();
-            digits=data.getDigits();
         }
         postInvalidate(left, 0, right, getMeasuredHeight());
     }
 
     @Override
     public void postInvalidate(int left, int top, int right, int bottom) {
-        showDataLeftX = left;
-        showDataRightX = right-SystemUtil.dp2px(mContext,KLineChartConstant.showPriceSpace);
+        showDataLeftX = left*scaleSize;
+        showDataRightX = (int)(right*scaleSize);
         int showPriceLeftX=left;
         int showPriceRightX=right;
         super.postInvalidate(left, top, right, bottom);
@@ -262,16 +279,27 @@ public class HistoryTradeView extends View {
     private int endIndex;
 
     private void devodeHistoryData() {
-        int i = SystemUtil.dp2px(mContext, KLineChartConstant.jianju + KLineChartConstant.juli);
-        int i1 = SystemUtil.dp2px(mContext, KLineChartConstant.jianju + KLineChartConstant.juli);
-        startIndex = Math.abs(showDataLeftX / SystemUtil.dp2px(mContext, KLineChartConstant.jianju + KLineChartConstant.juli));
-        endIndex = Math.abs(showDataRightX / SystemUtil.dp2px(mContext, KLineChartConstant.jianju + KLineChartConstant.juli));
+        mDrawPriceDataList.clear();;
+        digits=data.getDigits();
+        dataViewSpace = (float)( SystemUtil.dp2pxFloat(mContext, KLineChartConstant.jianju)*scaleSize);
+        simpleDataSpace=(float)(SystemUtil.dp2pxFloat(mContext,KLineChartConstant.juli)*scaleSize);
+        startIndex =(int) Math.abs(showDataLeftX / (simpleDataSpace+dataViewSpace));
+        endIndex = (int)Math.abs(showDataRightX / (simpleDataSpace+dataViewSpace));
+//        if(endIndex>data.getItems().size()){
+//            endIndex=data.getItems().size();
+//        }
+//        if(startIndex<=0){
+//            startIndex=0;
+//        }
         price = DataUtil.calcMaxMinPrice(data, data.getDigits(), startIndex, endIndex);
         blance = MoneyUtil.subPrice(price[1],price[0]);
-        unit = blance / (getMeasuredHeight()-SystemUtil.dp2pxFloat(mContext,KLineChartConstant.showTimeSpace));
-        unitSecond =  (float)data.getItems().get(data.getItems().size()-1).getT()/width;
-        showDataHeight = getMeasuredHeight() - SystemUtil.dp2pxFloat(mContext, KLineChartConstant.showTimeSpace);
-        showPriceSpace =SystemUtil.dp2pxFloat(mContext,KLineChartConstant.showPriceSpace);
+        showDataHeight = (getMeasuredHeight() - SystemUtil.dp2pxFloat(mContext, KLineChartConstant.showTimeSpace));
+//        unit = blance / (getMeasuredHeight()-SystemUtil.dp2pxFloat(mContext,KLineChartConstant.showTimeSpace))/scaleSize;
+        unit = blance / showDataHeight/scaleSize;
+        unitSecond =  (float)((data.getItems().get(data.getItems().size()-1).getT()/width)/scaleSize);
+        dataBeginTime = data.getItems().get(0).getT();
+        dataStopTime=dataBeginTime+data.getItems().get(data.getItems().size()-1).getT();
+        showBeginTime=dataBeginTime+data.getItems().get(startIndex).getT();
 
     }
 
@@ -287,67 +315,65 @@ public class HistoryTradeView extends View {
     private MODE mode=MODE.NONE;
     private double downDistance;
     private double moveDistance;
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        /** 处理单点、多点触摸 **/
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_DOWN");
-//                onTouchDown(event);
-                break;
-            // 多点触摸
-            case MotionEvent.ACTION_POINTER_DOWN:
-                if(mode==MODE.NONE) {
-                    mode = MODE.YES;
-                    downDistance= getDistance(event);
-                }
-//                onPointerDown(event);
-                onScaleDraw();
-                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_POINTER_DOWN");
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_MOVE");
-                if(mode==MODE.YES){
-                    moveDistance=getDistance(event);
-                    if(scaleSize>=2){
-                        scaleSize=2;
-                    }else if(scaleSize<=1&&scaleSize>0.5){
-                    scaleSize=MoneyUtil.addPrice(scaleSize,(MoneyUtil.subPrice(moveDistance,downDistance)/100));
-                    }else if(scaleSize<=0.5){
-                        scaleSize=0.5;
-                    }else{
-                    scaleSize=MoneyUtil.addPrice(scaleSize,(MoneyUtil.subPrice(moveDistance,downDistance)/100));
-                    }
-                    downDistance=moveDistance;
-                }
-                Log.i(TAG, "onTouchEvent: scaleSize"+scaleSize);
-//                onTouchMove(event);
-                break;
-            case MotionEvent.ACTION_UP:
-                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_UP");
-                break;
-
-            // 多点松开
-            case MotionEvent.ACTION_POINTER_UP:
-                if(mode==MODE.YES) {
-                    mode = MODE.NONE;
-                }
-
-                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_POINTER_UP");
-//                mode = MODE.NONE;
-                /** 执行缩放还原 **/
-//                if (isScaleAnim) {
-//                    doScaleAnim();
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        /** 处理单点、多点触摸 **/
+//        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+//            case MotionEvent.ACTION_DOWN:
+//                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_DOWN");
+////                onTouchDown(event);
+//                break;
+//            // 多点触摸
+//            case MotionEvent.ACTION_POINTER_DOWN:
+//                if(mode==MODE.NONE) {
+//                    mode = MODE.YES;
+//                    downDistance= getDistance(event);
 //                }
-                break;
-        }
-        Log.i(TAG, "onTouchEvent: event.getRawX()"+event.getRawX()+" event.getRawX()  "+event.getX());
-        return true;
-    }
+////                onPointerDown(event);
+//
+//                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_POINTER_DOWN");
+//                break;
+//
+//            case MotionEvent.ACTION_MOVE:
+//                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_MOVE");
+//                if(mode==MODE.YES){
+//                    moveDistance=getDistance(event);
+//                    scaleSize=Float.valueOf(MoneyUtil.mulPriceToString(scaleSize,1+(MoneyUtil.subPrice(moveDistance,downDistance)/100)));
+//                    if(scaleSize>=2){
+//                        scaleSize=2;
+//                    }else if(scaleSize<=0.5f){
+//                        scaleSize=0.5f;
+//                    }
+//                    downDistance=moveDistance;
+//                    onScaleDraw();
+//                }
+//                Log.i(TAG, "onTouchEvent: scaleSize"+scaleSize);
+////                onTouchMove(event);
+//                break;
+//            case MotionEvent.ACTION_UP:
+//                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_UP");
+//                break;
+//
+//            // 多点松开
+//            case MotionEvent.ACTION_POINTER_UP:
+//                if(mode==MODE.YES) {
+//                    mode = MODE.NONE;
+//                }
+//
+//                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_POINTER_UP");
+////                mode = MODE.NONE;
+//                /** 执行缩放还原 **/
+////                if (isScaleAnim) {
+////                    doScaleAnim();
+////                }
+//                break;
+//        }
+//        Log.i(TAG, "onTouchEvent: event.getRawX()"+event.getRawX()+" event.getRawX()  "+event.getX());
+//        return true;
+//    }
 
     private void onScaleDraw() {
-
+        postInvalidate();
     }
 
     public enum MODE{

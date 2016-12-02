@@ -18,12 +18,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import trade.xkj.com.trade.Base.BaseFragment;
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.GalleryAdapter;
 import trade.xkj.com.trade.Utils.SystemUtil;
-import trade.xkj.com.trade.Utils.View.HistoryTradeView;
-import trade.xkj.com.trade.Utils.View.MyHorizontalScrollView;
+import trade.xkj.com.trade.Utils.ToashUtil;
+import trade.xkj.com.trade.Utils.view.DrawPriceView;
+import trade.xkj.com.trade.Utils.view.HistoryTradeView;
+import trade.xkj.com.trade.Utils.view.MyHorizontalScrollView;
+import trade.xkj.com.trade.adapter.GalleryAdapter;
+import trade.xkj.com.trade.base.BaseFragment;
+import trade.xkj.com.trade.bean.BeanDrawPriceData;
 import trade.xkj.com.trade.bean.HistoryDataList;
 import trade.xkj.com.trade.constant.KLineChartConstant;
 import trade.xkj.com.trade.mvp.main_trade.p.MainTradeContentPre;
@@ -39,6 +42,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     private MyHorizontalScrollView mHScrollView;
     private HistoryTradeView mHistoryTradeView;
     private LinearLayout ll;
+    private LinearLayout llDrawTrade;
     private Context context;
     private int h;
     private int w;
@@ -46,6 +50,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     private RecyclerView mRecyclerView;
     private GalleryAdapter mAdapter;
     private List<Integer> mDatas;
+    private DrawPriceView mDrawPriceView;
 
     @Nullable
     @Override
@@ -57,22 +62,28 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         mHScrollView = (MyHorizontalScrollView) view.findViewById(R.id.hsv_trade);
+        mDrawPriceView=(DrawPriceView)view.findViewById(R.id.dp_draw_price);
         ll = (LinearLayout) view.findViewById(R.id.ll);
         context = this.getActivity();
+        mHistoryTradeView = new HistoryTradeView(context);
         ViewTreeObserver vto = mHScrollView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             public void onGlobalLayout() {
                 h = mHScrollView.getHeight();
                 w = mHScrollView.getWidth();
                 Log.i(TAG, "Height=" + h); // 得到正确结果
-                mHistoryTradeView = new HistoryTradeView(context);
                  wChild=KLineChartConstant.count*(SystemUtil.dp2px(context,KLineChartConstant.juli+KLineChartConstant.jianju));
                 ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(wChild, h);
                 mHistoryTradeView.setLayoutParams(layoutParams);
                 ll.addView(mHistoryTradeView);
                 mHScrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+        mHistoryTradeView.setDrawPriceListeren(new HistoryTradeView.DrawPriceListeren() {
+            @Override
+            public void drawPriceData(List<BeanDrawPriceData> drawPriceData) {
+                mDrawPriceView.refresh(drawPriceData);
             }
         });
         mRecyclerView = (RecyclerView) view.findViewById(R.id.id_recyclerview_horizontal);
@@ -82,8 +93,14 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
         mRecyclerView.setLayoutManager(linearLayoutManager);
         //设置适配器
         mAdapter = new GalleryAdapter(context, mDatas);
-        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new GalleryAdapter.OnRecyclerItemClickListener() {
+            @Override
+            public void onClick(View v, String s) {
+                ToashUtil.showShort(context,s+"  "+v.getX());
 
+            }
+        });
+        mRecyclerView.setAdapter(mAdapter);
         mHScrollView.setScrollViewListener(new MyHorizontalScrollView.ScrollViewListener() {
             int mX=0;
             int mY=0;
@@ -101,6 +118,10 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
                 }
             }
         });
+        decodeRecycle();
+    }
+
+    private void decodeRecycle() {
     }
 
     @Override
@@ -119,9 +140,9 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
         EventBus.getDefault().register(this);
         mMainTradeContentPre = new MainTradeContentPreImpl(this, mHandler);
         mMainTradeContentPre.loading();
-        mDatas = new ArrayList<Integer>(Arrays.asList(R.mipmap.ic_launcher,
-                R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-                R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher));
+        mDatas = new ArrayList<Integer>(Arrays.asList(R.mipmap.ic_instrument_au,
+                R.mipmap.ic_instrument_audcad, R.mipmap.ic_instrument_audchf, R.mipmap.ic_instrument_audjpy, R.mipmap.ic_instrument_audnzd,
+                R.mipmap.ic_instrument_beans, R.mipmap.ic_instrument_cadchf, R.mipmap.ic_instrument_cadjpy, R.mipmap.ic_instrument_be));
     }
     HistoryDataList data;
     @Override

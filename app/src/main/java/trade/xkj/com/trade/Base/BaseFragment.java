@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Base;
+package trade.xkj.com.trade.base;
 
 import android.app.Fragment;
 import android.os.Bundle;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package trade.xkj.com.trade.Utils.SSLSOCKET;
+package trade.xkj.com.trade.Utils.sslsocket;
 
 /**
  * Defines an interface for classes that can (or need to) be closed once they

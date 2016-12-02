@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.View;
+package trade.xkj.com.trade.Utils.view;
 
 import android.app.Dialog;
 import android.content.Context;

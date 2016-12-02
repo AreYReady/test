@@ -16,15 +16,17 @@
 
     <LinearLayout
         android:layout_below="@id/fl_trade_indicator"
+        android:id="@+id/ll_draw_trade_context"
         android:layout_width="match_parent"
         android:layout_height="150dip"
         android:background="@color/bright_foreground_inverse_material_dark"
         android:orientation="horizontal">
 
-        <trade.xkj.com.trade.Utils.View.MyHorizontalScrollView
+        <trade.xkj.com.trade.Utils.view.MyHorizontalScrollView
             android:id="@+id/hsv_trade"
-            android:layout_width="match_parent"
+            android:layout_width="0dip"
             android:layout_height="match_parent"
+            android:layout_weight="6"
             >
 
             <LinearLayout
@@ -34,12 +36,11 @@
                 android:layout_below="@id/fl_trade_indicator"
                 android:orientation="horizontal">
             </LinearLayout>
-        </trade.xkj.com.trade.Utils.View.MyHorizontalScrollView>
-        <!--<View-->
-            <!--android:id="@+id/imageVi"-->
-            <!--android:layout_width="0dip"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1">-->
-        <!--</View>-->
+        </trade.xkj.com.trade.Utils.view.MyHorizontalScrollView>
+        <trade.xkj.com.trade.Utils.view.DrawPriceView
+            android:id="@+id/dp_draw_price"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
     </LinearLayout>
 </RelativeLayout>

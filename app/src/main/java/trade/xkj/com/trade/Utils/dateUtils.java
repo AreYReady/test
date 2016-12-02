@@ -106,7 +106,7 @@ public class DateUtils{
      * 如果不是以1970.1.1:00.00.00开始,修正偏正值
      */
     public static String getShowTimeNoTimeZone(long time) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-d HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(new Date(time+xiuzhenTime()));
     }
 

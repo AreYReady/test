@@ -11,7 +11,7 @@
             android:tag="list"
             />
 
-    <trade.xkj.com.trade.Utils.View.PullViewDragLayout
+    <trade.xkj.com.trade.Utils.view.PullViewDragLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/dragLayout"
@@ -39,5 +39,5 @@
                 android:layout_height="match_parent"
                 android:background="#FF00FF"/>
 
-    </trade.xkj.com.trade.Utils.View.PullViewDragLayout>
+    </trade.xkj.com.trade.Utils.view.PullViewDragLayout>
 </FrameLayout>

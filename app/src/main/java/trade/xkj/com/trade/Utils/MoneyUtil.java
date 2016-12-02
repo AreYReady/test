@@ -93,6 +93,11 @@ public class MoneyUtil {
         BigDecimal bDecimal = new BigDecimal(b + "");
         return aDecimal.multiply(bDecimal).doubleValue();
     }
+    public static String mulPriceToString(double a, double b) {
+        BigDecimal aDecimal = new BigDecimal(a + "");
+        BigDecimal bDecimal = new BigDecimal(b + "");
+        return aDecimal.multiply(bDecimal).toString();
+    }
 
     /**
      * 价钱相加

@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.View;
+package trade.xkj.com.trade.Utils.view;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;

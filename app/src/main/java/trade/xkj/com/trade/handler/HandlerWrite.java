@@ -9,7 +9,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 
-import trade.xkj.com.trade.Utils.SSLSOCKET.SSLSocketChannel;
+import trade.xkj.com.trade.Utils.sslsocket.SSLSocketChannel;
 import trade.xkj.com.trade.mvp.login.UserLoginPresenter;
 
 /**
