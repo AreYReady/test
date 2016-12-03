@@ -78,6 +78,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         viewHolder.mImg = (ImageView) view
                 .findViewById(R.id.id_index_gallery_item_image);
         viewHolder.mTxt=(TextView)view.findViewById(R.id.id_index_gallery_item_text);
+
 //        AlphaAnimation alam=new AlphaAnimation(1, 0);
 //        //设置动画
 //        alam.setDuration(2000);
@@ -105,5 +106,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         viewHolder.mImg.setImageResource(mDatas.get(i));
         viewHolder.itemView.setTag(3+i+"");
     }
+
 
 }

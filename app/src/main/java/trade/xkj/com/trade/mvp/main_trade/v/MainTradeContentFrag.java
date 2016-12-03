@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.ScaleAnimation;
 import android.widget.LinearLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -59,6 +60,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
         return view;
     }
 
+    private float initF=1f;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -98,6 +100,32 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
             public void onClick(View v, String s) {
                 ToashUtil.showShort(context,s+"  "+v.getX());
 
+            }
+        });
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                if (lastVisibleItemPosition != 0) {
+                    Log.i(TAG, "onScrolled: firstVisibleItemPosition" + firstVisibleItemPosition + "  lastVisibleItemPosition" + lastVisibleItemPosition);
+                    View childAt = layoutManager.getChildAt(firstVisibleItemPosition+2);
+                    int halfWidth = recyclerView.getWidth()/2;
+                    float x = childAt.getX();
+                    float v = halfWidth - x;
+                    float v1 = x / halfWidth;
+                    ScaleAnimation scaleAnimation = new ScaleAnimation(initF, v1, initF, v1);
+                    initF=v1;
+                    Log.i(TAG, "onScrolled:initF "+initF+"    v1"+v1);
+                    scaleAnimation.setFillAfter(true);
+                    childAt.setAnimation(scaleAnimation);
+                    scaleAnimation.startNow();
+                }
             }
         });
         mRecyclerView.setAdapter(mAdapter);
