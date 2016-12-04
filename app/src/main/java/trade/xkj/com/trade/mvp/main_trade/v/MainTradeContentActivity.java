@@ -14,10 +14,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import trade.xkj.com.trade.base.BaseActivity;
 import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.Utils.view.PullViewDragLayout;
 import trade.xkj.com.trade.Utils.view.SwitchButton;
+import trade.xkj.com.trade.base.BaseActivity;
 
 public class MainTradeContentActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,6 +40,8 @@ public class MainTradeContentActivity extends BaseActivity
     public void initData() {
 
     }
+
+
 
     @Override
     public void initView() {

@@ -80,8 +80,8 @@ public class PullViewDragLayout extends ViewGroup {
 
 			mDragOffset = (float) top / mDragRange;
 
-            mHeaderView.setPivotX(mHeaderView.getWidth());
-            mHeaderView.setPivotY(mHeaderView.getHeight());
+			mHeaderView.setPivotX(mHeaderView.getWidth());
+			mHeaderView.setPivotY(mHeaderView.getHeight());
 //            mHeaderView.setScaleX(1 - mDragOffset / 2);
 //            mHeaderView.setScaleY(1 - mDragOffset / 2);
 
@@ -230,10 +230,27 @@ public class PullViewDragLayout extends ViewGroup {
                 r,
                 mTop + mHeaderView.getMeasuredHeight());
 
+
+
         mDescView.layout(
                 0,
                 mTop + mHeaderView.getMeasuredHeight(),
                 r,
                 mTop  + b);
+//        mHeaderView.layout(
+//                0,
+//                b-mTop - mHeaderView.getMeasuredHeight(),
+//                r,
+//                b-mTop);
+//
+//
+//
+//        mDescView.layout(
+//                0,
+//                b-mTop,
+//                r,
+//                b-mTop+mDragRange);
+//		Log.i("hsc", "mHeaderView.getMeasuredHeight(): "+mHeaderView.getMeasuredHeight()+"  mTop "+mTop+"    b"+b+"    mDragRange"+mDescView);
+
 	}
 }

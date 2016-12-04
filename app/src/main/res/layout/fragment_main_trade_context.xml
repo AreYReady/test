@@ -6,7 +6,7 @@
         android:id="@+id/fl_trade_indicator"
         android:layout_width="match_parent"
         android:layout_height="150dip">
-        <android.support.v7.widget.RecyclerView
+        <trade.xkj.com.trade.Utils.view.CustomRecycleView
             android:id="@+id/id_recyclerview_horizontal"
             android:scrollbars="vertical"
             android:background="@color/order_radio_button_background_dark"

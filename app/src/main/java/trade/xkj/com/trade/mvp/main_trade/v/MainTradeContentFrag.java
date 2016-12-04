@@ -1,8 +1,10 @@
 package trade.xkj.com.trade.mvp.main_trade.v;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,6 +24,7 @@ import java.util.List;
 import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.Utils.ToashUtil;
+import trade.xkj.com.trade.Utils.view.CustomRecycleView;
 import trade.xkj.com.trade.Utils.view.DrawPriceView;
 import trade.xkj.com.trade.Utils.view.HistoryTradeView;
 import trade.xkj.com.trade.Utils.view.MyHorizontalScrollView;
@@ -48,7 +51,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     private int h;
     private int w;
     private int wChild;
-    private RecyclerView mRecyclerView;
+    private CustomRecycleView mRecyclerView;
     private GalleryAdapter mAdapter;
     private List<Integer> mDatas;
     private DrawPriceView mDrawPriceView;
@@ -61,6 +64,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     }
 
     private float initF=1f;
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -88,7 +92,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
                 mDrawPriceView.refresh(drawPriceData);
             }
         });
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.id_recyclerview_horizontal);
+        mRecyclerView = (CustomRecycleView) view.findViewById(R.id.id_recyclerview_horizontal);
         //设置布局管理器
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -100,34 +104,47 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
             public void onClick(View v, String s) {
                 ToashUtil.showShort(context,s+"  "+v.getX());
 
-            }
+           }
         });
-
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState==RecyclerView.SCROLL_STATE_IDLE){
+                    mRecyclerView.smoothToCenter();
+                }
+            }
+
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
                 int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
-                if (lastVisibleItemPosition != 0) {
+                for(;firstVisibleItemPosition<=lastVisibleItemPosition;firstVisibleItemPosition++) {
                     Log.i(TAG, "onScrolled: firstVisibleItemPosition" + firstVisibleItemPosition + "  lastVisibleItemPosition" + lastVisibleItemPosition);
-                    View childAt = layoutManager.getChildAt(firstVisibleItemPosition+2);
-                    int halfWidth = recyclerView.getWidth()/2;
-                    float x = childAt.getX();
-                    float v = halfWidth - x;
-                    float v1 = x / halfWidth;
-                    ScaleAnimation scaleAnimation = new ScaleAnimation(initF, v1, initF, v1);
-                    initF=v1;
-                    Log.i(TAG, "onScrolled:initF "+initF+"    v1"+v1);
+                    View childAt = layoutManager.getChildAt(firstVisibleItemPosition);
+                    int parentWidth = recyclerView.getWidth();
+                    if (childAt == null)
+                        return;
+                    int childWidth = childAt.getWidth();
+                    int centerLeft = parentWidth / 2 - childWidth / 2;//计算子view居中后相对于父view的左边距
+                    int centerRight = parentWidth / 2 + childWidth / 2;//计算子view居中后相对于父view的右边距
+                    float chlidLeft = childAt.getLeft();
+                    float v1 = chlidLeft / centerLeft;
+                    if(chlidLeft>=centerLeft){
+                        int childAtRight = childAt.getRight();
+                        v1=childAtRight/centerRight;
+                    }
+                    ScaleAnimation scaleAnimation = new ScaleAnimation(v1, v1, v1, v1);
                     scaleAnimation.setFillAfter(true);
                     childAt.setAnimation(scaleAnimation);
                     scaleAnimation.startNow();
                 }
-            }
+                }
+
         });
+
         mRecyclerView.setAdapter(mAdapter);
         mHScrollView.setScrollViewListener(new MyHorizontalScrollView.ScrollViewListener() {
             int mX=0;
