@@ -1,7 +1,6 @@
 package trade.xkj.com.trade.mvp.main_trade.v;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,8 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +33,8 @@ import trade.xkj.com.trade.bean.HistoryDataList;
 import trade.xkj.com.trade.constant.TradeDateConstant;
 import trade.xkj.com.trade.mvp.main_trade.p.MainTradeContentPre;
 import trade.xkj.com.trade.mvp.main_trade.p.MainTradeContentPreImpl;
+
+import static android.os.Build.VERSION_CODES.M;
 
 /**
  * Created by admin on 2016-11-22.
@@ -70,7 +69,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
 
     private float initF = 1f;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @RequiresApi(api = M)
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -104,58 +103,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         //设置适配器
-        mAdapter = new GalleryAdapter(context, mIndicatorDatas);
-        mAdapter.setOnItemClickListener(new GalleryAdapter.OnRecyclerItemClickListener() {
-            @Override
-            public void onClick(View v, String s) {
-                ToashUtil.showShort(context, s + "  " + v.getX());
-            }
-        });
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                                              @Override
-                                              public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                                                  super.onScrollStateChanged(recyclerView, newState);
-                                                  if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                                                      mRecyclerView.smoothToCenter();
-                                                  }
-                                              }
-//
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                Log.i(TAG, "smoothToCenter: onScrolled");
-//                firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
-//                lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
-//                for (; firstVisibleItemPosition <= lastVisibleItemPosition; firstVisibleItemPosition++) {
-//                    Log.i(TAG, "onScrolled: firstVisibleItemPosition" + firstVisibleItemPosition + "  lastVisibleItemPosition" + lastVisibleItemPosition);
-//                    childAt = linearLayoutManager.getChildAt(firstVisibleItemPosition);
-//                    int parentWidth = recyclerView.getWidth();
-//                    if (childAt == null)
-//                        return;
-//                    int childWidth = childAt.getWidth();
-//                    int center = parentWidth / 2 - childWidth / 2;//计算子view居中后相对于父view的左边距
-//                    float chlidLeft = childAt.getLeft();
-//                    float v1 = chlidLeft / center;
-//                    if (chlidLeft >= center) {
-//                        int childAtRight = childAt.getRight();
-//                        v1 = (parentWidth - childAtRight) / center;
-//                    }
-//                    if (v1 > 1) {
-//                        v1 = 1;
-//                    }
-//                        Log.i(TAG, "onScrolled: v1" + v1);
-//                        ScaleAnimation scaleAnimation = new ScaleAnimation(v1, v1, v1, v1);
-//                        scaleAnimation.setFillAfter(true);
-//                        childAt.setAnimation(scaleAnimation);
-//                        scaleAnimation.startNow();
-//                    }
-//                }
-//
-                                          }
 
-        );
-
-        mRecyclerView.setAdapter(mAdapter);
         mHScrollView.setScrollViewListener(new MyHorizontalScrollView.ScrollViewListener()
 
                                            {
@@ -194,7 +142,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
 
     @Override
     protected void initData() {
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
         mMainTradeContentPre = new MainTradeContentPreImpl(this, mHandler);
         mMainTradeContentPre.loading();
         if (mIndicatorDatas == null)
@@ -220,13 +168,57 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     @Override
     public void refreshIndicator(ArrayList<BeanIndicatorData> mBeanIndicatorDataArrayList) {
         mIndicatorDatas = mBeanIndicatorDataArrayList;
+                mAdapter = new GalleryAdapter(context, mIndicatorDatas);
+                mAdapter.setOnItemClickListener(new GalleryAdapter.OnRecyclerItemClickListener() {
+                    @Override
+                    public void onClick(View v, String s) {
+                        ToashUtil.showShort(context, s + "  " + v.getX());
+                    }
+                });
+                mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                                                      @Override
+                                                      public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                                                          super.onScrollStateChanged(recyclerView, newState);
+                                                          if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                                                              mRecyclerView.smoothToCenter();
+                                                          }
+                                                      }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                Log.i(TAG, "smoothToCenter: onScrolled");
+//                firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+//                lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
+//                for (; firstVisibleItemPosition <= lastVisibleItemPosition; firstVisibleItemPosition++) {
+//                    Log.i(TAG, "onScrolled: firstVisibleItemPosition" + firstVisibleItemPosition + "  lastVisibleItemPosition" + lastVisibleItemPosition);
+//                    childAt = linearLayoutManager.getChildAt(firstVisibleItemPosition);
+//                    int parentWidth = recyclerView.getWidth();
+//                    if (childAt == null)
+//                        return;
+//                    int childWidth = childAt.getWidth();
+//                    int center = parentWidth / 2 - childWidth / 2;//计算子view居中后相对于父view的左边距
+//                    float chlidLeft = childAt.getLeft();
+//                    float v1 = chlidLeft / center;
+//                    if (chlidLeft >= center) {
+//                        int childAtRight = childAt.getRight();
+//                        v1 = (parentWidth - childAtRight) / center;
+//                    }
+//                    if (v1 > 1) {
+//                        v1 = 1;
+//                    }
+//                        Log.i(TAG, "onScrolled: v1" + v1);
+//                        ScaleAnimation scaleAnimation = new ScaleAnimation(v1, v1, v1, v1);
+//                        scaleAnimation.setFillAfter(true);
+//                        childAt.setAnimation(scaleAnimation);
+//                        scaleAnimation.startNow();
+//                    }
+//                }
+//
+                                                  }
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.notifyDataSetChanged();
-            }
-        }, 2000);
+                );
+                mRecyclerView.setAdapter(mAdapter);
     }
 
     private void initScrollView() {

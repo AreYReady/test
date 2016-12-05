@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import trade.xkj.com.trade.Utils.SystemUtil;
@@ -18,6 +19,12 @@ public  abstract class BaseFragment extends Fragment {
     protected View view;
     protected Handler mHandler;
     protected final String TAG= SystemUtil.getTAG(this);
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

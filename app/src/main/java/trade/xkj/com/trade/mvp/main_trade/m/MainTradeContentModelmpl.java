@@ -47,7 +47,7 @@ public class MainTradeContentModelmpl implements MainTradeContentModel {
     }
 
 
-@Subscribe()
+    @Subscribe(threadMode = ThreadMode.MAIN)
 public void onGetAllSymbol(EventBusAllSymbol eventBusAllSymbol){
     mEventBusAllSymbol=eventBusAllSymbol;
 }
@@ -64,7 +64,7 @@ public void onGetAllSymbol(EventBusAllSymbol eventBusAllSymbol){
         }
     }
 
-    @Subscribe()
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetShowSymbol(BeanSymbolConfig beanSymbolConfig){
         BeanSymbolConfig mBeanSymbolConfig1=beanSymbolConfig;
         TradeDateConstant.tz_delta = mBeanSymbolConfig1.getTz_delta();
