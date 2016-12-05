@@ -10,7 +10,11 @@ import java.nio.ByteBuffer;
 
 import trade.xkj.com.trade.Utils.SocketUtil;
 import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.bean.BeanServerTime;
+import trade.xkj.com.trade.bean.BeanSymbolConfig;
 import trade.xkj.com.trade.bean.DataEvent;
+import trade.xkj.com.trade.bean.EventBusAllSymbol;
+import trade.xkj.com.trade.bean.RealTimeDataList;
 import trade.xkj.com.trade.bean.ResponseEvent;
 import trade.xkj.com.trade.constant.MessageType;
 
@@ -75,13 +79,13 @@ public class SSLDecoderImp implements Decoder<String> {
                     break;
                 case MessageType.TYPE_BINARY_ALL_SYMBOL://所有产品列表
                     Log.i(TAG, "handleResult:所有产品列表=  " + resultMessage);
-//                    EventBusAllSymbol allSymbol = new Gson().fromJson(resultMessage, EventBusAllSymbol.class);
-//                    EventBus.getDefault().post(allSymbol);
+                    EventBusAllSymbol allSymbol = new Gson().fromJson(resultMessage, EventBusAllSymbol.class);
+                    EventBus.getDefault().post(allSymbol);
                     break;
                 case MessageType.TYPE_BINARY_SYMBOLE_SHOW://要展示的产品
-//                    BeanSymbolConfig symbolShow = new Gson().fromJson(resultMessage, BeanSymbolConfig.class);
+                    BeanSymbolConfig symbolShow = new Gson().fromJson(resultMessage, BeanSymbolConfig.class);
                     Log.i(TAG, "handleResult:要展示的产品=  " + resultMessage);
-//                    EventBus.getDefault().postSticky(symbolShow);
+                    EventBus.getDefault().post(symbolShow);
                     break;
                 case MessageType.TYPE_BINARY_ACTIVE_ORDER_LIST://进行中订单
                     Log.i(TAG, "handleResult:进行中订单=  " + resultMessage);
@@ -97,9 +101,9 @@ public class SSLDecoderImp implements Decoder<String> {
                     Log.i(TAG, "handleResult:订单通知结果=  " + resultMessage);
                     break;
                 case MessageType.TYPE_BINARY_REAL_TIME_LIST://发送实时数据
-//                    RealTimeDataList realTimeDataList = new Gson().fromJson(resultMessage, RealTimeDataList.class);
+                    RealTimeDataList realTimeDataList = new Gson().fromJson(resultMessage, RealTimeDataList.class);
                     Log.i(TAG, "handleResult:发送实时数据=  " + resultMessage);
-//                    EventBus.getDefault().post(realTimeDataList);
+                    EventBus.getDefault().post(realTimeDataList);
                     break;
                 case MessageType.TYPE_BINARY_HISTORY_LIST://发送历史数据，画图
                     Log.i(TAG, "handleResult:发送历史数据，画图=  " + resultMessage);
@@ -125,8 +129,8 @@ public class SSLDecoderImp implements Decoder<String> {
                     break;
                 case MessageType.TYPE_BINARY_SERVER_TIME://服务器时间
                     Log.i(TAG, "handleResult:服务器时间=  " + resultMessage);
-//                    BeanServerTime serverTime = new Gson().fromJson(resultMessage, BeanServerTime.class);
-//                    EventBus.getDefault().post(serverTime);
+                    BeanServerTime serverTime = new Gson().fromJson(resultMessage, BeanServerTime.class);
+                    EventBus.getDefault().post(serverTime);
                     break;
             }
         }

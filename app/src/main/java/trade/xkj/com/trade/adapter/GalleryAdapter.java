@@ -2,7 +2,6 @@ package trade.xkj.com.trade.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import java.util.List;
 
 import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.bean.BeanIndicatorData;
 
 
 /**
@@ -21,7 +21,7 @@ import trade.xkj.com.trade.Utils.SystemUtil;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> implements View.OnClickListener {
     private LayoutInflater mInflater;
-    protected List<Integer> mDatas;
+    protected List<BeanIndicatorData> mDatas;
     private Context mContext;
     private String TAG= SystemUtil.getTAG(this);
     private OnRecyclerItemClickListener mOnRecyclerItemClickListener;
@@ -29,7 +29,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         void onClick(View v, String s);
     }
 
-    public GalleryAdapter(Context context, List<Integer> datats)
+    public GalleryAdapter(Context context, List<BeanIndicatorData> datats)
     {
         mContext=context;
         mInflater = LayoutInflater.from(context);
@@ -70,14 +70,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         View view = mInflater.inflate(R.layout.test_item,
                 viewGroup, false);
         view.setOnClickListener(this);
-        Log.i(TAG, "onCreateViewHolder: "+i);
-        if(i==1){
-
-        }
         ViewHolder viewHolder = new ViewHolder(view);
         viewHolder.mImg = (ImageView) view
                 .findViewById(R.id.id_index_gallery_item_image);
-        viewHolder.mTxt=(TextView)view.findViewById(R.id.id_index_gallery_item_text);
+        viewHolder.mTxt=(TextView)view.findViewById(R.id.id_index_gallery_item_text_left);
 
 //        AlphaAnimation alam=new AlphaAnimation(1, 0);
 //        //设置动画
@@ -91,9 +87,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-        if(position==0){
-            return 1;
-        }
         return super.getItemViewType(position);
     }
 
@@ -103,7 +96,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int i)
     {
-        viewHolder.mImg.setImageResource(mDatas.get(i));
+        viewHolder.mImg.setImageResource(mDatas.get(i).getImageResource());
         viewHolder.itemView.setTag(3+i+"");
     }
 

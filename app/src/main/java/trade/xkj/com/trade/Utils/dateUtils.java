@@ -91,19 +91,19 @@ public class DateUtils{
 
     /**
      * @author huangsc
-     * 获取当前时间格式:时间起点是1936
+     * 获取当前时间格式:=
      */
     public static String getShowTime(long time) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yy:MM:dd HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("yy:MM:dd HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone(getCurrentTimeZone()));
         return sdf.format(new Date(time));
     }
 
 
     /**
-     * @author huangsc...1936
+     * @author huangsc.
      * 获取当前时间格式没有时区
-     * 如果不是以1970.1.1:00.00.00开始,修正偏正值
+     *
      */
     public static String getShowTimeNoTimeZone(long time) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

@@ -56,7 +56,7 @@ public class DrawPriceView extends View {
             return;
         }
         for (BeanDrawPriceData beanDrawPriceData : mDrawPrice) {
-            canvas.drawText(beanDrawPriceData.getPriceString(), 0, beanDrawPriceData.getPriceY(), mGarkPaint);
+            canvas.drawText(beanDrawPriceData.getPriceString(), getWidth()/3, beanDrawPriceData.getPriceY(), mGarkPaint);
         }
     }
 

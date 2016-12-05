@@ -23,6 +23,11 @@ public class MoneyUtil {
         }
         return df.format(money);
     }
+    public static String moneyFormat(double numble,int digist){
+            BigDecimal   b   =   new   BigDecimal(numble);
+          return String.valueOf( b.setScale(digist,   BigDecimal.ROUND_HALF_UP).doubleValue());
+
+    }
 
     public static String moneyFormat(String money) {
         DecimalFormat df = new DecimalFormat("0.00000");
@@ -93,6 +98,7 @@ public class MoneyUtil {
         BigDecimal bDecimal = new BigDecimal(b + "");
         return aDecimal.multiply(bDecimal).doubleValue();
     }
+
     public static String mulPriceToString(double a, double b) {
         BigDecimal aDecimal = new BigDecimal(a + "");
         BigDecimal bDecimal = new BigDecimal(b + "");
@@ -117,6 +123,25 @@ public class MoneyUtil {
         BigDecimal aDecimal = new BigDecimal(moneyFormat(a));
         BigDecimal bDecimal = new BigDecimal(moneyFormat(b));
         return aDecimal.add(bDecimal).movePointLeft(digits).toString();
+    }
+
+    /**
+     * 提供精确的除法运算方法div
+     *
+     * @param value1 被除数
+     * @param value2 除数
+     * @param scale  精确范围
+     * @return 两个参数的商
+     * @throws IllegalAccessException
+     */
+    public static double div(double value1, double value2, int scale) throws IllegalAccessException {
+        //如果精确范围小于0，抛出异常信息
+        if (scale < 0) {
+            throw new IllegalAccessException("精确度不能小于0");
+        }
+        BigDecimal b1 = new BigDecimal(Double.valueOf(value1));
+        BigDecimal b2 = new BigDecimal(Double.valueOf(value2));
+        return b1.divide(b2, scale).doubleValue();
     }
 
 //    @NonNull

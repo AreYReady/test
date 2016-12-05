@@ -160,7 +160,7 @@ public class CustomRecycleView extends RecyclerView {
                 position=i;
             }
         }
-        int count = ((LinearLayoutManager)getLayoutManager()).getItemCount();//获取item总数
+        int count = (getLayoutManager()).getItemCount();//获取item总数
         Log.i(TAG,"count:"+count);
         mTargetPos = Math.max(0, Math.min(count - 1, position));//获取目标item的位置（参考listview中的smoothScrollToPosition方法）
         Log.i(TAG, "firstposition:" + firstvisiableposition + "   lastposition:" + lastvisiableposition + "   position:" + position+
@@ -173,8 +173,6 @@ public class CustomRecycleView extends RecyclerView {
         int childLeftPx = targetChild.getLeft();//子view相对于父view的左边距
         int childRightPx = targetChild.getRight();//子view相对于父view的右边距
         Log.i(TAG, "target-->left:" + targetChild.getLeft() + "   right:" + targetChild.getRight());
-
-
         int childWidth = targetChild.getWidth();
         int centerLeft = parentWidth/2-childWidth/2;//计算子view居中后相对于父view的左边距
         int centerRight = parentWidth/2+childWidth/2;//计算子view居中后相对于父view的右边距
@@ -183,6 +181,7 @@ public class CustomRecycleView extends RecyclerView {
             //平移的起始位置就是子view的左边距，平移的距离就是两者之差
             mLastx = childLeftPx;
             mScroller.startScroll(childLeftPx,0,centerLeft-childLeftPx,0,600);//600为移动时长，可自行设定
+            Log.i(TAG, "smoothToCenter: ");
             postInvalidate();
         }else if(childRightPx<centerRight){
             mLastx = childRightPx;

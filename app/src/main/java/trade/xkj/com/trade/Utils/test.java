@@ -34,7 +34,7 @@ public class test extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         //设置适配器
-        mAdapter = new GalleryAdapter(this, mDatas);
+//        mAdapter = new GalleryAdapter(this, mDatas);
         mRecyclerView.setAdapter(mAdapter);
 
 

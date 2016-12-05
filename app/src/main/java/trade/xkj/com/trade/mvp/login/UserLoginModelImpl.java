@@ -15,15 +15,18 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
-import trade.xkj.com.trade.base.MyApplication;
+import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.Utils.sslsocket.Decoder;
 import trade.xkj.com.trade.Utils.sslsocket.Encoder;
 import trade.xkj.com.trade.Utils.sslsocket.SSLDecoderImp;
 import trade.xkj.com.trade.Utils.sslsocket.SSLEncodeImp;
 import trade.xkj.com.trade.Utils.sslsocket.SSLSocketChannel;
-import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.base.MyApplication;
+import trade.xkj.com.trade.bean.BeanSymbolConfig;
 import trade.xkj.com.trade.bean.BeanUserLoginData;
+import trade.xkj.com.trade.bean.EventBusAllSymbol;
 import trade.xkj.com.trade.bean.ResponseEvent;
 import trade.xkj.com.trade.constant.MessageType;
 import trade.xkj.com.trade.constant.ServerIP;
@@ -46,6 +49,8 @@ public class UserLoginModelImpl implements UserLoginModel {
     private HandlerWrite mHandlerWrite;
     private ResultEnum mResultEnum;
     private UserLoginPresenter mUserLoginPresenter;
+    private EventBusAllSymbol mEventBusAllSymbol;
+    private ArrayList<BeanSymbolConfig.SymbolsBean> subTradeSymbol;
     public UserLoginModelImpl(UserLoginPresenter mUserLoginPresenter){
         this.mUserLoginPresenter=mUserLoginPresenter;
         EventBus.getDefault().register(this);
@@ -134,4 +139,42 @@ public class UserLoginModelImpl implements UserLoginModel {
         mUserLoginPresenter.loginResult(mResultEnum);
     }
 
+//    @Subscribe(sticky = true)
+//    public void onGetAllSymbol(EventBusAllSymbol eventBusAllSymbol){
+//        mEventBusAllSymbol=eventBusAllSymbol;
+//    }
+//
+//
+//    @Subscribe(sticky = true)
+//    public void onGetShowSymbol(BeanSymbolConfig beanSymbolConfig){
+//        BeanSymbolConfig mBeanSymbolConfig1=beanSymbolConfig;
+//        TradeDateConstant.tz_delta = mBeanSymbolConfig1.getTz_delta();
+//        sendSubSymbol(beanSymbolConfig);
+//        Log.i(TAG, "onGetShowSymbol: tz_delta"+ TradeDateConstant.tz_delta);
+//    }
+//
+//    /**
+//     * 发送订阅的商品类型
+//     * @param beanSymbolConfig
+//     */
+//    private void sendSubSymbol(BeanSymbolConfig beanSymbolConfig) {
+//
+//        if(mEventBusAllSymbol!=null) {
+//            if(subTradeSymbol==null)
+//                subTradeSymbol=new ArrayList<>();
+//            subTradeSymbol.clear();
+//            Log.i(TAG, "sendSubSymbol: 发送订阅商品实时数据请求");
+//            ArrayList<BeanSymbolConfig.SymbolsBean> showSymbolsList = beanSymbolConfig.getSymbols();
+//            for (BeanSymbolConfig.SymbolsBean allsymbol : beanSymbolConfig.getSymbols()) {
+//                for (BeanSymbolConfig.SymbolsBean symbol : showSymbolsList) {
+//                    if (!symbol.getSymbol().equalsIgnoreCase(allsymbol.getSymbol())) {
+//                        continue;
+//                    } else {
+//                        subTradeSymbol.add(symbol);
+//                    }
+////                    sendMessageToSubThread("{\"msg_type\":1010,\"symbol\":\"" + symbol.getSymbol() + "\"}");
+//                }
+//            }
+//        }
+//    }
 }
