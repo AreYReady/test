@@ -2,30 +2,33 @@ package trade.xkj.com.trade.mvp.main_trade.v;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.Utils.ToashUtil;
-import trade.xkj.com.trade.Utils.view.CustomRecycleView;
+import trade.xkj.com.trade.Utils.view.CustomViewPager;
 import trade.xkj.com.trade.Utils.view.DrawPriceView;
+import trade.xkj.com.trade.Utils.view.FixedSpeedScroller;
 import trade.xkj.com.trade.Utils.view.HistoryTradeView;
 import trade.xkj.com.trade.Utils.view.MyHorizontalScrollView;
-import trade.xkj.com.trade.adapter.GalleryAdapter;
+import trade.xkj.com.trade.Utils.view.ZoomOutPageTransformer;
 import trade.xkj.com.trade.base.BaseFragment;
 import trade.xkj.com.trade.bean.BeanDrawPriceData;
 import trade.xkj.com.trade.bean.BeanIndicatorData;
@@ -46,19 +49,16 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     private MyHorizontalScrollView mHScrollView;
     private HistoryTradeView mHistoryTradeView;
     private LinearLayout ll;
-    private LinearLayout llDrawTrade;
     private Context context;
     private int h;
     private int w;
     private int wChild;
-    private CustomRecycleView mRecyclerView;
-    private GalleryAdapter mAdapter;
+    private CustomViewPager mCustomViewPager;
     private List<BeanIndicatorData> mIndicatorDatas;
     private DrawPriceView mDrawPriceView;
-    private LinearLayoutManager linearLayoutManager;
-    private int firstVisibleItemPosition;
-    private int lastVisibleItemPosition;
-    private View childAt;
+    private ViewpagerAdapter mViewPagerAdapter;
+    private FixedSpeedScroller scroller;
+    private int mPosition;
 
     @Nullable
     @Override
@@ -67,16 +67,11 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
         return view;
     }
 
-    private float initF = 1f;
 
     @RequiresApi(api = M)
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mHScrollView = (MyHorizontalScrollView) view.findViewById(R.id.hsv_trade);
-        mDrawPriceView = (DrawPriceView) view.findViewById(R.id.dp_draw_price);
-        ll = (LinearLayout) view.findViewById(R.id.ll);
-        context = this.getActivity();
         mHistoryTradeView = new HistoryTradeView(context);
         ViewTreeObserver vto = mHScrollView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -97,13 +92,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
                 mDrawPriceView.refresh(drawPriceData);
             }
         });
-        mRecyclerView = (CustomRecycleView) view.findViewById(R.id.id_recyclerview_horizontal);
-        //设置布局管理器
-        linearLayoutManager = new LinearLayoutManager(context);
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        //设置适配器
-
         mHScrollView.setScrollViewListener(new MyHorizontalScrollView.ScrollViewListener()
 
                                            {
@@ -130,23 +118,18 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-
-    @Override
     protected void initView() {
-
+        mCustomViewPager = (CustomViewPager) view.findViewById(R.id.vp_indicator_trade_content);
+        mHScrollView = (MyHorizontalScrollView) view.findViewById(R.id.hsv_trade);
+        mDrawPriceView = (DrawPriceView) view.findViewById(R.id.dp_draw_price);
+        ll = (LinearLayout) view.findViewById(R.id.ll);
     }
 
     @Override
     protected void initData() {
-//        EventBus.getDefault().register(this);
+        context = this.getActivity();
         mMainTradeContentPre = new MainTradeContentPreImpl(this, mHandler);
         mMainTradeContentPre.loading();
-        if (mIndicatorDatas == null)
-            mIndicatorDatas = new ArrayList<>();
     }
 
     HistoryDataList data;
@@ -155,71 +138,44 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     public void freshView(final HistoryDataList data) {
         Log.i(TAG, "freshView: ");
         this.data = data;
-
         initScrollView();
     }
 
-    private Handler handler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-        }
-    };
     @Override
     public void refreshIndicator(ArrayList<BeanIndicatorData> mBeanIndicatorDataArrayList) {
         mIndicatorDatas = mBeanIndicatorDataArrayList;
-                mAdapter = new GalleryAdapter(context, mIndicatorDatas);
-                mAdapter.setOnItemClickListener(new GalleryAdapter.OnRecyclerItemClickListener() {
-                    @Override
-                    public void onClick(View v, String s) {
-                        ToashUtil.showShort(context, s + "  " + v.getX());
-                    }
-                });
-                mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                                                      @Override
-                                                      public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                                                          super.onScrollStateChanged(recyclerView, newState);
-                                                          if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                                                              mRecyclerView.smoothToCenter();
-                                                          }
-                                                      }
-//
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                Log.i(TAG, "smoothToCenter: onScrolled");
-//                firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
-//                lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
-//                for (; firstVisibleItemPosition <= lastVisibleItemPosition; firstVisibleItemPosition++) {
-//                    Log.i(TAG, "onScrolled: firstVisibleItemPosition" + firstVisibleItemPosition + "  lastVisibleItemPosition" + lastVisibleItemPosition);
-//                    childAt = linearLayoutManager.getChildAt(firstVisibleItemPosition);
-//                    int parentWidth = recyclerView.getWidth();
-//                    if (childAt == null)
-//                        return;
-//                    int childWidth = childAt.getWidth();
-//                    int center = parentWidth / 2 - childWidth / 2;//计算子view居中后相对于父view的左边距
-//                    float chlidLeft = childAt.getLeft();
-//                    float v1 = chlidLeft / center;
-//                    if (chlidLeft >= center) {
-//                        int childAtRight = childAt.getRight();
-//                        v1 = (parentWidth - childAtRight) / center;
-//                    }
-//                    if (v1 > 1) {
-//                        v1 = 1;
-//                    }
-//                        Log.i(TAG, "onScrolled: v1" + v1);
-//                        ScaleAnimation scaleAnimation = new ScaleAnimation(v1, v1, v1, v1);
-//                        scaleAnimation.setFillAfter(true);
-//                        childAt.setAnimation(scaleAnimation);
-//                        scaleAnimation.startNow();
-//                    }
-//                }
-//
-                                                  }
+        mViewPagerAdapter = new ViewpagerAdapter();
+        mCustomViewPager.setAdapter(mViewPagerAdapter);
+        mCustomViewPager.setOffscreenPageLimit(mIndicatorDatas.size());
+        mCustomViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        mCustomViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                mPosition = position;
+            }
 
-                );
-                mRecyclerView.setAdapter(mAdapter);
+            @Override
+            public void onPageSelected(int position) {
+                //当手指左滑速度大于2000时viewpager右滑（注意是item+2）
+                if (mCustomViewPager.getSpeed() < -1800) {
+
+                    mCustomViewPager.setCurrentItem(mPosition + 2);
+                    mCustomViewPager.setSpeed(0);
+                } else if (mCustomViewPager.getSpeed() > 1800 && mPosition > 0) {
+                    //当手指右滑速度大于2000时viewpager左滑（注意item-1即可）
+                    mCustomViewPager.setCurrentItem(mPosition - 1);
+                    mCustomViewPager.setSpeed(0);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        setViewPagerSpeed(250);
     }
+
 
     private void initScrollView() {
         mHandler.postDelayed(new Runnable() {
@@ -229,5 +185,66 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
                 mHistoryTradeView.setHistoryData(data, wChild - w, wChild);
             }
         }, 1000);
+    }
+
+    class ViewpagerAdapter extends PagerAdapter {
+        @Override
+        public Object instantiateItem(ViewGroup container, final int position) {
+            final BeanIndicatorData info = mIndicatorDatas.get(position);
+            //设置一大堆演示用的数据，麻里麻烦~~
+            View view = LayoutInflater.from(context).inflate(R.layout.viewpager_layout, null);
+            ImageView isSymbol = (ImageView) view.findViewById(R.id.id_index_gallery_item_image);
+            view.setTag(info.getImageResource());
+            TextView tvLetf = (TextView) view.findViewById(R.id.id_index_gallery_item_text_left);
+            TextView tvRight = (TextView) view.findViewById(R.id.id_index_gallery_item_text_right);
+            tvLetf.setText(info.getLeftString());
+            tvRight.setText(info.getRightString());
+            isSymbol.setImageResource(info.getImageResource());
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ToashUtil.showShort(context, info.getSymbolTag());
+                }
+            });
+            container.addView(view);
+            return view;
+        }
+
+        @Override
+        public int getCount() {
+            return mIndicatorDatas.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            View view = (View) object;
+            container.removeView(view);
+        }
+
+    }
+
+    /**
+     * 设置ViewPager切换速度
+     *
+     * @param duration
+     */
+    private void setViewPagerSpeed(int duration) {
+        try {
+            Field field = ViewPager.class.getDeclaredField("mScroller");
+            field.setAccessible(true);
+            scroller = new FixedSpeedScroller(context, new AccelerateInterpolator());
+            field.set(mCustomViewPager, scroller);
+            scroller.setmDuration(duration);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

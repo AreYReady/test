@@ -64,4 +64,11 @@
     <style name="MyToggleButton" parent="@android:style/Widget.CompoundButton">
         <item name="android:button">@drawable/setting_checkbox_button</item>
     </style>
+    <style name="TextHeader" parent="@android:style/TextAppearance.Small">
+        <item name="android:textSize">10.0sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_color_primary_dark_with_opacity</item>
+
+    </style>
+
 </resources>

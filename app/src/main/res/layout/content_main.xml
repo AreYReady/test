@@ -18,19 +18,16 @@
             android:id="@+id/dragLayout"
             android:orientation="vertical">
 
-            <TextView
+            <include
                 android:id="@+id/header"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:fontFamily="sans-serif-thin"
-                android:textSize="25sp"
+                layout="@layout/f_balance_horizontal"
+                />
+            <!--<trade.xkj.com.trade.Utils.view.CustomViewPager-->
+                <!--android:id="@+id/desc"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
 
-                android:text="Drag me to the bottom"
-                android:tag="text"
-                android:gravity="center"
-                android:textColor="@android:color/white"
-                android:background="@color/toolbars_title_dark"/>
-
+            <!--</trade.xkj.com.trade.Utils.view.CustomViewPager>-->
             <TextView
                 android:id="@+id/desc"
                 android:tag="desc"

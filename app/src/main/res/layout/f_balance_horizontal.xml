@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginTop="@dimen/space_nano"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:background="@color/toolbars_title_dark"
+    android:paddingLeft="@dimen/space_big">
+
+    <RelativeLayout
+        android:id="@android:id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_marginTop="@dimen/space_normal">
+
+        <ImageView
+            android:id="@+id/iv_suitcase"
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/badge_size_third"
+            android:gravity="center"
+            android:src="@mipmap/ic_bag"
+             />
+
+        <TextView
+            android:id="@+id/tv_badge"
+            android:layout_width="@dimen/badge_size"
+            android:layout_height="@dimen/badge_size"
+            android:layout_toRightOf="@id/iv_suitcase"
+            android:background="@color/brand_color_dark"
+            android:gravity="center"
+            android:padding="0.0dip"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/default_item_height"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/space_normal"
+                android:layout_weight="@integer/balance_weight_column_1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/open_pl"
+                    android:textAppearance="@style/TextHeader"
+                     />
+
+                <TextView
+                    android:id="@+id/tv_pull_open_p_l"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:text="$8888.88"
+                    android:textAppearance="@style/TextSmall" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/space_normal"
+                android:layout_weight="@integer/balance_weight_column_2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/balance"
+                    android:textAppearance="@style/TextHeader"
+                     />
+
+                <TextView
+                    android:id="@+id/tv_pull_balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$8888.88"
+                    android:textAppearance="@style/TextSmall" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/space_normal"
+                android:layout_weight="@integer/balance_weight_column_3"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/equity"
+                    android:textAppearance="@style/TextHeader"
+                     />
+
+                <TextView
+                    android:id="@+id/tv_pull_equity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$8888.88"
+                    android:textAppearance="@style/TextSmall" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="@dimen/balance_space_width"
+                android:layout_height="fill_parent">
+
+                <ImageView
+                    android:id="@+id/tv_pull_group_indicator"
+                    android:layout_width="@dimen/group_indicator_icon_size"
+                    android:layout_height="@dimen/group_indicator_icon_size"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:visibility="gone" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_micro"
+            android:minHeight="@dimen/default_item_height"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/space_normal"
+                android:layout_weight="@integer/balance_weight_column_1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/margin"
+                    android:textAppearance="@style/TextHeader" />
+
+                <TextView
+                    android:id="@+id/tv_pull_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:text="$8888.88"
+                    android:textAppearance="@style/TextSmall" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/space_normal"
+                android:layout_weight="@integer/balance_weight_column_2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/margin_level"
+                    android:textAppearance="@style/TextHeader" />
+
+                <TextView
+                    android:id="@+id/tv_pull_margin_level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$8888.88"
+                    android:textAppearance="@style/TextSmall" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/space_normal"
+                android:layout_weight="@integer/balance_weight_column_3"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/credit"
+                    android:textAppearance="@style/TextHeader" />
+
+                <TextView
+                    android:id="@+id/tv_pull_credit"
+                    android:layout_width="wrap_content"
+                    android:text="$8888.88"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextSmall" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="@dimen/balance_space_width"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

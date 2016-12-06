@@ -13,6 +13,7 @@
         android:layout_margin="5dp"
         android:scaleType="centerCrop" />
 
+
     <RelativeLayout
         android:layout_width="120dip"
         android:layout_height="wrap_content"
@@ -26,7 +27,7 @@
             android:layout_height="1dip"
             android:visibility="invisible"
             android:layout_centerHorizontal="true"
-             />
+            />
 
         <TextView
             android:id="@+id/id_index_gallery_item_text_left"

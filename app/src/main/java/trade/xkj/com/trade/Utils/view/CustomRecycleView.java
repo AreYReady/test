@@ -8,11 +8,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Scroller;
 
+import trade.xkj.com.trade.Utils.SystemUtil;
+
 /**
  * Created by huangsc on 2016/12/4.
  */
 public class CustomRecycleView extends RecyclerView {
-    private static final String TAG = CustomRecycleView.class.getSimpleName();
+    private  String TAG =SystemUtil.getTAG(this);
     private Scroller mScroller;
     private int mLastx = 0;
     private int mTargetPos;
@@ -35,6 +37,7 @@ public class CustomRecycleView extends RecyclerView {
     }
 
     private void init(Context context){
+
         mScroller = new Scroller(context);
     }
 
@@ -44,7 +47,7 @@ public class CustomRecycleView extends RecyclerView {
         super.computeScroll();
         //computeScrollOffset返回true表示滚动还在继续，持续时间应该就是startScroll设置的时间
         if(mScroller!=null && mScroller.computeScrollOffset()){
-            Log.d(TAG, "getCurrX = " + mScroller.getCurrX());
+//            Log.d(TAG, "getCurrX = " + mScroller.getCurrX());
             scrollBy(mLastx - mScroller.getCurrX(), 0);
             mLastx = mScroller.getCurrX();
             postInvalidate();//让系统继续重绘，则会继续重复执行computeScroll
@@ -152,20 +155,11 @@ public class CustomRecycleView extends RecyclerView {
         //获取可视范围内的选项的头尾位置
         int firstvisiableposition = ((LinearLayoutManager) getLayoutManager()).findFirstVisibleItemPosition();
         int lastvisiableposition = ((LinearLayoutManager) getLayoutManager()).findLastVisibleItemPosition();
-        int temp=10000;
-        int position=0;
-        for(int i=firstvisiableposition;i<=lastvisiableposition;i++){
-            if(getChildAt(i)!=null&&getWidth()/2-getChildAt(i).getLeft()>=0&&getWidth()/2-getChildAt(i).getLeft()<temp){
-                temp=getWidth()/2-getChildAt(i).getLeft();
-                position=i;
-            }
-        }
+        int position=(lastvisiableposition-firstvisiableposition)/2;
         int count = (getLayoutManager()).getItemCount();//获取item总数
-        Log.i(TAG,"count:"+count);
         mTargetPos = Math.max(0, Math.min(count - 1, position));//获取目标item的位置（参考listview中的smoothScrollToPosition方法）
-        Log.i(TAG, "firstposition:" + firstvisiableposition + "   lastposition:" + lastvisiableposition + "   position:" + position+
-                "   mTargetPos:"+mTargetPos);
-        View targetChild = getChildAt(mTargetPos);//获取目标item在当前可见视图item集合中的位置
+        Log.i(TAG, "smoothToCenter: mTargetPos"+mTargetPos);
+        View targetChild = getChildAt(position);//获取目标item在当前可见视图item集合中的位置
 //        View firstChild = getChildAt(0);//当前可见视图集合中的最左view
 //        View lastChild = getChildAt(childCount-1);//当前可见视图集合中的最右view
 //        Log.i(TAG,"first-->left:"+firstChild.getLeft()+"   right:"+firstChild.getRight());
@@ -188,7 +182,5 @@ public class CustomRecycleView extends RecyclerView {
             mScroller.startScroll(childRightPx,0,centerRight-childRightPx,0,600);
             postInvalidate();
         }
-
-
     }
 }

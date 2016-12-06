@@ -41,4 +41,6 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
         void onScrollChanged(MyHorizontalScrollView scrollView, int x, int y, int oldx, int oldy);
 
     }
+
+
 }

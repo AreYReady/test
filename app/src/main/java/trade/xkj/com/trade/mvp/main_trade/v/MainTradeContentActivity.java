@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import trade.xkj.com.trade.R;
+import trade.xkj.com.trade.Utils.ToashUtil;
 import trade.xkj.com.trade.Utils.view.PullViewDragLayout;
 import trade.xkj.com.trade.Utils.view.SwitchButton;
 import trade.xkj.com.trade.base.BaseActivity;
@@ -67,17 +68,6 @@ public class MainTradeContentActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-//        mSitchButton=(SwitchButton) findViewById(R.id.dragLayout);
-//        mSitchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if(isChecked){
-//                    replaceFragment(new MainTradeContentFrag(),"1");
-//                }else{
-//                    replaceFragment(new MainTradeContentFrag2(),"2");
-//                }
-//            }
-//        });
         fragmentManager = getFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fl_main_trade_content,new MainTradeContentFrag(),"1");
@@ -111,6 +101,7 @@ public class MainTradeContentActivity extends BaseActivity
         } else if (id == R.id.nav_manage) {
 
         }
+        ToashUtil.showShort(this,"功能暂未开放");
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

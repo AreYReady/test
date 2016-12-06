@@ -81,7 +81,7 @@ public class PullViewDragLayout extends ViewGroup {
 			mDragOffset = (float) top / mDragRange;
 
 			mHeaderView.setPivotX(mHeaderView.getWidth());
-			mHeaderView.setPivotY(mHeaderView.getHeight());
+			mHeaderView.setPivotY(mHeaderView.getHeight()/2);
 //            mHeaderView.setScaleX(1 - mDragOffset / 2);
 //            mHeaderView.setScaleY(1 - mDragOffset / 2);
 
@@ -108,7 +108,7 @@ public class PullViewDragLayout extends ViewGroup {
 		@Override
 		public int clampViewPositionVertical(View child, int top, int dy) {
 			final int topBound = getPaddingTop();
-			final int bottomBound = getHeight() - mHeaderView.getHeight() - mHeaderView.getPaddingBottom();
+			final int bottomBound = getHeight() - mHeaderView.getHeight()/2 - mHeaderView.getPaddingBottom();
 
 			final int newTop = Math.min(Math.max(top, topBound), bottomBound);
 			return newTop;
@@ -223,7 +223,7 @@ public class PullViewDragLayout extends ViewGroup {
 
     @Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		mDragRange = getHeight() - mHeaderView.getHeight();
+		mDragRange = getHeight() - mHeaderView.getHeight()/2;
         mHeaderView.layout(
                 0,
                 mTop,

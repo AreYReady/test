@@ -31,4 +31,5 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'org.slf4j:slf4j-android:1.7.21'
+    compile 'cn.bingoogolapple:bga-badgeview:1.1.3'
 }

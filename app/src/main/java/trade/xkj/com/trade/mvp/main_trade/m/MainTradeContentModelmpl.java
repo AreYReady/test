@@ -91,7 +91,7 @@ public void onGetAllSymbol(EventBusAllSymbol eventBusAllSymbol){
                         } else {
                             subTradeSymbol.add(symbol);
                         }
-                        sendMessageToSubThread("{\"msg_type\":1010,\"symbol\":\"" + symbol.getSymbol() + "\"}");
+//                        sendMessageToSubThread("{\"msg_type\":1010,\"symbol\":\"" + symbol.getSymbol() + "\"}");
                     }
                 }
             refreshIndicator(subTradeSymbol);
