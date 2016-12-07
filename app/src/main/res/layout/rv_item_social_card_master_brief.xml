@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginRight="0.0dip"
+        android:background="@color/toolbars_title_dark"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/space_normal"
+        android:paddingLeft="@dimen/space_big"
+        android:paddingRight="0.0dip"
+        android:paddingTop="@dimen/space_normal">
+
+        <FrameLayout
+            android:id="@+id/avatar_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/avatar"
+                style="@style/AvatarStyle"
+                android:layout_width="@dimen/card_avatar_size"
+                android:layout_height="@dimen/card_avatar_size"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="@dimen/space_small"
+                android:layout_marginRight="@dimen/space_big"
+                android:layout_marginTop="@dimen/space_small"
+                android:clickable="false"
+                android:contentDescription="@string/avatar" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="@dimen/space_mini"
+            android:layout_marginTop="@dimen/space_mini"
+            android:layout_toLeftOf="@+id/unwatch_copy_buttons"
+            android:layout_toRightOf="@+id/avatar_layout"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_normal"
+                android:ellipsize="end"
+                android:textAppearance="@style/TextAverage" />
+
+            <LinearLayout
+                android:id="@+id/copiers_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/copiers_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/space_normal"
+                    android:text="@string/copiers"
+                    android:textAppearance="@style/TextHeader" />
+
+                <TextView
+                    android:id="@+id/copiers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextRegular" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/unwatch_copy_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/space_big"
+            android:layout_marginTop="@dimen/space_big"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/watch_button"
+                style="@style/Button.Action.Secondary.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/action_button_height_traders_i"
+                android:layout_marginRight="@dimen/space_big"
+                android:text="@string/unwatch"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/action_button"
+                style="@style/Button.Action.Secondary.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/action_button_height_traders_i"
+                android:layout_marginRight="@dimen/space_big"
+                android:visibility="visible" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

@@ -44,7 +44,6 @@ import static android.os.Build.VERSION_CODES.M;
  */
 
 public class MainTradeContentFrag extends BaseFragment implements MainTradeContentLFragListener {
-    private View view;
     private MainTradeContentPre mMainTradeContentPre;
     private MyHorizontalScrollView mHScrollView;
     private HistoryTradeView mHistoryTradeView;
@@ -53,7 +52,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     private int h;
     private int w;
     private int wChild;
-    private CustomViewPager mCustomViewPager;
+    private CustomViewPager mHeaderCustomViewPager;
     private List<BeanIndicatorData> mIndicatorDatas;
     private DrawPriceView mDrawPriceView;
     private ViewpagerAdapter mViewPagerAdapter;
@@ -115,13 +114,15 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
                                            }
 
         );
+
     }
 
     @Override
     protected void initView() {
-        mCustomViewPager = (CustomViewPager) view.findViewById(R.id.vp_indicator_trade_content);
+        mHeaderCustomViewPager = (CustomViewPager) view.findViewById(R.id.vp_indicator_trade_content);
         mHScrollView = (MyHorizontalScrollView) view.findViewById(R.id.hsv_trade);
         mDrawPriceView = (DrawPriceView) view.findViewById(R.id.dp_draw_price);
+
         ll = (LinearLayout) view.findViewById(R.id.ll);
     }
 
@@ -130,6 +131,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
         context = this.getActivity();
         mMainTradeContentPre = new MainTradeContentPreImpl(this, mHandler);
         mMainTradeContentPre.loading();
+
     }
 
     HistoryDataList data;
@@ -145,10 +147,10 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     public void refreshIndicator(ArrayList<BeanIndicatorData> mBeanIndicatorDataArrayList) {
         mIndicatorDatas = mBeanIndicatorDataArrayList;
         mViewPagerAdapter = new ViewpagerAdapter();
-        mCustomViewPager.setAdapter(mViewPagerAdapter);
-        mCustomViewPager.setOffscreenPageLimit(mIndicatorDatas.size());
-        mCustomViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
-        mCustomViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mHeaderCustomViewPager.setAdapter(mViewPagerAdapter);
+        mHeaderCustomViewPager.setOffscreenPageLimit(mIndicatorDatas.size());
+        mHeaderCustomViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        mHeaderCustomViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 mPosition = position;
@@ -157,14 +159,14 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
             @Override
             public void onPageSelected(int position) {
                 //当手指左滑速度大于2000时viewpager右滑（注意是item+2）
-                if (mCustomViewPager.getSpeed() < -1800) {
-
-                    mCustomViewPager.setCurrentItem(mPosition + 2);
-                    mCustomViewPager.setSpeed(0);
-                } else if (mCustomViewPager.getSpeed() > 1800 && mPosition > 0) {
+                if (mHeaderCustomViewPager.getSpeed() < -1800) {
+                    mHeaderCustomViewPager.setCurrentItem(mPosition + 2);
+                    mHeaderCustomViewPager.setSpeed(0);
+                } else if (mHeaderCustomViewPager.getSpeed() > 1800 && mPosition > 0) {
                     //当手指右滑速度大于2000时viewpager左滑（注意item-1即可）
-                    mCustomViewPager.setCurrentItem(mPosition - 1);
-                    mCustomViewPager.setSpeed(0);
+                    mHeaderCustomViewPager.setCurrentItem(mPosition - 1);
+                    mHeaderCustomViewPager.setSpeed(0);
+
                 }
             }
 
@@ -197,10 +199,11 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
             view.setTag(info.getImageResource());
             TextView tvLetf = (TextView) view.findViewById(R.id.id_index_gallery_item_text_left);
             TextView tvRight = (TextView) view.findViewById(R.id.id_index_gallery_item_text_right);
+            TextView tvName =(TextView)view.findViewById(R.id.id_index_gallery_symbol_name);
             tvLetf.setText(info.getLeftString());
             tvRight.setText(info.getRightString());
+            tvName.setText(info.getSymbolTag());
             isSymbol.setImageResource(info.getImageResource());
-
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -210,7 +213,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
             container.addView(view);
             return view;
         }
-
         @Override
         public int getCount() {
             return mIndicatorDatas.size();
@@ -239,7 +241,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
             Field field = ViewPager.class.getDeclaredField("mScroller");
             field.setAccessible(true);
             scroller = new FixedSpeedScroller(context, new AccelerateInterpolator());
-            field.set(mCustomViewPager, scroller);
+            field.set(mHeaderCustomViewPager, scroller);
             scroller.setmDuration(duration);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();

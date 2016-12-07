@@ -1,8 +1,9 @@
 package trade.xkj.com.trade.base;
 
-import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 
@@ -17,20 +18,22 @@ import trade.xkj.com.trade.Utils.SystemUtil;
 
 public  abstract class BaseFragment extends Fragment {
     protected View view;
+    protected Context context;
     protected Handler mHandler;
     protected final String TAG= SystemUtil.getTAG(this);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context=getActivity();
         EventBus.getDefault().register(this);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initView();
         initData();
+        initView();
     }
 
     protected abstract void initView();

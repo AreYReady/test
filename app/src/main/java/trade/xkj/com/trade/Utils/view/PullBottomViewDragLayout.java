@@ -14,7 +14,7 @@ import trade.xkj.com.trade.R;
 /**
  * Created by Flavien Laurent (flavienlaurent.com) on 23/08/13.
  */
-public class PullViewDragLayout extends ViewGroup {
+public class PullBottomViewDragLayout extends ViewGroup {
 
 	private final ViewDragHelper mDragHelper;
 
@@ -29,15 +29,15 @@ public class PullViewDragLayout extends ViewGroup {
 	private float mDragOffset;
 
 
-    public PullViewDragLayout(Context context) {
+    public PullBottomViewDragLayout(Context context) {
 		this(context, null);
 	}
 
-	public PullViewDragLayout(Context context, AttributeSet attrs) {
+	public PullBottomViewDragLayout(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
 	}
 
-	public PullViewDragLayout(Context context, AttributeSet attrs, int defStyle) {
+	public PullBottomViewDragLayout(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		mDragHelper = ViewDragHelper.create(this, 1f, new DragHelperCallback());
 	}

@@ -70,5 +70,17 @@
         <item name="android:textColor">@color/text_color_primary_dark_with_opacity</item>
 
     </style>
-
+    <style name="Button.Action.Secondary.Small" parent="@style/Button">
+        <item name="android:textAppearance">@style/TextSmall</item>
+        <item name="android:textColor">@color/button_disabled_light</item>
+        <item name="android:background">@drawable/branded_action_button_dark</item>
+        <item name="android:minWidth">@dimen/action_button_width_short</item>
+    </style>
+    <style name="TextAverage" parent="@style/TextMedium">
+        <item name="android:textSize">15.0sp</item>
+    </style>
+    <style name="AvatarStyle">
+        <item name="android:background">@drawable/brand_oval_dark</item>
+        <item name="android:src">@mipmap/join_social_cover</item>
+    </style>
 </resources>

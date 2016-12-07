@@ -3,46 +3,46 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/rll_trade_indicator"
         android:layout_width="match_parent"
         android:layout_height="150dip"
-        android:id="@+id/rll_trade_indicator"
         android:background="@color/order_radio_button_background_dark"
         android:clipChildren="false">
+
         <trade.xkj.com.trade.Utils.view.CustomViewPager
             android:id="@+id/vp_indicator_trade_content"
             android:layout_width="360dp"
             android:layout_height="120dp"
             android:layout_centerInParent="true"
             android:layout_marginLeft="120dp"
-            android:layout_marginRight="120dp"/>
+            android:layout_marginRight="120dp" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_below="@id/rll_trade_indicator"
-        android:id="@+id/ll_draw_trade_context"
-        android:layout_width="match_parent"
-        android:layout_height="150dip"
-        android:background="@color/bright_foreground_inverse_material_dark"
-        android:orientation="horizontal">
 
-        <trade.xkj.com.trade.Utils.view.MyHorizontalScrollView
-            android:id="@+id/hsv_trade"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="6"
-            >
+        <LinearLayout
+            android:layout_below="@id/rll_trade_indicator"
+            android:background="@color/bright_foreground_inverse_material_dark"
+            android:id="@+id/ll_draw_trade_context"
+            android:layout_width="match_parent"
+            android:layout_height="150dip"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/ll"
-                android:layout_width="wrap_content"
-                android:layout_height="200dip"
-                android:orientation="horizontal">
-            </LinearLayout>
-        </trade.xkj.com.trade.Utils.view.MyHorizontalScrollView>
-        <trade.xkj.com.trade.Utils.view.DrawPriceView
-            android:id="@+id/dp_draw_price"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
-    </LinearLayout>
+            <trade.xkj.com.trade.Utils.view.MyHorizontalScrollView
+                android:id="@+id/hsv_trade"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="6">
+                <LinearLayout
+                    android:id="@+id/ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dip"
+                    android:orientation="horizontal"></LinearLayout>
+            </trade.xkj.com.trade.Utils.view.MyHorizontalScrollView>
+            <trade.xkj.com.trade.Utils.view.DrawPriceView
+                android:id="@+id/dp_draw_price"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
+
 </RelativeLayout>

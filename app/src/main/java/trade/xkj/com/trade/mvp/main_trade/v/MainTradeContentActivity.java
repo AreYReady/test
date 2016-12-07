@@ -1,31 +1,51 @@
 package trade.xkj.com.trade.mvp.main_trade.v;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.Utils.ToashUtil;
-import trade.xkj.com.trade.Utils.view.PullViewDragLayout;
+import trade.xkj.com.trade.Utils.view.CustomViewPager;
+import trade.xkj.com.trade.Utils.view.PullBottomViewDragLayout;
 import trade.xkj.com.trade.Utils.view.SwitchButton;
+import trade.xkj.com.trade.Utils.view.ZoomOutPageTransformer;
+import trade.xkj.com.trade.adapter.FragmentAdapter;
 import trade.xkj.com.trade.base.BaseActivity;
 
 public class MainTradeContentActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    private PullViewDragLayout mPullViewDragLayout;
+        implements NavigationView.OnNavigationItemSelectedListener{
+    private PullBottomViewDragLayout mPullViewDragLayout;
     private SwitchButton mSitchButton;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
+    private CustomViewPager mCustomViewPagerItem;
+    private List<String> mDataItem;
+    private Context context;
+    private int mPosition;
+    private ViewPager mViewPagerFrag;
+    private List<Fragment> mFragmentList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +59,20 @@ public class MainTradeContentActivity extends BaseActivity
 
     @Override
     public void initData() {
-
+        context = this;
+        mDataItem = new ArrayList<>();
+        mDataItem.add("我关注的操盘手");
+        mDataItem.add("我复制的操盘手");
+        mDataItem.add("持仓仓位");
+        mDataItem.add("挂单");
+        mDataItem.add("平仓仓位");
+        mFragmentList = new ArrayList<>();
+        mFragmentList.add(new Fragment1());
+        mFragmentList.add(new Fragment2());
+        mFragmentList.add(new Fragment3());
+        mFragmentList.add(new Fragment1());
+        mFragmentList.add(new Fragment1());
     }
-
 
 
     @Override
@@ -49,7 +80,7 @@ public class MainTradeContentActivity extends BaseActivity
         Log.i(TAG, "initView: ");
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mPullViewDragLayout = (PullViewDragLayout) findViewById(R.id.dragLayout);
+
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -68,10 +99,55 @@ public class MainTradeContentActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        fragmentManager = getFragmentManager();
+
+        fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fl_main_trade_content,new MainTradeContentFrag(),"1");
+        fragmentTransaction.replace(R.id.fl_main_trade_content, new MainTradeContentFrag(), "1");
         fragmentTransaction.commit();
+
+        mPullViewDragLayout = (PullBottomViewDragLayout) findViewById(R.id.dragLayout);
+        mViewPagerFrag = (ViewPager) findViewById(R.id.vp_indicator_content);
+        mViewPagerFrag.setAdapter(new FragmentAdapter(fragmentManager, mFragmentList));
+        mViewPagerFrag.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+            @Override
+            public void onPageSelected(int position) {
+                mCustomViewPagerItem.setCurrentItem(position,true);
+            }
+        });
+
+        mCustomViewPagerItem = (CustomViewPager) findViewById(R.id.cvp_indicator_item);
+        mCustomViewPagerItem.setAdapter(new ViewpagerAdapterItem());
+        mCustomViewPagerItem.setOffscreenPageLimit(mDataItem.size());
+        mCustomViewPagerItem.setPageTransformer(true, new ZoomOutPageTransformer());
+        mCustomViewPagerItem.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                mPosition = position;
+                Log.i(TAG, "onPageScrolled:position "+position);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+//                if (mCustomViewPagerItem.getSpeed() < -1800) {
+//                    mCustomViewPagerItem.setCurrentItem(mPosition + 1);
+//                    mCustomViewPagerItem.setSpeed(0);
+//                    mViewPagerFrag.setCurrentItem(mPosition + 1);
+//                } else if (mCustomViewPagerItem.getSpeed() > 1800 && mPosition > 0) {
+//                    //当手指右滑速度大于2000时viewpager左滑（注意item-1即可）
+//                    mCustomViewPagerItem.setCurrentItem(mPosition - 1);
+//                    mCustomViewPagerItem.setSpeed(0);
+//                    mViewPagerFrag.setCurrentItem(mPosition - 1);
+//                }
+                Log.i(TAG, "onPageSelected: mPosition"+position);
+                    mViewPagerFrag.setCurrentItem(position,true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
     }
 
     @Override
@@ -101,12 +177,39 @@ public class MainTradeContentActivity extends BaseActivity
         } else if (id == R.id.nav_manage) {
 
         }
-        ToashUtil.showShort(this,"功能暂未开放");
+        ToashUtil.showShort(this, "功能暂未开放");
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    public class ViewpagerAdapterItem extends PagerAdapter {
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            String s = mDataItem.get(position);
+            View inflate = LayoutInflater.from(context).inflate(R.layout.item_viewpager, null);
+            TextView textView = (TextView) inflate.findViewById(R.id.tv_item_name);
+            textView.setText(s);
+            container.addView(inflate);
+            return inflate;
+        }
+
+        @Override
+        public int getCount() {
+            return mDataItem.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            View view = (View) object;
+            container.removeView(view);
+        }
+    }
 
 
 }
