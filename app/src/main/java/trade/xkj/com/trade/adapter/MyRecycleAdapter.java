@@ -12,6 +12,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import trade.xkj.com.trade.R;
+import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.bean.BeanAttentionTraderData;
 
 /**
@@ -22,6 +23,7 @@ import trade.xkj.com.trade.bean.BeanAttentionTraderData;
 public class MyRecycleAdapter extends RecyclerView.Adapter<MyRecycleAdapter.MyViewHolder>{
     private Context context;
     private List<BeanAttentionTraderData> mDataList;
+    private String TAG= SystemUtil.getTAG(this);
     public MyRecycleAdapter(Context context, List<BeanAttentionTraderData> mDataList){
         this.context=context;
         this.mDataList=mDataList;

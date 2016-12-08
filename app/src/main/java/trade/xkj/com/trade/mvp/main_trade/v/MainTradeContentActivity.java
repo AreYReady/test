@@ -71,7 +71,7 @@ public class MainTradeContentActivity extends BaseActivity
         mFragmentList.add(new Fragment2());
         mFragmentList.add(new Fragment3());
         mFragmentList.add(new Fragment1());
-        mFragmentList.add(new Fragment1());
+        mFragmentList.add(new Fragment5());
     }
 
 

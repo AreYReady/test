@@ -2,42 +2,41 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="@dimen/header_height">
-    <ImageView
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"/>
+
     <TextView
         android:layout_width="0.0dip"
         android:layout_height="wrap_content"
-        android:layout_weight="2.5"
+        android:layout_weight="@integer/open_position_column_1"
         android:text="@string/instrument"
         android:textAppearance="@style/TextHeader" />
 
     <TextView
         android:layout_width="0.0dip"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
+        android:layout_weight="@integer/open_position_column_2"
+        android:paddingLeft="@dimen/space_small"
         android:text="@string/action"
         android:textAppearance="@style/TextHeader" />
 
     <TextView
         android:layout_width="0.0dip"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:gravity="left"
+        android:layout_weight="@integer/open_position_column_3"
+        android:gravity="right"
         android:text="@string/amount"
         android:textAppearance="@style/TextHeader" />
 
     <TextView
         android:layout_width="0.0dip"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:gravity="left"
+        android:layout_weight="@integer/open_position_column_4_1"
+        android:gravity="right"
+        android:paddingRight="@dimen/space_small"
         android:text="@string/profit"
         android:textAppearance="@style/TextHeader" />
 
     <TextView
         android:layout_width="0.0dip"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_weight="@integer/open_position_column_4_2" />
 </merge>

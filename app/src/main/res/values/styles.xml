@@ -79,8 +79,29 @@
     <style name="TextAverage" parent="@style/TextMedium">
         <item name="android:textSize">15.0sp</item>
     </style>
+    <style name="TextDesc">
+        <item name="android:textSize">15.0sp</item>
+        <item name="android:textColor">@color/common_signin_btn_light_text_disabled</item>
+    </style>
     <style name="AvatarStyle">
         <item name="android:background">@drawable/brand_oval_dark</item>
         <item name="android:src">@mipmap/join_social_cover</item>
     </style>
+    <style name="TextView.Numbers" parent="@style/TextView" />
+    <style name="TextView" />
+    <style name="Branded.Button.Small.Radio" parent="@style/Branded.Button.Small">
+        <item name="android:textColor">@color/abc_primary_text_material_light</item>
+        <item name="android:button">@drawable/brand_oval_dark</item>
+    </style>
+    <style name="Branded.Button.Small" parent="@style/Branded.Button">
+        <item name="android:textAppearance">@style/TextSmaller</item>
+        <item name="android:background">@drawable/branded_button_small_dark</item>
+        <item name="android:maxHeight">@dimen/small_button_height</item>
+        <item name="android:minHeight">@dimen/small_button_height</item>
+    </style>
+    <style name="TextSmaller" parent="@android:style/TextAppearance">
+        <item name="android:textSize">10.0sp</item>
+        <item name="android:textColor">@color/highlighted_text_material_dark</item>
+    </style>
+    <style name="Branded.Button" parent="@android:style/Widget.Button" />
 </resources>

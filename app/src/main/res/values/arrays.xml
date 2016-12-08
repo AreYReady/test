@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="pending_order_columns_3">
+        <item>@integer/pending_position_column_1</item>
+        <item>@integer/pending_position_column_2</item>
+        <item>@integer/pending_position_column_3swap4</item>
+    </integer-array>
+</resources>

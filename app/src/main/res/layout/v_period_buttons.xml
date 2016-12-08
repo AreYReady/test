@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/period_group"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/space_big">
+
+    <RadioButton
+        android:id="@+id/days_7"
+        style="@style/Branded.Button.Small.Radio"
+        android:layout_width="0.0dip"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/space_xxbig"
+        android:layout_weight="1.0"
+        android:text="@string/seven_days" />
+
+    <RadioButton
+        android:id="@+id/days_14"
+        style="@style/Branded.Button.Small.Radio"
+        android:layout_width="0.0dip"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/space_xxbig"
+        android:layout_weight="1.0"
+        android:text="@string/fourteen_days" />
+
+    <RadioButton
+        android:id="@+id/month_1"
+        style="@style/Branded.Button.Small.Radio"
+        android:layout_width="0.0dip"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/space_xxbig"
+        android:layout_weight="1.0"
+        android:text="@string/one_month_capital" />
+
+    <RadioButton
+        android:id="@+id/all"
+        style="@style/Branded.Button.Small.Radio"
+        android:layout_width="0.0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0"
+        android:text="@string/all" />
+</RadioGroup>
