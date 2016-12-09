@@ -13,6 +13,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,24 +29,21 @@ import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.Utils.ToashUtil;
 import trade.xkj.com.trade.Utils.view.CustomViewPager;
 import trade.xkj.com.trade.Utils.view.PullBottomViewDragLayout;
-import trade.xkj.com.trade.Utils.view.SwitchButton;
 import trade.xkj.com.trade.Utils.view.ZoomOutPageTransformer;
 import trade.xkj.com.trade.adapter.FragmentAdapter;
 import trade.xkj.com.trade.base.BaseActivity;
+import trade.xkj.com.trade.bean.BeanOpenPositionData;
 
 public class MainTradeContentActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener{
     private PullBottomViewDragLayout mPullViewDragLayout;
-    private SwitchButton mSitchButton;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
-    private CustomViewPager mCustomViewPagerItem;
+    private CustomViewPager mHeadViewPager;
     private List<String> mDataItem;
     private Context context;
-    private int mPosition;
     private ViewPager mViewPagerFrag;
     private List<Fragment> mFragmentList;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +67,10 @@ public class MainTradeContentActivity extends BaseActivity
         mFragmentList = new ArrayList<>();
         mFragmentList.add(new Fragment1());
         mFragmentList.add(new Fragment2());
-        mFragmentList.add(new Fragment3());
-        mFragmentList.add(new Fragment1());
-        mFragmentList.add(new Fragment5());
+        mFragmentList.add(new FragmentOpenPosition());
+        mFragmentList.add(new FragmentPending());
+        mFragmentList.add(new FragmentClosePosition());
+
     }
 
 
@@ -111,31 +110,29 @@ public class MainTradeContentActivity extends BaseActivity
         mViewPagerFrag.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
             @Override
             public void onPageSelected(int position) {
-                mCustomViewPagerItem.setCurrentItem(position,true);
+                mHeadViewPager.setCurrentItem(position,true);
             }
         });
 
-        mCustomViewPagerItem = (CustomViewPager) findViewById(R.id.cvp_indicator_item);
-        mCustomViewPagerItem.setAdapter(new ViewpagerAdapterItem());
-        mCustomViewPagerItem.setOffscreenPageLimit(mDataItem.size());
-        mCustomViewPagerItem.setPageTransformer(true, new ZoomOutPageTransformer());
-        mCustomViewPagerItem.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mHeadViewPager = (CustomViewPager) findViewById(R.id.cvp_indicator_item);
+        mHeadViewPager.setAdapter(new ViewpagerAdapterItem());
+        mHeadViewPager.setOffscreenPageLimit(mDataItem.size());
+        mHeadViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        mHeadViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                mPosition = position;
-                Log.i(TAG, "onPageScrolled:position "+position);
             }
 
             @Override
             public void onPageSelected(int position) {
-//                if (mCustomViewPagerItem.getSpeed() < -1800) {
-//                    mCustomViewPagerItem.setCurrentItem(mPosition + 1);
-//                    mCustomViewPagerItem.setSpeed(0);
+//                if (mHeadViewPager.getSpeed() < -1800) {
+//                    mHeadViewPager.setCurrentItem(mPosition + 1);
+//                    mHeadViewPager.setSpeed(0);
 //                    mViewPagerFrag.setCurrentItem(mPosition + 1);
-//                } else if (mCustomViewPagerItem.getSpeed() > 1800 && mPosition > 0) {
+//                } else if (mHeadViewPager.getSpeed() > 1800 && mPosition > 0) {
 //                    //当手指右滑速度大于2000时viewpager左滑（注意item-1即可）
-//                    mCustomViewPagerItem.setCurrentItem(mPosition - 1);
-//                    mCustomViewPagerItem.setSpeed(0);
+//                    mHeadViewPager.setCurrentItem(mPosition - 1);
+//                    mHeadViewPager.setSpeed(0);
 //                    mViewPagerFrag.setCurrentItem(mPosition - 1);
 //                }
                 Log.i(TAG, "onPageSelected: mPosition"+position);
@@ -147,6 +144,8 @@ public class MainTradeContentActivity extends BaseActivity
 
             }
         });
+
+
 
     }
 

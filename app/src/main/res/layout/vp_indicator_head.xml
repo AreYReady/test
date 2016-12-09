@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="120dp"
+    android:layout_height="wrap_content"
     android:layout_marginLeft="40dip">
 
     <trade.xkj.com.trade.Utils.RoundImageView
@@ -17,16 +17,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:text="EURUSD"
+        android:textColor="@android:color/white"
         android:layout_below="@+id/id_index_gallery_item_image"
         android:textSize="20dip"
         />
     <RelativeLayout
-        android:layout_width="120dip"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:layout_below="@id/id_index_gallery_symbol_name">
-
-
         <View
             android:id="@+id/v_temp"
             android:layout_width="1dip"
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/v_temp"
-            android:text="some info"
+            android:text="1.05940"
             android:textColor="#ff0000"
             android:textSize="15dp" />
 
@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/v_temp"
-            android:text="some info"
+            android:text="1.05940"
             android:textColor="#ffff"
             android:textSize="15dp" />
     </RelativeLayout>

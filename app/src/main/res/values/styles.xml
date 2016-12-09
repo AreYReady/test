@@ -23,7 +23,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="TextSmall" parent="@android:style/TextAppearance">
-        <item name="android:textSize">12.0sp</item>
+        <item name="android:textSize">15.0sp</item>
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
     <style name="TextMedium" parent="@android:style/TextAppearance">
@@ -65,7 +65,7 @@
         <item name="android:button">@drawable/setting_checkbox_button</item>
     </style>
     <style name="TextHeader" parent="@android:style/TextAppearance.Small">
-        <item name="android:textSize">10.0sp</item>
+        <item name="android:textSize">15.0sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_color_primary_dark_with_opacity</item>
 
@@ -80,7 +80,7 @@
         <item name="android:textSize">15.0sp</item>
     </style>
     <style name="TextDesc">
-        <item name="android:textSize">15.0sp</item>
+        <item name="android:textSize">20.0sp</item>
         <item name="android:textColor">@color/common_signin_btn_light_text_disabled</item>
     </style>
     <style name="AvatarStyle">
@@ -104,4 +104,14 @@
         <item name="android:textColor">@color/highlighted_text_material_dark</item>
     </style>
     <style name="Branded.Button" parent="@android:style/Widget.Button" />
+    <style name="realTimeLeftText">
+        <item name="android:textSize">14.0sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+    <style name="realTimeRightText">
+        <item name="android:textSize">20.0sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 </resources>

@@ -1,7 +1,15 @@
 package trade.xkj.com.trade.Utils;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.TextAppearanceSpan;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+
+import trade.xkj.com.trade.R;
 
 /**
  * @author xjunda
@@ -144,18 +152,18 @@ public class MoneyUtil {
         return b1.divide(b2, scale).doubleValue();
     }
 
-//    @NonNull
-//    /**
-//     * 最后3个字放大
-//     */
-//    public static SpannableString getRealTimePriceTextBig(Context context, String realTimeText) {
-//        SpannableString spannableString = new SpannableString(realTimeText);
-//        if(spannableString.length()>3){
-//            spannableString.setSpan(new TextAppearanceSpan(context, R.style.realTimeLeftText),
-//                    0, spannableString.length() - 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            spannableString.setSpan(new TextAppearanceSpan(context, R.style.realTimeRightText),
-//                    spannableString.length() - 3, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        }
-//        return spannableString;
-//    }
+    @NonNull
+    /**
+     * 最后3个字放大
+     */
+    public static SpannableString getRealTimePriceTextBig(Context context, String realTimeText) {
+        SpannableString spannableString = new SpannableString(realTimeText);
+        if(spannableString.length()>3){
+            spannableString.setSpan(new TextAppearanceSpan(context, R.style.realTimeLeftText),
+                    0, spannableString.length() - 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableString.setSpan(new TextAppearanceSpan(context, R.style.realTimeRightText),
+                    spannableString.length() - 3, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return spannableString;
+    }
 }

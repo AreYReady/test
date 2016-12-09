@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import trade.xkj.com.trade.R;
+import trade.xkj.com.trade.Utils.MoneyUtil;
 import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.Utils.ToashUtil;
 import trade.xkj.com.trade.Utils.view.CustomViewPager;
@@ -29,9 +32,11 @@ import trade.xkj.com.trade.Utils.view.FixedSpeedScroller;
 import trade.xkj.com.trade.Utils.view.HistoryTradeView;
 import trade.xkj.com.trade.Utils.view.MyHorizontalScrollView;
 import trade.xkj.com.trade.Utils.view.ZoomOutPageTransformer;
+import trade.xkj.com.trade.adapter.OpenAdapter;
 import trade.xkj.com.trade.base.BaseFragment;
 import trade.xkj.com.trade.bean.BeanDrawPriceData;
 import trade.xkj.com.trade.bean.BeanIndicatorData;
+import trade.xkj.com.trade.bean.BeanOpenPositionData;
 import trade.xkj.com.trade.bean.HistoryDataList;
 import trade.xkj.com.trade.constant.TradeDateConstant;
 import trade.xkj.com.trade.mvp.main_trade.p.MainTradeContentPre;
@@ -58,6 +63,9 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     private ViewpagerAdapter mViewPagerAdapter;
     private FixedSpeedScroller scroller;
     private int mPosition;
+    private RecyclerView mTradeContent;
+    private List<BeanOpenPositionData> mBeanOpenList;
+
 
     @Nullable
     @Override
@@ -114,7 +122,10 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
                                            }
 
         );
+        mTradeContent=(RecyclerView)view.findViewById(R.id.rv_trade_content);
 
+        mTradeContent.setLayoutManager(new LinearLayoutManager(context));
+        mTradeContent.setAdapter(new OpenAdapter(context,mBeanOpenList));
     }
 
     @Override
@@ -124,6 +135,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
         mDrawPriceView = (DrawPriceView) view.findViewById(R.id.dp_draw_price);
 
         ll = (LinearLayout) view.findViewById(R.id.ll);
+
     }
 
     @Override
@@ -131,7 +143,10 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
         context = this.getActivity();
         mMainTradeContentPre = new MainTradeContentPreImpl(this, mHandler);
         mMainTradeContentPre.loading();
-
+        mBeanOpenList=new ArrayList<>();
+        for(int i=0;i<=20;i++){
+            mBeanOpenList.add(new BeanOpenPositionData());
+        }
     }
 
     HistoryDataList data;
@@ -166,7 +181,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
                     //当手指右滑速度大于2000时viewpager左滑（注意item-1即可）
                     mHeaderCustomViewPager.setCurrentItem(mPosition - 1);
                     mHeaderCustomViewPager.setSpeed(0);
-
                 }
             }
 
@@ -193,15 +207,16 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
             final BeanIndicatorData info = mIndicatorDatas.get(position);
-            //设置一大堆演示用的数据，麻里麻烦~~
-            View view = LayoutInflater.from(context).inflate(R.layout.viewpager_layout, null);
+            View view = LayoutInflater.from(context).inflate(R.layout.vp_indicator_head, null);
             ImageView isSymbol = (ImageView) view.findViewById(R.id.id_index_gallery_item_image);
             view.setTag(info.getImageResource());
-            TextView tvLetf = (TextView) view.findViewById(R.id.id_index_gallery_item_text_left);
+            TextView tvLeft = (TextView) view.findViewById(R.id.id_index_gallery_item_text_left);
             TextView tvRight = (TextView) view.findViewById(R.id.id_index_gallery_item_text_right);
             TextView tvName =(TextView)view.findViewById(R.id.id_index_gallery_symbol_name);
-            tvLetf.setText(info.getLeftString());
-            tvRight.setText(info.getRightString());
+//            tvLeft.setText(info.getLeftString());
+//            tvRight.setText(info.getRightString());
+            tvLeft.setText(MoneyUtil.getRealTimePriceTextBig(context,"1.90031"));
+            tvRight.setText(MoneyUtil.getRealTimePriceTextBig(context,"1.90031"));
             tvName.setText(info.getSymbolTag());
             isSymbol.setImageResource(info.getImageResource());
             view.setOnClickListener(new View.OnClickListener() {

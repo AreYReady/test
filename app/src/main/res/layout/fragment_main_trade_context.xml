@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+   >
 
     <RelativeLayout
         android:id="@+id/rll_trade_indicator"
@@ -12,37 +13,112 @@
         <trade.xkj.com.trade.Utils.view.CustomViewPager
             android:id="@+id/vp_indicator_trade_content"
             android:layout_width="360dp"
-            android:layout_height="120dp"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginLeft="120dp"
             android:layout_marginRight="120dp" />
     </RelativeLayout>
 
+    <trade.xkj.com.trade.Utils.view.MyScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
 
         <LinearLayout
-            android:layout_below="@id/rll_trade_indicator"
-            android:background="@color/bright_foreground_inverse_material_dark"
-            android:id="@+id/ll_draw_trade_context"
             android:layout_width="match_parent"
-            android:layout_height="150dip"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <trade.xkj.com.trade.Utils.view.MyHorizontalScrollView
-                android:id="@+id/hsv_trade"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="6">
-                <LinearLayout
-                    android:id="@+id/ll"
+            <Space
+                android:id="@+id/space"
+                android:layout_width="match_parent"
+                android:layout_height="150dip" />
+
+            <LinearLayout
+                android:id="@+id/ll_draw_trade_context"
+                android:layout_width="match_parent"
+                android:layout_height="150dip"
+                android:layout_below="@id/rll_trade_indicator"
+                android:background="@color/bright_foreground_inverse_material_dark"
+                android:orientation="horizontal">
+
+                <trade.xkj.com.trade.Utils.view.MyHorizontalScrollView
+                    android:id="@+id/hsv_trade"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="6">
+
+                    <LinearLayout
+                        android:id="@+id/ll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="200dip"
+                        android:orientation="horizontal"></LinearLayout>
+                </trade.xkj.com.trade.Utils.view.MyHorizontalScrollView>
+
+                <trade.xkj.com.trade.Utils.view.DrawPriceView
+                    android:id="@+id/dp_draw_price"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:background="@color/vpi__bright_foreground_disabled_holo_dark"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/space_big"
+                android:paddingRight="@dimen/space_big"
+                android:gravity="center_vertical"
+
+                >
+                <TextView
+                    android:id="@+id/tv_open_position_count"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="20持仓位"
+                    style="@style/TextDesc"
+                    />
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="200dip"
-                    android:orientation="horizontal"></LinearLayout>
-            </trade.xkj.com.trade.Utils.view.MyHorizontalScrollView>
-            <trade.xkj.com.trade.Utils.view.DrawPriceView
-                android:id="@+id/dp_draw_price"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+                    android:layout_height="wrap_content"
+                    android:text="利润总额"
+                    style="@style/TextDesc"
+                    />
+                <Space
+                    android:layout_width="10dip"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_profit_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-$3,514.53"
+                    style="@style/TextDesc"
+                />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/toolbars_title_dark"
+                >
+                <LinearLayout
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <include layout="@layout/v_positions_opened_header_impl"
+                    />
+                </LinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:layout_below="@+id/title"
+                    android:id="@+id/rv_trade_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </RelativeLayout>
         </LinearLayout>
+
+    </trade.xkj.com.trade.Utils.view.MyScrollView>>
 
 </RelativeLayout>

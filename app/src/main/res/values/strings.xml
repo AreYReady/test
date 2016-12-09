@@ -94,6 +94,7 @@
     <string name="buy_capitalize">买进</string>
     <string name="buy_limit">限价买入</string>
     <string name="buy_stop">止损买入</string>
+
     <string name="by_clicking_create_a_real_account_button_you_are_agreeing_to_the">"点击“创建真实账户”按钮即表示
 您同意%1$s"</string>
     <string name="by_clicking_create_real_account">"点击“创建真实账户”按钮

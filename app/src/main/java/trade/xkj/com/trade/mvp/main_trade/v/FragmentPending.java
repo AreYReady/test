@@ -25,7 +25,7 @@ import trade.xkj.com.trade.bean.BeanOpenPositionData;
  * TODO:
  */
 
-public class Fragment5 extends BaseFragment {
+public class FragmentPending extends BaseFragment {
     private ViewPager mViewPager;
     private List<BeanOpenPositionData> mDataList;
     private BeanOpenPositionData mBeanOpenPositionData;
@@ -34,7 +34,7 @@ public class Fragment5 extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_5, null);
+        view = inflater.inflate(R.layout.fragment_4, null);
         return view;
     }
 
@@ -61,14 +61,13 @@ public class Fragment5 extends BaseFragment {
 
         @Override
         public OpenAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            MyViewHolder viewHolder=new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.rv_item_social_card_close_position,parent,false));
+            MyViewHolder viewHolder=new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.rv_item_social_card_pending,parent,false));
             return viewHolder;
         }
 
         @Override
         public void onBindViewHolder(final OpenAdapter.MyViewHolder holder, final int position) {
             Log.i(TAG, "onBindViewHolder: "+position);
-            holder.tvCountyName.setText("刷漆");
             holder.llOnclick.setTag(0);
             holder.llOnclick.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -93,7 +92,6 @@ public class Fragment5 extends BaseFragment {
 
         @Override
         public int getItemCount() {
-            Log.i(TAG, "getItemCount: mDataList"+mDataList.size());
             return mDataList.size();
         }
 
