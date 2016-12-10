@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/toolbars_title_dark"
+    android:orientation="vertical">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="@android:color/black"/>
+    <include layout="@layout/v_operate_symbol_info" android:layout_width="match_parent" android:layout_height="70dip"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="@android:color/black"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/b_order"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/toolbars_title_dark"
+            style="@style/TextDesc"
+            android:text="订单"/>
+        <Button
+            android:id="@+id/b_pending_order"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/toolbars_title_dark"
+            android:text="挂单"
+            style="@style/TextDesc"
+            />
+    </LinearLayout>
+   <trade.xkj.com.trade.Utils.view.NoScrollViewPager
+       android:id="@+id/vp_operate_add_content"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:background="@color/bright_foreground_disabled_material_light"/>
+
+
+</LinearLayout>

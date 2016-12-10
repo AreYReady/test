@@ -5,8 +5,6 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -36,28 +34,28 @@ public  abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-    //退出时的时间
-    private long mExitTime;
-    //对返回键进行监听
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-
-            exit();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    public void exit() {
-        if ((System.currentTimeMillis() - mExitTime) > 2000) {
-            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
-            mExitTime = System.currentTimeMillis();
-        } else {
-            MyApplication.getInstance().exit();
-        }
-    }
+//    //退出时的时间
+//    private long mExitTime;
+//    //对返回键进行监听
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//
+//        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+//
+//            exit();
+//            return true;
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
+//
+//    public void exit() {
+//        if ((System.currentTimeMillis() - mExitTime) > 2000) {
+//            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+//            mExitTime = System.currentTimeMillis();
+//        } else {
+//            MyApplication.getInstance().exit();
+//        }
+//    }
     @Subscribe(sticky = true)
     public void getHander(Handler handler){
         Log.i(TAG, "getHandler: ");

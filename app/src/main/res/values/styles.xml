@@ -83,6 +83,10 @@
         <item name="android:textSize">20.0sp</item>
         <item name="android:textColor">@color/common_signin_btn_light_text_disabled</item>
     </style>
+    <style name="TextDescBig">
+    <item name="android:textSize">30.0sp</item>
+    <item name="android:textColor">@color/common_signin_btn_light_text_disabled</item>
+</style>
     <style name="AvatarStyle">
         <item name="android:background">@drawable/brand_oval_dark</item>
         <item name="android:src">@mipmap/join_social_cover</item>

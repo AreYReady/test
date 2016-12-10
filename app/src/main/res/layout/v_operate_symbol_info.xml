@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="left|center_vertical"
+    android:paddingLeft="@dimen/space_big"
+    android:paddingRight="@dimen/space_big"
+    android:orientation="horizontal">
+<trade.xkj.com.trade.Utils.RoundImageView
+    android:id="@+id/riv_trade_symbol"
+    android:layout_width="0dip"
+    android:layout_height="50dip"
+    android:paddingTop="10dip"
+    android:src="@mipmap/ic_instrument_audhuf"
+    android:layout_weight="2"/>
+    <TextView
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:gravity="center_vertical"
+        android:text="EURUSD"
+        style="@style/TextDesc"/>
+    <TextView
+        android:id="@+id/price_left"
+        android:gravity="center_vertical"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:text="1.06285"
+        style="@style/TextDesc"
+        android:layout_weight="3"/>
+    <TextView
+        android:id="@+id/price_right"
+        android:gravity="center_vertical"
+        android:layout_width="0dip"
+        style="@style/TextDesc"
+        android:text="1.06283"
+        android:layout_height="match_parent"
+        android:layout_weight="3"/>
+</LinearLayout>
