@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5" />
             <Button
-                android:id="@+id/bt_cancel"
+                android:id="@+id/b_unlink"
                 style="@style/TextDesc"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 />
             <Button
-                android:id="@+id/bt_change"
+                android:id="@+id/b_edit"
                 style="@style/TextDesc"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 />
             <Button
-                android:id="@+id/bt_close_position"
+                android:id="@+id/b_close_position"
                 style="@style/TextDesc"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"

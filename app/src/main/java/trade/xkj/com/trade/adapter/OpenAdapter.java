@@ -1,11 +1,12 @@
 package trade.xkj.com.trade.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,17 +14,21 @@ import android.widget.TextView;
 import java.util.List;
 
 import trade.xkj.com.trade.R;
+import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.bean.BeanOpenPositionData;
+import trade.xkj.com.trade.mvp.operate.OperatePositionActivity;
 
-import static android.content.ContentValues.TAG;
+import static trade.xkj.com.trade.R.id.ll_onclick;
 
 /**
  * Created by huangsc on 2016-12-09.
  * TODO:
  */
 
-public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder>{
+public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> implements View.OnClickListener{
+    private String TAG= SystemUtil.getTAG(this);
     private List<BeanOpenPositionData> mDataList;
+    private MyViewHolder holder;
     private Context context;
     public OpenAdapter(Context context,List<BeanOpenPositionData> mDataList){
         this.mDataList=mDataList;
@@ -33,12 +38,13 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder>{
 
     @Override
     public  OpenAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        OpenAdapter.MyViewHolder viewHolder=new OpenAdapter.MyViewHolder(LayoutInflater.from(context).inflate(R.layout.rv_item_social_card_open_position,parent,false));
+        MyViewHolder viewHolder=new OpenAdapter.MyViewHolder(LayoutInflater.from(context).inflate(R.layout.rv_item_social_card_open_position,parent,false));
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(final OpenAdapter.MyViewHolder holder, final int position) {
+        this.holder=holder;
         holder.llOnclick.setTag(0);
         holder.llOnclick.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +64,9 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder>{
                 }
             }
         });
+        holder.bClosePositon.setOnClickListener(this);
+        holder.bUnlink.setOnClickListener(this);
+        holder.bEditPositon.setOnClickListener(this);
     }
 
 
@@ -66,6 +75,20 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder>{
         return mDataList.size();
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.b_edit:
+                context.startActivity(new Intent(context, OperatePositionActivity.class).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.EDIT_POSITION));
+                break;
+            case R.id.b_close_position:
+                context.startActivity(new Intent(context, OperatePositionActivity.class).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.ClOSE_POSITION));
+                break;
+            case R.id.b_unlink:
+                context.startActivity(new Intent(context, OperatePositionActivity.class).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.UNLINK));
+                break;
+        }
+    }
 
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -73,7 +96,7 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder>{
         public MyViewHolder(View itemView) {
             super(itemView);
             llHide=(LinearLayout)itemView.findViewById(R.id.ll_hide_layout) ;
-            llOnclick=(LinearLayout)itemView.findViewById(R.id.ll_onclick) ;
+            llOnclick=(LinearLayout)itemView.findViewById(ll_onclick) ;
             tvCountyName =(TextView)itemView.findViewById(R.id.tv_county_name);
             tvOperate =(TextView)itemView.findViewById(R.id.tv_operater);
             tvMoney =(TextView)itemView.findViewById(R.id.tv_money);
@@ -86,6 +109,10 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder>{
             tvOpenTime2 =(TextView)itemView.findViewById(R.id.open_time2);
             tvSwap =(TextView)itemView.findViewById(R.id.swap);
             tvOpenRate =(TextView)itemView.findViewById(R.id.open_rate);
+            bEditPositon=(Button)itemView.findViewById(R.id.b_edit);
+            bClosePositon=(Button)itemView.findViewById(R.id.b_close_position);
+            bUnlink=(Button)itemView.findViewById(R.id.b_unlink);
+
         }
         LinearLayout llHide;
         LinearLayout llOnclick;
@@ -101,5 +128,9 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder>{
         TextView tvOpenTime2;
         TextView tvSwap;
         TextView tvOpenRate;
+        Button bEditPositon;
+        Button bClosePositon;
+        Button bUnlink;
+
     }
 }

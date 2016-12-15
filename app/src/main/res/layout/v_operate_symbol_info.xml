@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="left|center_vertical"
+    android:background="@color/toolbars_title_dark"
     android:paddingLeft="@dimen/space_big"
     android:paddingRight="@dimen/space_big"
     android:orientation="horizontal">

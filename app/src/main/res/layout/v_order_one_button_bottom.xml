@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="110dip"
+    android:layout_marginTop="30dip"
+    android:layout_marginBottom="30dip"
+    android:layout_marginLeft="40dip"
+    android:layout_marginRight="40dip"
+    android:orientation="vertical"
+    >
+
+        <TextView
+        android:id="@+id/tv_enter_button_prompt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="市价单"
+        android:textSize="20dip"
+        android:textColor="@android:color/white"/>
+        <TextView
+            android:id="@+id/tv_enter_button"
+            android:background="@drawable/button_backgroud_orange"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:padding="5dip"
+            android:gravity="center_horizontal|bottom"
+            android:text="平仓"
+            android:textSize="30dip"
+            android:textColor="@android:color/white"/>
+</LinearLayout>

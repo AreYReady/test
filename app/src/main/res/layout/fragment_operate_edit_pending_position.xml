@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:hsc="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/toolbars_title_dark"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip" />
+
+    <include
+        layout="@layout/v_operate_symbol_info"
+        android:layout_width="match_parent"
+        android:layout_height="70dip" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@android:color/black"
+        android:padding="@dimen/space_big">
+
+        <Space
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5" />
+
+        <include layout="@layout/v_stack_operate" />
+
+        <include layout="@layout/v_stack_amount" />
+
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:paddingTop="10dip"
+        android:layout_weight="1"
+        android:background="@color/toolbars_title_dark"
+        android:gravity="bottom|center_horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="100dip"
+            android:orientation="vertical">
+
+            <trade.xkj.com.trade.Utils.view.CustomASETGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                hsc:desc_text="价格为"
+                hsc:iamge_visibility="false" />
+
+            <trade.xkj.com.trade.Utils.view.CustomASETGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                hsc:desc_text="止损" />
+            <trade.xkj.com.trade.Utils.view.CustomASETGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                hsc:desc_text="获利" />
+            <trade.xkj.com.trade.Utils.view.CustomDateSelect
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></trade.xkj.com.trade.Utils.view.CustomDateSelect>
+        </LinearLayout>
+    </ScrollView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@android:color/black"/>
+        <include layout="@layout/v_order_one_button_bottom"  />
+</LinearLayout>

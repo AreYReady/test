@@ -13,4 +13,9 @@
         <attr name="border_inside_color" format="color" />
         <attr name="border_outside_color" format="color"></attr>
     </declare-styleable>
+    <declare-styleable name="CustomGroup">
+        <attr name="iamge_visibility" format="boolean"/>
+        <attr name="desc_text" format="string"/>
+    </declare-styleable>
+
 </resources>

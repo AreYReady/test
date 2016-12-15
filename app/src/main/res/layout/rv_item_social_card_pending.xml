@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 />
             <Button
-                android:id="@+id/bt_change"
+                android:id="@+id/b_edit"
                 style="@style/TextDesc"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 />
             <Button
-                android:id="@+id/bt_delete_position"
+                android:id="@+id/b_delete_pending_position"
                 style="@style/TextDesc"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"

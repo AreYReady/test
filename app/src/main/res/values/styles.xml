@@ -85,7 +85,7 @@
     </style>
     <style name="TextDescBig">
     <item name="android:textSize">30.0sp</item>
-    <item name="android:textColor">@color/common_signin_btn_light_text_disabled</item>
+    <item name="android:textColor">@drawable/buy_button_text_color</item>
 </style>
     <style name="AvatarStyle">
         <item name="android:background">@drawable/brand_oval_dark</item>

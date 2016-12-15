@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:gravity="center_vertical"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/iv_state"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:src="@drawable/riv_state"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/tv_desc"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="@string/stop_loss"
+            style="@style/TextDesc"
+            />
+
+        <trade.xkj.com.trade.Utils.view.AddSubEditText
+            android:id="@+id/aset_aset"
+            android:layout_width="0dip"
+            android:layout_height="50dip"
+            android:layout_weight="4" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <Space
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="4"/>
+        <TextView
+            android:id="@+id/tv_desc_prompt"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_weight="4"
+            android:visibility="invisible"
+            android:textColor="@color/red"
+            android:text="1.06190或者更高"
+            style="@style/TextAverage"/>
+    </LinearLayout>
+</LinearLayout>

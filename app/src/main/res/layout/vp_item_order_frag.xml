@@ -5,23 +5,60 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/ll_button_group"
         android:layout_width="match_parent"
-        android:layout_height="100dip">
-        <Button
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="卖出"
-            style="@style/TextDescBig"
-            />
-        <Button
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="买进"
-            style="@style/TextDescBig"
-            />
-        </LinearLayout>
+        android:layout_height="100dip"
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/b_sell"
+            style="@style/TextDescBig"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/order_radio_button_background_dark"
+            android:text="卖出" />
+
+        <View
+            android:id="@+id/v_line"
+            android:layout_width="0.1dip"
+            android:layout_height="match_parent"
+            android:background="@color/button_material_dark" />
+
+        <Button
+            android:id="@+id/b_buy"
+            style="@style/TextDescBig"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/order_radio_button_background_dark"
+            android:text="买进" />
     </LinearLayout>
+
+    <TextView
+        style="@style/TextDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="20dip"
+        android:text="选择金额" />
+
+    <trade.xkj.com.trade.Utils.view.CustomSeekBar
+        android:layout_width="match_parent"
+        android:layout_height="100dip" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:gravity="bottom|center_horizontal"
+        android:text="市价单"
+        android:textColor="@android:color/white"
+        android:textSize="20dip" />
+
+    <include
+        layout="@layout/v_order_button_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="110dip" />
+</LinearLayout>

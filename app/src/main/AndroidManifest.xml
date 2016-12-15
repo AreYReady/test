@@ -27,7 +27,7 @@
             android:name=".mvp.main_trade.v.MainTradeContentActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".mvp.operate.AddPositionActivity"
+            android:name=".mvp.operate.OperatePositionActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

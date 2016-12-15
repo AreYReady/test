@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@drawable/add_sub_backgroud"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_sub"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        style="@style/TextDesc"
+        android:text="-" />
+
+    <View
+        android:layout_width="0.1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"
+        android:background="@color/order_radio_button_separator_color_light"/>
+    <EditText
+        android:id="@+id/et_amount"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="7"
+        android:text="10,000"
+        android:singleLine="true"
+        android:visibility="invisible"
+        android:gravity="center"
+        style="@style/TextDesc"/>
+    <View
+        android:layout_width="0.1dp"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"
+        android:background="@color/order_radio_button_separator_color_light"
+        android:layout_height="match_parent" />
+    <TextView
+        android:id="@+id/tv_add"
+        android:layout_width="0dip"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        style="@style/TextDesc"
+        android:text="+" />
+</LinearLayout>

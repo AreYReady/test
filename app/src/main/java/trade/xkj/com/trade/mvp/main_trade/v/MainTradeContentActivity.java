@@ -31,7 +31,7 @@ import trade.xkj.com.trade.Utils.view.PullBottomViewDragLayout;
 import trade.xkj.com.trade.Utils.view.ZoomOutPageTransformer;
 import trade.xkj.com.trade.adapter.FragmentAdapter;
 import trade.xkj.com.trade.base.BaseActivity;
-import trade.xkj.com.trade.mvp.operate.AddPositionActivity;
+import trade.xkj.com.trade.mvp.operate.OperatePositionActivity;
 
 public class MainTradeContentActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -67,7 +67,7 @@ public class MainTradeContentActivity extends BaseActivity
         mFragmentList.add(new Fragment1());
         mFragmentList.add(new Fragment2());
         mFragmentList.add(new FragmentOpenPosition());
-        mFragmentList.add(new FragmentPending());
+        mFragmentList.add(new FragmentPendingPosition());
         mFragmentList.add(new FragmentClosePosition());
 
     }
@@ -85,7 +85,7 @@ public class MainTradeContentActivity extends BaseActivity
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(context, AddPositionActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                startActivity(new Intent(context, OperatePositionActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.ADD));
             }
         });
 

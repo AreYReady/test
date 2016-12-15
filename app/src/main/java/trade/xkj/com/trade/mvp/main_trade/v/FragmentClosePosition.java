@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,6 @@ public class FragmentClosePosition extends BaseFragment {
         mRecyclerView=(RecyclerView)view.findViewById(R.id.rv_item3_content);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.setAdapter(new OpenAdapter());
-        Log.i(TAG, "initView: mDataList"+mDataList.size());
     }
 
     @Override
@@ -67,7 +65,6 @@ public class FragmentClosePosition extends BaseFragment {
 
         @Override
         public void onBindViewHolder(final OpenAdapter.MyViewHolder holder, final int position) {
-            Log.i(TAG, "onBindViewHolder: "+position);
             holder.llOnclick.setTag(0);
             holder.llOnclick.setOnClickListener(new View.OnClickListener() {
                 @Override

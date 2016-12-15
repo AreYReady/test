@@ -37,6 +37,7 @@ public class DateUtils{
         return dateString;
     }
 
+
     public static Long getCurrentTimeHHMMNoS() throws ParseException {
 //        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
 //        Date currentTime = new Date();
@@ -95,6 +96,18 @@ public class DateUtils{
      */
     public static String getShowTime(long time) {
         SimpleDateFormat sdf = new SimpleDateFormat("yy:MM:dd HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone(getCurrentTimeZone()));
+        return sdf.format(new Date(time));
+    }
+    public static String getShowTime(Date date){
+        return (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(date);
+    }
+    /**
+     * @author huangsc
+     * 获取当前时间格式:=
+     */
+    public static String getShowTime(long time,String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
         sdf.setTimeZone(TimeZone.getTimeZone(getCurrentTimeZone()));
         return sdf.format(new Date(time));
     }

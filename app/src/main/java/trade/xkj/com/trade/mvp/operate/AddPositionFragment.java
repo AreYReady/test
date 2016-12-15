@@ -1,5 +1,6 @@
 package trade.xkj.com.trade.mvp.operate;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,12 +10,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import trade.xkj.com.trade.R;
+import trade.xkj.com.trade.Utils.ResourceReader;
+import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.Utils.view.NoScrollViewPager;
 import trade.xkj.com.trade.base.BaseFragment;
 
@@ -29,6 +34,7 @@ public class AddPositionFragment extends BaseFragment implements View.OnClickLis
     private List<Fragment> mListFragment;
     private Button bOrder;
     private Button bPendingOrder;
+    private LinearLayout layoutTab;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,16 +48,32 @@ public class AddPositionFragment extends BaseFragment implements View.OnClickLis
         mViewPager.setAdapter(new MyAdapter(getFragmentManager()));
         mViewPager.setNoScroll(true);
         bOrder=(Button)view.findViewById(R.id.b_order);
+         ViewTreeObserver viewTreeObserver = bOrder.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                setTabSelected(bOrder);
+                bOrder.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+
         bPendingOrder=(Button)view.findViewById(R.id.b_pending_order);
         bOrder.setOnClickListener(this);
         bPendingOrder.setOnClickListener(this);
+        layoutTab=(LinearLayout)view.findViewById(R.id.ll_button_group);
+
+    }
+
+    @Override
+    public void onMultiWindowModeChanged(boolean isInMultiWindowMode) {
+        super.onMultiWindowModeChanged(isInMultiWindowMode);
     }
 
     @Override
     protected void initData() {
         mListFragment=new ArrayList<>();
-        mListFragment.add(new OrderCardFrag());
-        mListFragment.add(new OrderCardFrag());
+        mListFragment.add(new CardOrderFrag());
+        mListFragment.add(new CardPendingFrag());
     }
 
 
@@ -60,9 +82,11 @@ public class AddPositionFragment extends BaseFragment implements View.OnClickLis
         Log.i(TAG, "onClick: ");
         switch (v.getId()){
             case R.id.b_order:
+                setTabSelected((Button) v);
                 mViewPager.setCurrentItem(0);
                 break;
             case R.id.b_pending_order:
+                setTabSelected((Button) v);
                 mViewPager.setCurrentItem(1);
                 break;
         }
@@ -84,4 +108,23 @@ public class AddPositionFragment extends BaseFragment implements View.OnClickLis
             return mListFragment.size();
         }
     }
+    private void setTabSelected(Button btnSelected) {
+        Drawable selectedDrawable = ResourceReader.readDrawable(context, R.drawable.shape_nav_indicator);
+
+//        int screenWidth = DensityUtils.getScreenSize(MainActivity.this)[0];
+
+        int right = btnSelected.getWidth();
+        Log.i(TAG, "setTabSelected: right"+right);
+        selectedDrawable.setBounds(0, 0, right, SystemUtil.dp2px(context,3));
+        btnSelected.setSelected(true);
+        btnSelected.setCompoundDrawables(null, null, null, selectedDrawable);
+        int size = layoutTab.getChildCount();
+        for (int i = 0; i < size; i++) {
+            if (btnSelected.getId() != layoutTab.getChildAt(i).getId()) {
+                layoutTab.getChildAt(i).setSelected(false);
+                ((Button) layoutTab.getChildAt(i)).setCompoundDrawables(null, null, null, null);
+            }
+        }
+    }
+
 }

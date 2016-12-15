@@ -166,4 +166,15 @@ public class MoneyUtil {
         }
         return spannableString;
     }
+
+    /**
+     * new BigDecimal(123456789)
+     * (",###,###",bd)); //out: 123,456,789
+     * @return
+     */
+    public static String parseMoney(int money){
+        BigDecimal bd=new BigDecimal(money);
+        DecimalFormat df=new DecimalFormat(",###,###");
+        return df.format(bd);
+    }
 }

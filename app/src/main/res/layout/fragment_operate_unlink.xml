@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip" />
+
+    <include
+        layout="@layout/v_operate_symbol_info"
+        android:layout_width="match_parent"
+        android:layout_height="70dip" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/space_big">
+
+        <Space
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5" />
+
+        <include layout="@layout/v_stack_operate" />
+
+        <include layout="@layout/v_stack_amount" />
+
+        <include layout="@layout/v_stack_open_rate" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/space_big">
+
+        <Space
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5" />
+
+
+        <include layout="@layout/v_stack_open_time" />
+
+        <Space
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="7" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="@color/toolbars_title_dark" />
+
+    <LinearLayout
+        android:id="@+id/ll_copy_from"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/space_big"
+        android:paddingRight="@dimen/space_big"
+        android:paddingTop="@dimen/space_big">
+
+        <Space
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="0dip"
+            android:layout_height="40dip"
+            android:layout_weight="2"
+            android:src="@mipmap/menu_avatar" />
+
+        <include layout="@layout/v_stack_copy_from" />
+
+        <include layout="@layout/v_stack_stop_loss" />
+
+        <include layout="@layout/v_stack_take_profit" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:background="@color/toolbars_title_dark"
+        android:paddingTop="50dip"
+        android:paddingLeft="@dimen/space_big"
+        android:paddingRight="@dimen/space_big"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="20dip"
+            android:textColor="@android:color/white"
+            android:text="@string/unlinking_will_not_close_the_position_automatically"/>
+
+        <include layout="@layout/v_order_one_button_bottom"
+            android:layout_width="match_parent" android:layout_height="60dip"/>
+    </LinearLayout>
+</LinearLayout>
