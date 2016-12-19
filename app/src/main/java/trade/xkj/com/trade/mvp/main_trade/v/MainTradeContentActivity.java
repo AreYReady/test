@@ -118,22 +118,24 @@ public class MainTradeContentActivity extends BaseActivity
         mHeadViewPager.setOffscreenPageLimit(mDataItem.size());
         mHeadViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         mHeadViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            int mPosition=0;
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                mPosition=position;
             }
 
             @Override
             public void onPageSelected(int position) {
-//                if (mHeadViewPager.getSpeed() < -1800) {
-//                    mHeadViewPager.setCurrentItem(mPosition + 1);
-//                    mHeadViewPager.setSpeed(0);
-//                    mViewPagerFrag.setCurrentItem(mPosition + 1);
-//                } else if (mHeadViewPager.getSpeed() > 1800 && mPosition > 0) {
-//                    //当手指右滑速度大于2000时viewpager左滑（注意item-1即可）
-//                    mHeadViewPager.setCurrentItem(mPosition - 1);
-//                    mHeadViewPager.setSpeed(0);
-//                    mViewPagerFrag.setCurrentItem(mPosition - 1);
-//                }
+                if (mHeadViewPager.getSpeed() < -1800) {
+                    mHeadViewPager.setCurrentItem(mPosition + 1);
+                    mHeadViewPager.setSpeed(0);
+                    mViewPagerFrag.setCurrentItem(mPosition + 1);
+                } else if (mHeadViewPager.getSpeed() > 1800 && mPosition > 0) {
+                    //当手指右滑速度大于2000时viewpager左滑（注意item-1即可）
+                    mHeadViewPager.setCurrentItem(mPosition - 1);
+                    mHeadViewPager.setSpeed(0);
+                    mViewPagerFrag.setCurrentItem(mPosition - 1);
+                }
                 Log.i(TAG, "onPageSelected: mPosition"+position);
                     mViewPagerFrag.setCurrentItem(position,true);
             }

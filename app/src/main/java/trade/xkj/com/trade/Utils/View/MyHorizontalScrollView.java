@@ -2,8 +2,11 @@ package trade.xkj.com.trade.Utils.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.HorizontalScrollView;
 
+import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.Utils.SystemUtil;
 
 /**
@@ -13,17 +16,16 @@ import trade.xkj.com.trade.Utils.SystemUtil;
 
 public class MyHorizontalScrollView extends HorizontalScrollView {
     private ScrollViewListener mScrollViewListener;
-    private String TAG= SystemUtil.getTAG(this);
     public MyHorizontalScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     public MyHorizontalScrollView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs,0);
     }
 
     public MyHorizontalScrollView(Context context) {
-        super(context);
+        this(context,null);
     }
     public void setScrollViewListener(ScrollViewListener scrollViewListener) {
         this.mScrollViewListener = scrollViewListener;
@@ -41,6 +43,5 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
         void onScrollChanged(MyHorizontalScrollView scrollView, int x, int y, int oldx, int oldy);
 
     }
-
 
 }

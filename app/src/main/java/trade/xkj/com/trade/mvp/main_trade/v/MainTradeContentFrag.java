@@ -2,6 +2,7 @@ package trade.xkj.com.trade.mvp.main_trade.v;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.PagerAdapter;
@@ -30,7 +31,7 @@ import trade.xkj.com.trade.Utils.view.CustomViewPager;
 import trade.xkj.com.trade.Utils.view.DrawPriceView;
 import trade.xkj.com.trade.Utils.view.FixedSpeedScroller;
 import trade.xkj.com.trade.Utils.view.HistoryTradeView;
-import trade.xkj.com.trade.Utils.view.MyHorizontalScrollView;
+import trade.xkj.com.trade.Utils.view.MyHorizontalScrollView2;
 import trade.xkj.com.trade.Utils.view.ZoomOutPageTransformer;
 import trade.xkj.com.trade.adapter.OpenAdapter;
 import trade.xkj.com.trade.base.BaseFragment;
@@ -50,12 +51,14 @@ import static android.os.Build.VERSION_CODES.M;
 
 public class MainTradeContentFrag extends BaseFragment implements MainTradeContentLFragListener {
     private MainTradeContentPre mMainTradeContentPre;
-    private MyHorizontalScrollView mHScrollView;
+    private MyHorizontalScrollView2 mHScrollView;
     private HistoryTradeView mHistoryTradeView;
     private LinearLayout ll;
     private Context context;
     private int h;
     private int w;
+    private float currentScaleSize=1f;
+    private float previousScaleSize=1f;
     private int wChild;
     private CustomViewPager mHeaderCustomViewPager;
     private List<BeanIndicatorData> mIndicatorDatas;
@@ -99,7 +102,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
                 mDrawPriceView.refresh(drawPriceData);
             }
         });
-        mHScrollView.setScrollViewListener(new MyHorizontalScrollView.ScrollViewListener()
+        mHScrollView.setScrollViewListener(new MyHorizontalScrollView2.ScrollViewListener()
 
                                            {
                                                int mX = 0;
@@ -107,23 +110,34 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
                                                int z = SystemUtil.dp2px(context, TradeDateConstant.juli + TradeDateConstant.jianju);
 
                                                @Override
-                                               public void onScrollChanged(MyHorizontalScrollView scrollView, int x, int y,
+                                               public void onScrollChanged(MyHorizontalScrollView2 scrollView, int x, int y,
                                                                            int oldx, int oldy) {
                                                    if (x != oldx) {
                                                        if (Math.abs(x - mX) >= z) {
                                                            mX = x;
-                                                           mHistoryTradeView.postInvalidate(x, 0, x + w, h);
+                                                           mHistoryTradeView.postInvalidate(x, 0, x + w, h,currentScaleSize);
                                                        }
                                                    } else {
                                                        mX = x;
                                                        mY = y;
                                                    }
                                                }
+
+                                               @Override
+                                               public void onScaleDraw(float scaleSize) {
+                                                   currentScaleSize=scaleSize;
+                                                   Log.i(TAG, "onScaleDraw: previousScaleSize "+previousScaleSize +"   scaleSize "+scaleSize);
+                                                   LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams((int)(wChild*scaleSize), h);
+                                                   mHScrollView.smoothScrollTo((int)(mX*(scaleSize/previousScaleSize)),0);
+                                                   mHistoryTradeView.setLayoutParams(layoutParams);
+                                                   previousScaleSize=scaleSize;
+                                                   mHistoryTradeView.postInvalidate((int)(mX*(scaleSize/previousScaleSize)), 0, (int)(mX*(scaleSize/previousScaleSize)) + w, h,currentScaleSize);
+                                               }
                                            }
 
         );
-        mTradeContent=(RecyclerView)view.findViewById(R.id.rv_trade_content);
 
+        mTradeContent=(RecyclerView)view.findViewById(R.id.rv_trade_content);
         mTradeContent.setLayoutManager(new LinearLayoutManager(context));
         mTradeContent.setAdapter(new OpenAdapter(context,mBeanOpenList));
     }
@@ -131,9 +145,8 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     @Override
     protected void initView() {
         mHeaderCustomViewPager = (CustomViewPager) view.findViewById(R.id.vp_indicator_trade_content);
-        mHScrollView = (MyHorizontalScrollView) view.findViewById(R.id.hsv_trade);
+        mHScrollView = (MyHorizontalScrollView2) view.findViewById(R.id.hsv_trade);
         mDrawPriceView = (DrawPriceView) view.findViewById(R.id.dp_draw_price);
-
         ll = (LinearLayout) view.findViewById(R.id.ll);
 
     }
@@ -192,9 +205,9 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
         setViewPagerSpeed(250);
     }
 
-
+private Handler handler=new Handler(){};
     private void initScrollView() {
-        mHandler.postDelayed(new Runnable() {
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mHScrollView.scrollTo(wChild, 0);

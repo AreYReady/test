@@ -28,7 +28,7 @@ public class UnlinkFrament extends BaseFragment {
     protected void initView() {
         tvAction=(TextView)view.findViewById(R.id.tv_enter_button);
         tvAction.setText(this.getString(R.string.unlink));
-        view.findViewById(R.id.tv_enter_button_prompt).setVisibility(View.GONE);
+        view.findViewById(R.id.tv_enter_button_prompt).setVisibility(View.INVISIBLE);
     }
 
     @Override
