@@ -195,7 +195,7 @@
     <color name="shadow_end_color">#00000000</color>
     <color name="shadow_middle_color">#b3000000</color>
     <color name="shadow_start_color">#2f000000</color>
-    <color name="switch_account_color">#ff727375</color>
+    <color name="switch_account_color">#33727375</color>
     <color name="switch_thumb_normal_material_dark">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
     <color name="text_color_highlight_dark">#fff8f8f8</color>

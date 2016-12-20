@@ -34,7 +34,7 @@ import trade.xkj.com.trade.base.BaseActivity;
 import trade.xkj.com.trade.mvp.operate.OperatePositionActivity;
 
 public class MainTradeContentActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener {
     private PullBottomViewDragLayout mPullViewDragLayout;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -106,10 +106,10 @@ public class MainTradeContentActivity extends BaseActivity
         mPullViewDragLayout = (PullBottomViewDragLayout) findViewById(R.id.dragLayout);
         mViewPagerFrag = (ViewPager) findViewById(R.id.vp_indicator_content);
         mViewPagerFrag.setAdapter(new FragmentAdapter(fragmentManager, mFragmentList));
-        mViewPagerFrag.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+        mViewPagerFrag.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                mHeadViewPager.setCurrentItem(position,true);
+                mHeadViewPager.setCurrentItem(position, true);
             }
         });
 
@@ -118,10 +118,11 @@ public class MainTradeContentActivity extends BaseActivity
         mHeadViewPager.setOffscreenPageLimit(mDataItem.size());
         mHeadViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         mHeadViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            int mPosition=0;
+            int mPosition = 0;
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                mPosition=position;
+                mPosition = position;
             }
 
             @Override
@@ -136,8 +137,8 @@ public class MainTradeContentActivity extends BaseActivity
                     mHeadViewPager.setSpeed(0);
                     mViewPagerFrag.setCurrentItem(mPosition - 1);
                 }
-                Log.i(TAG, "onPageSelected: mPosition"+position);
-                    mViewPagerFrag.setCurrentItem(position,true);
+                Log.i(TAG, "onPageSelected: mPosition" + position);
+                mViewPagerFrag.setCurrentItem(position, true);
             }
 
             @Override
@@ -145,7 +146,6 @@ public class MainTradeContentActivity extends BaseActivity
 
             }
         });
-
 
 
     }

@@ -10,37 +10,39 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import trade.xkj.com.trade.R;
+import trade.xkj.com.trade.Utils.SystemUtil;
 
 /**
  * Created by Flavien Laurent (flavienlaurent.com) on 23/08/13.
  */
 public class PullBottomViewDragLayout extends ViewGroup {
+    private String TAG = SystemUtil.getTAG(this);
+    private int initTop = -1;
+    private final ViewDragHelper mDragHelper;
 
-	private final ViewDragHelper mDragHelper;
-
-	private View mHeaderView;
+    private View mHeaderView;
     private View mDescView;
 
-	private float mInitialMotionX;
-	private float mInitialMotionY;
+    private float mInitialMotionX;
+    private float mInitialMotionY;
 
-	private int mDragRange;
+    private int mDragRange;
     private int mTop;
-	private float mDragOffset;
+    private float mDragOffset;
 
 
     public PullBottomViewDragLayout(Context context) {
-		this(context, null);
-	}
+        this(context, null);
+    }
 
-	public PullBottomViewDragLayout(Context context, AttributeSet attrs) {
-		this(context, attrs, 0);
-	}
+    public PullBottomViewDragLayout(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
 
-	public PullBottomViewDragLayout(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-		mDragHelper = ViewDragHelper.create(this, 1f, new DragHelperCallback());
-	}
+    public PullBottomViewDragLayout(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        mDragHelper = ViewDragHelper.create(this, 1f, new DragHelperCallback());
+    }
 
     @Override
     protected void onFinishInflate() {
@@ -56,6 +58,12 @@ public class PullBottomViewDragLayout extends ViewGroup {
         smoothSlideTo(1f);
     }
 
+    /**
+     * 如果
+     *
+     * @param slideOffset
+     * @return
+     */
     boolean smoothSlideTo(float slideOffset) {
         final int topBound = getPaddingTop();
         int y = (int) (topBound + slideOffset * mDragRange);
@@ -69,134 +77,145 @@ public class PullBottomViewDragLayout extends ViewGroup {
 
     private class DragHelperCallback extends ViewDragHelper.Callback {
 
-		@Override
-		public boolean tryCaptureView(View child, int pointerId) {
+        @Override
+        public boolean tryCaptureView(View child, int pointerId) {
             return child == mHeaderView;
-		}
+        }
 
         @Override
-		public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
-			mTop = top;
+        public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
+            mTop = top;
 
-			mDragOffset = (float) top / mDragRange;
+            mDragOffset = (float) top / mDragRange;
 
-			mHeaderView.setPivotX(mHeaderView.getWidth());
-			mHeaderView.setPivotY(mHeaderView.getHeight()/2);
+            mHeaderView.setPivotX(mHeaderView.getWidth());
+            mHeaderView.setPivotY(mHeaderView.getHeight() / 2);
 //            mHeaderView.setScaleX(1 - mDragOffset / 2);
 //            mHeaderView.setScaleY(1 - mDragOffset / 2);
 
 //            mDescView.setAlpha(1 - mDragOffset);
 
             requestLayout();
-		}
+        }
 
-		@Override
-		public void onViewReleased(View releasedChild, float xvel, float yvel) {
-			int top = getPaddingTop();
-			if (yvel > 0 || (yvel == 0 && mDragOffset > 0.5f)) {
-				top += mDragRange;
-			}
-			mDragHelper.settleCapturedViewAt(releasedChild.getLeft(), top);
-			invalidate();
-		}
+        @Override
+        public void onViewReleased(View releasedChild, float xvel, float yvel) {
+            int top = getPaddingTop();
+            if (yvel > 0 || (yvel == 0 && mDragOffset > 0.5f)) {
+                top += mDragRange;
+            }
+            mDragHelper.settleCapturedViewAt(releasedChild.getLeft(), top);
+            invalidate();
+        }
 
-		@Override
-		public int getViewVerticalDragRange(View child) {
-			return mDragRange;
-		}
+        @Override
+        public int getViewVerticalDragRange(View child) {
+            return mDragRange;
+        }
 
-		@Override
-		public int clampViewPositionVertical(View child, int top, int dy) {
-			final int topBound = getPaddingTop();
-			final int bottomBound = getHeight() - mHeaderView.getHeight()/2 - mHeaderView.getPaddingBottom();
+        @Override
+        public int clampViewPositionVertical(View child, int top, int dy) {
+            final int topBound = getPaddingTop();
+            final int bottomBound = getHeight() - mHeaderView.getHeight() / 2 - mHeaderView.getPaddingBottom();
 
-			final int newTop = Math.min(Math.max(top, topBound), bottomBound);
-			return newTop;
-		}
+            final int newTop = Math.min(Math.max(top, topBound), bottomBound);
+            return newTop;
+        }
 
-	}
+    }
 
-	@Override
-	public void computeScroll() {
-		if (mDragHelper.continueSettling(true)) {
-			ViewCompat.postInvalidateOnAnimation(this);
-		}
-	}
+    @Override
+    public void computeScroll() {
+        if (mDragHelper.continueSettling(true)) {
+            ViewCompat.postInvalidateOnAnimation(this);
+        }
+    }
 
-	@Override
-	public boolean onInterceptTouchEvent(MotionEvent ev) {
-		final int action = MotionEventCompat.getActionMasked(ev);
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        final int action = MotionEventCompat.getActionMasked(ev);
+        if ((action != MotionEvent.ACTION_DOWN)) {
+            mDragHelper.cancel();
+            return super.onInterceptTouchEvent(ev);
+        }
 
-		if (( action != MotionEvent.ACTION_DOWN)) {
-			mDragHelper.cancel();
-			return super.onInterceptTouchEvent(ev);
-		}
+        if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
+            mDragHelper.cancel();
+            return false;
+        }
 
-		if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
-			mDragHelper.cancel();
-			return false;
-		}
+        final float x = ev.getX();
+        final float y = ev.getY();
+        boolean interceptTap = false;
 
-		final float x = ev.getX();
-		final float y = ev.getY();
-		boolean interceptTap = false;
-
-		switch (action) {
-			case MotionEvent.ACTION_DOWN: {
-				mInitialMotionX = x;
-				mInitialMotionY = y;
+        switch (action) {
+            case MotionEvent.ACTION_DOWN: {
+                mInitialMotionX = x;
+                mInitialMotionY = y;
                 interceptTap = mDragHelper.isViewUnder(mHeaderView, (int) x, (int) y);
-				break;
-			}
+                break;
+            }
 
-			case MotionEvent.ACTION_MOVE: {
-				final float adx = Math.abs(x - mInitialMotionX);
-				final float ady = Math.abs(y - mInitialMotionY);
-				final int slop = mDragHelper.getTouchSlop();
+            case MotionEvent.ACTION_MOVE: {
+                initBollean=false;
+                final float adx = Math.abs(x - mInitialMotionX);
+                final float ady = Math.abs(y - mInitialMotionY);
+                final int slop = mDragHelper.getTouchSlop();
                 /*useless*/
-				if (ady > slop && adx > ady) {
-					mDragHelper.cancel();
-					return false;
-				}
-			}
-		}
+                if (ady > slop && adx > ady) {
+                    mDragHelper.cancel();
+                    return false;
+                }
+            }
+        }
 
-		return mDragHelper.shouldInterceptTouchEvent(ev) || interceptTap;
-	}
+        return mDragHelper.shouldInterceptTouchEvent(ev) || interceptTap;
+    }
+    private boolean initBollean=true;
 
-	@Override
-	public boolean onTouchEvent(MotionEvent ev) {
-		mDragHelper.processTouchEvent(ev);
-
-		final int action = ev.getAction();
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        mDragHelper.processTouchEvent(ev);
+        initTop=0;
+        final int action = ev.getAction();
         final float x = ev.getX();
         final float y = ev.getY();
 
         boolean isHeaderViewUnder = mDragHelper.isViewUnder(mHeaderView, (int) x, (int) y);
         switch (action & MotionEventCompat.ACTION_MASK) {
-			case MotionEvent.ACTION_DOWN: {
-				mInitialMotionX = x;
-				mInitialMotionY = y;
-				break;
-			}
+            case MotionEvent.ACTION_DOWN: {
+                mInitialMotionX = x;
+                mInitialMotionY = y;
+                break;
+            }
 
-			case MotionEvent.ACTION_UP: {
-				final float dx = x - mInitialMotionX;
-				final float dy = y - mInitialMotionY;
-				final int slop = mDragHelper.getTouchSlop();
-				if (dx * dx + dy * dy < slop * slop && isHeaderViewUnder) {
-					if (mDragOffset == 0) {
-						smoothSlideTo(1f);
-					} else {
-						smoothSlideTo(0f);
-					}
-				}
-				break;
-			}
-		}
+            case MotionEvent.ACTION_UP: {
+                final float dx = x - mInitialMotionX;
+                final float dy = y - mInitialMotionY;
+                final int slop = mDragHelper.getTouchSlop();
 
-		return isHeaderViewUnder && isViewHit(mHeaderView, (int) x, (int) y) || isViewHit(mDescView, (int) x, (int) y);
-	}
+                if (dx * dx + dy * dy < slop * slop && isHeaderViewUnder) {
+                    if(initBollean) {
+                        initBollean=false;
+                        if (mDragOffset == 0) {
+                            smoothSlideTo(0f);
+                        } else {
+                            smoothSlideTo(1f);
+                        }
+                    }else{
+                        if (mDragOffset == 0) {
+                            smoothSlideTo(1f);
+                        } else {
+                            smoothSlideTo(0f);
+                        }
+                    }
+                }
+                break;
+            }
+        }
+
+        return isHeaderViewUnder && isViewHit(mHeaderView, (int) x, (int) y) || isViewHit(mDescView, (int) x, (int) y);
+    }
 
 
     private boolean isViewHit(View view, int x, int y) {
@@ -222,21 +241,23 @@ public class PullBottomViewDragLayout extends ViewGroup {
     }
 
     @Override
-	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		mDragRange = getHeight() - mHeaderView.getHeight()/2;
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        mDragRange = getHeight() - mHeaderView.getHeight() / 2;
+        if (initTop != 0) {
+            initTop = mDragRange;
+        }
         mHeaderView.layout(
                 0,
-                mTop,
+                initTop + mTop,
                 r,
-                mTop + mHeaderView.getMeasuredHeight());
-
+                initTop + mTop + mHeaderView.getMeasuredHeight());
 
 
         mDescView.layout(
                 0,
-                mTop + mHeaderView.getMeasuredHeight(),
+                initTop + mTop + mHeaderView.getMeasuredHeight(),
                 r,
-                mTop  + b);
+                initTop + mTop + b);
 //        mHeaderView.layout(
 //                0,
 //                b-mTop - mHeaderView.getMeasuredHeight(),
@@ -252,5 +273,5 @@ public class PullBottomViewDragLayout extends ViewGroup {
 //                b-mTop+mDragRange);
 //		Log.i("hsc", "mHeaderView.getMeasuredHeight(): "+mHeaderView.getMeasuredHeight()+"  mTop "+mTop+"    b"+b+"    mDragRange"+mDescView);
 
-	}
+    }
 }

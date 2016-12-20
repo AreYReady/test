@@ -20,21 +20,28 @@
             android:background="@color/toolbars_title_dark"
             app:popupTheme="@style/AppTheme.PopupOverlay" >
 
-            <!--<trade.xkj.com.trade.Utils.View.SwitchButton-->
-                <!--android:id="@+id/sb_change_content"-->
-                <!--style="@style/Switch"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:layout_marginTop="3dip"-->
-                <!--android:clickable="true"-->
-                <!--/>-->
-            <!--<Button-->
-                <!--android:id="@+id/b_money"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="点击"-->
-                <!--android:textColor="@color/red"/>-->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="@dimen/x30"
+               >
+                <ImageButton
+                    android:layout_toLeftOf="@+id/ib_"
+                    android:layout_marginRight="@dimen/x30"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/x70"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/tag_switch">
+                </ImageButton>
+                <ImageButton
+                    android:id="@+id/ib_"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="@dimen/x70"
+                    android:layout_height="@dimen/x70"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/trade_for_real"/>
+            </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

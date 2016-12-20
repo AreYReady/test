@@ -10,7 +10,7 @@
         android:id="@+id/tv_sub"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="center"
         style="@style/TextDesc"
         android:text="-" />
@@ -27,6 +27,7 @@
         android:layout_height="match_parent"
         android:layout_weight="7"
         android:text="10,000"
+        android:inputType="number"
         android:singleLine="true"
         android:visibility="invisible"
         android:gravity="center"
@@ -42,7 +43,7 @@
         android:layout_width="0dip"
         android:gravity="center"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="2"
         style="@style/TextDesc"
         android:text="+" />
 </LinearLayout>

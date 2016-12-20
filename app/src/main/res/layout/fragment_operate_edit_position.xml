@@ -95,18 +95,18 @@
         android:layout_height="0dip"
         android:layout_weight="1"
         android:background="@color/toolbars_title_dark"
-        android:paddingTop="50dip"
+        android:paddingTop="@dimen/y50"
         android:paddingLeft="@dimen/space_big"
         android:paddingRight="@dimen/space_big"
         android:orientation="vertical">
 
         <trade.xkj.com.trade.Utils.view.CustomASETGroup
             android:layout_width="match_parent"
-            android:layout_height="100dip" />
+            android:layout_height="@dimen/y150" />
 
         <trade.xkj.com.trade.Utils.view.CustomASETGroup
             android:layout_width="match_parent"
-            android:layout_height="100dip" />
+            android:layout_height="@dimen/y150" />
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dip"

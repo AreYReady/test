@@ -10,7 +10,7 @@
 <trade.xkj.com.trade.Utils.RoundImageView
     android:id="@+id/riv_trade_symbol"
     android:layout_width="0dip"
-    android:layout_height="50dip"
+    android:layout_height="@dimen/y60"
     android:paddingTop="10dip"
     android:src="@mipmap/ic_instrument_audhuf"
     android:layout_weight="2"/>

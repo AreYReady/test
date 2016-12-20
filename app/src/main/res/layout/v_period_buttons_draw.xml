@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RadioButton
+        android:id="@+id/rb_period"
+        style="@style/Branded.Button.Small.Radio.white"
+        android:layout_width="@dimen/x100"
+        android:layout_height="wrap_content"
+        android:text="1分钟>" />
+
+    <RadioGroup
+        android:visibility="gone"
+        android:id="@+id/rg_period_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_minute1"
+            style="@style/Branded.Button.Small.Radio.white"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="1分钟" />
+
+
+        <RadioButton
+            android:id="@+id/rb_minute5"
+            style="@style/Branded.Button.Small.Radio.white"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_weight="1"
+            android:text="5分钟" />
+
+        <RadioButton
+            android:id="@+id/rb_minute15"
+            style="@style/Branded.Button.Small.Radio.white"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="15分钟" />
+
+        <RadioButton
+            android:id="@+id/rb_minute30"
+            style="@style/Branded.Button.Small.Radio.white"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="30分钟" />
+
+        <RadioButton
+            android:id="@+id/rb_hour1"
+            style="@style/Branded.Button.Small.Radio.white"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="1小时" />
+
+        <RadioButton
+            android:id="@+id/rb_hour4"
+            style="@style/Branded.Button.Small.Radio.white"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="4小时" />
+
+        <RadioButton
+            android:id="@+id/rb_day1"
+            android:layout_marginLeft="@dimen/x20"
+            style="@style/Branded.Button.Small.Radio.white"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="1天" />
+
+        <RadioButton
+            android:id="@+id/rb_week1"
+            style="@style/Branded.Button.Small.Radio.white"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="1周" />
+    </RadioGroup>
+</RelativeLayout>

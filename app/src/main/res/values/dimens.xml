@@ -32,13 +32,13 @@
     <dimen name="menu_user_name_margin_top">6.0dip</dimen>
     <dimen name="rates_carousel_distance_between_items">20.0dip</dimen>
     <dimen name="rates_carousel_text_size_small">13.0dip</dimen>
-    <dimen name="space_big">10.5dip</dimen>
+    <dimen name="space_big">@dimen/x10</dimen>
     <dimen name="space_big_half">5.25dip</dimen>
     <dimen name="space_micro">1.5dip</dimen>
     <dimen name="space_mini">3.0dip</dimen>
     <dimen name="space_nano">0.75dip</dimen>
-    <dimen name="space_normal">6.0dip</dimen>
-    <dimen name="space_small">4.5dip</dimen>
+    <dimen name="space_normal">@dimen/x6</dimen>
+    <dimen name="space_small">@dimen/x4</dimen>
     <dimen name="space_xbig">14.5dip</dimen>
     <dimen name="space_xbig_half">7.25dip</dimen>
     <dimen name="space_xxbig">19.5dip</dimen>

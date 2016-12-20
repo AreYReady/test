@@ -73,7 +73,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_main_trade_context, container, false);
+        view = inflater.inflate(R.layout.fragment_main_trade_content, container, false);
         return view;
     }
 
@@ -140,6 +140,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
         mTradeContent=(RecyclerView)view.findViewById(R.id.rv_trade_content);
         mTradeContent.setLayoutManager(new LinearLayoutManager(context));
         mTradeContent.setAdapter(new OpenAdapter(context,mBeanOpenList));
+        mTradeContent.setFocusable(false);
     }
 
     @Override
