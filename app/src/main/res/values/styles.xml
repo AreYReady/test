@@ -14,6 +14,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="TranslucentTheme" parent="AppTheme">
         <!--在Android 4.4之前的版本上运行，直接跟随系统主题-->
     </style>
@@ -26,14 +27,17 @@
         <item name="android:textSize">15.0sp</item>
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
+
     <style name="TextMedium" parent="@android:style/TextAppearance">
         <item name="android:textSize">20.0sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="TextRegular" parent="@android:style/TextAppearance">
         <item name="android:textSize">14.0sp</item>
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
+
     <style name="Button" parent="@android:style/Widget.Button">
         <item name="android:textAppearance">@style/TextRegular</item>
         <item name="android:paddingLeft">0.0dip</item>
@@ -43,6 +47,7 @@
         <item name="android:minWidth">@dimen/button_default_width</item>
         <item name="android:minHeight">@dimen/button_default_height</item>
     </style>
+
     <style name="Button.Action" parent="@style/Button">
         <item name="android:textAppearance">@style/TextMedium</item>
         <item name="android:textColor">@color/sell_action_button_pressed_light</item>
@@ -53,6 +58,7 @@
         <item name="android:minWidth">@dimen/action_button_width</item>
         <item name="android:minHeight">@dimen/action_button_height</item>
     </style>
+
     <style name="loading_dialog" parent="android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>
@@ -61,42 +67,58 @@
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
     <style name="MyToggleButton" parent="@android:style/Widget.CompoundButton">
         <item name="android:button">@drawable/setting_checkbox_button</item>
     </style>
+
     <style name="TextHeader" parent="@android:style/TextAppearance.Small">
         <item name="android:textSize">10.0sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_color_primary_dark_with_opacity</item>
 
     </style>
+
     <style name="Button.Action.Secondary.Small" parent="@style/Button">
         <item name="android:textAppearance">@style/TextSmall</item>
         <item name="android:textColor">@color/button_disabled_light</item>
         <item name="android:background">@drawable/branded_action_button_dark</item>
         <item name="android:minWidth">@dimen/action_button_width_short</item>
     </style>
+
     <style name="TextAverage" parent="@style/TextMedium">
         <item name="android:textSize">15.0sp</item>
     </style>
+
     <style name="TextDesc">
         <item name="android:textSize">15.0sp</item>
         <item name="android:textColor">@color/common_signin_btn_light_text_disabled</item>
     </style>
+
     <style name="TextDescBig">
-    <item name="android:textSize">20.0sp</item>
-    <item name="android:textColor">@drawable/buy_button_text_color</item>
-</style>
+        <item name="android:textSize">20.0sp</item>
+        <item name="android:textColor">@drawable/buy_button_text_color</item>
+    </style>
+
+    <style name="TextDescBigGreen">
+        <item name="android:textSize">20.0sp</item>
+        <item name="android:textColor">@color/link_text_material_light</item>
+    </style>
+
     <style name="ButtonActionText">
         <item name="android:textSize">30.0sp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
+
     <style name="AvatarStyle">
         <item name="android:background">@drawable/brand_oval_dark</item>
         <item name="android:src">@mipmap/join_social_cover</item>
     </style>
+
     <style name="TextView.Numbers" parent="@style/TextView" />
+
     <style name="TextView" />
+
     <style name="Branded.Button.Small.Radio.white" parent="Branded.Button.Small.Radio">
         <item name="android:textColor">@android:color/white</item>
     </style>
@@ -105,22 +127,27 @@
         <item name="android:textColor">@color/abc_primary_text_material_light</item>
         <item name="android:button">@drawable/brand_oval_dark</item>
     </style>
+
     <style name="Branded.Button.Small" parent="@style/Branded.Button">
         <item name="android:textAppearance">@style/TextSmaller</item>
         <item name="android:background">@drawable/branded_button_small_dark</item>
         <item name="android:maxHeight">@dimen/small_button_height</item>
         <item name="android:minHeight">@dimen/small_button_height</item>
     </style>
+
     <style name="TextSmaller" parent="@android:style/TextAppearance">
         <item name="android:textSize">10.0sp</item>
         <item name="android:textColor">@color/highlighted_text_material_dark</item>
     </style>
+
     <style name="Branded.Button" parent="@android:style/Widget.Button" />
+
     <style name="realTimeLeftText">
         <item name="android:textSize">14.0sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
+
     <style name="realTimeRightText">
         <item name="android:textSize">20.0sp</item>
         <item name="android:textStyle">bold</item>

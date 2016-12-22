@@ -16,6 +16,7 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="@dimen/x180"
             android:layout_marginRight="@dimen/x180" />
+
     </RelativeLayout>
 
     <trade.xkj.com.trade.Utils.view.MyScrollView

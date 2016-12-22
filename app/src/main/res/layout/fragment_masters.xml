@@ -4,8 +4,10 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_master"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        >
     </android.support.v7.widget.RecyclerView>
 </FrameLayout>

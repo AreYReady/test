@@ -68,6 +68,7 @@
         android:textColorHint="@android:color/white"
         android:textColor="@android:color/holo_blue_light"
         android:imeOptions="actionNext"
+        android:backgroundTint="#ffeeeeee"
         android:inputType="number" />
 
     <EditText
@@ -79,6 +80,7 @@
         android:textColorHint="@android:color/white"
         android:textColor="@android:color/holo_blue_light"
         android:imeOptions="actionDone"
+        android:backgroundTint="#ffeeeeee"
         android:inputType="textPassword" />
 
     <CheckBox

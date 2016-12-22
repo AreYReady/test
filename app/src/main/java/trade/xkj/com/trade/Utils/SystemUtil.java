@@ -7,10 +7,15 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.text.InputFilter;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.lang.reflect.Field;
@@ -41,10 +46,11 @@ public class SystemUtil {
 
     /**
      * 是否锁屏
+     *
      * @param context
      * @return
      */
-    public static boolean isScreenOn(Context context){
+    public static boolean isScreenOn(Context context) {
         KeyguardManager mKeyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         boolean flag = mKeyguardManager.inKeyguardRestrictedInputMode();
         return !flag;
@@ -60,11 +66,13 @@ public class SystemUtil {
     public static boolean isAvalidNetSetting(Context context) {
         return !(NetworkType.UNKNOWN.endsWith(getNetworkType(context)));
     }
+
     /**
- 　　* 获取设置的最大长度
- 　　*
- 　　* @return
- 　　*/
+     * 　　* 获取设置的最大长度
+     * 　　*
+     * 　　* @return
+     *
+     */
     public static int getMaxLength(TextView tv) {
         int length = 0;
         try {
@@ -77,15 +85,16 @@ public class SystemUtil {
                         if (field.getName().equals("mMax")) {
                             field.setAccessible(true);
                             length = (Integer) field.get(filter);
-                            }
                         }
                     }
                 }
-            } catch (Exception e) {
-            e.printStackTrace();
             }
-        return length;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return length;
+    }
+
     /**
      * 获取网络类型
      *
@@ -140,17 +149,20 @@ public class SystemUtil {
 
         return NetworkType.NET_3G;
     }
-    public static String getTAG(Object object){
-        return "hsc : "+ object.getClass().getSimpleName();
+
+    public static String getTAG(Object object) {
+        return "hsc : " + object.getClass().getSimpleName();
     }
-    public static int[] getScrren(Activity activity){
+
+    public static int[] getScrren(Activity activity) {
         DisplayMetrics metric = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(metric);
         int width = metric.widthPixels; // 屏幕宽度（像素）
         int height = metric.heightPixels; // 屏幕高度（像素）
-        int[] i=new int[]{width,height};
+        int[] i = new int[]{width, height};
         return i;
     }
+
     /**
      * dp转px
      *
@@ -158,14 +170,13 @@ public class SystemUtil {
      * @param
      * @return
      */
-    public static int dp2px(Context context, float dpVal)
-    {
+    public static int dp2px(Context context, float dpVal) {
         return (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpVal, context.getResources().getDisplayMetrics()));
     }
-    public static float dp2pxFloat(Context context, float dpVal)
-    {
-        return  (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+
+    public static float dp2pxFloat(Context context, float dpVal) {
+        return (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpVal, context.getResources().getDisplayMetrics()));
     }
 
@@ -176,8 +187,7 @@ public class SystemUtil {
      * @param
      * @return
      */
-    public static int sp2px(Context context, float spVal)
-    {
+    public static int sp2px(Context context, float spVal) {
         return (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
                 spVal, context.getResources().getDisplayMetrics()));
     }
@@ -189,8 +199,7 @@ public class SystemUtil {
      * @param pxVal
      * @return
      */
-    public static float px2dp(Context context, float pxVal)
-    {
+    public static float px2dp(Context context, float pxVal) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (pxVal / scale);
     }
@@ -202,9 +211,72 @@ public class SystemUtil {
      * @param pxVal
      * @return
      */
-    public static float px2sp(Context context, float pxVal)
-    {
+    public static float px2sp(Context context, float pxVal) {
         return (pxVal / context.getResources().getDisplayMetrics().scaledDensity);
     }
 
+    /**
+     * 判断是否是图片作为背景,是则状态栏透明
+     *
+     * @param activity
+     */
+    public static void setTranslucentForImage(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // 设置状态栏透明
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            // 设置根布局的参数
+            ViewGroup rootView = (ViewGroup) ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
+            rootView.setFitsSystemWindows(true);
+            rootView.setClipToPadding(true);
+        }
+    }
+
+    /**
+     * 设置状态栏颜色 * * @param activity 需要设置的activity * @param color 状态栏颜色值
+     */
+    public static void setColor(Activity activity, int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // 设置状态栏透明
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            // 生成一个状态栏大小的矩形
+            View statusView = createStatusView(activity, color);
+            // 添加 statusView 到布局中
+            ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
+            decorView.addView(statusView);
+            // 设置根布局的参数
+            ViewGroup rootView = (ViewGroup) ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
+            rootView.setFitsSystemWindows(true);
+            rootView.setClipToPadding(true);
+        }
+    }
+
+    /**
+     * 生成一个和状态栏大小相同的矩形条 * * @param activity 需要设置的activity * @param color 状态栏颜色值 * @return 状态栏矩形条
+     */
+    private static View createStatusView(Activity activity, int color) {
+        // 获得状态栏高度
+        int resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int statusBarHeight = activity.getResources().getDimensionPixelSize(resourceId);
+
+        // 绘制一个和状态栏一样高的矩形
+        View statusView = new View(activity);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                statusBarHeight);
+        statusView.setLayoutParams(params);
+        statusView.setBackgroundColor(color);
+        return statusView;
+    }
+
+    /**
+     * 设置透明栏
+     * @param activity
+     */
+    public static void setTranslucent(Activity activity){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //透明状态栏
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //透明导航栏
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+    }
 }

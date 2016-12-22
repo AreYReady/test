@@ -15,11 +15,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +39,13 @@ import trade.xkj.com.trade.Utils.view.PullBottomViewDragLayout;
 import trade.xkj.com.trade.Utils.view.ZoomOutPageTransformer;
 import trade.xkj.com.trade.adapter.FragmentAdapter;
 import trade.xkj.com.trade.base.BaseActivity;
+import trade.xkj.com.trade.base.BaseFragment;
+import trade.xkj.com.trade.base.MyApplication;
+import trade.xkj.com.trade.bean.BeanMasterInfo;
 import trade.xkj.com.trade.mvp.operate.OperatePositionActivity;
 
 public class MainTradeContentActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, BaseFragment.BackInterface {
     private PullBottomViewDragLayout mPullViewDragLayout;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -43,6 +54,9 @@ public class MainTradeContentActivity extends BaseActivity
     private Context context;
     private ViewPager mViewPagerFrag;
     private List<Fragment> mFragmentList;
+    private ImageButton mIbSwitch;
+    private BaseFragment mBaseFragment;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +65,7 @@ public class MainTradeContentActivity extends BaseActivity
 
     @Override
     public void initRegister() {
-
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -77,14 +91,23 @@ public class MainTradeContentActivity extends BaseActivity
     public void initView() {
         Log.i(TAG, "initView: ");
         setContentView(R.layout.activity_main);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        mIbSwitch = (ImageButton) findViewById(R.id.ib_switch);
+        mIbSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fl_main_trade_content, new FragmentMaster(), "1");
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 startActivity(new Intent(context, OperatePositionActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.ADD));
             }
         });
@@ -104,6 +127,15 @@ public class MainTradeContentActivity extends BaseActivity
         fragmentTransaction.commit();
 
         mPullViewDragLayout = (PullBottomViewDragLayout) findViewById(R.id.dragLayout);
+        mPullViewDragLayout.getChildAt(0).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                //将fragment固定在mPullViewDragLayout上面
+                mPullViewDragLayout.getChildAt(0).getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                findViewById(R.id.s_temp).setLayoutParams(new LinearLayout.LayoutParams(1,mPullViewDragLayout.getChildAt(0).getHeight()/2));
+            }
+        });
+
         mViewPagerFrag = (ViewPager) findViewById(R.id.vp_indicator_content);
         mViewPagerFrag.setAdapter(new FragmentAdapter(fragmentManager, mFragmentList));
         mViewPagerFrag.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -152,12 +184,7 @@ public class MainTradeContentActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        Log.i(TAG, "onBackPressed: ");
 
     }
 
@@ -182,6 +209,12 @@ public class MainTradeContentActivity extends BaseActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    public void setSelectedFragment(BaseFragment selectedFragment) {
+        this.mBaseFragment = selectedFragment;
+    }
+
 
     public class ViewpagerAdapterItem extends PagerAdapter {
         @Override
@@ -211,5 +244,44 @@ public class MainTradeContentActivity extends BaseActivity
         }
     }
 
+    /**
+     * 展示高手的个人信息
+     */
+    private FragmentMasterInfo mFragmentMasterInfo;
 
+    @Subscribe
+    public void getShowMasterInfo(BeanMasterInfo mBeanMasterInfo) {
+        Log.i(TAG, "getShowMasterInfo: 展示高手个人信息");
+        fragmentManager.beginTransaction().add(R.id.fl_main_trade_content, mFragmentMasterInfo = new FragmentMasterInfo()).addToBackStack("tag").commit();
+    }
+
+    //退出时的时间
+    private long mExitTime;
+
+    //    对返回键进行监听
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.i(TAG, "onKeyDown: " + MyApplication.getInstance().getListSize());
+        //双击退出
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+                //判断fragment是否消费返回键.
+            } else if (mBaseFragment != null && mBaseFragment.onBackPressed()) {
+            } else {
+                exit();
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void exit() {
+        if ((System.currentTimeMillis() - mExitTime) > 2000) {
+            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            mExitTime = System.currentTimeMillis();
+        } else {
+            MyApplication.getInstance().exit();
+        }
+    }
 }

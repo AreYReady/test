@@ -32,30 +32,15 @@ public  abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.i(TAG, "onDestroy: ");
         EventBus.getDefault().unregister(this);
+        MyApplication.getInstance().deleteActivity(this);
+        if(MyApplication.getInstance().getListSize()==0){
+            MyApplication.getInstance().exit();
+        }
     }
-//    //退出时的时间
-//    private long mExitTime;
-//    //对返回键进行监听
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//
-//        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-//
-//            exit();
-//            return true;
-//        }
-//        return super.onKeyDown(keyCode, event);
-//    }
-//
-//    public void exit() {
-//        if ((System.currentTimeMillis() - mExitTime) > 2000) {
-//            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
-//            mExitTime = System.currentTimeMillis();
-//        } else {
-//            MyApplication.getInstance().exit();
-//        }
-//    }
+
+
     @Subscribe(sticky = true)
     public void getHander(Handler handler){
         Log.i(TAG, "getHandler: ");

@@ -17,6 +17,7 @@ import trade.xkj.com.trade.Utils.SystemUtil;
  */
 public class PullBottomViewDragLayout extends ViewGroup {
     private String TAG = SystemUtil.getTAG(this);
+    public static int mHeaderHight;
     private int initTop = -1;
     private final ViewDragHelper mDragHelper;
 
@@ -242,6 +243,7 @@ public class PullBottomViewDragLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        mHeaderHight=mHeaderView.getHeight();
         mDragRange = getHeight() - mHeaderView.getHeight() / 2;
         if (initTop != 0) {
             initTop = mDragRange;

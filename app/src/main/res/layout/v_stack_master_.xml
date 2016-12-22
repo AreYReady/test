@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    >
+
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tv_experience_time"
+            style="@style/TextDescBigGreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:text="473天" />
+
+        <TextView
+            style="@style/TextDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tv_experience_time"
+            android:text="经验" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="0.1dp"
+        android:layout_height="match_parent"
+        android:background="@color/common_signin_btn_light_text_disabled" />
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tv_avg_daily_pl"
+            style="@style/TextDescBigGreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:text="3.94%" />
+
+        <TextView
+            style="@style/TextDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tv_avg_daily_pl"
+            android:text="@string/avg_daily_pl" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/common_signin_btn_light_text_disabled" />
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tv_success_rate"
+            style="@style/TextDescBigGreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:text="48.48%" />
+
+        <TextView
+            style="@style/TextDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tv_success_rate"
+            android:text="@string/success_rate" />
+    </RelativeLayout>
+</LinearLayout>

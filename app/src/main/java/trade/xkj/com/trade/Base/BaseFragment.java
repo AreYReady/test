@@ -14,6 +14,7 @@ import trade.xkj.com.trade.Utils.SystemUtil;
 
 /**
  * Created by admin on 2016-11-23.
+ * TODO:所有的fragment都需要继承的父类
  */
 
 public  abstract class BaseFragment extends Fragment {
@@ -22,16 +23,19 @@ public  abstract class BaseFragment extends Fragment {
     protected Handler mHandler;
     protected final String TAG= SystemUtil.getTAG(this);
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context=getActivity();
         EventBus.getDefault().register(this);
+
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        view.setClickable(true);
         initData();
         initView();
     }
@@ -39,9 +43,20 @@ public  abstract class BaseFragment extends Fragment {
     protected abstract void initView();
 
     protected abstract void initData();
+    public Boolean onBackPressed(){
+        return false;
+    }
     @Subscribe(sticky = true)
     public void getHander(Handler handler){
         Log.i(TAG, "getHandler: ");
         mHandler=handler;
+    }
+    public interface BackInterface {
+          void setSelectedFragment(BaseFragment selectedFragment);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 }

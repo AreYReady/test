@@ -17,7 +17,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/toolbars_title_dark"
             app:popupTheme="@style/AppTheme.PopupOverlay" >
 
 
@@ -27,6 +26,7 @@
                 android:paddingRight="@dimen/x30"
                >
                 <ImageButton
+                    android:id="@+id/ib_switch"
                     android:layout_toLeftOf="@+id/ib_"
                     android:layout_marginRight="@dimen/x30"
                     android:layout_width="wrap_content"

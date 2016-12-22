@@ -86,6 +86,7 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
         etUserName.setText("83047938");
         etUserPassWord.setText("abcd8888");
         mLoadingDialog=new LoadingDialog(this,"请稍等");
+        SystemUtil.setTranslucentForImage(this);
     }
     @Override
     public void hintLoading() {

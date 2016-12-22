@@ -12,16 +12,20 @@ import java.util.List;
 
 public class MyApplication extends Application {
     private static MyApplication instance;
+
     public static MyApplication getInstance() {
         return instance;
     }
+
     @Override
     public void onCreate() {
         // TODO Auto-generated method stub
         super.onCreate();
         instance = this;
     }
+
     private List<Activity> mList = new LinkedList();
+
     // add Activity
     public void addActivity(Activity activity) {
         mList.add(activity);
@@ -39,6 +43,25 @@ public class MyApplication extends Application {
             System.exit(0);
         }
     }
+    public int getListSize(){
+            return mList.size();
+    }
+
+    public void deleteActivity(Activity activity) {
+        if (activityExist(activity)) {
+            mList.remove(activity);
+        }
+    }
+
+    private boolean activityExist(Activity activity) {
+        for (Activity a : mList) {
+            if (a == activity) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void onLowMemory() {
         super.onLowMemory();
         System.gc();

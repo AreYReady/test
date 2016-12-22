@@ -3,6 +3,7 @@ package trade.xkj.com.trade.mvp.operate;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.Utils.ToashUtil;
@@ -10,7 +11,7 @@ import trade.xkj.com.trade.base.OperateBaseActivity;
 
 /**
  * Created by huangsc on 2016-12-10.
- * TODO:
+ * TODO:对界面上的各种按钮键操作的显示activity
  */
 
 public class OperatePositionActivity extends OperateBaseActivity {
@@ -21,6 +22,8 @@ public class OperatePositionActivity extends OperateBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_operate_add);
         operateAction=(OperateAction) getIntent().getExtras().get(OPERATEACTION);
+//        SystemUtil.setColor(this,R.color.colorPrimaryDark);
+//        SystemUtil.setTranslucent(this);
         super.onCreate(savedInstanceState);
     }
 
@@ -33,6 +36,14 @@ public class OperatePositionActivity extends OperateBaseActivity {
     public void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         switch (operateAction) {
             case ADD:
@@ -66,6 +77,6 @@ public class OperatePositionActivity extends OperateBaseActivity {
         EDIT_PENDING_POSITION,
         EDIT_POSITION,
         UNLINK,
-        ClOSE_POSITION;
+        ClOSE_POSITION
     }
 }
