@@ -10,15 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.SystemUtil;
 
 /**
  * Created by Flavien Laurent (flavienlaurent.com) on 23/08/13.
  */
 public class PullBottomViewDragLayout extends ViewGroup {
-    private String TAG = SystemUtil.getTAG(this);
-    public static int mHeaderHight;
-    private int initTop = -1;
+
     private final ViewDragHelper mDragHelper;
 
     private View mHeaderView;
@@ -59,12 +56,6 @@ public class PullBottomViewDragLayout extends ViewGroup {
         smoothSlideTo(1f);
     }
 
-    /**
-     * 如果
-     *
-     * @param slideOffset
-     * @return
-     */
     boolean smoothSlideTo(float slideOffset) {
         final int topBound = getPaddingTop();
         int y = (int) (topBound + slideOffset * mDragRange);
@@ -90,7 +81,7 @@ public class PullBottomViewDragLayout extends ViewGroup {
             mDragOffset = (float) top / mDragRange;
 
             mHeaderView.setPivotX(mHeaderView.getWidth());
-            mHeaderView.setPivotY(mHeaderView.getHeight() / 2);
+            mHeaderView.setPivotY(mHeaderView.getHeight()/2);
 //            mHeaderView.setScaleX(1 - mDragOffset / 2);
 //            mHeaderView.setScaleY(1 - mDragOffset / 2);
 
@@ -117,8 +108,7 @@ public class PullBottomViewDragLayout extends ViewGroup {
         @Override
         public int clampViewPositionVertical(View child, int top, int dy) {
             final int topBound = getPaddingTop();
-            final int bottomBound = getHeight() - mHeaderView.getHeight() / 2 - mHeaderView.getPaddingBottom();
-
+            final int bottomBound = getHeight() - mHeaderView.getHeight()/2 - mHeaderView.getPaddingBottom();
             final int newTop = Math.min(Math.max(top, topBound), bottomBound);
             return newTop;
         }
@@ -135,7 +125,8 @@ public class PullBottomViewDragLayout extends ViewGroup {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         final int action = MotionEventCompat.getActionMasked(ev);
-        if ((action != MotionEvent.ACTION_DOWN)) {
+
+        if (( action != MotionEvent.ACTION_DOWN)) {
             mDragHelper.cancel();
             return super.onInterceptTouchEvent(ev);
         }
@@ -158,7 +149,6 @@ public class PullBottomViewDragLayout extends ViewGroup {
             }
 
             case MotionEvent.ACTION_MOVE: {
-                initBollean=false;
                 final float adx = Math.abs(x - mInitialMotionX);
                 final float ady = Math.abs(y - mInitialMotionY);
                 final int slop = mDragHelper.getTouchSlop();
@@ -172,12 +162,11 @@ public class PullBottomViewDragLayout extends ViewGroup {
 
         return mDragHelper.shouldInterceptTouchEvent(ev) || interceptTap;
     }
-    private boolean initBollean=true;
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         mDragHelper.processTouchEvent(ev);
-        initTop=0;
+
         final int action = ev.getAction();
         final float x = ev.getX();
         final float y = ev.getY();
@@ -194,21 +183,11 @@ public class PullBottomViewDragLayout extends ViewGroup {
                 final float dx = x - mInitialMotionX;
                 final float dy = y - mInitialMotionY;
                 final int slop = mDragHelper.getTouchSlop();
-
                 if (dx * dx + dy * dy < slop * slop && isHeaderViewUnder) {
-                    if(initBollean) {
-                        initBollean=false;
-                        if (mDragOffset == 0) {
-                            smoothSlideTo(0f);
-                        } else {
-                            smoothSlideTo(1f);
-                        }
-                    }else{
-                        if (mDragOffset == 0) {
-                            smoothSlideTo(1f);
-                        } else {
-                            smoothSlideTo(0f);
-                        }
+                    if (mDragOffset == 0) {
+                        smoothSlideTo(1f);
+                    } else {
+                        smoothSlideTo(0f);
                     }
                 }
                 break;
@@ -217,6 +196,7 @@ public class PullBottomViewDragLayout extends ViewGroup {
 
         return isHeaderViewUnder && isViewHit(mHeaderView, (int) x, (int) y) || isViewHit(mDescView, (int) x, (int) y);
     }
+
 
 
     private boolean isViewHit(View view, int x, int y) {
@@ -243,23 +223,20 @@ public class PullBottomViewDragLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        mHeaderHight=mHeaderView.getHeight();
-        mDragRange = getHeight() - mHeaderView.getHeight() / 2;
-        if (initTop != 0) {
-            initTop = mDragRange;
-        }
+        mDragRange = getHeight() - mHeaderView.getHeight()/2;
         mHeaderView.layout(
                 0,
-                initTop + mTop,
+                mTop,
                 r,
-                initTop + mTop + mHeaderView.getMeasuredHeight());
+                mTop + mHeaderView.getMeasuredHeight());
+
 
 
         mDescView.layout(
                 0,
-                initTop + mTop + mHeaderView.getMeasuredHeight(),
+                mTop + mHeaderView.getMeasuredHeight(),
                 r,
-                initTop + mTop + b);
+                mTop  + b);
 //        mHeaderView.layout(
 //                0,
 //                b-mTop - mHeaderView.getMeasuredHeight(),

@@ -9,21 +9,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,6 +34,7 @@ import trade.xkj.com.trade.Utils.view.CustomViewPager;
 import trade.xkj.com.trade.Utils.view.PullBottomViewDragLayout;
 import trade.xkj.com.trade.Utils.view.ZoomOutPageTransformer;
 import trade.xkj.com.trade.adapter.FragmentAdapter;
+import trade.xkj.com.trade.adapter.MyViewPagerAdapterItem;
 import trade.xkj.com.trade.base.BaseActivity;
 import trade.xkj.com.trade.base.BaseFragment;
 import trade.xkj.com.trade.base.MyApplication;
@@ -132,9 +129,13 @@ public class MainTradeContentActivity extends BaseActivity
             public void onGlobalLayout() {
                 //将fragment固定在mPullViewDragLayout上面
                 mPullViewDragLayout.getChildAt(0).getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//                int initHight = mPullViewDragLayout.getMeasuredHeight() - mPullViewDragLayout.getChildAt(0).getWidth() / 2;
+//                Log.i(TAG, "onGlobalLayout: "+initHight);
+//                mPullViewDragLayout.setPadding(0,initHight,0,0);
                 findViewById(R.id.s_temp).setLayoutParams(new LinearLayout.LayoutParams(1,mPullViewDragLayout.getChildAt(0).getHeight()/2));
             }
         });
+
 
         mViewPagerFrag = (ViewPager) findViewById(R.id.vp_indicator_content);
         mViewPagerFrag.setAdapter(new FragmentAdapter(fragmentManager, mFragmentList));
@@ -146,7 +147,7 @@ public class MainTradeContentActivity extends BaseActivity
         });
 
         mHeadViewPager = (CustomViewPager) findViewById(R.id.cvp_indicator_item);
-        mHeadViewPager.setAdapter(new ViewpagerAdapterItem());
+        mHeadViewPager.setAdapter(new MyViewPagerAdapterItem(context,mDataItem));
         mHeadViewPager.setOffscreenPageLimit(mDataItem.size());
         mHeadViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         mHeadViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -213,35 +214,6 @@ public class MainTradeContentActivity extends BaseActivity
     @Override
     public void setSelectedFragment(BaseFragment selectedFragment) {
         this.mBaseFragment = selectedFragment;
-    }
-
-
-    public class ViewpagerAdapterItem extends PagerAdapter {
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            String s = mDataItem.get(position);
-            View inflate = LayoutInflater.from(context).inflate(R.layout.item_viewpager, null);
-            TextView textView = (TextView) inflate.findViewById(R.id.tv_item_name);
-            textView.setText(s);
-            container.addView(inflate);
-            return inflate;
-        }
-
-        @Override
-        public int getCount() {
-            return mDataItem.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            View view = (View) object;
-            container.removeView(view);
-        }
     }
 
     /**

@@ -3,6 +3,7 @@ package trade.xkj.com.trade.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,7 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
         holder.llOnclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i(TAG, "onClick: OpenAdapter");
                 if(holder.llHide.getTag()==null) {
                     holder.llHide.setTag(0);
                 }

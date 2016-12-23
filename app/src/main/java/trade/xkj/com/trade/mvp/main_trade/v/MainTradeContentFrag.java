@@ -63,7 +63,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     private CustomViewPager mHeaderCustomViewPager;
     private List<BeanIndicatorData> mIndicatorDatas;
     private DrawPriceView mDrawPriceView;
-    private ViewpagerAdapter mViewPagerAdapter;
+    private MyPagerAdpter mViewPagerAdapter;
     private FixedSpeedScroller scroller;
     private int mPosition;
     private RecyclerView mTradeContent;
@@ -175,7 +175,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     @Override
     public void refreshIndicator(ArrayList<BeanIndicatorData> mBeanIndicatorDataArrayList) {
         mIndicatorDatas = mBeanIndicatorDataArrayList;
-        mViewPagerAdapter = new ViewpagerAdapter();
+        mViewPagerAdapter = new MyPagerAdpter();
         mHeaderCustomViewPager.setAdapter(mViewPagerAdapter);
         mHeaderCustomViewPager.setOffscreenPageLimit(mIndicatorDatas.size());
         mHeaderCustomViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
@@ -217,7 +217,7 @@ private Handler handler=new Handler(){};
         }, 1000);
     }
 
-    class ViewpagerAdapter extends PagerAdapter {
+    class MyPagerAdpter extends PagerAdapter {
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
             final BeanIndicatorData info = mIndicatorDatas.get(position);

@@ -59,8 +59,9 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
     public void initData() {
         mUserLoginPresenter=new UserLoginPresenter(this);
        scrren = SystemUtil.getScrren(this);
-
     }
+
+
 
     @Override
     public void onClick(View v) {
