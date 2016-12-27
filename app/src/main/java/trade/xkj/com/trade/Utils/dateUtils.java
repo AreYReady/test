@@ -4,13 +4,13 @@ package trade.xkj.com.trade.Utils;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.text.format.Time;
 
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -37,29 +37,23 @@ public class DateUtils{
         return dateString;
     }
 
+    /**
+     * 获取当前时间yy:MM:dd HH:mm:ss
+     * @return
+     */
+    public static String getCurrenTime(){
+    return DateUtils.getXTShowTime(Calendar.getInstance().getTimeInMillis());
+}
 
-    public static Long getCurrentTimeHHMMNoS() throws ParseException {
-//        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-//        Date currentTime = new Date();
-//        String dateString = formatter.format(currentTime);
-//        return dateToLong(currentTime);
-        Time time = new Time();
-        time.setToNow();
-        return stringToLong(time.hour + ":" + time.minute, "HH:mm");
+    /**
+     * 获取以手机当前时区的时间yyyyMMddHHmmss
+     * @param date
+     * @return
+     */
+    public static String getShowTime(Long date){
+        SimpleDateFormat format=new SimpleDateFormat("yyyyMMddHHmmss");
+        return format.format(new Date(date));
     }
-
-    //算法是当前时间减去8:00得出来的毫毛值
-    public static long stringToLong(String strTime, String formatType)
-            throws ParseException {
-        Date date = stringToDate(strTime, formatType); // String类型转成date类型
-        if (date == null) {
-            return 0;
-        } else {
-            long currentTime = dateToLong(date); // date类型转成long类型
-            return currentTime;
-        }
-    }
-
     // string类型转换为date类型
     // strTime要转换的string类型的时间，formatType要转换的格式yyyy-MM-dd HH:mm:ss//yyyy年MM月dd日
     // HH时mm分ss秒，
@@ -92,9 +86,10 @@ public class DateUtils{
 
     /**
      * @author huangsc
+     *
      * 获取当前时间格式:=
      */
-    public static String getShowTime(long time) {
+    public static String getXTShowTime(long time) {
         SimpleDateFormat sdf = new SimpleDateFormat("yy:MM:dd HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone(getCurrentTimeZone()));
         return sdf.format(new Date(time));

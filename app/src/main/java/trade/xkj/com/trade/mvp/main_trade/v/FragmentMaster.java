@@ -32,12 +32,6 @@ public class FragmentMaster extends BaseFragment {
         mRvMaster=(RecyclerView)view.findViewById(R.id.rv_master);
         mRvMaster.setAdapter(mMasterAdapter=new MasterAdapter(context));
         mRvMaster.setLayoutManager(new LinearLayoutManager(context));
-//        mMasterAdapter.setOnItemClickListener(new MasterAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick() {
-//
-//            }
-//        });
     }
 
     @Override

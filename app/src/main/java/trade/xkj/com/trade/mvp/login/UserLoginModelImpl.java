@@ -2,7 +2,6 @@ package trade.xkj.com.trade.mvp.login;
 
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -17,12 +16,12 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
+import trade.xkj.com.trade.IO.sslsocket.Decoder;
+import trade.xkj.com.trade.IO.sslsocket.Encoder;
+import trade.xkj.com.trade.IO.sslsocket.SSLDecoderImp;
+import trade.xkj.com.trade.IO.sslsocket.SSLEncodeImp;
+import trade.xkj.com.trade.IO.sslsocket.SSLSocketChannel;
 import trade.xkj.com.trade.Utils.SystemUtil;
-import trade.xkj.com.trade.Utils.sslsocket.Decoder;
-import trade.xkj.com.trade.Utils.sslsocket.Encoder;
-import trade.xkj.com.trade.Utils.sslsocket.SSLDecoderImp;
-import trade.xkj.com.trade.Utils.sslsocket.SSLEncodeImp;
-import trade.xkj.com.trade.Utils.sslsocket.SSLSocketChannel;
 import trade.xkj.com.trade.base.MyApplication;
 import trade.xkj.com.trade.bean.BeanSymbolConfig;
 import trade.xkj.com.trade.bean.BeanUserLoginData;
@@ -32,6 +31,8 @@ import trade.xkj.com.trade.constant.MessageType;
 import trade.xkj.com.trade.constant.ServerIP;
 import trade.xkj.com.trade.handler.HandlerSend;
 import trade.xkj.com.trade.handler.HandlerWrite;
+
+import static android.util.Log.i;
 
 /**
  * Created by admin on 2016-11-16.
@@ -61,6 +62,8 @@ public class UserLoginModelImpl implements UserLoginModel {
         return 0;
     }
 
+
+
     /**
      * 发送数据
      * @param beanLoginData
@@ -70,7 +73,7 @@ public class UserLoginModelImpl implements UserLoginModel {
             @Override
             public void run() {
                 try {
-                    Log.i("123", "run: sslTest");
+                    i("123", "run: sslTest");
                     sslTest(String.valueOf(beanLoginData.getLogin()), beanLoginData.getPassword_hash());
                 } catch (KeyManagementException e) {
                     e.printStackTrace();
@@ -92,22 +95,22 @@ public class UserLoginModelImpl implements UserLoginModel {
 
         Encoder<String> encoder = new SSLEncodeImp();
         Decoder<String> decoder = new SSLDecoderImp();
-        Log.i("123", "doLogin: Opening channel");
+        i("123", "doLogin: Opening channel");
         try {
             mSSLSocketChannel = SSLSocketChannel.open(address, encoder, decoder, 1024*1024, 1024*1024);
             HandlerThread writeThread = new HandlerThread("write");
             writeThread.start();
             mHandlerWrite = new HandlerWrite(writeThread.getLooper(), mSSLSocketChannel);
-            Log.i("123", "doLogin: Channel opened, initial handshake done");
+            i("123", "doLogin: Channel opened, initial handshake done");
 ///		map.put(SSL_SOCKET, sslSocketChannel);
 ///		map.put(THREAD_READ, mHandlerThread
-            Log.i("123", "doLogin: Sending request");
+            i("123", "doLogin: Sending request");
 
             BeanUserLoginData userLogin = new BeanUserLoginData(Integer.valueOf(name), passwd);
             String loginStr = new Gson().toJson(userLogin, BeanUserLoginData.class);
             mSSLSocketChannel.send(loginStr);
 
-            Log.i("123", "doLogin: Receiving response");
+            i("123", "doLogin: Receiving response");
             mHandlerWrite.sendEmptyMessage(0);
         } catch (IOException e) {
             e.printStackTrace();
@@ -125,7 +128,7 @@ public class UserLoginModelImpl implements UserLoginModel {
     }
     @Subscribe(threadMode=ThreadMode.MAIN)
     public void loginResult(ResponseEvent responseEvent){
-        Log.i(TAG, "loginResult:responseEvent "+responseEvent.toString());
+        i(TAG, "loginResult:responseEvent "+responseEvent.toString());
         int result_code = responseEvent.getResult_code();
         if(responseEvent==null||(responseEvent.getMsg_type()!= MessageType.TYPE_BINARY_LOGIN_RESULT)){
             mResultEnum=ResultEnum.erro;

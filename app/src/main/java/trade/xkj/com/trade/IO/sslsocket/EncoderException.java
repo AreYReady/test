@@ -13,12 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package trade.xkj.com.trade.Utils.sslsocket;
+package trade.xkj.com.trade.IO.sslsocket;
 
-import java.nio.ByteBuffer;
+import java.io.IOException;
 
-//@FunctionalInterface
-public interface Encoder<T> {
+public class EncoderException extends IOException {
 
-    void encode(T value, ByteBuffer buffer) throws EncoderException;
+    public EncoderException() {
+    }
+
+    public EncoderException(String message) {
+        super(message);
+    }
+
+    public EncoderException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public EncoderException(Throwable cause) {
+        super(cause);
+    }
 }

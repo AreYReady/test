@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.sslsocket;
+package trade.xkj.com.trade.IO.sslsocket;
 
 
 import java.io.IOException;

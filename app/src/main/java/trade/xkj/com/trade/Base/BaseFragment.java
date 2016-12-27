@@ -39,16 +39,14 @@ public  abstract class BaseFragment extends Fragment {
         initData();
         initView();
     }
-
+    protected abstract void initData();
     protected abstract void initView();
 
-    protected abstract void initData();
     public Boolean onBackPressed(){
         return false;
     }
     @Subscribe(sticky = true)
     public void getHander(Handler handler){
-        Log.i(TAG, "getHandler: ");
         mHandler=handler;
     }
     public interface BackInterface {

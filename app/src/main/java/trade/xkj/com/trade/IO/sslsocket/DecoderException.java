@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package trade.xkj.com.trade.Utils.sslsocket;
+package trade.xkj.com.trade.IO.sslsocket;
 
 import java.io.IOException;
 
-public class EncoderException extends IOException {
+public class DecoderException extends IOException {
 
-    public EncoderException() {
+    public DecoderException() {
     }
 
-    public EncoderException(String message) {
+    public DecoderException(String message) {
         super(message);
     }
 
-    public EncoderException(String message, Throwable cause) {
+    public DecoderException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public EncoderException(Throwable cause) {
+    public DecoderException(Throwable cause) {
         super(cause);
     }
 }

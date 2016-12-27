@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/space_big"
+    android:paddingRight="@dimen/space_big"
+    android:orientation="vertical">
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/rb_1"
+             style="@style/Branded.Button.Small.Radio.white"
+            android:textSize="@dimen/text_size_medium"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/space_xbig"
+            android:checked="true"
+            android:text="关注着" />
+
+        <RadioButton
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size_medium"
+             style="@style/Branded.Button.Small.Radio.white"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/space_xbig"
+            android:text="关注中" />
+
+
+        <RadioButton
+            android:id="@+id/month_1"
+            android:textSize="@dimen/text_size_medium"
+            style="@style/Branded.Button.Small.Radio.white"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/space_xbig"
+            android:layout_weight="1.0"
+            android:text="复制者" />
+
+        <RadioButton
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size_medium"
+             style="@style/Branded.Button.Small.Radio.white"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:text="复制中" />
+    </RadioGroup>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_master_community"
+        android:layout_width="match_parent"
+        android:paddingTop="@dimen/space_normal"
+        android:paddingRight="@dimen/space_big"
+        android:paddingLeft="@dimen/space_big"
+        android:layout_height="match_parent" />
+</LinearLayout>

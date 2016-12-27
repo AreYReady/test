@@ -4,7 +4,7 @@ package trade.xkj.com.trade.bean;
  * Created by admin on 2016-11-16.
  */
 
-public class BeanUserLoginData {
+public class BeanUserLoginDataSS {
     /**
      * msg_type : 10
      * login : 1000
@@ -13,10 +13,10 @@ public class BeanUserLoginData {
      */
 
     private int msg_type;
-    private int login;
+    private String login;
     private String password_hash;
     private int port;
-    public BeanUserLoginData(int login, String password_hash) {
+    public BeanUserLoginDataSS(String login, String password_hash) {
         this.msg_type = 10;
         this.port =9994;
         this.login = login;
@@ -31,11 +31,11 @@ public class BeanUserLoginData {
         this.msg_type = msg_type;
     }
 
-    public int getLogin() {
+    public String getLogin() {
         return login;
     }
 
-    public void setLogin(int login) {
+    public void setLogin(String login) {
         this.login = login;
     }
 

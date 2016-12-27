@@ -5,9 +5,8 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ScrollView;
-
-import trade.xkj.com.trade.R;
 
 /**
  * Created by huangsc on 2016-12-09.
@@ -31,7 +30,8 @@ public class MyScrollView extends ScrollView {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        view=findViewById(R.id.space);
+//        view=findViewById(R.id.space);
+        view=((ViewGroup)this.getChildAt(0)).getChildAt(0);
     }
 
     @Override
@@ -44,7 +44,6 @@ public class MyScrollView extends ScrollView {
         }
         return super.onTouchEvent(ev);
     }
-
 
 
     /**
