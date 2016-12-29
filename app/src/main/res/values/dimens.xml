@@ -6,7 +6,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="rv_master_height">400dip</dimen>
+    <dimen name="rv_master_height">300dip</dimen>
 
     <!--old size-->
     <dimen name="abc_action_bar_default_height_material">56.0dip</dimen>
@@ -48,6 +48,7 @@
     <dimen name="space_xxxbig_half">13.5dip</dimen>
     <dimen name="space_xxxxbig">39.0dip</dimen>
     <dimen name="anchor_height">0.0dip</dimen>
+    <dimen name="image_common">40.0dip</dimen>
     <dimen name="floating_action_button_margin_mini">26.0dip</dimen>
     <dimen name="floating_action_button_margin_mini_minus">-26.0dip</dimen>
     <dimen name="floating_action_button_margin_normal">34.0dip</dimen>

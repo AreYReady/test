@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/space_big"
+    android:paddingRight="@dimen/space_big">
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="35dip"
+        android:paddingTop="@dimen/space_normal"
+        android:paddingBottom="@dimen/space_normal"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_1"
+            style="@style/Branded.Button.Small.Radio.white"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/space_xbig"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="建仓"
+            android:textSize="@dimen/text_size_medium" />
+
+        <RadioButton
+            style="@style/Branded.Button.Small.Radio.white"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/space_xbig"
+            android:layout_weight="1"
+            android:text="挂单"
+            android:textSize="@dimen/text_size_medium" />
+
+
+        <RadioButton
+            style="@style/Branded.Button.Small.Radio.white"
+            android:layout_width="0.0dip"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/space_xbig"
+            android:layout_weight="1.0"
+            android:text="已关闭"
+            android:textSize="@dimen/text_size_medium" />
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:paddingTop="@dimen/space_normal"
+        android:paddingBottom="@dimen/space_normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/TextDesc"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_weight="3"
+            android:text="@string/instrument" />
+
+        <TextView
+            style="@style/TextDesc"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_weight="1.5"
+            android:text="@string/action" />
+
+        <TextView
+            style="@style/TextDesc"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="left"
+            android:layout_weight="2"
+            android:text="@string/open_price" />
+
+        <TextView
+            style="@style/TextDesc"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_weight="2"
+            android:text="@string/pl" />
+
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_master_position"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+</LinearLayout>

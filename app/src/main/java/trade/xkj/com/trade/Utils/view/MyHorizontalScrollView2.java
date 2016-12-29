@@ -54,7 +54,7 @@ public class MyHorizontalScrollView2 extends HorizontalScrollView {
     }
 
 
-    private HistoryTradeView.MODE mode = HistoryTradeView.MODE.NONE;
+    private MODE mode = MODE.NONE;
     private float scaleSize = 1f;
     private double downDistance;
     private double moveDistance;
@@ -65,15 +65,15 @@ public class MyHorizontalScrollView2 extends HorizontalScrollView {
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
                 Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_DOWN");
-                if (mode == HistoryTradeView.MODE.YES) {
-                    mode = HistoryTradeView.MODE.NONE;
+                if (mode == MODE.YES) {
+                    mode = MODE.NONE;
                 }
 //                onTouchDown(event);
                 break;
             // 多点触摸
             case MotionEvent.ACTION_POINTER_DOWN:
-                if (mode == HistoryTradeView.MODE.NONE) {
-                    mode = HistoryTradeView.MODE.YES;
+                if (mode == MODE.NONE) {
+                    mode = MODE.YES;
                     downDistance = getDistance(event);
                 }
 //                onPointerDown(event);
@@ -82,7 +82,7 @@ public class MyHorizontalScrollView2 extends HorizontalScrollView {
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                if (mode == HistoryTradeView.MODE.YES) {
+                if (mode == MODE.YES) {
                     moveDistance = getDistance(event);
                     scaleSize = Float.valueOf(MoneyUtil.mulPriceToString(scaleSize, 1 + (MoneyUtil.subPrice(moveDistance, downDistance) / getWidth())));
                     if (scaleSize >= 2) {
@@ -101,8 +101,8 @@ public class MyHorizontalScrollView2 extends HorizontalScrollView {
 
             // 多点松开
             case MotionEvent.ACTION_POINTER_UP:
-                if (mode == HistoryTradeView.MODE.YES) {
-                    mode = HistoryTradeView.MODE.NONE;
+                if (mode == MODE.YES) {
+                    mode = MODE.NONE;
                 }
 
                 Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_POINTER_UP");
@@ -113,7 +113,7 @@ public class MyHorizontalScrollView2 extends HorizontalScrollView {
 //                }
                 break;
         }
-        if (mode == HistoryTradeView.MODE.NONE)
+        if (mode == MODE.NONE)
             return super.onTouchEvent(event);
         return true;
     }
@@ -132,6 +132,10 @@ public class MyHorizontalScrollView2 extends HorizontalScrollView {
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);
         return Math.sqrt(x * x + y * y);
+    }
+    public enum MODE{
+        YES,
+        NONE
     }
 
 }

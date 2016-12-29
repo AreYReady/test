@@ -5,28 +5,29 @@
     android:layout_marginLeft="20dip"
     android:layout_marginRight="20dip"
     android:layout_marginTop="30dip"
+    android:background="@color/color_primary_dark"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="1.5"
+        android:layout_weight="1"
         android:background="@color/background_floating_material_dark"
+        android:orientation="horizontal"
         android:padding="5dip"
-        android:orientation="horizontal">
+        android:paddingLeft="@dimen/space_xbig">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/civ_master"
-            android:layout_width="30dip"
-            android:layout_height="30dip"
+            android:layout_width="@dimen/image_common"
+            android:layout_height="@dimen/image_common"
             android:layout_gravity="center_vertical"
-            android:background="@mipmap/menu_avatar"
-            android:paddingLeft="@dimen/x30" />
+            android:background="@mipmap/menu_avatar" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingLeft="25dip">
+            android:paddingLeft="@dimen/space_xxbig">
 
             <Space
                 android:id="@+id/s_temp"
@@ -59,54 +60,109 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="7"
-        android:background="@color/color_primary_dark"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1">
-
-            <include layout="@layout/v_stack_master_"  />
-        </FrameLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_weight="3" />
+        android:layout_weight="4">
 
         <LinearLayout
+            android:id="@+id/ll_master_base"
             android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            >
-            <Button
-                android:layout_marginTop="10dip"
-                android:layout_marginBottom="10dip"
-                android:layout_marginLeft="20dip"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="关注"
-                android:layout_marginRight="10dip"
-                style="@style/Button.Action.Secondary.Small"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dip"
+                android:layout_weight="1">
+                <include layout="@layout/v_stack_master_" />
+            </FrameLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dip"
+                android:layout_weight="3" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_cover"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/space_big">
+                <TextView
+                    style="@style/TextDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/select_amount" />
+            </RelativeLayout>
+
+            <trade.xkj.com.trade.Utils.view.CustomSeekBar
+                android:layout_width="match_parent"
+                android:layout_height="100dip"
+                android:paddingTop="@dimen/space_big">
+            </trade.xkj.com.trade.Utils.view.CustomSeekBar>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextDesc"
+                android:gravity="center"
+                android:paddingBottom="@dimen/space_big"
+                android:paddingTop="@dimen/space_big"
+                android:text="通过ohorzin$306.00,按比例复制策略"
+                />
+        </LinearLayout>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/color_primary_dark"
+        android:layout_height="50dip">
+        <Button
+            android:id="@+id/b_complete"
+            android:layout_width="200dip"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dip"
+            android:layout_marginBottom="10dip"
+            android:layout_centerInParent="true"
+            style="@style/Button.Action.Secondary.Small"
+            android:visibility="gone"
+            android:text="完成"
+            />
+        <LinearLayout
+            android:id="@+id/ll_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <Button
+                style="@style/Button.Action.Secondary.Small"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dip"
+                android:layout_marginLeft="20dip"
+                android:layout_marginRight="10dip"
                 android:layout_marginTop="10dip"
+                android:layout_weight="1"
+                android:text="关注" />
+
+            <Button
+                android:id="@+id/b_copy"
+                style="@style/Button.Action.Secondary.Small"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="10dip"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="20dip"
-                android:text="复制"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_marginTop="10dip"
                 android:layout_weight="1"
-                style="@style/Button.Action.Secondary.Small"/>
+                android:text="复制" />
         </LinearLayout>
-    </LinearLayout>
-
+    </RelativeLayout>
 </LinearLayout>

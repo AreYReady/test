@@ -6,8 +6,10 @@
     android:paddingRight="@dimen/space_big"
     android:orientation="vertical">
     <RadioGroup
+        android:paddingTop="@dimen/space_normal"
+        android:paddingBottom="@dimen/space_normal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dip"
         android:orientation="horizontal">
         <RadioButton
             android:id="@+id/rb_1"
@@ -15,7 +17,7 @@
             android:textSize="@dimen/text_size_medium"
             android:layout_width="0dip"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginRight="@dimen/space_xbig"
             android:checked="true"
             android:text="关注着" />
@@ -25,7 +27,7 @@
             android:textSize="@dimen/text_size_medium"
              style="@style/Branded.Button.Small.Radio.white"
             android:layout_width="0dip"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginRight="@dimen/space_xbig"
             android:text="关注中" />
 
@@ -35,7 +37,7 @@
             android:textSize="@dimen/text_size_medium"
             style="@style/Branded.Button.Small.Radio.white"
             android:layout_width="0.0dip"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginRight="@dimen/space_xbig"
             android:layout_weight="1.0"
             android:text="复制者" />
@@ -45,7 +47,7 @@
             android:textSize="@dimen/text_size_medium"
              style="@style/Branded.Button.Small.Radio.white"
             android:layout_width="0dip"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="复制中" />
     </RadioGroup>
 
@@ -53,7 +55,5 @@
         android:id="@+id/rv_master_community"
         android:layout_width="match_parent"
         android:paddingTop="@dimen/space_normal"
-        android:paddingRight="@dimen/space_big"
-        android:paddingLeft="@dimen/space_big"
         android:layout_height="match_parent" />
 </LinearLayout>

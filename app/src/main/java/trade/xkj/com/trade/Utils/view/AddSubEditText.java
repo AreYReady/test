@@ -197,6 +197,9 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
 
     public void followSeekBarChange(int count) {
         isFollow=true;
+        if(editText.getVisibility()!=VISIBLE){
+            editText.setVisibility(VISIBLE);
+    }
         amount = baseNumbel * count+ minPrice;
         handler.sendEmptyMessage(1);
     }
@@ -207,8 +210,10 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
     public void setAmountChangeListener(AmountChangeListener listener){
         this.listener=listener;
     }
-    public void setMaxPrice(int maxPrice){
+    public void setMaxPrice(int minPrice,int maxPrice,int baseNumbel){
         this.maxPrice=maxPrice;
+        this.minPrice=minPrice;
+        this.baseNumbel=baseNumbel;
     }
     public void setNumbelTextInvisible(){
         editText.setVisibility(INVISIBLE);

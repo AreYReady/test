@@ -39,6 +39,7 @@ import trade.xkj.com.trade.base.BaseActivity;
 import trade.xkj.com.trade.base.BaseFragment;
 import trade.xkj.com.trade.base.MyApplication;
 import trade.xkj.com.trade.bean.BeanMasterInfo;
+import trade.xkj.com.trade.mvp.master.FragmentMasterInfo;
 import trade.xkj.com.trade.mvp.operate.OperatePositionActivity;
 
 public class MainTradeContentActivity extends BaseActivity
@@ -90,16 +91,16 @@ public class MainTradeContentActivity extends BaseActivity
         setContentView(R.layout.activity_main);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mIbSwitch = (ImageButton) findViewById(R.id.ib_switch);
-        mIbSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fl_main_trade_content, new FragmentMaster(), "1");
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
+//        mIbSwitch = (ImageButton) findViewById(R.id.ib_switch);
+//        mIbSwitch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.fl_main_trade_content, new FragmentMaster(), "1");
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//            }
+//        });
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

@@ -31,7 +31,7 @@ import trade.xkj.com.trade.Utils.view.CustomViewPager;
 import trade.xkj.com.trade.Utils.view.DrawPriceView;
 import trade.xkj.com.trade.Utils.view.FixedSpeedScroller;
 import trade.xkj.com.trade.Utils.view.HistoryTradeView;
-import trade.xkj.com.trade.Utils.view.MyHorizontalScrollView2;
+import trade.xkj.com.trade.Utils.view.MyHorizontalScrollView;
 import trade.xkj.com.trade.Utils.view.ZoomOutPageTransformer;
 import trade.xkj.com.trade.adapter.OpenAdapter;
 import trade.xkj.com.trade.base.BaseFragment;
@@ -51,7 +51,7 @@ import static android.os.Build.VERSION_CODES.M;
 
 public class MainTradeContentFrag extends BaseFragment implements MainTradeContentLFragListener {
     private MainTradeContentPre mMainTradeContentPre;
-    private MyHorizontalScrollView2 mHScrollView;
+    private MyHorizontalScrollView mHScrollView;
     private HistoryTradeView mHistoryTradeView;
     private LinearLayout ll;
     private Context context;
@@ -102,7 +102,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
                 mDrawPriceView.refresh(drawPriceData);
             }
         });
-        mHScrollView.setScrollViewListener(new MyHorizontalScrollView2.ScrollViewListener()
+        mHScrollView.setScrollViewListener(new MyHorizontalScrollView.ScrollViewListener()
 
                                            {
                                                int mX = 0;
@@ -110,7 +110,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
                                                int z = SystemUtil.dp2px(context, TradeDateConstant.juli + TradeDateConstant.jianju);
 
                                                @Override
-                                               public void onScrollChanged(MyHorizontalScrollView2 scrollView, int x, int y,
+                                               public void onScrollChanged(MyHorizontalScrollView scrollView, int x, int y,
                                                                            int oldx, int oldy) {
                                                    if (x != oldx) {
                                                        if (Math.abs(x - mX) >= z) {
@@ -146,7 +146,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
     @Override
     protected void initView() {
         mHeaderCustomViewPager = (CustomViewPager) view.findViewById(R.id.vp_indicator_trade_content);
-        mHScrollView = (MyHorizontalScrollView2) view.findViewById(R.id.hsv_trade);
+        mHScrollView = (MyHorizontalScrollView) view.findViewById(R.id.hsv_trade);
         mDrawPriceView = (DrawPriceView) view.findViewById(R.id.dp_draw_price);
         ll = (LinearLayout) view.findViewById(R.id.ll);
 

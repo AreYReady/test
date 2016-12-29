@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -26,8 +24,6 @@ import trade.xkj.com.trade.constant.TradeDateConstant;
  */
 
 public class HistoryTradeView extends View {
-
-    private String TAG = SystemUtil.getTAG(this);
     private Paint mRedPaint;
     private Context mContext;
     private Paint mBluePaint;
@@ -127,8 +123,6 @@ public class HistoryTradeView extends View {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        Log.i(TAG, "onLayout: width   " + getMeasuredWidth() + "    hergh   " + getMeasuredHeight());
-
     }
 
 
@@ -177,14 +171,9 @@ public class HistoryTradeView extends View {
         int size = (int)(13/scaleSize);
         float l = (int) (data.getPeriod() * 60 * size / unitSecond);
         float i = l - ((int) showDataLeftX) % l;
-        Log.i(TAG, "drawVertical: i "+i+"   l "+l);
         for (int x = 0; x < 5; x++) {
             if (showDataLeftX + i + l * x <= showDataRightX) {
                 canvas.drawLine(showDataLeftX + i + l * x, 0, showDataLeftX + i + l * x, showDataHeight, mGarkPaint);
-//                canvas.drawText(DateUtils.getShowTimeNoTimeZone((long)(dataBeginTime*1000+unitSecond*(showDataLeftX + i + l * x )*1000)), showDataLeftX + i + l * x, showDataHeight + TradeDateConstant.showTimeSpace / 2 + SystemUtil.dp2pxFloat(mContext, 10), mGarkPaint);
-//                int i1 = (int) (unitDataIndex * (showDataLeftX + i + l * x));
-//                long l1 = (long) (data.getItems().get((int) (unitDataIndex * (showDataLeftX + i + l * x))).getT()) * 1000 + dataBeginTime * 1000;
-                Log.i(TAG,"x"+ x  + "drawVertical: (showDataLeftX + i + l * x)"  +(showDataLeftX + i + l * x)+"  unitDataIndex  "  +unitDataIndex+"  除"+ ((showDataLeftX + i + l * x) / unitDataIndex));
                 //下标从0开始,所有有可能为1000,实际上是999
                 int showTimeIndex = (int) ((showDataLeftX + i + l * x) / unitDataIndex);
                 if(showTimeIndex>=1000){
@@ -194,19 +183,12 @@ public class HistoryTradeView extends View {
             }
         }
     }
-
-    private int moveSpace;
-
     //画矩形
     private void drawRect(Canvas canvas) {
         if (data != null) {
             HistoryData historyData;
-            long t;
             for (int i = startIndex; i < endIndex; i++) {
                 historyData = data.getItems().get(i);
-                if (i == 0) {
-                    t = historyData.getT();
-                }
                 String oPrice[] = historyData.getO().split("\\|");
                 openPrice = Double.valueOf(oPrice[0]);
                 closePrice = Double.valueOf(oPrice[0]) + Double.valueOf(oPrice[3]);
@@ -268,7 +250,6 @@ public class HistoryTradeView extends View {
         this.scaleSize=scaleSize;
         showDataLeftX = left ;
         showDataRightX =  right;
-        Log.i(TAG, "postInvalidate:showDataLeftX "+showDataLeftX +"showDataRightX "+showDataRightX+"  Width "+getWidth());
         super.postInvalidate(left, top, right, bottom);
     }
 
@@ -290,9 +271,7 @@ public class HistoryTradeView extends View {
         price = DataUtil.calcMaxMinPrice(data, digits, startIndex, endIndex);
         blance = MoneyUtil.subPrice(price[1], price[0]);
         showDataHeight = (getMeasuredHeight() - SystemUtil.dp2pxFloat(mContext, TradeDateConstant.showTimeSpace));
-//        unit = blance / (getMeasuredHeight()-SystemUtil.dp2pxFloat(mContext,TradeDateConstant.showTimeSpace))/scaleSize;
         unit = blance / showDataHeight;
-//        unitSecond =  (float)((data.getItems().get(data.getItems().size()-1).getT()/width)/scaleSize);
         unitSecond = (float) (data.getPeriod() * 60 * data.getCount() / getWidth());
         unitDataIndex = ( (float) getWidth() / (float) data.getCount());
         dataBeginTime = data.getItems().get(0).getT();
@@ -303,83 +282,4 @@ public class HistoryTradeView extends View {
     }
 
 
-    private MODE mode = MODE.NONE;
-    private double downDistance;
-    private double moveDistance;
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        /** 处理单点、多点触摸 **/
-//        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-//            case MotionEvent.ACTION_DOWN:
-//                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_DOWN");
-////                onTouchDown(event);
-//                break;
-//            // 多点触摸
-//            case MotionEvent.ACTION_POINTER_DOWN:
-//                if(mode==MODE.NONE) {
-//                    mode = MODE.YES;
-//                    downDistance= getDistance(event);
-//                }
-////                onPointerDown(event);
-//
-//                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_POINTER_DOWN");
-//                break;
-//
-//            case MotionEvent.ACTION_MOVE:
-//                if(mode==MODE.YES){
-//                    moveDistance=getDistance(event);
-//                    scaleSize=Float.valueOf(MoneyUtil.mulPriceToString(scaleSize,1+(MoneyUtil.subPrice(moveDistance,downDistance)/100)));
-//                    if(scaleSize>=2){
-//                        scaleSize=2;
-//                    }else if(scaleSize<=0.5f){
-//                        scaleSize=0.5f;
-//                    }
-//                    downDistance=moveDistance;
-//                    onScaleDraw();
-//                }
-//                Log.i(TAG, "onTouchEvent: scaleSize "+scaleSize);
-////                onTouchMove(event);
-//                break;
-//            case MotionEvent.ACTION_UP:
-//                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_UP");
-//                break;
-//
-//            // 多点松开
-//            case MotionEvent.ACTION_POINTER_UP:
-//                if(mode==MODE.YES) {
-//                    mode = MODE.NONE;
-//                }
-//
-//                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_POINTER_UP");
-////                mode = MODE.NONE;
-//                /** 执行缩放还原 **/
-////                if (isScaleAnim) {
-////                    doScaleAnim();
-////                }
-//                break;
-//        }
-//        Log.i(TAG, "onTouchEvent: event.getRawX()"+event.getRawX()+" event.getRawX()  "+event.getX());
-//        return true;
-//    }
-
-    private void onScaleDraw() {
-//        this.measure(getWidth(),getHeight());
-//        postInvalidate();
-    }
-
-    public enum MODE {
-        NONE,
-        YES
-    }
-
-    /**
-     * 获取两点的距离
-     **/
-    double getDistance(MotionEvent event) {
-        float x = event.getX(0) - event.getX(1);
-        float y = event.getY(0) - event.getY(1);
-        float sqrt = (float) Math.sqrt(x * x + y * y);
-        Log.i(TAG, "getDistance: sqrt" + sqrt);
-        return Math.sqrt(x * x + y * y);
-    }
 }

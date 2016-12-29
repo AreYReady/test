@@ -27,6 +27,10 @@ public class CustomSeekBar extends FrameLayout {
     private AddSubEditText mASEditText;
     private int max=40000;
     private int maxPrice=100000000;
+    private int minPrice=10000;
+    //加减的基数
+    private int baseNumber=10000;
+    private int[] ints =new int[]{10000,100000,1000000,10000000,100000000};
     private int setProgress;
     private boolean isAmountChange=false;
     int i = max / 4;
@@ -41,6 +45,10 @@ public class CustomSeekBar extends FrameLayout {
     public CustomSeekBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         View inflate = LayoutInflater.from(context).inflate(R.layout.v_seekbar, null);
+//        if(ints.length!=0){
+//            minPrice=ints[0];
+//            maxPrice=ints[ints.length-1];
+//        }
         mASEditText=(AddSubEditText)inflate.findViewById(R.id.aset_aset);
         mASEditText.setAmountChangeListener(new AddSubEditText.AmountChangeListener() {
             @Override
@@ -72,8 +80,7 @@ public class CustomSeekBar extends FrameLayout {
 //        tv3.setText(tvString3);
         tv4.setText(tvString4);
         mSeekBar.setMax(max);
-        mASEditText.setMaxPrice(maxPrice);
-
+        mASEditText.setMaxPrice(minPrice,maxPrice,baseNumber);
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int count;
             @Override
@@ -82,11 +89,11 @@ public class CustomSeekBar extends FrameLayout {
                     if (progress <= i) {
                         count = progress / 1000;
                     } else if (progress <= 2 * i) {
-                        count = (progress - i) / 100+10;
+                        count = (progress - i) /100;
                     } else if (progress <= 3 * i) {
-                        count = (progress - 2 * i) / 10+100;
+                        count = (progress - 2 * i) /10;
                     } else if (progress <= 4 * i) {
-                        count = (progress - 3 * i)+1000;
+                        count = (progress - 3 * i);
                     }
                     Log.i(TAG, "onProgressChanged: count " + count + "  progress " + progress);
                     mASEditText.followSeekBarChange(count);
@@ -119,5 +126,14 @@ public class CustomSeekBar extends FrameLayout {
             mSeekBar.setProgress(setProgress);
         }
     };
+
 //
+
+    /**
+     * 设置尺度：例如ints{10000,100000,100000,1000000,1000000}
+     * @param ints
+     */
+    public void setScale(int[] ints){
+        this.ints=ints;
+    }
 }

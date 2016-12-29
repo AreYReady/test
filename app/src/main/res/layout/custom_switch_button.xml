@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_stitch"
+    android:clickable="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+    <ImageButton
+        android:id="@+id/ib_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tag_switch"/>
+    <ImageView
+        android:id="@+id/imageView_rang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@drawable/toggle_switch"
+        android:paddingLeft="@dimen/space_big_half"
+        />
+</RelativeLayout>

@@ -9,15 +9,16 @@
         android:id="@+id/ll_master_head"
         android:layout_width="match_parent"
         android:layout_height="50dip"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/space_xbig">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/civ_master"
-            android:layout_width="@dimen/x80"
-            android:layout_height="@dimen/x80"
-            android:layout_gravity="center_vertical"
+            android:layout_width="@dimen/image_common"
+            android:layout_height="@dimen/image_common"
+            android:layout_gravity="center"
             android:background="@mipmap/menu_avatar"
-            android:paddingLeft="@dimen/x30" />
+            />
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -63,76 +64,80 @@
         android:layout_weight="1"
         android:background="@color/color_primary_dark">
 
-        <LinearLayout
-            android:id="@+id/ll_master_base_info"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dip"
-                android:layout_gravity="center_vertical">
-                <include layout="@layout/v_stack_master_" />
-            </FrameLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="100dip" />
+            android:layout_height="wrap_content">
 
             <LinearLayout
+                android:id="@+id/ll_master_base_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dip"
+                    android:layout_gravity="center_vertical">
+
+                    <include layout="@layout/v_stack_master_" />
+                </FrameLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="130dip" />
+                <include layout="@layout/v_progress_resk_level" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_cover"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="@dimen/space_xxbig"
-                android:paddingRight="@dimen/space_xxbig"
-                android:paddingBottom="@dimen/space_normal"
-                >
-
-                <TextView
-                    style="@style/TextDesc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/risk_level" />
-
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="7.5dp"
-                    android:layout_marginRight="8dp"
-                    android:max="100"
-                    android:progress="80"
-                    android:progressDrawable="@drawable/progressbar"
-                    android:visibility="visible" />
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/space_big">
 
                     <TextView
                         style="@style/TextDesc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:text="@string/low" />
+                        android:layout_centerInParent="true"
+                        android:text="@string/select_amount" />
 
                     <TextView
-                        style="@style/TextDesc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:text="@string/medium" />
-
-                    <TextView
+                        android:id="@+id/tv_take_rebound"
                         style="@style/TextDesc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:text="@string/high" />
+                        android:paddingRight="@dimen/space_xxxbig"
+                        android:clickable="true"
+                        android:text="v" />
                 </RelativeLayout>
+
+                <trade.xkj.com.trade.Utils.view.CustomSeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="100dip"
+                    android:paddingTop="@dimen/space_big">
+                </trade.xkj.com.trade.Utils.view.CustomSeekBar>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/TextDesc"
+                    android:text="通过ohorzin$306.00,按比例复制策略"
+                    android:paddingTop="@dimen/space_big"
+                    android:paddingBottom="@dimen/space_big"
+                    android:gravity="center"
+                    />
+                <include
+                    layout="@layout/v_progress_resk_level"
+                    android:paddingTop="@dimen/space_big" />
             </LinearLayout>
-        </LinearLayout>
+
+        </FrameLayout>
 
         <trade.xkj.com.trade.Utils.view.MyScrollView
             android:layout_width="match_parent"
@@ -154,14 +159,15 @@
                     android:background="@android:color/black"
                     android:clipChildren="false"
                     android:layerType="software">
+
                     <trade.xkj.com.trade.Utils.view.CustomViewPager
                         android:id="@+id/cvp_master_info_indicator"
                         android:layout_width="match_parent"
                         android:layout_height="40dip"
                         android:layout_marginLeft="100dp"
-                        android:layout_marginRight="100dp">
-                    </trade.xkj.com.trade.Utils.view.CustomViewPager>
+                        android:layout_marginRight="100dp"></trade.xkj.com.trade.Utils.view.CustomViewPager>
                 </FrameLayout>
+
                 <android.support.v4.view.ViewPager
                     android:id="@+id/vp_master_info"
                     android:layout_width="match_parent"
@@ -171,32 +177,49 @@
         </trade.xkj.com.trade.Utils.view.MyScrollView>
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dip"
         android:background="@color/color_primary_dark"
-        android:orientation="horizontal">
-
+        android:layout_height="50dip">
         <Button
-            style="@style/Button.Action.Secondary.Small"
-            android:layout_width="0dp"
+            android:id="@+id/b_complete"
+            android:layout_width="200dip"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10dip"
-            android:layout_marginLeft="20dip"
-            android:layout_marginRight="10dip"
             android:layout_marginTop="10dip"
-            android:layout_weight="1"
-            android:text="关注" />
+            android:layout_marginBottom="10dip"
+            android:layout_centerInParent="true"
+            style="@style/Button.Action.Secondary.Small"
+            android:visibility="gone"
+            android:text="完成"
+            />
+        <LinearLayout
+            android:id="@+id/ll_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <Button
-            style="@style/Button.Action.Secondary.Small"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dip"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="20dip"
-            android:layout_marginTop="10dip"
-            android:layout_weight="1"
-            android:text="复制" />
-    </LinearLayout>
+            <Button
+                style="@style/Button.Action.Secondary.Small"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dip"
+                android:layout_marginLeft="20dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="10dip"
+                android:layout_weight="1"
+                android:text="关注" />
+
+            <Button
+                android:id="@+id/b_copy"
+                style="@style/Button.Action.Secondary.Small"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="20dip"
+                android:layout_marginTop="10dip"
+                android:layout_weight="1"
+                android:text="复制" />
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="@drawable/add_sub_backgroud"
+    android:background="@drawable/add_sub_background"
     android:orientation="horizontal">
 
     <TextView
@@ -13,6 +13,7 @@
         android:layout_weight="2"
         android:gravity="center"
         style="@style/TextDesc"
+        android:textSize="20sp"
         android:text="-" />
 
     <View
@@ -45,5 +46,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         style="@style/TextDesc"
+        android:textSize="20sp"
         android:text="+" />
 </LinearLayout>
