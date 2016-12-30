@@ -25,7 +25,6 @@ import trade.xkj.com.trade.Utils.view.ZoomOutPageTransformer;
 import trade.xkj.com.trade.adapter.FragmentAdapter;
 import trade.xkj.com.trade.adapter.MyViewPagerAdapterItem;
 import trade.xkj.com.trade.base.BaseFragment;
-import trade.xkj.com.trade.mvp.main_trade.v.Fragment2;
 
 /**
  * Created by huangsc on 2016-12-22.
@@ -76,7 +75,7 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
         mListFragment.add(new FragmentMasterComnunity());
         mListFragment.add(new FragmentMasterStream());
         mListFragment.add(new FragmentMasterPosition());
-        mListFragment.add(new Fragment2());
+        mListFragment.add(new FragmentMasterPortfolio());
     }
 
     @Override

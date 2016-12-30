@@ -22,6 +22,7 @@ public class CustomSwitch extends FrameLayout{
     private ImageButton ibSwitch;
     private View parant;
     Animation animation;
+    private SelectedChangedListener listener;
     public CustomSwitch(Context context) {
         this(context,null);
     }
@@ -45,18 +46,19 @@ public class CustomSwitch extends FrameLayout{
                     view.startAnimation(animation=AnimationUtils.loadAnimation(context, R.anim.transtale_x_toleft));
                     parant.setSelected(false);
                 }else{
-
                     view.startAnimation(animation=AnimationUtils.loadAnimation(context, R.anim.transtale_x_toright));
                     parant.setSelected(true);
                 }
                 animation.setFillAfter(true);
+                if(listener!=null)
+                    listener.SelectChange(parant.isSelected());
             }
         });
-        parant.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+    }
+    public interface SelectedChangedListener{
+        void SelectChange(Boolean select);
+    }
+    public void setSelectedChangeListener(SelectedChangedListener listener){
+        this.listener=listener;
     }
 }

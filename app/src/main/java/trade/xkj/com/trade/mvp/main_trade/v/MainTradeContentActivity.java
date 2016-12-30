@@ -1,5 +1,6 @@
 package trade.xkj.com.trade.mvp.main_trade.v;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +19,6 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -28,8 +28,10 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import immortalz.me.library.TransitionsHeleper;
 import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.Utils.ToashUtil;
+import trade.xkj.com.trade.Utils.view.CustomSwitch;
 import trade.xkj.com.trade.Utils.view.CustomViewPager;
 import trade.xkj.com.trade.Utils.view.PullBottomViewDragLayout;
 import trade.xkj.com.trade.Utils.view.ZoomOutPageTransformer;
@@ -39,6 +41,7 @@ import trade.xkj.com.trade.base.BaseActivity;
 import trade.xkj.com.trade.base.BaseFragment;
 import trade.xkj.com.trade.base.MyApplication;
 import trade.xkj.com.trade.bean.BeanMasterInfo;
+import trade.xkj.com.trade.mvp.master.FragmentMaster;
 import trade.xkj.com.trade.mvp.master.FragmentMasterInfo;
 import trade.xkj.com.trade.mvp.operate.OperatePositionActivity;
 
@@ -52,9 +55,10 @@ public class MainTradeContentActivity extends BaseActivity
     private Context context;
     private ViewPager mViewPagerFrag;
     private List<Fragment> mFragmentList;
-    private ImageButton mIbSwitch;
+    private CustomSwitch mCSSwitch;
     private BaseFragment mBaseFragment;
     private DrawerLayout drawer;
+    private Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,7 @@ public class MainTradeContentActivity extends BaseActivity
     @Override
     public void initData() {
         context = this;
+        activity = this;
         mDataItem = new ArrayList<>();
         mDataItem.add("我关注的操盘手");
         mDataItem.add("我复制的操盘手");
@@ -101,12 +106,27 @@ public class MainTradeContentActivity extends BaseActivity
 //                fragmentTransaction.commit();
 //            }
 //        });
+        mCSSwitch = (CustomSwitch) findViewById(R.id.cs_switch_tag);
+        mCSSwitch.setSelectedChangeListener(new CustomSwitch.SelectedChangedListener() {
+            @Override
+            public void SelectChange(Boolean select) {
+                if (select) {
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.add(R.id.fl_main_trade_content, new FragmentMaster(), "1");
+                    fragmentTransaction.addToBackStack("TAG");
+                    fragmentTransaction.commit();
+                }else{
+                   fragmentManager.popBackStack("TAG",FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+            }
+        });
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(context, OperatePositionActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.ADD));
+//                startActivity(new Intent(context, OperatePositionActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.ADD));
+                TransitionsHeleper.startActivity(activity, new Intent(context, OperatePositionActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.ADD), findViewById(R.id.fab));
             }
         });
 
@@ -133,7 +153,7 @@ public class MainTradeContentActivity extends BaseActivity
 //                int initHight = mPullViewDragLayout.getMeasuredHeight() - mPullViewDragLayout.getChildAt(0).getWidth() / 2;
 //                Log.i(TAG, "onGlobalLayout: "+initHight);
 //                mPullViewDragLayout.setPadding(0,initHight,0,0);
-                findViewById(R.id.s_temp).setLayoutParams(new LinearLayout.LayoutParams(1,mPullViewDragLayout.getChildAt(0).getHeight()/2));
+                findViewById(R.id.s_temp).setLayoutParams(new LinearLayout.LayoutParams(1, mPullViewDragLayout.getChildAt(0).getHeight() / 2));
             }
         });
 
@@ -148,7 +168,7 @@ public class MainTradeContentActivity extends BaseActivity
         });
 
         mHeadViewPager = (CustomViewPager) findViewById(R.id.cvp_indicator_item);
-        mHeadViewPager.setAdapter(new MyViewPagerAdapterItem(context,mDataItem));
+        mHeadViewPager.setAdapter(new MyViewPagerAdapterItem(context, mDataItem));
         mHeadViewPager.setOffscreenPageLimit(mDataItem.size());
         mHeadViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         mHeadViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

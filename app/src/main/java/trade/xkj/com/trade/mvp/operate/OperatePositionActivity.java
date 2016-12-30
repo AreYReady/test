@@ -1,13 +1,22 @@
 package trade.xkj.com.trade.mvp.operate;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.widget.ImageView;
 
+import immortalz.me.library.TransitionsHeleper;
+import immortalz.me.library.bean.InfoBean;
+import immortalz.me.library.method.ColorShowMethod;
 import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.Utils.ToashUtil;
 import trade.xkj.com.trade.base.OperateBaseActivity;
+
+import static trade.xkj.com.trade.R.color.color_tertiary_dark;
 
 /**
  * Created by huangsc on 2016-12-10.
@@ -47,6 +56,20 @@ public class OperatePositionActivity extends OperateBaseActivity {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         switch (operateAction) {
             case ADD:
+                TransitionsHeleper.getInstance().setShowMethod(new ColorShowMethod(color_tertiary_dark, color_tertiary_dark) {
+                    @Override
+                    public void loadCopyView(InfoBean bean, ImageView copyView) {
+                        AnimatorSet set = new AnimatorSet();
+                        set.playTogether(
+                                ObjectAnimator.ofFloat(copyView,"rotation",0,180),
+                                ObjectAnimator.ofFloat(copyView, "scaleX", 1, 0),
+                                ObjectAnimator.ofFloat(copyView, "scaleY", 1, 0)
+                        );
+                        set.setInterpolator(new AccelerateInterpolator());
+                        set.setDuration(duration / 4 * 5).start();
+                    }
+                }
+                ).show(this,null);
                 fragmentTransaction.add(R.id.fl_operate_content, new AddPositionFragment());
                 break;
             case ClOSE_POSITION:
