@@ -6,13 +6,13 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import trade.xkj.com.trade.R;
+import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.bean.BeanPortfolioData;
 
 /**
@@ -21,13 +21,14 @@ import trade.xkj.com.trade.bean.BeanPortfolioData;
  */
 
 public class CustomPortfolio extends View {
+    String TAG= SystemUtil.getTAG(this);
     Paint basePaint;
     Paint portfolioPaint;
     int strokeWidth = 30;
     List<BeanPortfolioData> data;
-
     List<Integer> selectColors ;
-
+    Paint textPaint;
+private Context context;
 
     public CustomPortfolio(Context context) {
         this(context, null);
@@ -39,9 +40,11 @@ public class CustomPortfolio extends View {
 
     public CustomPortfolio(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context=context;
         init();
     }
     private void init() {
+
         selectColors=  new ArrayList<>();
         selectColors.add(R.color.buy_action_button_edge_color_dark);
         selectColors.add(R.color.link_text_material_light);
@@ -53,8 +56,14 @@ public class CustomPortfolio extends View {
         portfolioPaint.setColor(getResources().getColor(R.color.buy_action_button_edge_color_dark));
         basePaint.setStrokeWidth(strokeWidth);
         basePaint.setStyle(Paint.Style.STROKE);
+        basePaint.setAntiAlias(true);
         portfolioPaint.setStrokeWidth(strokeWidth);
         portfolioPaint.setStyle(Paint.Style.STROKE);
+        portfolioPaint.setAntiAlias(true);
+        textPaint=new Paint();
+        textPaint.setStrokeWidth(5);
+        textPaint.setTextSize(40);
+        textPaint.setTextAlign(Paint.Align.CENTER);
     }
 
     //    /**
@@ -71,26 +80,81 @@ public class CustomPortfolio extends View {
 //            points.add(new Point(x, y));
 //        }
 //    }
-    int center;
     int radius;
-
+    Point centerPoint;
     @Override
     protected void onDraw(Canvas canvas) {
         if (data != null) {
-            center = getWidth() / 2;
-            radius = center - strokeWidth / 2;
-            RectF rectf = new RectF(center - radius, center - radius, center + radius, center + radius);
-            canvas.drawCircle(center, center, radius, basePaint);
+            centerPoint=new Point();
+            centerPoint.x = getWidth()/2;
+            centerPoint.y=getHeight()/2;
+            radius =(int) SystemUtil.dp2px(context,100);
+            RectF rectf = new RectF(centerPoint.x - radius, centerPoint.y - radius, centerPoint.x + radius, centerPoint.y + radius);
+            canvas.drawCircle(centerPoint.x , centerPoint.y, radius, basePaint);
             for (int i = 0; i < data.size(); i++) {
-                canvas.drawArc(rectf, data.get(i).getBeginAngle(), data.get(i).getEndAngle(), false, portfolioPaint);
-                int x;
-                portfolioPaint.setColor(getResources().getColor(selectColors.get(x=i%selectColors.size())));
-                Log.i("hsc", "onDraw: "+portfolioPaint.getColor()+"  x  "+x);
 
+                BeanPortfolioData portfolioData=data.get(i);
+                portfolioPaint.setColor(getResources().getColor(selectColors.get(i%selectColors.size())));
+                textPaint.setColor(getResources().getColor(selectColors.get(i%selectColors.size())));
+                canvas.drawArc(rectf, portfolioData.getBeginAngle(), portfolioData.getSweepAngle(), false, portfolioPaint);
+                //画标识
+//                 getXY((portfolioData.getBeginAngle() + portfolioData.getSweepAngle()) / 2);
+                drawText(canvas,getXY((portfolioData.getBeginAngle()*2 + portfolioData.getSweepAngle()) / 2),portfolioData);
             }
         }
     }
 
+    /**
+     * 画线和文字
+     * @param canvas
+     * @param xy
+     */
+    private int linkLendth=100;
+    private void drawText(Canvas canvas, Point point,BeanPortfolioData data) {
+        Point endPoint=new Point();
+        if(Math.abs(centerPoint.x-point.x)>Math.abs(centerPoint.y-point.y)){
+            //先画横线在画竖线
+            if(point.y>centerPoint.y){
+                if(point.x>centerPoint.x){
+                    canvas.drawLine(point.x,point.y,point.x+linkLendth,point.y,textPaint);
+                    canvas.drawLine(endPoint.x=point.x+linkLendth,point.y,point.x+linkLendth,endPoint.y=point.y+linkLendth,textPaint);
+
+                }else{
+                    canvas.drawLine(point.x,point.y,point.x-linkLendth,point.y,textPaint);
+                    canvas.drawLine(endPoint.x=point.x-linkLendth,point.y,point.x-linkLendth,endPoint.y=point.y+linkLendth,textPaint);
+                }
+                canvas.drawText(data.getSymbol(),endPoint.x,endPoint.y+textPaint.getTextSize(),textPaint);
+            }else{
+                if(point.x>centerPoint.x){
+                    canvas.drawLine(point.x,point.y,point.x+linkLendth,point.y,textPaint);
+                    canvas.drawLine(endPoint.x=point.x+linkLendth,point.y,point.x+linkLendth,endPoint.y=point.y-linkLendth,textPaint);
+                }else{
+                    canvas.drawLine(point.x,point.y,point.x-linkLendth,point.y,textPaint);
+                    canvas.drawLine(endPoint.x=point.x-linkLendth,point.y,point.x-linkLendth,endPoint.y=point.y-linkLendth,textPaint);
+                }
+                canvas.drawText(data.getSymbol(),endPoint.x,endPoint.y,textPaint);
+            }
+
+        }else{
+            //先画竖线在画横线
+            if(point.y>centerPoint.y){
+                canvas.drawLine(endPoint.x=point.x,point.y,point.x,endPoint.y=point.y+linkLendth,textPaint);
+                canvas.drawText(data.getSymbol(),endPoint.x,endPoint.y+textPaint.getTextSize(),textPaint);
+            }else{
+                canvas.drawLine(endPoint.x=point.x,point.y,point.x,endPoint.y=point.y-linkLendth,textPaint);
+                canvas.drawText(data.getSymbol(),endPoint.x,endPoint.y,textPaint);
+            }
+
+        }
+
+    }
+//    圆点坐标：(x0,y0)
+//    半径：r
+//    角度：a0
+//
+//    则圆上任一点为：（x1,y1）
+//    x1   =   x0   +   r   *   cos(ao   *   3.14   /180   )
+//    y1   =   y0   +   r   *   sin(ao   *   3.14   /180   )
     /**
      * 获取圆上任一点的坐标
      *
@@ -98,9 +162,8 @@ public class CustomPortfolio extends View {
      * @return
      */
     public Point getXY(int angle) {
-        int x = (int) (center - radius * Math.sin(Math.PI * (angle - 90) / 180));
-        int y = (int) (center - radius - 10
-                + radius * Math.cos(Math.PI * (angle - 90) / 180));
+        int x = (int) (centerPoint.x +radius * Math.cos(Math.PI * (angle) / 180));
+        int y = (int) (centerPoint.y + radius * Math.sin(Math.PI * (angle) / 180));
         return new Point(x, y);
     }
 

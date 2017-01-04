@@ -10,6 +10,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.bean.HistoryData;
 
 public  abstract class BaseActivity extends AppCompatActivity {
     protected String TAG= SystemUtil.getTAG(this);

@@ -15,16 +15,16 @@ public class BeanPortfolioData {
     }
 
     private int beginAngle;
-    private int endAngle;
+    private int sweepAngle;
     private String symbol;
     private String type;
 
-    public int getEndAngle() {
-        return endAngle;
+    public int getSweepAngle() {
+        return sweepAngle;
     }
 
-    public void setEndAngle(int endAngle) {
-        this.endAngle = endAngle;
+    public void setSweepAngle(int sweepAngle) {
+        this.sweepAngle = sweepAngle;
     }
 
     public String getSymbol() {

@@ -11,8 +11,9 @@
         android:layout_height="match_parent">
 
         <trade.xkj.com.trade.Utils.view.CustomPortfolio
-            android:layout_width="200dip"
-            android:layout_height="200dip"
+            android:id="@+id/cp_portfolio"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_centerHorizontal="true" />
     </RelativeLayout>
 

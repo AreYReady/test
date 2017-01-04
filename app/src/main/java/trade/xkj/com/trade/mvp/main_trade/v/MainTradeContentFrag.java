@@ -136,7 +136,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeConte
                                            }
 
         );
-
         mTradeContent=(RecyclerView)view.findViewById(R.id.rv_trade_content);
         mTradeContent.setLayoutManager(new LinearLayoutManager(context));
         mTradeContent.setAdapter(new OpenAdapter(context,mBeanOpenList));

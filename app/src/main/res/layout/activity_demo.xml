@@ -9,9 +9,5 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="trade.xkj.com.trade.demo">
-<trade.xkj.com.trade.Utils.view.CustomPortfolio
-    android:id="@+id/cp_portfolio"
-    android:layout_width="200dip"
-    android:layout_height="200dip"
-    android:layout_centerHorizontal="true"/>
+
 </RelativeLayout>
