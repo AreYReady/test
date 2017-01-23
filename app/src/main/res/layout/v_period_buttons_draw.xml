@@ -6,7 +6,7 @@
     <RadioButton
         android:id="@+id/rb_period"
         style="@style/Branded.Button.Small.Radio.white"
-        android:layout_width="@dimen/x100"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:text="1分钟>" />
 
@@ -21,8 +21,10 @@
             android:id="@+id/rb_minute1"
             style="@style/Branded.Button.Small.Radio.white"
             android:layout_width="0dip"
+            android:checked="true"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:tag="m1"
             android:text="1分钟" />
 
 
@@ -31,11 +33,13 @@
             style="@style/Branded.Button.Small.Radio.white"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
+            android:tag="m5"
             android:layout_marginLeft="@dimen/x20"
             android:layout_weight="1"
             android:text="5分钟" />
 
         <RadioButton
+            android:tag="m15"
             android:id="@+id/rb_minute15"
             style="@style/Branded.Button.Small.Radio.white"
             android:layout_marginLeft="@dimen/x20"
@@ -45,6 +49,7 @@
             android:text="15分钟" />
 
         <RadioButton
+            android:tag="m30"
             android:id="@+id/rb_minute30"
             style="@style/Branded.Button.Small.Radio.white"
             android:layout_marginLeft="@dimen/x20"
@@ -54,6 +59,7 @@
             android:text="30分钟" />
 
         <RadioButton
+            android:tag="h1"
             android:id="@+id/rb_hour1"
             style="@style/Branded.Button.Small.Radio.white"
             android:layout_marginLeft="@dimen/x20"
@@ -63,6 +69,7 @@
             android:text="1小时" />
 
         <RadioButton
+            android:tag="h4"
             android:id="@+id/rb_hour4"
             style="@style/Branded.Button.Small.Radio.white"
             android:layout_marginLeft="@dimen/x20"
@@ -72,6 +79,7 @@
             android:text="4小时" />
 
         <RadioButton
+            android:tag="d1"
             android:id="@+id/rb_day1"
             android:layout_marginLeft="@dimen/x20"
             style="@style/Branded.Button.Small.Radio.white"
@@ -81,6 +89,7 @@
             android:text="1天" />
 
         <RadioButton
+            android:tag="w1"
             android:id="@+id/rb_week1"
             style="@style/Branded.Button.Small.Radio.white"
             android:layout_marginLeft="@dimen/x20"

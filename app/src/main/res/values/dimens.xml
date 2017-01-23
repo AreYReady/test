@@ -7,6 +7,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="rv_master_height">300dip</dimen>
+    <dimen name="symbol_tag_space">90dip</dimen>
+
 
     <!--old size-->
     <dimen name="abc_action_bar_default_height_material">56.0dip</dimen>

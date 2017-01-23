@@ -1,4 +1,6 @@
-package trade.xkj.com.trade.Utils;
+package trade.xkj.com.trade.utils;
+
+import android.util.Log;
 
 import java.math.BigDecimal;
 
@@ -64,21 +66,78 @@ public class DataUtil {
     public static int[] drawLineCount(int digits,double maxPrice,double minPrice ){
         int i = (int)(maxPrice-minPrice);
         int[] data=new int[2];
-        if(i<100){
-            data[0]=20;
-            data[1]=5;
-        }else if(i<300){
-            data[0]=50;
-            data[1]=6;
-        }else if(i<600){
-            data[0]=100;
-            data[1]=6;
-        }else {
-            data[0]=200;
-            data[1]=6;
-        }
-//        Log.i("DataUtil:hsc", "drawLineCount"+i );
+        int len=String.valueOf(i).length();
+        data[1]=10;
+        if(i>5*Math.pow(10,len-1)){
+            data[0]=(int)Math.pow(10,len-1);
 
+        }else if(i>2*Math.pow(10,len-1)){
+            data[0]=(int)Math.pow(10,len-2)*5;
+        }else{
+            data[0]=(int)Math.pow(10,len-2)*2;
+        }
+
+        Log.i("DataUtil:hsc", "drawLine差价 "+data[0] +"  "+  i  );
         return data;
+    }
+    public static int selectPeriod(String period){
+        int mPeriod=1;
+        switch (period){
+            case "m1":
+                mPeriod=1;
+                break;
+            case "m5":
+                mPeriod=5;
+                break;
+            case "m15":
+                mPeriod=15;
+                break;
+            case "m30":
+                mPeriod=30;
+                break;
+            case "h1":
+                mPeriod=60;
+                break;
+            case "h4":
+                mPeriod=240;
+                break;
+            case "d1":
+                mPeriod=1440;
+                break;
+            case "w1":
+                mPeriod=10080;
+                break;
+        }
+        return mPeriod;
+    }
+    public static String selectPeriod(int period){
+        String mPeriod="m1";
+        switch (period){
+            case 1:
+                mPeriod="m1";
+                break;
+            case 5:
+                mPeriod="m5";
+                break;
+            case 15:
+                mPeriod="m15";
+                break;
+            case 30:
+                mPeriod="m30";
+                break;
+            case 60:
+                mPeriod="h1";
+                break;
+            case 240:
+                mPeriod="h4";
+                break;
+            case 1440:
+                mPeriod="d1";
+                break;
+            case 10080:
+                mPeriod="w1";
+                break;
+        }
+        return mPeriod;
     }
 }

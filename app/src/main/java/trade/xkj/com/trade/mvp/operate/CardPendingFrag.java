@@ -12,8 +12,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.ResourceReader;
-import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.utils.ResourceReader;
+import trade.xkj.com.trade.utils.SystemUtil;
 import trade.xkj.com.trade.base.BaseFragment;
 
 /**

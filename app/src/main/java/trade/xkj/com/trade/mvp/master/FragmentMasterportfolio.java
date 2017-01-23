@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.view.CustomPortfolio;
+import trade.xkj.com.trade.utils.view.CustomPortfolio;
 import trade.xkj.com.trade.base.BaseFragment;
 import trade.xkj.com.trade.bean.BeanPortfolioData;
 

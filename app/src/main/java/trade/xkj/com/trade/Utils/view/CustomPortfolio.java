@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.view;
+package trade.xkj.com.trade.utils.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.utils.SystemUtil;
 import trade.xkj.com.trade.bean.BeanPortfolioData;
 
 /**

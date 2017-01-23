@@ -1,14 +1,13 @@
-package trade.xkj.com.trade.Utils.view;
+package trade.xkj.com.trade.utils.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.HorizontalScrollView;
 
-import trade.xkj.com.trade.Utils.MoneyUtil;
-import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.utils.MoneyUtil;
+import trade.xkj.com.trade.utils.SystemUtil;
 
 /**
  * Created by huangsc on 2016-11-30.
@@ -63,7 +62,7 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
         /** 处理单点、多点触摸 **/
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
-                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_DOWN");
+//                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_DOWN");
                 if (mode == MODE.YES) {
                     mode = MODE.NONE;
                 }
@@ -77,7 +76,7 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
                 }
 //                onPointerDown(event);
 
-                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_POINTER_DOWN");
+//                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_POINTER_DOWN");
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -95,7 +94,7 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
 //                onTouchMove(event);
                 break;
             case MotionEvent.ACTION_UP:
-                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_UP");
+//                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_UP");
                 break;
 
             // 多点松开
@@ -104,7 +103,7 @@ public class MyHorizontalScrollView extends HorizontalScrollView {
                     mode = MODE.NONE;
                 }
 
-                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_POINTER_UP");
+//                Log.i(TAG, "onTouchEvent: MotionEvent.ACTION_POINTER_UP");
 //                mode = MODE.NONE;
                 /** 执行缩放还原 **/
 //                if (isScaleAnim) {

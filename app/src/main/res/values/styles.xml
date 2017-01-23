@@ -26,6 +26,8 @@
     <style name="TextSmall" parent="@android:style/TextAppearance">
         <item name="android:textSize">15.0sp</item>
         <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textColor">@color/text_color_pull_head_text_content</item>
+
     </style>
 
     <style name="TextMedium" parent="@android:style/TextAppearance">
@@ -75,7 +77,7 @@
     <style name="TextHeader" parent="@android:style/TextAppearance.Small">
         <item name="android:textSize">10.0sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/text_color_primary_dark_with_opacity</item>
+        <item name="android:textColor">@color/text_color_pull_head_text_desc</item>
 
     </style>
 
@@ -121,6 +123,7 @@
 
     <style name="Branded.Button.Small.Radio.white" parent="Branded.Button.Small.Radio">
         <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/popup_message_hint_message_text_size</item>
     </style>
 
     <style name="Branded.Button.Small.Radio" parent="@style/Branded.Button.Small">

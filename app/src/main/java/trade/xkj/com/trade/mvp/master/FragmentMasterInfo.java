@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.view.CustomViewPager;
-import trade.xkj.com.trade.Utils.view.ZoomOutPageTransformer;
+import trade.xkj.com.trade.utils.view.CustomViewPager;
+import trade.xkj.com.trade.utils.view.ZoomOutPageTransformer;
 import trade.xkj.com.trade.adapter.FragmentAdapter;
 import trade.xkj.com.trade.adapter.MyViewPagerAdapterItem;
 import trade.xkj.com.trade.base.BaseFragment;
@@ -48,7 +47,6 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_master_info, null);
-        Log.i(TAG, "onCreateView: ");
         //又来判断关联的activity是否是实现接口的activity
         if (!(getActivity() instanceof BackInterface)) {
             throw new ClassCastException("Hosting Activity must implement BackHandledInterface");
@@ -104,7 +102,6 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
                     mCustomViewPager.setSpeed(0);
                     mViewPager.setCurrentItem(mPosition - 1);
                 }
-                Log.i(TAG, "onPageSelected: mPosition" + position);
                 mViewPager.setCurrentItem(position, true);
             }
 

@@ -27,6 +27,11 @@ public class BeanHistoryRequest implements Serializable{
         this.symbol = symbol;
         this.bar_count = bar_count;
     }
+    public BeanHistoryRequest(String symbol, int bar_count,String period) {
+        this.symbol = symbol;
+        this.bar_count = bar_count;
+        this.period=period;
+    }
 
     public BeanHistoryRequest(String symbol) {
         this.symbol = symbol;

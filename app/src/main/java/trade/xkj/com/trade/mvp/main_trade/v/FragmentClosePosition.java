@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,16 +34,24 @@ public class FragmentClosePosition extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_5, null);
+        view = inflater.inflate(R.layout.fragment_close_position, null);
         return view;
     }
 
     @Override
     protected void initView() {
-        mViewPager = (ViewPager) view.findViewById(R.id.vp_indicator_content);
-        mRecyclerView=(RecyclerView)view.findViewById(R.id.rv_item3_content);
+        mRecyclerView=(RecyclerView)view.findViewById(R.id.rv_close_content);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mRecyclerView.setAdapter(new OpenAdapter());
+        mRecyclerView.setAdapter(new CloseAdapter());
+        //未知原因，可能是因为ViewDragHelper和recycle多种嵌套导致fragment高度大于父类。暂不探究原理。代码动态计算高度
+        mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                mRecyclerView.setLayoutParams(new LinearLayout.LayoutParams(mRecyclerView.getWidth(),(int)MainTradeContentActivity.descHeight
+                        -(int)MainTradeContentActivity.flIndicatorHeight -view.findViewById(R.id.v_period_buttons).getHeight()));
+            }
+        });
     }
 
     @Override
@@ -54,17 +63,17 @@ public class FragmentClosePosition extends BaseFragment {
         }
     }
 
-    class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder>{
+    class CloseAdapter extends RecyclerView.Adapter<CloseAdapter.MyViewHolder>{
 
 
         @Override
-        public OpenAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public CloseAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             MyViewHolder viewHolder=new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.rv_item_social_card_close_position,parent,false));
             return viewHolder;
         }
 
         @Override
-        public void onBindViewHolder(final OpenAdapter.MyViewHolder holder, final int position) {
+        public void onBindViewHolder(final CloseAdapter.MyViewHolder holder, final int position) {
             holder.llOnclick.setTag(0);
             holder.llOnclick.setOnClickListener(new View.OnClickListener() {
                 @Override

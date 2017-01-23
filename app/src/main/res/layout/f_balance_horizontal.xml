@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/toolbars_title_dark"
+    android:background="@color/background_pull_head"
     android:orientation="vertical"
     >
 <View
@@ -35,7 +35,6 @@
                 android:layout_width="@dimen/badge_size"
                 android:layout_height="@dimen/badge_size"
                 android:layout_toRightOf="@id/iv_suitcase"
-                android:background="@color/brand_color_dark"
                 android:gravity="center"
                 android:padding="0.0dip"
                 android:visibility="invisible" />

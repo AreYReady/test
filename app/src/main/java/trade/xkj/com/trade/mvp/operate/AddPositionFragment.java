@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.ResourceReader;
-import trade.xkj.com.trade.Utils.SystemUtil;
-import trade.xkj.com.trade.Utils.view.NoScrollViewPager;
+import trade.xkj.com.trade.utils.ResourceReader;
+import trade.xkj.com.trade.utils.SystemUtil;
+import trade.xkj.com.trade.utils.view.NoScrollViewPager;
 import trade.xkj.com.trade.base.BaseFragment;
 
 /**

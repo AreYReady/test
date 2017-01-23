@@ -12,10 +12,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.utils.SystemUtil;
 import trade.xkj.com.trade.bean.BeanOpenPositionData;
 import trade.xkj.com.trade.mvp.operate.OperatePositionActivity;
 
@@ -29,46 +30,52 @@ import static trade.xkj.com.trade.R.id.ll_onclick;
 public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> implements View.OnClickListener{
     private String TAG= SystemUtil.getTAG(this);
     private List<BeanOpenPositionData> mDataList;
-    private MyViewHolder holder;
     private Context context;
+    private List<Boolean> listSelect=new ArrayList<>();
     public OpenAdapter(Context context,List<BeanOpenPositionData> mDataList){
         this.mDataList=mDataList;
         this.context=context;
+        for(int i=0;i<mDataList.size();i++){
+            listSelect.add(false);
+        }
     }
 
 
     @Override
-    public  OpenAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        MyViewHolder viewHolder=new OpenAdapter.MyViewHolder(LayoutInflater.from(context).inflate(R.layout.rv_item_social_card_open_position,parent,false));
-        return viewHolder;
+    public  MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view=LayoutInflater.from(context).inflate(R.layout.rv_item_social_card_open_position,parent,false);
+        return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final OpenAdapter.MyViewHolder holder, final int position) {
-        this.holder=holder;
-        holder.llOnclick.setTag(0);
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+
         holder.llOnclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "onClick: OpenAdapter");
-                if(holder.llHide.getTag()==null) {
-                    holder.llHide.setTag(0);
-                }
-                if(0==(int)holder.llHide.getTag()) {
-                    holder.llHide.setVisibility(View.VISIBLE);
-                    holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.congratulation_joining_background_dark));
-                    holder.llHide.setTag(1);
-                }
-                else{
+                Log.i(TAG, "onClick: "+position+"  tvmoney"+holder.tvMoney.getText());
+                if(listSelect.get(position)){
                     holder.llHide.setVisibility(View.GONE);
-                    holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.color_primary_2_light_transparent));
-                    holder.llHide.setTag(0);
+                    holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.background_trade_item));
+                    listSelect.set(position,false);
+                }else{
+                    holder.llHide.setVisibility(View.VISIBLE);
+                    holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.background_trade_item_open));
+                    listSelect.set(position,true);
                 }
             }
         });
-        holder.bClosePositon.setOnClickListener(this);
+        if(listSelect.get(position)){
+            holder.llHide.setVisibility(View.VISIBLE);
+            holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.congratulation_joining_background_dark));
+
+        }else{
+            holder.llHide.setVisibility(View.GONE);
+            holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.color_primary_2_light_transparent));
+        }
+        holder.bClosePosition.setOnClickListener(this);
         holder.bUnlink.setOnClickListener(this);
-        holder.bEditPositon.setOnClickListener(this);
+        holder.bEditPosition.setOnClickListener(this);
     }
 
 
@@ -95,7 +102,7 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public MyViewHolder(View itemView) {
+        public MyViewHolder(final View itemView) {
             super(itemView);
             llHide=(LinearLayout)itemView.findViewById(R.id.ll_hide_layout) ;
             llOnclick=(LinearLayout)itemView.findViewById(ll_onclick) ;
@@ -111,10 +118,9 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
             tvOpenTime2 =(TextView)itemView.findViewById(R.id.open_time2);
             tvSwap =(TextView)itemView.findViewById(R.id.swap);
             tvOpenRate =(TextView)itemView.findViewById(R.id.open_rate);
-            bEditPositon=(Button)itemView.findViewById(R.id.b_edit);
-            bClosePositon=(Button)itemView.findViewById(R.id.b_close_position);
+            bEditPosition =(Button)itemView.findViewById(R.id.b_edit);
+            bClosePosition =(Button)itemView.findViewById(R.id.b_close_position);
             bUnlink=(Button)itemView.findViewById(R.id.b_unlink);
-
         }
         LinearLayout llHide;
         LinearLayout llOnclick;
@@ -130,8 +136,8 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
         TextView tvOpenTime2;
         TextView tvSwap;
         TextView tvOpenRate;
-        Button bEditPositon;
-        Button bClosePositon;
+        Button bEditPosition;
+        Button bClosePosition;
         Button bUnlink;
 
     }

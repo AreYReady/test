@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/space_big"
     android:paddingRight="@dimen/space_big"
     android:orientation="horizontal">
-<trade.xkj.com.trade.Utils.RoundImageView
+<trade.xkj.com.trade.utils.RoundImageView
     android:id="@+id/riv_trade_symbol"
     android:layout_width="0dip"
     android:layout_height="@dimen/y60"

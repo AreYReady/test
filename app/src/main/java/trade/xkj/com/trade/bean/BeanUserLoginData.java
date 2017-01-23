@@ -8,19 +8,25 @@ public class BeanUserLoginData {
     /**
      * msg_type : 10
      * login : 1000
-     * password_hash : 54B7589A1B85E7324F00483EB7F6A2F1
+     * password : 54B7589A1B85E7324F00483EB7F6A2F1
      * port : 9988
      */
 
     private int msg_type;
     private int login;
-    private String password_hash;
+    private String password;
     private int port;
     public BeanUserLoginData(int login, String password_hash) {
         this.msg_type = 10;
         this.port =9994;
         this.login = login;
-        this.password_hash = password_hash;
+        this.password = password_hash;
+    }
+    public BeanUserLoginData(int login, String password_hash,int port) {
+        this.msg_type = 10;
+        this.port =port;
+        this.login = login;
+        this.password = password_hash;
     }
 
     public int getMsg_type() {
@@ -39,12 +45,12 @@ public class BeanUserLoginData {
         this.login = login;
     }
 
-    public String getPassword_hash() {
-        return password_hash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPassword_hash(String password_hash) {
-        this.password_hash = password_hash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 
@@ -53,7 +59,7 @@ public class BeanUserLoginData {
         return "{" +
                 "msg_type=" + msg_type +
                 ", login=" + login +
-                ", password_hash='" + password_hash + '\'' +
+                ", password='" + password + '\'' +
                 ", port=" + port +
                 '}';
     }

@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="10dip"
-    android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:paddingTop="10dip"
+
     >
 
-    <include layout="@layout/v_stack_header_data" />
+    <include layout="@layout/v_stack_header_data"/>
 
     <LinearLayout
         android:id="@+id/ll_hide_layout"
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="wrap_content"
-        android:background="@color/congratulation_joining_background_dark"
-        android:orientation="vertical">
+        android:background="@color/background_trade_item_open"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,16 +23,17 @@
             android:orientation="horizontal"
             android:paddingLeft="@dimen/space_big"
             android:paddingRight="@dimen/space_big">
+
             <Space
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"/>
 
-            <include layout="@layout/v_stack_commission" />
+            <include layout="@layout/v_stack_commission"/>
 
-            <include layout="@layout/v_stack_stop_loss" />
+            <include layout="@layout/v_stack_stop_loss"/>
 
-            <include layout="@layout/v_stack_take_profit" />
+            <include layout="@layout/v_stack_take_profit"/>
 
         </LinearLayout>
 
@@ -41,31 +43,33 @@
             android:orientation="horizontal"
             android:paddingLeft="@dimen/space_big"
             android:paddingRight="@dimen/space_big">
+
             <Space
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"/>
 
 
-            <include layout="@layout/v_stack_open_time" />
+            <include layout="@layout/v_stack_open_time"/>
 
-            <include layout="@layout/v_stack_swap" />
+            <include layout="@layout/v_stack_swap"/>
 
-            <include layout="@layout/v_stack_open_rate" />
+            <include layout="@layout/v_stack_open_rate"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:paddingBottom="@dimen/space_big"
             android:paddingLeft="@dimen/space_big"
-            android:paddingRight="@dimen/space_big"
-            android:paddingBottom="@dimen/space_big">
+            android:paddingRight="@dimen/space_big">
 
             <Space
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"/>
+
             <Button
                 android:id="@+id/b_unlink"
                 style="@style/TextDesc"
@@ -74,12 +78,14 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="3"
                 android:background="@color/toolbars_title_dark"
-                android:text="取消关联" />
+                android:text="取消关联"/>
+
             <Space
-                android:layout_weight="0.5"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.5"
                 />
+
             <Button
                 android:id="@+id/b_edit"
                 style="@style/TextDesc"
@@ -88,40 +94,48 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="3"
                 android:background="@color/toolbars_title_dark"
-                android:text="修改" />
+                android:text="修改"/>
+
             <Space
-                android:layout_weight="0.5"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.5"
                 />
+
             <Button
                 android:id="@+id/b_close_position"
                 style="@style/TextDesc"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
-                android:paddingLeft="5dip"
                 android:background="@color/toolbars_title_dark"
-                android:text="平仓1.07593" />
+                android:paddingLeft="5dip"
+                android:text="平仓1.07593"/>
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/ll_copy_from"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingRight="@dimen/space_big"
-            android:paddingBottom="@dimen/space_big">
+            android:paddingBottom="@dimen/space_big"
+            android:paddingRight="@dimen/space_big">
+
             <Space
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"/>
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="0dip"
                 android:layout_height="40dip"
                 android:layout_weight="2"
                 android:src="@mipmap/menu_avatar"/>
-            <include layout="@layout/v_stack_copy_from"   />
+
+            <include layout="@layout/v_stack_copy_from"/>
+
             <include layout="@layout/v_stack_stop_loss"/>
+
             <include layout="@layout/v_stack_take_profit"/>
         </LinearLayout>
     </LinearLayout>

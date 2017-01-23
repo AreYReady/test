@@ -7,7 +7,7 @@ import trade.xkj.com.trade.bean.BeanUserLoginData;
  */
 
 public interface UserLoginModel {
-    public int login(BeanUserLoginData beanLoginData);
+     int login(BeanUserLoginData beanLoginData);
 
 
 }

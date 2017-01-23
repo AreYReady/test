@@ -12,7 +12,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.utils.SystemUtil;
 import trade.xkj.com.trade.bean.BeanAttentionTraderData;
 
 /**

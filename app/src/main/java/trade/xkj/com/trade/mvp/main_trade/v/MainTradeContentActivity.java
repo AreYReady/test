@@ -29,11 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.ToashUtil;
-import trade.xkj.com.trade.Utils.view.CustomSwitch;
-import trade.xkj.com.trade.Utils.view.CustomViewPager;
-import trade.xkj.com.trade.Utils.view.PullBottomViewDragLayout;
-import trade.xkj.com.trade.Utils.view.ZoomOutPageTransformer;
+import trade.xkj.com.trade.utils.ACache;
+import trade.xkj.com.trade.utils.ToashUtil;
+import trade.xkj.com.trade.utils.view.CustomSwitch;
+import trade.xkj.com.trade.utils.view.CustomViewPager;
+import trade.xkj.com.trade.utils.view.PullBottomViewDragLayout;
+import trade.xkj.com.trade.utils.view.ZoomOutPageTransformer;
 import trade.xkj.com.trade.adapter.FragmentAdapter;
 import trade.xkj.com.trade.adapter.MyViewPagerAdapterItem;
 import trade.xkj.com.trade.base.BaseActivity;
@@ -58,6 +59,9 @@ public class MainTradeContentActivity extends BaseActivity
     private BaseFragment mBaseFragment;
     private DrawerLayout drawer;
     private Activity activity;
+    public static float descHeight;
+    public static float flIndicatorHeight;
+    public LinearLayout llNetworkPrompt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +70,15 @@ public class MainTradeContentActivity extends BaseActivity
 
     @Override
     public void initRegister() {
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
     }
 
     @Override
     public void initData() {
+
         context = this;
+        ACache.get(context).clear();
         activity = this;
         mDataItem = new ArrayList<>();
         mDataItem.add("我关注的操盘手");
@@ -93,18 +100,10 @@ public class MainTradeContentActivity extends BaseActivity
     public void initView() {
         Log.i(TAG, "initView: ");
         setContentView(R.layout.activity_main);
+        llNetworkPrompt=(LinearLayout) findViewById(R.id.ll_net_exception_prompt);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        mIbSwitch = (ImageButton) findViewById(R.id.ib_switch);
-//        mIbSwitch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.fl_main_trade_content, new FragmentMaster(), "1");
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//            }
-//        });
+
         mCSSwitch = (CustomSwitch) findViewById(R.id.cs_switch_tag);
         mCSSwitch.setSelectedChangeListener(new CustomSwitch.SelectedChangedListener() {
             @Override
@@ -114,8 +113,8 @@ public class MainTradeContentActivity extends BaseActivity
                     fragmentTransaction.add(R.id.fl_main_trade_content, new FragmentMaster(), "1");
                     fragmentTransaction.addToBackStack("TAG");
                     fragmentTransaction.commit();
-                }else{
-                   fragmentManager.popBackStack("TAG",FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                } else {
+                    fragmentManager.popBackStack("TAG", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             }
         });
@@ -153,6 +152,8 @@ public class MainTradeContentActivity extends BaseActivity
 //                Log.i(TAG, "onGlobalLayout: "+initHight);
 //                mPullViewDragLayout.setPadding(0,initHight,0,0);
                 findViewById(R.id.s_temp).setLayoutParams(new LinearLayout.LayoutParams(1, mPullViewDragLayout.getChildAt(0).getHeight() / 2));
+                descHeight = findViewById(R.id.desc).getHeight();
+                flIndicatorHeight = findViewById(R.id.fl_indicator_item).getHeight();
             }
         });
 
@@ -192,6 +193,7 @@ public class MainTradeContentActivity extends BaseActivity
                 }
                 Log.i(TAG, "onPageSelected: mPosition" + position);
                 mViewPagerFrag.setCurrentItem(position, true);
+
             }
 
             @Override
@@ -199,7 +201,6 @@ public class MainTradeContentActivity extends BaseActivity
 
             }
         });
-
 
     }
 
@@ -274,6 +275,22 @@ public class MainTradeContentActivity extends BaseActivity
             mExitTime = System.currentTimeMillis();
         } else {
             MyApplication.getInstance().exit();
+        }
+    }
+
+    @Override
+    protected void hideNetWorkPrompt() {
+        super.hideNetWorkPrompt();
+        if(llNetworkPrompt!=null&&llNetworkPrompt.getVisibility()!=View.GONE){
+            llNetworkPrompt.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    protected void showNetWorkPrompt() {
+        super.showNetWorkPrompt();
+        if(llNetworkPrompt!=null&&llNetworkPrompt.getVisibility()!=View.VISIBLE){
+            llNetworkPrompt.setVisibility(View.VISIBLE);
         }
     }
 }

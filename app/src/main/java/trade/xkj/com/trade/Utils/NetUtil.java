@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils;
+package trade.xkj.com.trade.utils;
 
 import android.app.Activity;
 import android.content.ComponentName;

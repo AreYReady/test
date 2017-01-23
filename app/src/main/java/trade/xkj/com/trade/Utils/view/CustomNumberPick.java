@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.view;
+package trade.xkj.com.trade.utils.view;
 
 import android.content.Context;
 import android.graphics.Color;

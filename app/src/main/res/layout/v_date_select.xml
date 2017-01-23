@@ -45,13 +45,13 @@
         android:orientation="horizontal"
         android:paddingLeft="3.0dip" >
 
-        <trade.xkj.com.trade.Utils.view.CustomNumberPick
+        <trade.xkj.com.trade.utils.view.CustomNumberPick
             android:id="@+id/np_date"
             android:layout_width="120.0dip"
             android:layout_height="wrap_content"
             android:button="@null" />
 
-        <trade.xkj.com.trade.Utils.view.CustomNumberPick
+        <trade.xkj.com.trade.utils.view.CustomNumberPick
             android:id="@+id/np_hour"
             android:layout_width="50.0dip"
             android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
             android:textColor="@android:color/white"
             android:textSize="20.0sp" />
 
-        <trade.xkj.com.trade.Utils.view.CustomNumberPick
+        <trade.xkj.com.trade.utils.view.CustomNumberPick
             android:id="@+id/np_minute"
             android:layout_width="50.0dip"
             android:layout_height="wrap_content" />

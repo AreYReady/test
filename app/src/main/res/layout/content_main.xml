@@ -7,25 +7,42 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="trade.xkj.com.trade.mvp.main_trade.v.MainTradeContentActivity"
+    android:background="@color/background_"
     tools:showIn="@layout/app_bar_main">
 
     <LinearLayout
+        android:id="@+id/ll_net_exception_prompt"
+        android:layout_width="match_parent"
+        android:layout_height="30dip"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:background="@color/red">
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:text="网络连接有异常，重新连接...."/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_below="@+id/ll_net_exception_prompt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
         <FrameLayout
             android:id="@+id/fl_main_trade_content"
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="1"/>
-        <Space
+        <View
             android:id="@+id/s_temp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            />
     </LinearLayout>
 
-    <trade.xkj.com.trade.Utils.view.PullBottomViewDragLayout
+    <trade.xkj.com.trade.utils.view.PullBottomViewDragLayout
+        android:layout_below="@+id/ll_net_exception_prompt"
         android:id="@+id/dragLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,17 +56,18 @@
             android:id="@+id/desc"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/toolbars_title_dark"
+            android:background="@color/background_"
             android:orientation="vertical">
 
             <FrameLayout
+                android:id="@+id/fl_indicator_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/congratulation_joining_background_dark"
+                android:background="@color/background_indicator"
                 android:clipChildren="false"
                 android:layerType="software">
 
-                <trade.xkj.com.trade.Utils.view.CustomViewPager
+                <trade.xkj.com.trade.utils.view.CustomViewPager
                     android:id="@+id/cvp_indicator_item"
                     android:layout_width="match_parent"
                     android:layout_height="50dip"
@@ -60,7 +78,8 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/vp_indicator_content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/space_big"/>
         </LinearLayout>
-    </trade.xkj.com.trade.Utils.view.PullBottomViewDragLayout>
+    </trade.xkj.com.trade.utils.view.PullBottomViewDragLayout>
 </RelativeLayout>

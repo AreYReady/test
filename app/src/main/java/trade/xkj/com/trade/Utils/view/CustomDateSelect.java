@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.view;
+package trade.xkj.com.trade.utils.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -16,8 +16,8 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.DateUtils;
-import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.utils.DateUtils;
+import trade.xkj.com.trade.utils.SystemUtil;
 
 
 /**

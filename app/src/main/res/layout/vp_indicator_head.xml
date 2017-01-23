@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="40dip">
 
-    <trade.xkj.com.trade.Utils.RoundImageView
+    <cn.bingoogolapple.badgeview.BGABadgeImageView
         android:id="@+id/id_index_gallery_item_image"
         android:layout_width="80dp"
         android:layout_height="80dp"

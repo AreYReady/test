@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Trade</string>
+    <string name="app_name">星科技</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -10,6 +10,7 @@
     <string name="action_feedback">反馈</string>
     <string name="action_about">关于</string>
     <string name="logo">logo</string>
+
 
     <string name="abc_action_bar_home_description">转到主屏幕</string>
     <string name="abc_action_bar_home_description_format">%1$s：%2$s</string>

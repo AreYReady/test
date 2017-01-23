@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.view;
+package trade.xkj.com.trade.utils.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -11,7 +11,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.utils.SystemUtil;
 
 /**
  * Created by huangsc on 2016-12-16.

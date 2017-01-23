@@ -22,6 +22,8 @@ public class MyApplication extends Application {
         // TODO Auto-generated method stub
         super.onCreate();
         instance = this;
+        CrashHandler catchHandler = CrashHandler.getInstance();
+//        catchHandler.init(getApplicationContext());
     }
 
     private List<Activity> mList = new LinkedList();
@@ -33,6 +35,7 @@ public class MyApplication extends Application {
 
     public void exit() {
         try {
+
             for (Activity activity : mList) {
                 if (activity != null)
                     activity.finish();

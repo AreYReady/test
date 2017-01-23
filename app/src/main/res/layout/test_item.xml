@@ -4,7 +4,7 @@
     android:layout_height="120dp"
     android:layout_marginLeft="40dip">
 
-    <trade.xkj.com.trade.Utils.RoundImageView
+    <trade.xkj.com.trade.utils.RoundImageView
         android:id="@+id/id_index_gallery_item_image"
         android:layout_width="80dp"
         android:layout_height="80dp"

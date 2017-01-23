@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.view;
+package trade.xkj.com.trade.utils.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -40,7 +40,6 @@ public class CustomSwitch extends FrameLayout{
         ibSwitch.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Log.i("hsc", "ACTION_DOWN: "+parant.isSelected());
                 if(parant.isSelected()) {
                     view.startAnimation(animation=AnimationUtils.loadAnimation(context, R.anim.transtale_x_toleft));

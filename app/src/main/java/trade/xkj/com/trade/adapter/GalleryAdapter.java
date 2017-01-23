@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.utils.SystemUtil;
 import trade.xkj.com.trade.bean.BeanIndicatorData;
 
 

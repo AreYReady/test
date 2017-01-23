@@ -37,14 +37,13 @@ public class FragmentPendingPosition extends BaseFragment  {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_4, null);
+        view = inflater.inflate(R.layout.fragment_pending_position, null);
         return view;
     }
 
     @Override
     protected void initView() {
-        mViewPager = (ViewPager) view.findViewById(R.id.vp_indicator_content);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_item3_content);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_pending_content);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.setAdapter(new PendingAdapter());
         Log.i(TAG, "initView: mDataList" + mDataList.size());

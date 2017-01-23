@@ -3,7 +3,7 @@ package trade.xkj.com.trade;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import trade.xkj.com.trade.Utils.view.CustomPortfolio;
+import trade.xkj.com.trade.utils.view.CustomPortfolio;
 
 public class demo extends AppCompatActivity {
     CustomPortfolio customPortfolio;

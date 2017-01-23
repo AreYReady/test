@@ -37,7 +37,7 @@
             style="@style/TextDesc"
             />
     </LinearLayout>
-   <trade.xkj.com.trade.Utils.view.NoScrollViewPager
+   <trade.xkj.com.trade.utils.view.NoScrollViewPager
        android:id="@+id/vp_operate_add_content"
        android:layout_width="match_parent"
        android:layout_height="match_parent"

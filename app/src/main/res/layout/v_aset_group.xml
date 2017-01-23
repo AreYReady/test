@@ -27,7 +27,7 @@
             style="@style/TextDesc"
             />
 
-        <trade.xkj.com.trade.Utils.view.AddSubEditText
+        <trade.xkj.com.trade.utils.view.AddSubEditText
             android:id="@+id/aset_aset"
             android:layout_width="0dip"
             android:layout_height="50dip"

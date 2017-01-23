@@ -4,8 +4,8 @@ import android.util.Log;
 
 import java.nio.ByteBuffer;
 
-import trade.xkj.com.trade.Utils.SocketUtil;
-import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.utils.SocketUtil;
+import trade.xkj.com.trade.utils.SystemUtil;
 
 /**
  * @author xjunda

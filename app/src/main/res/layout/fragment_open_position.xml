@@ -2,19 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+              android:background="@color/background_trade_item"
     android:orientation="vertical">
     <LinearLayout
+        android:id="@+id/ll_positions_opened_header_impl"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/space_big"
         android:paddingRight="@dimen/space_big">
-
         <include layout="@layout/v_positions_opened_header_impl" />
     </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_item3_content"
+        android:id="@+id/rv_open_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/space_big"/>
+
 </LinearLayout>

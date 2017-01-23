@@ -6,7 +6,7 @@ package trade.xkj.com.trade.constant;
  */
 public interface MessageType {
     int TYPE_BINARY_HEART_BEAT_REQUEST = 1;
-    int TYPE_BINARY_HEART_BEAT_RESPONSE = 2;
+    int TYPE_BINARY_HEART_BEAT_RESPONSE = 2;//心跳反应
     int TYPE_BINARY_LOGIN_RESULT = 11;
     int TYPE_BINARY_SERVER_TIME = 281;
     int TYPE_BINARY_HISTORY_RESULT = 290;
@@ -19,4 +19,5 @@ public interface MessageType {
     int TYPE_BINARY_USER_INFO = 1300;
     int TYPE_BINARY_ALL_SYMBOL = 1201;
     String TYPE_ORDER_SREVER_TIME="{\"msg_type\":280}";
+    String HEAT="{\"msg_type\":2}";
 }

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 <View
-    android:id="@+id/view"
+    android:id="@+id/ll_net_exception_prompt"
     android:layout_width="match_parent"
     android:layout_height="10dip"
     android:background="@color/brand_color_dark"

@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.view;
+package trade.xkj.com.trade.utils.view;
 
 import android.content.Context;
 import android.os.Handler;
@@ -15,8 +15,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.MoneyUtil;
-import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.utils.MoneyUtil;
+import trade.xkj.com.trade.utils.SystemUtil;
 
 import static trade.xkj.com.trade.R.id.tv_add;
 import static trade.xkj.com.trade.R.id.tv_sub;
@@ -34,8 +34,8 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
     private int amount;
     private int minPrice = 10000;
     //加减的基数
-    private int baseNumbel = 10000;
-    private int maxPrice=-1;
+    private int baseNumber = 10000;
+    private int maxPrice=100000000;
     //判断是否是跟随SeekBar改变操作
     private boolean isFollow=false;
 
@@ -54,10 +54,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         addView = (TextView) inflate.findViewById(tv_add);
         subView = (TextView) inflate.findViewById(R.id.tv_sub);
         editText = (EditText) inflate.findViewById(R.id.et_amount);
-        amount = minPrice;
         editText.setText(MoneyUtil.parseMoney(amount));
-//        addView.setOnClickListener(this);
-//        subView.setOnClickListener(this);
         subView.setLongClickable(true);
         subView.setOnTouchListener(this);
         addView.setOnTouchListener(this);
@@ -83,36 +80,31 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
                     amount=maxPrice;
                     editText.setText(MoneyUtil.parseMoney(maxPrice));
                 }
+
             }
         });
     }
 
-
-    public void setBaseNumbel(int baseNumbel) {
-        this.baseNumbel = baseNumbel;
-    }
-
     private boolean isOnLongClick;
-    private MiusThread miusThread;
+    private SubThread subThread;
     private PlusThread plusThread;
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         int eventAction = event.getAction();
         Log.i(TAG, "onTouch: ");
-        editText.setVisibility(VISIBLE);
         switch (v.getId()) {
             case tv_sub:
                 if (eventAction == MotionEvent.ACTION_DOWN) {
-                    miusThread = new MiusThread();
+                    subThread = new SubThread();
                     isOnLongClick = true;
-                    miusThread.start();
+                    subThread.start();
                 } else if (eventAction == MotionEvent.ACTION_UP) {
-                    if (miusThread != null) {
+                    if (subThread != null) {
                         isOnLongClick = false;
                     }
                 } else if (eventAction == MotionEvent.ACTION_MOVE) {
-                    if (miusThread != null) {
+                    if (subThread != null) {
                         isOnLongClick = true;
                     }
                 }
@@ -136,14 +128,17 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         return true;
     }
 
-    class MiusThread extends Thread {
+    class SubThread extends Thread {
         @Override
         public void run() {
             while (isOnLongClick) {
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(100);
                     Log.i(TAG, "run: ");
-                    amount = amount - baseNumbel;
+                    if(amount<=minPrice){
+                        amount=minPrice;
+                    }
+                    amount = amount - baseNumber;
                     handler.sendEmptyMessage(0);
 //                    editText.setText(MoneyUtil.parseMoney(amount));
                 } catch (InterruptedException e) {
@@ -159,10 +154,13 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         public void run() {
             while (isOnLongClick) {
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(100);
 //                    editText.setText(MoneyUtil.parseMoney(amount));
 //                    myHandler.sendEmptyMessage(2);
-                    amount = amount + baseNumbel;
+                    amount = amount + baseNumber;
+                    if(amount>=maxPrice){
+                        amount=maxPrice;
+                    }
                     handler.sendEmptyMessage(0);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -180,7 +178,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
                 //onTouch
                 case 0:
                     if(listener!=null&&!isFollow) {
-                        listener.amountChange((amount-minPrice) / baseNumbel);
+                        listener.amountChange(amount);
                     }
                     break;
                 //follow
@@ -189,6 +187,9 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
                     break;
             }
             editText.setText(MoneyUtil.parseMoney(amount));
+            if(editText.getVisibility()!=VISIBLE){
+                editText.setVisibility(VISIBLE);
+            }
         }
     };
 
@@ -197,28 +198,30 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
 
     public void followSeekBarChange(int count) {
         isFollow=true;
+        amount = baseNumber * count;
+        handler.sendEmptyMessage(1);
         if(editText.getVisibility()!=VISIBLE){
             editText.setVisibility(VISIBLE);
-    }
-        amount = baseNumbel * count+ minPrice;
-        handler.sendEmptyMessage(1);
+        }
     }
     public interface AmountChangeListener{
-        void amountChange(int count);
+//        void amountChange(int count);
+        void amountChange(int amount);
     }
     private AmountChangeListener listener;
     public void setAmountChangeListener(AmountChangeListener listener){
         this.listener=listener;
     }
-    public void setMaxPrice(int minPrice,int maxPrice,int baseNumbel){
+    public void setData(int minPrice, int maxPrice, int baseNumber){
         this.maxPrice=maxPrice;
         this.minPrice=minPrice;
-        this.baseNumbel=baseNumbel;
+        this.baseNumber =baseNumber;
+        editText.setText(MoneyUtil.parseMoney(minPrice));
     }
-    public void setNumbelTextInvisible(){
+    public void setNumberTextInvisible(){
         editText.setVisibility(INVISIBLE);
     }
-    public void setNumbelTextVisible(){
+    public void setNumberTextVisible(){
         editText.setVisibility(VISIBLE);
     }
 }

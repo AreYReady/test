@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils;
+package trade.xkj.com.trade.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,6 +14,7 @@ public class CacheUtil {
     private static final String PASSWORD = "PASSWORD";
     public static final String FAVOR_SYMBOL = "FAVOR_SYMBOL";
     public static final String KLINE_CACHE = "KLINE_CACHE";
+
 
 
     /**

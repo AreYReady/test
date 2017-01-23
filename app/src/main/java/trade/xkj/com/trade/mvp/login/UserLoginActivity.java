@@ -8,29 +8,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import java.util.Map;
-import java.util.TreeMap;
-
-import trade.xkj.com.trade.IO.Volley.SingleVolleyRequestQueue;
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.AesEncryptionUtil;
-import trade.xkj.com.trade.Utils.DateUtils;
-import trade.xkj.com.trade.Utils.SystemUtil;
-import trade.xkj.com.trade.Utils.ToashUtil;
-import trade.xkj.com.trade.Utils.view.LoadingDialog;
 import trade.xkj.com.trade.base.BaseActivity;
-import trade.xkj.com.trade.base.MyApplication;
 import trade.xkj.com.trade.bean.BeanUserLoginData;
-import trade.xkj.com.trade.constant.ServerIP;
 import trade.xkj.com.trade.mvp.main_trade.v.MainTradeContentActivity;
-
-import static android.util.Log.i;
+import trade.xkj.com.trade.utils.AesEncryptionUtil;
+import trade.xkj.com.trade.utils.CacheUtil;
+import trade.xkj.com.trade.utils.SystemUtil;
+import trade.xkj.com.trade.utils.ToashUtil;
+import trade.xkj.com.trade.utils.view.LoadingDialog;
 
 public class UserLoginActivity extends BaseActivity implements UserLoginActivityInterface,View.OnClickListener{
 
@@ -44,6 +30,7 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
     @Override
     public void toMainActivity() {
         startActivity(new Intent(this, MainTradeContentActivity.class));
+        CacheUtil.saveuserInfo(this,etUserName.getText().toString(), AesEncryptionUtil.encrypt(etUserPassWord.getText().toString()));
         finish();
     }
 
@@ -66,9 +53,7 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
     }
 
     public static int[] scrren;
-    @Override
-    public void initRegister() {
-    }
+
     @Override
     public void initData() {
         mUserLoginPresenter=new UserLoginPresenter(this);
@@ -92,51 +77,51 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
 //        sendDataOfVolley();
     }
     private void sendDataOfVolley() {
-        final String s= DateUtils.getShowTime(System.currentTimeMillis()-10000);
-        i(TAG, "sendDataOfVolley: time"+ s);
-        SingleVolleyRequestQueue queue=SingleVolleyRequestQueue.getInstance(MyApplication.getInstance().getApplicationContext());
-        StringRequest requetTime=new StringRequest(ServerIP.URL_SERVICE_TIME, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.i(TAG, "onResponse: "+response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        String name = AesEncryptionUtil.stringBase64toString(etUserName.getText().toString());
-        String pass = AesEncryptionUtil.stringBase64toString(etUserPassWord.getText().toString());
-        final TreeMap<String,String> map=new TreeMap<>();
-        map.put("account",name);
-        map.put("apiid","crm1");
-        map.put("apitime",s);
-        map.put("password",pass);
-        String md5;
-        md5=AesEncryptionUtil.getMD5(AesEncryptionUtil.getUrl(ServerIP.URL_LOGIN,map).concat("v66YKULHFld2JElhm"));
-        Log.i(TAG, "sendDataOfVolley: md5解析前 "+AesEncryptionUtil.getUrl(ServerIP.URL_LOGIN,map).concat("v66YKULHFld2JElhm"));
-        map.put("apisign",md5);
-        String url=AesEncryptionUtil.getUrl(ServerIP.URL_LOGIN,map);
-        StringRequest request=new StringRequest(Request.Method.POST,ServerIP.URL_LOGIN, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                i(TAG, "onResponse: "+response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                i(TAG, "onErrorResponse: "+error.toString());
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                return map;
-            }
-        };
-        Log.i(TAG, "sendDataOfVolley: "+request.getUrl());
-//        queue.addToRequestQueue(requetTime);
-        queue.addToRequestQueue(request);
+//        final String s= DateUtils.getShowTime(System.currentTimeMillis()-10000);
+//        i(TAG, "sendDataOfVolley: time"+ s);
+//        SingleVolleyRequestQueue queue=SingleVolleyRequestQueue.getInstance(MyApplication.getInstance().getApplicationContext());
+//        StringRequest requetTime=new StringRequest(ServerIP.URL_SERVICE_TIME, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                Log.i(TAG, "onResponse: "+response);
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//            }
+//        });
+//        String name = AesEncryptionUtil.stringBase64toString(etUserName.getText().toString());
+//        String pass = AesEncryptionUtil.stringBase64toString(etUserPassWord.getText().toString());
+//        final TreeMap<String,String> map=new TreeMap<>();
+//        map.put("account",name);
+//        map.put("apiid","crm1");
+//        map.put("apitime",s);
+//        map.put("password",pass);
+//        String md5;
+//        md5=AesEncryptionUtil.getMD5(AesEncryptionUtil.getUrl(ServerIP.URL_LOGIN,map).concat("v66YKULHFld2JElhm"));
+//        Log.i(TAG, "sendDataOfVolley: md5解析前 "+AesEncryptionUtil.getUrl(ServerIP.URL_LOGIN,map).concat("v66YKULHFld2JElhm"));
+//        map.put("apisign",md5);
+//        String url=AesEncryptionUtil.getUrl(ServerIP.URL_LOGIN,map);
+//        StringRequest request=new StringRequest(Request.Method.POST,ServerIP.URL_LOGIN, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                i(TAG, "onResponse: "+response);
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                i(TAG, "onErrorResponse: "+error.toString());
+//            }
+//        }){
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                return map;
+//            }
+//        };
+//        Log.i(TAG, "sendDataOfVolley: "+request.getUrl());
+////        queue.addToRequestQueue(requetTime);
+//        queue.addToRequestQueue(request);
     }
 
     @Override
@@ -176,6 +161,5 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
             mLoadingDialog=new LoadingDialog(this,"请稍等");
         }
         mLoadingDialog.show();
-
     }
 }

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="10dip"
-    android:orientation="vertical">
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/toolbars_title_dark"
+              android:orientation="vertical"
+              android:paddingTop="10dip">
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginRight="0.0dip"
-        android:background="@color/toolbars_title_dark"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/space_normal"
         android:paddingLeft="@dimen/space_big"
@@ -32,7 +32,7 @@
                 android:layout_marginRight="@dimen/space_big"
                 android:layout_marginTop="@dimen/space_small"
                 android:clickable="false"
-                android:contentDescription="@string/avatar" />
+                android:contentDescription="@string/avatar"/>
         </FrameLayout>
 
         <LinearLayout
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/space_normal"
                 android:ellipsize="end"
-                android:textAppearance="@style/TextAverage" />
+                android:textAppearance="@style/TextAverage"/>
 
             <LinearLayout
                 android:id="@+id/copiers_container"
@@ -65,13 +65,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/space_normal"
                     android:text="@string/copiers"
-                    android:textAppearance="@style/TextHeader" />
+                    android:textAppearance="@style/TextHeader"/>
 
                 <TextView
                     android:id="@+id/copiers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextRegular" />
+                    android:textAppearance="@style/TextRegular"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -92,7 +92,7 @@
                 android:layout_height="@dimen/action_button_height_traders_i"
                 android:layout_marginRight="@dimen/space_big"
                 android:text="@string/unwatch"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/action_button"
@@ -100,7 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/action_button_height_traders_i"
                 android:layout_marginRight="@dimen/space_big"
-                android:visibility="visible" />
+                android:visibility="visible"/>
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

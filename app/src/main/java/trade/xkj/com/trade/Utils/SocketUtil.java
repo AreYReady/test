@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils;
+package trade.xkj.com.trade.utils;
 
 import android.content.Context;
 import android.os.HandlerThread;
@@ -31,6 +31,7 @@ import trade.xkj.com.trade.IO.sslsocket.SSLSocketChannel;
 import trade.xkj.com.trade.bean.BeanUserLoginData;
 import trade.xkj.com.trade.constant.ServerIP;
 import trade.xkj.com.trade.handler.HandlerWrite;
+import trade.xkj.com.trade.mvp.login.UserLoginPresenter;
 
 /**
  * @author xjunda
@@ -227,7 +228,7 @@ public class SocketUtil {
 
         int serverCheckNum = SocketUtil.byteArrayToInt(checkSum);
         int appCheckNum = SocketUtil.getCheckSum(byteMessage);
-//        Log.i("123", "result:::::" + new String(result));
+//        Log.i(TAG, "result:::::" + new String(result));
 //        Log.i("123", "message: " + message);
 //        Log.i("123", "serverCheckSum: " + serverCheckNum + "appCheckNum: " + appCheckNum);
         if (serverCheckNum == appCheckNum) {
@@ -339,7 +340,7 @@ public class SocketUtil {
         SSLSocketChannel<String> sslSocketChannel = null;
         //网路地址:暂用mgf:mm.mgfoption.com
 //        final SocketAddress address = new InetSocketAddress(BuildConfig.API_URL, ServerIP.PORT);
-        final SocketAddress address = new InetSocketAddress(ServerIP.API_URL_MGF, ServerIP.PORT_MGF);
+        final SocketAddress address = new InetSocketAddress(ServerIP.API_URL_MGF, ServerIP.PORT);
         Encoder<String> encoder = new SSLEncodeImp();
         Decoder<String> decoder = new SSLDecoderImp();
         Log.i("123", "doLogin: Opening channel");
@@ -349,7 +350,7 @@ public class SocketUtil {
             Log.i("123", "doLogin: Sending request");
             String [] user = CacheUtil.getUserInfo(context);
             //暂时不用配置文件的端口号
-            BeanUserLoginData userLogin = new BeanUserLoginData(Integer.valueOf(user[0]), user[1]);
+            BeanUserLoginData userLogin = new BeanUserLoginData(Integer.valueOf(user[0]), user[1],ServerIP.PORT_MGF);
             String loginStr = new Gson().toJson(userLogin, BeanUserLoginData.class);
             sslSocketChannel.send(loginStr);
             Log.i("123", "doLogin: Receiving response");
@@ -357,9 +358,12 @@ public class SocketUtil {
             handlerWrite.sendEmptyMessage(0);
         } catch (IOException e) {
             e.printStackTrace();
+            EventBus.getDefault().post(UserLoginPresenter.DISCONNECT_FROM_SERVER);
         } catch (NoSuchAlgorithmException e) {
+            EventBus.getDefault().post(UserLoginPresenter.DISCONNECT_FROM_SERVER);
             e.printStackTrace();
         } catch (KeyManagementException e) {
+            EventBus.getDefault().post(UserLoginPresenter.DISCONNECT_FROM_SERVER);
             e.printStackTrace();
         }
         return sslSocketChannel;

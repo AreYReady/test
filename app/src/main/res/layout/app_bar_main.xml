@@ -23,29 +23,13 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="@dimen/x30"
                >
-                <!--<ImageButton-->
-                    <!--android:id="@+id/ib_switch"-->
-                    <!--android:layout_toLeftOf="@+id/ib_"-->
-                    <!--android:layout_marginRight="@dimen/x30"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:background="@drawable/tag_switch">-->
-                <!--</ImageButton>-->
-                <!--<ImageView-->
-                    <!--android:layout_toLeftOf="@+id/ib_"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginRight="@dimen/x30"-->
-                    <!--android:src="@drawable/toggle_switch_plain"-->
-                    <!--android:layout_centerVertical="true"/>-->
-                <trade.xkj.com.trade.Utils.view.CustomSwitch
+                <trade.xkj.com.trade.utils.view.CustomSwitch
                     android:id="@+id/cs_switch_tag"
                     android:layout_toLeftOf="@+id/ib_"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true">
-                </trade.xkj.com.trade.Utils.view.CustomSwitch>
+                </trade.xkj.com.trade.utils.view.CustomSwitch>
                 <ImageButton
                     android:id="@+id/ib_"
                     android:layout_alignParentRight="true"
@@ -67,6 +51,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email"
-        app:backgroundTint="@color/brand_color_dark"/>
+        app:backgroundTint="@color/background_floating_action_button"/>
 
 </android.support.design.widget.CoordinatorLayout>

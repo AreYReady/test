@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.view;
+package trade.xkj.com.trade.utils.view;
 
 import android.content.Context;
 import android.graphics.RectF;
@@ -14,6 +14,8 @@ import android.widget.ScrollView;
  */
 
 public class MyScrollView extends ScrollView {
+    private ScrollListener scrollListener;
+
     View view;
     public MyScrollView(Context context) {
         super(context);
@@ -55,5 +57,19 @@ public class MyScrollView extends ScrollView {
         view.getLocationOnScreen(location);
         return new RectF(location[0], location[1], location[0] + view.getWidth(),
                 location[1] + view.getHeight());
+    }
+    @Override
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+        super.onScrollChanged(l, t, oldl, oldt);
+        if (scrollListener != null) {
+            scrollListener.onScroll(t, l);
+        }
+    }
+
+    public void registerListener(ScrollListener scrollListener){
+        this.scrollListener = scrollListener;
+    }
+    public interface  ScrollListener{
+        void onScroll(int top,int left);
     }
 }

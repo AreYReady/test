@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.view;
+package trade.xkj.com.trade.utils.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.utils.SystemUtil;
 
 /**
  * Created by huangsc on 2016-12-13.
@@ -81,11 +81,11 @@ public class CustomASETGroup extends FrameLayout{
         if (mImageView.isSelected()) {
             mImageView.setSelected(false);
             mTVDescPrompt.setVisibility(INVISIBLE);
-            mASET.setNumbelTextInvisible();
+            mASET.setNumberTextInvisible();
         } else {
             mImageView.setSelected(true);
             mTVDescPrompt.setVisibility(VISIBLE);
-            mASET.setNumbelTextVisible();
+            mASET.setNumberTextVisible();
         }
     }
 

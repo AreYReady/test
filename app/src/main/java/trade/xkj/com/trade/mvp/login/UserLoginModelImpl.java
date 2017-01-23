@@ -2,6 +2,7 @@ package trade.xkj.com.trade.mvp.login;
 
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -21,9 +22,9 @@ import trade.xkj.com.trade.IO.sslsocket.Encoder;
 import trade.xkj.com.trade.IO.sslsocket.SSLDecoderImp;
 import trade.xkj.com.trade.IO.sslsocket.SSLEncodeImp;
 import trade.xkj.com.trade.IO.sslsocket.SSLSocketChannel;
-import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.base.MyApplication;
 import trade.xkj.com.trade.bean.BeanSymbolConfig;
+import trade.xkj.com.trade.bean.BeanUnRegister;
 import trade.xkj.com.trade.bean.BeanUserLoginData;
 import trade.xkj.com.trade.bean.EventBusAllSymbol;
 import trade.xkj.com.trade.bean.ResponseEvent;
@@ -31,6 +32,7 @@ import trade.xkj.com.trade.constant.MessageType;
 import trade.xkj.com.trade.constant.ServerIP;
 import trade.xkj.com.trade.handler.HandlerSend;
 import trade.xkj.com.trade.handler.HandlerWrite;
+import trade.xkj.com.trade.utils.SystemUtil;
 
 import static android.util.Log.i;
 
@@ -61,6 +63,13 @@ public class UserLoginModelImpl implements UserLoginModel {
         sendData(beanLoginData);
         return 0;
     }
+    @Subscribe
+    public void unRegister(BeanUnRegister beanUnRegister) {
+        if(EventBus.getDefault().isRegistered(this))
+            Log.i(TAG, "unRegister: ");
+            EventBus.getDefault().unregister(this);
+    }
+
 
 
 
@@ -74,7 +83,7 @@ public class UserLoginModelImpl implements UserLoginModel {
             public void run() {
                 try {
                     i("123", "run: sslTest");
-                    sslTest(String.valueOf(beanLoginData.getLogin()), beanLoginData.getPassword_hash());
+                    sslTest(String.valueOf(beanLoginData.getLogin()), beanLoginData.getPassword());
                 } catch (KeyManagementException e) {
                     e.printStackTrace();
                     mResultEnum=ResultEnum.erro;
@@ -87,11 +96,33 @@ public class UserLoginModelImpl implements UserLoginModel {
                 MyApplication.getInstance().getApplicationContext(),mHandlerThread, mSSLSocketChannel, mHandlerWrite);
         ///		Map<String, Object> map = new HashMap<>();
         EventBus.getDefault().postSticky(handlerRead);
+
+//        //先获取服务器时间，再由服务器时间作为参数处理；
+//        Request request=new Request.Builder().url(HttpKeyConstant.URL_SERVICE_TIME).build();
+//        OkhttpUtils.enqueue(request, new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                Log.i(TAG, "onFailure: ");
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                Log.i(TAG, "onResponse: "+response.toString());
+//            }
+//        });
+//
+//
+//
+//        RequestBody body=new FormBody.Builder()
+//                .add(HttpKeyConstant.LOGIN_NAME, AesEncryptionUtil.stringBase64toString(beanLoginData.getLogin()))
+//                .add(HttpKeyConstant.LOGIN_PASSWORD,AesEncryptionUtil.stringBase64toString(beanLoginData.getPassword()))
+//                .build();
+
     }
     private void sslTest(String name, String passwd) throws KeyManagementException {
-        //暂时用固定的
+//        //暂时用固定的
 //        final SocketAddress address = new InetSocketAddress(BuildConfig.API_URL, ServerIP.PORT);
-        final SocketAddress address = new InetSocketAddress("mm.mgfoption.com", ServerIP.PORT);
+        final SocketAddress address = new InetSocketAddress(ServerIP.API_URL_MGF, ServerIP.PORT);
 
         Encoder<String> encoder = new SSLEncodeImp();
         Decoder<String> decoder = new SSLDecoderImp();
@@ -105,11 +136,9 @@ public class UserLoginModelImpl implements UserLoginModel {
 ///		map.put(SSL_SOCKET, sslSocketChannel);
 ///		map.put(THREAD_READ, mHandlerThread
             i("123", "doLogin: Sending request");
-
-            BeanUserLoginData userLogin = new BeanUserLoginData(Integer.valueOf(name), passwd);
+            BeanUserLoginData userLogin = new BeanUserLoginData(Integer.valueOf(name), passwd,ServerIP.PORT_MGF);
             String loginStr = new Gson().toJson(userLogin, BeanUserLoginData.class);
             mSSLSocketChannel.send(loginStr);
-
             i("123", "doLogin: Receiving response");
             mHandlerWrite.sendEmptyMessage(0);
         } catch (IOException e) {

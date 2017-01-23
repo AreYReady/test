@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/toolbars_title_dark</color>
-    <color name="colorPrimaryDark">@color/toolbars_title_dark</color>
+    <color name="colorPrimary">#272a36</color>
+    <color name="colorPrimaryDark">@color/colorPrimary</color>
     <color name="colorAccent">#FF4081</color>
     <color name="background_tint_black">@color/bright_foreground_disabled_material_light</color>
     <color name ="background_tint_gray">@color/color_primary_dark</color>
+    <color name ="background_floating_action_button">#fe5e00</color>
+    <color name ="background_">#272a36</color>
+    <color name ="background_indicator">#08080f</color>
+    <color name ="background_show_trade">#16171e</color>
+    <color name ="background_trade_item_open">#080812</color>
+    <color name ="background_trade_item">#171721</color>
+    <color name ="background_pull_head">#1e1d2b</color>
+    <color name ="background_master">#111217</color>
+    <color name ="background_master_head">#383c45</color>
+    <color name ="background_master_content">#272936</color>
+    <color name ="background_master_info_content">#17171f</color>
+    <color name ="text_color_pull_head_text_desc">#686a7a</color>
+    <color name ="text_color_pull_head_text_content">#4e4e58</color>
+
+
+
+
+
 <!--old-->
     <color name="abc_input_method_navigation_guard">@android:color/black</color>
     <color name="abc_search_url_text_normal">#ff7fa87f</color>
@@ -227,7 +245,7 @@
     <color name="vpi__bright_foreground_inverse_holo_dark">@color/vpi__bright_foreground_holo_light</color>
     <color name="vpi__bright_foreground_inverse_holo_light">@color/vpi__bright_foreground_holo_dark</color>
     <color name="yellow">#ffffff00</color>
-    <color name="toolbars_title_dark">#ff292b37</color>
+    <color name="toolbars_title_dark">#1e1d2b</color>
     <color name="content_black">#ff070304</color>
     <color name="menu_black">#ff110A0B</color>
     <color name="menu_dark">#ff292b37</color>

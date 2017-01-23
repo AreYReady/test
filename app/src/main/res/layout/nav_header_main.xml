@@ -12,7 +12,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <trade.xkj.com.trade.Utils.RoundImageView
+    <trade.xkj.com.trade.utils.RoundImageView
         android:id="@+id/imageView"
         android:layout_width="50dip"
         android:layout_height="50dip"

@@ -11,7 +11,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.IOException;
 
 import trade.xkj.com.trade.IO.sslsocket.SSLSocketChannel;
-import trade.xkj.com.trade.Utils.SocketUtil;
+import trade.xkj.com.trade.utils.SocketUtil;
 
 /**
  * Created by jimdaxu on 16/9/6.

@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.view;
+package trade.xkj.com.trade.utils.view;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Scroller;
 
-import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.utils.SystemUtil;
 
 /**
  * Created by huangsc on 2016/12/4.

@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,14 @@ public class Fragment2 extends BaseFragment {
         mRecyclerView = (RecyclerView)view.findViewById(R.id.rv_item_content);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.setAdapter(new MyRecycleAdapter(context,mDataList));
+        mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                mRecyclerView.setLayoutParams(new RelativeLayout.LayoutParams(mRecyclerView.getWidth(),(int)MainTradeContentActivity.descHeight
+                        -(int)MainTradeContentActivity.flIndicatorHeight));
+            }
+        });
     }
 
     @Override

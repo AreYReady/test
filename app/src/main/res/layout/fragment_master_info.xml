@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_floating_material_dark"
+    android:background="@color/background_master_head"
     android:orientation="vertical">
 
     <LinearLayout
@@ -62,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
-        android:background="@color/color_primary_dark">
+        android:background="@color/background_master_info_content">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -118,11 +118,11 @@
                         android:text="v" />
                 </RelativeLayout>
 
-                <trade.xkj.com.trade.Utils.view.CustomSeekBar
+                <trade.xkj.com.trade.utils.view.CustomSeekBar
                     android:layout_width="match_parent"
                     android:layout_height="100dip"
                     android:paddingTop="@dimen/space_big">
-                </trade.xkj.com.trade.Utils.view.CustomSeekBar>
+                </trade.xkj.com.trade.utils.view.CustomSeekBar>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -139,7 +139,7 @@
 
         </FrameLayout>
 
-        <trade.xkj.com.trade.Utils.view.MyScrollView
+        <trade.xkj.com.trade.utils.view.MyScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -156,30 +156,30 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/black"
+                    android:background="@color/background_indicator"
                     android:clipChildren="false"
                     android:layerType="software">
 
-                    <trade.xkj.com.trade.Utils.view.CustomViewPager
+                    <trade.xkj.com.trade.utils.view.CustomViewPager
                         android:id="@+id/cvp_master_info_indicator"
                         android:layout_width="match_parent"
                         android:layout_height="40dip"
                         android:layout_marginLeft="100dp"
-                        android:layout_marginRight="100dp"></trade.xkj.com.trade.Utils.view.CustomViewPager>
+                        android:layout_marginRight="100dp"></trade.xkj.com.trade.utils.view.CustomViewPager>
                 </FrameLayout>
 
                 <android.support.v4.view.ViewPager
                     android:id="@+id/vp_master_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/color_primary_dark" />
+                    android:background="@color/background_master_info_content" />
             </LinearLayout>
-        </trade.xkj.com.trade.Utils.view.MyScrollView>
+        </trade.xkj.com.trade.utils.view.MyScrollView>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/color_primary_dark"
+        android:background="@color/background_master_info_content"
         android:layout_height="50dip">
         <Button
             android:id="@+id/b_complete"

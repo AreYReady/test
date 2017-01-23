@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <trade.xkj.com.trade.Utils.view.CustomPortfolio
+        <trade.xkj.com.trade.utils.view.CustomPortfolio
             android:id="@+id/cp_portfolio"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

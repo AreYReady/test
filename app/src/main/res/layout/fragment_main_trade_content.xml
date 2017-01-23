@@ -1,25 +1,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+    >
 
     <RelativeLayout
         android:id="@+id/rll_trade_indicator"
         android:layout_width="match_parent"
         android:layout_height="150dip"
-        android:background="@color/order_radio_button_background_dark"
+        android:background="@color/background_indicator"
         android:clipChildren="false">
 
-        <trade.xkj.com.trade.Utils.view.CustomViewPager
+        <trade.xkj.com.trade.utils.view.CustomViewPager
             android:id="@+id/vp_indicator_trade_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/x180"
-            android:layout_marginRight="@dimen/x180" />
+            android:layout_marginLeft="@dimen/symbol_tag_space"
+            android:layout_marginRight="@dimen/symbol_tag_space"/>
 
     </RelativeLayout>
 
-    <trade.xkj.com.trade.Utils.view.MyScrollView
+    <trade.xkj.com.trade.utils.view.MyScrollView
+        android:id="@+id/msv_my_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -31,49 +33,62 @@
             <Space
                 android:id="@+id/space"
                 android:layout_width="match_parent"
-                android:layout_height="150dip" />
+                android:layout_height="150dip"/>
 
-            <trade.xkj.com.trade.Utils.view.CustomPeriodButtons
+            <trade.xkj.com.trade.utils.view.CustomPeriodButtons
+                android:id="@+id/cpb_period"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/space_big"
-                android:background="@color/bright_foreground_inverse_material_dark">
+                android:background="@color/background_show_trade"
+                android:padding="@dimen/space_big">
 
-            </trade.xkj.com.trade.Utils.view.CustomPeriodButtons>
+            </trade.xkj.com.trade.utils.view.CustomPeriodButtons>
 
             <LinearLayout
                 android:id="@+id/ll_draw_trade_context"
                 android:layout_width="match_parent"
                 android:layout_height="150dip"
                 android:layout_below="@id/rll_trade_indicator"
-                android:background="@color/bright_foreground_inverse_material_dark"
+                android:background="@color/background_show_trade"
                 android:orientation="horizontal">
 
-                <trade.xkj.com.trade.Utils.view.MyHorizontalScrollView
-                    android:id="@+id/hsv_trade"
+                <FrameLayout
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
                     android:layout_weight="6">
 
-                    <LinearLayout
-                        android:id="@+id/ll"
-                        android:layout_width="wrap_content"
-                        android:layout_height="200dip"
-                        android:orientation="horizontal"></LinearLayout>
-                </trade.xkj.com.trade.Utils.view.MyHorizontalScrollView>
+                    <trade.xkj.com.trade.utils.view.MyHorizontalScrollView
+                        android:id="@+id/hsv_trade"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        >
 
+                        <RelativeLayout
+                            android:id="@+id/rl"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dip"
+                            >
 
-                <trade.xkj.com.trade.Utils.view.DrawPriceView
+                        </RelativeLayout>
+                    </trade.xkj.com.trade.utils.view.MyHorizontalScrollView>
+
+                    <trade.xkj.com.trade.utils.view.CustomDashedLinkView
+                        android:id="@+id/cdlv_"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </FrameLayout>
+
+                <trade.xkj.com.trade.utils.view.DrawPriceView
                     android:id="@+id/dp_draw_price"
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
-                android:background="@color/vpi__bright_foreground_disabled_holo_dark"
+                android:background="@color/background_"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/space_big"
@@ -87,49 +102,64 @@
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="20持仓位" />
+                    android:text="20持仓位"/>
 
                 <TextView
                     style="@style/TextDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="利润总额" />
+                    android:text="利润总额"/>
 
                 <Space
                     android:layout_width="10dip"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"/>
 
                 <TextView
                     android:id="@+id/tv_profit_count"
                     style="@style/TextDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="-$3,514.53" />
+                    android:text="-$3,514.53"/>
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_trade"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/toolbars_title_dark">
+                android:background="@color/background_trade_item">
 
                 <LinearLayout
-                    android:id="@+id/title"
+                    android:id="@+id/trade_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <include layout="@layout/v_positions_opened_header_impl" />
+                    <include
+                        android:id="@+id/title_content"
+                        layout="@layout/v_positions_opened_header_impl"/>
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_trade_content"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/title" />
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/trade_title"/>
             </RelativeLayout>
         </LinearLayout>
 
-    </trade.xkj.com.trade.Utils.view.MyScrollView>
-    >
+    </trade.xkj.com.trade.utils.view.MyScrollView>
+
+    <LinearLayout
+        android:id="@+id/trade_title_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <include
+            android:id="@+id/title_content"
+            layout="@layout/v_positions_opened_header_impl"/>
+    </LinearLayout>
 
 </RelativeLayout>

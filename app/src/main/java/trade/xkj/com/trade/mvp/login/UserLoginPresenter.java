@@ -1,12 +1,9 @@
 package trade.xkj.com.trade.mvp.login;
 
-import android.os.HandlerThread;
 import android.util.Log;
 
-import trade.xkj.com.trade.IO.sslsocket.SSLSocketChannel;
-import trade.xkj.com.trade.Utils.SystemUtil;
 import trade.xkj.com.trade.bean.BeanUserLoginData;
-import trade.xkj.com.trade.handler.HandlerWrite;
+import trade.xkj.com.trade.utils.SystemUtil;
 
 /**
  * Created by admin on 2016-11-17.
@@ -18,9 +15,6 @@ public class UserLoginPresenter {
     public static final String SSL_SOCKET = "sslSocket";
     public static final String HANDLER_WRITE = "handler_write";
     private String TAG= SystemUtil.getTAG(this);
-    HandlerThread mHandlerThread;
-    private SSLSocketChannel<String> mSSLSocketChannel;
-    private HandlerWrite mHandlerWrite;
     private UserLoginModel mUserLoginModel;
     private UserLoginActivityInterface mLoginActivityInterface;
     private int result;
@@ -41,8 +35,5 @@ public class UserLoginPresenter {
         }else {
             mLoginActivityInterface.showFaidPromt(mResultEnum);
         }
-
     }
-
-
 }

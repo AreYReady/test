@@ -13,7 +13,8 @@ import android.widget.LinearLayout;
 import org.greenrobot.eventbus.EventBus;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.ToashUtil;
+import trade.xkj.com.trade.utils.ToashUtil;
+import trade.xkj.com.trade.utils.view.CustomSeekBar;
 import trade.xkj.com.trade.bean.BeanMasterInfo;
 
 /**
@@ -24,6 +25,7 @@ import trade.xkj.com.trade.bean.BeanMasterInfo;
 public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> {
     private Context context;
     private int position;
+    int[] ints= new int[]{100,120,140,200,300};
 
     //    private OnItemClickListener onItemClickListener;
     public MasterAdapter(Context context) {
@@ -47,6 +49,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                 EventBus.getDefault().post(new BeanMasterInfo());
             }
         });
+        holder.mCustomSeekBar.setData(ints,1);
         holder.bCopyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +90,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
             bCopyButton = (Button) itemView.findViewById(R.id.b_copy);
             mLlButtons = (LinearLayout) itemView.findViewById(R.id.ll_buttons);
             mImageView=(ImageView)itemView.findViewById(R.id.civ_master);
+            mCustomSeekBar=(CustomSeekBar) itemView.findViewById(R.id.csb_rv_item_master);
         }
         ImageView mImageView;
         LinearLayout mLlButtons;
@@ -94,5 +98,6 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
         LinearLayout mCover;
         Button bCopyButton;
         Button bCompleteButton;
+        CustomSeekBar mCustomSeekBar;
     }
 }

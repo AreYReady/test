@@ -16,7 +16,7 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import trade.xkj.com.trade.Utils.SocketUtil;
+import trade.xkj.com.trade.utils.SocketUtil;
 import trade.xkj.com.trade.bean.BeanUserLoginData;
 import trade.xkj.com.trade.constant.ServerIP;
 

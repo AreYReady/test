@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.view;
+package trade.xkj.com.trade.utils.view;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import trade.xkj.com.trade.R;
+import trade.xkj.com.trade.utils.SystemUtil;
 
 /**
  * Created by Flavien Laurent (flavienlaurent.com) on 23/08/13.
@@ -26,7 +27,9 @@ public class PullBottomViewDragLayout extends ViewGroup {
 
     private int mDragRange;
     private int mTop;
-    private float mDragOffset;
+    private float mDragOffset=1f;
+    private boolean mFirstLayout = true;
+    private String TAG= SystemUtil.getTAG(this);
 
 
     public PullBottomViewDragLayout(Context context) {
@@ -59,7 +62,6 @@ public class PullBottomViewDragLayout extends ViewGroup {
     boolean smoothSlideTo(float slideOffset) {
         final int topBound = getPaddingTop();
         int y = (int) (topBound + slideOffset * mDragRange);
-
         if (mDragHelper.smoothSlideViewTo(mHeaderView, mHeaderView.getLeft(), y)) {
             ViewCompat.postInvalidateOnAnimation(this);
             return true;
@@ -172,8 +174,12 @@ public class PullBottomViewDragLayout extends ViewGroup {
         final float y = ev.getY();
 
         boolean isHeaderViewUnder = mDragHelper.isViewUnder(mHeaderView, (int) x, (int) y);
+        if(!isHeaderViewUnder){
+            return false;
+        }
         switch (action & MotionEventCompat.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN: {
+                mFirstLayout = false;
                 mInitialMotionX = x;
                 mInitialMotionY = y;
                 break;
@@ -224,33 +230,32 @@ public class PullBottomViewDragLayout extends ViewGroup {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         mDragRange = getHeight() - mHeaderView.getHeight()/2;
-        mHeaderView.layout(
-                0,
-                mTop,
-                r,
-                mTop + mHeaderView.getMeasuredHeight());
+        if (mFirstLayout){
+            mHeaderView.layout(
+                    0,
+                    mDragRange,
+                    r,
+                    mDragRange + mHeaderView.getMeasuredHeight());
 
+            mDescView.layout(
+                    0,
+                    mDragRange + mHeaderView.getMeasuredHeight(),
+                    r,
+                    mDragRange + b);
 
+        }else {
+            mHeaderView.layout(
+                    0,
+                    mTop,
+                    r,
+                    mTop + mHeaderView.getMeasuredHeight());
 
-        mDescView.layout(
-                0,
-                mTop + mHeaderView.getMeasuredHeight(),
-                r,
-                mTop  + b);
-//        mHeaderView.layout(
-//                0,
-//                b-mTop - mHeaderView.getMeasuredHeight(),
-//                r,
-//                b-mTop);
-//
-//
-//
-//        mDescView.layout(
-//                0,
-//                b-mTop,
-//                r,
-//                b-mTop+mDragRange);
-//		Log.i("hsc", "mHeaderView.getMeasuredHeight(): "+mHeaderView.getMeasuredHeight()+"  mTop "+mTop+"    b"+b+"    mDragRange"+mDescView);
+            mDescView.layout(
+                    0,
+                    mTop + mHeaderView.getMeasuredHeight(),
+                    r,
+                    mTop + b);
+        }
 
     }
 }

@@ -1,4 +1,4 @@
-package trade.xkj.com.trade.Utils.view;
+package trade.xkj.com.trade.utils.view;
 
 import android.content.Context;
 import android.support.v4.widget.ViewDragHelper;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.utils.SystemUtil;
 
 /**
  * Created by huangsc on 2016-12-07.

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+              android:background="@color/background_trade_item"
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="fill_parent"
@@ -14,7 +15,7 @@
         <include layout="@layout/v_positions_opened_header_impl" />
     </LinearLayout>
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_item3_content"
+        android:id="@+id/rv_pending_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

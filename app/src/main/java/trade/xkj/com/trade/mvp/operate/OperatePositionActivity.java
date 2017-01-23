@@ -13,7 +13,7 @@ import immortalz.me.library.TransitionsHeleper;
 import immortalz.me.library.bean.InfoBean;
 import immortalz.me.library.method.ColorShowMethod;
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.Utils.ToashUtil;
+import trade.xkj.com.trade.utils.ToashUtil;
 import trade.xkj.com.trade.base.OperateBaseActivity;
 
 import static trade.xkj.com.trade.R.color.color_tertiary_dark;

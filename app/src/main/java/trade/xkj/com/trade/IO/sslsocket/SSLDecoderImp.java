@@ -8,8 +8,11 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.nio.ByteBuffer;
 
-import trade.xkj.com.trade.Utils.SocketUtil;
-import trade.xkj.com.trade.Utils.SystemUtil;
+import trade.xkj.com.trade.utils.DateUtils;
+import trade.xkj.com.trade.utils.SocketUtil;
+import trade.xkj.com.trade.utils.SystemUtil;
+import trade.xkj.com.trade.bean.BeanCurrentServerTime;
+import trade.xkj.com.trade.bean.BeanHeartResponse;
 import trade.xkj.com.trade.bean.BeanServerTime;
 import trade.xkj.com.trade.bean.BeanSymbolConfig;
 import trade.xkj.com.trade.bean.DataEvent;
@@ -17,6 +20,8 @@ import trade.xkj.com.trade.bean.EventBusAllSymbol;
 import trade.xkj.com.trade.bean.RealTimeDataList;
 import trade.xkj.com.trade.bean.ResponseEvent;
 import trade.xkj.com.trade.constant.MessageType;
+
+import static trade.xkj.com.trade.constant.TradeDateConstant.diffTimeServiceAndNative;
 
 /**
  * @author xjunda
@@ -116,7 +121,7 @@ public class SSLDecoderImp implements Decoder<String> {
                     break;
                 case MessageType.TYPE_BINARY_HEART_BEAT_REQUEST://心跳请求，每30秒服务器请求客服端一次
                     Log.i(TAG, "handleResult:心跳请求，每30秒服务器请求客服端一次=  " + resultMessage);
-//                    EventBus.getDefault().post(HEART_BEAT);
+                    EventBus.getDefault().post(new BeanHeartResponse());
                     break;
                 case MessageType.TYPE_BINARY_HEART_BEAT_RESPONSE://心跳响应
                     Log.i(TAG, "handleResult:心跳响应=  " + resultMessage);
@@ -130,6 +135,8 @@ public class SSLDecoderImp implements Decoder<String> {
                 case MessageType.TYPE_BINARY_SERVER_TIME://服务器时间
                     Log.i(TAG, "handleResult:服务器时间=  " + resultMessage);
                     BeanServerTime serverTime = new Gson().fromJson(resultMessage, BeanServerTime.class);
+                    BeanCurrentServerTime mBeanCurrentServerTime = BeanCurrentServerTime.getInstance(DateUtils.getOrderStartTime(serverTime.getTime()));
+                    diffTimeServiceAndNative = mBeanCurrentServerTime.getDiffTime();
                     EventBus.getDefault().post(serverTime);
                     break;
             }

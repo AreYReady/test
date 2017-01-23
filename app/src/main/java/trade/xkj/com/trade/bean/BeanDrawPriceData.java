@@ -8,6 +8,15 @@ package trade.xkj.com.trade.bean;
 public class BeanDrawPriceData {
     Integer priceY;
     String priceString;
+    int color=0;
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
 
     public Integer getPriceY() {
         return priceY;
