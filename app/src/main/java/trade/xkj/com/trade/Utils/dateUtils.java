@@ -136,7 +136,10 @@ public class DateUtils{
      * @return
      */
     public static long getOrderStartTime(String open_time) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return getOrderStartTime(open_time,"yyyy-MM-dd HH:mm:ss");
+    }
+    public static long getOrderStartTime(String open_time,String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
         sdf.setTimeZone(TimeZone.getTimeZone(getCurrentTimeZone()));
         try {
             return sdf.parse(open_time).getTime();

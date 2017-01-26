@@ -13,16 +13,16 @@ public class BeanUserLoginData {
      */
 
     private int msg_type;
-    private int login;
+    private String login;
     private String password;
     private int port;
-    public BeanUserLoginData(int login, String password_hash) {
+    public BeanUserLoginData(String login, String password_hash) {
         this.msg_type = 10;
         this.port =9994;
         this.login = login;
         this.password = password_hash;
     }
-    public BeanUserLoginData(int login, String password_hash,int port) {
+    public BeanUserLoginData(String login, String password_hash,int port) {
         this.msg_type = 10;
         this.port =port;
         this.login = login;
@@ -37,11 +37,11 @@ public class BeanUserLoginData {
         this.msg_type = msg_type;
     }
 
-    public int getLogin() {
+    public String getLogin() {
         return login;
     }
 
-    public void setLogin(int login) {
+    public void setLogin(String login) {
         this.login = login;
     }
 

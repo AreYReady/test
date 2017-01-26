@@ -1,7 +1,7 @@
 package trade.xkj.com.trade.mvp.main_trade.m;
 
+import android.content.Context;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -11,19 +11,30 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
-import trade.xkj.com.trade.utils.DataUtil;
-import trade.xkj.com.trade.utils.SystemUtil;
-import trade.xkj.com.trade.bean.BeanHistoryRequest;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Request;
+import okhttp3.Response;
+import trade.xkj.com.trade.IO.okhttp.OkhttpUtils;
+import trade.xkj.com.trade.bean.BeanCurrentServerTime;
 import trade.xkj.com.trade.bean.BeanServerTime;
 import trade.xkj.com.trade.bean.BeanSymbolConfig;
-import trade.xkj.com.trade.bean.DataEvent;
 import trade.xkj.com.trade.bean.EventBusAllSymbol;
-import trade.xkj.com.trade.bean.HistoryDataList;
 import trade.xkj.com.trade.bean.RealTimeDataList;
-import trade.xkj.com.trade.constant.MessageType;
+import trade.xkj.com.trade.bean_.BeanHistory;
+import trade.xkj.com.trade.constant.RequestConstant;
 import trade.xkj.com.trade.mvp.main_trade.v.MainTradeListener;
+import trade.xkj.com.trade.utils.ACache;
+import trade.xkj.com.trade.utils.AesEncryptionUtil;
+import trade.xkj.com.trade.utils.DateUtils;
+import trade.xkj.com.trade.utils.SystemUtil;
+
+import static trade.xkj.com.trade.constant.UrlConstant.URL_MT4_PRICE;
 
 
 /**
@@ -37,11 +48,13 @@ public class MainTradeContentModelImpl implements MainTradeListener.MainTradeCon
     private EventBusAllSymbol mEventBusAllSymbol;
     private ArrayList<BeanSymbolConfig.SymbolsBean> subTradeSymbol;
     private String oldSubSymbol;
+    private Context mContext;
 
 
-    public MainTradeContentModelImpl(MainTradeListener.MainTradeContentPreListener mMainTradeContentPreListener, Handler handler) {
+    public MainTradeContentModelImpl(MainTradeListener.MainTradeContentPreListener mMainTradeContentPreListener, Context context) {
         this.mMainTradeContentPreListener = mMainTradeContentPreListener;
-        this.mHandler = handler;
+//        this.mHandler = handler;
+        mContext=context;
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
     }
@@ -53,23 +66,8 @@ public class MainTradeContentModelImpl implements MainTradeListener.MainTradeCon
         Log.i(TAG, "onGetAllSymbol: ");
     }
 
-    /**
-     * 接受类型历史数据
-     *
-     * @param dataEvent
-     */
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
-    public void onDrawHistoryData(DataEvent dataEvent) {
-        Log.i(TAG, "onDrawHistoryData: ");
-        HistoryDataList dataList;
-        if (dataEvent.getType() == MessageType.TYPE_BINARY_HISTORY_LIST) {//绘制历史数据
-            dataList = new Gson().fromJson(dataEvent.getResult(), new TypeToken<HistoryDataList>() {
-            }.getType());
-            DataUtil.calcMaxMinPrice(dataList, dataList.getDigits());
-            mMainTradeContentPreListener.refreshView(dataList);
-        }
 
-    }
+
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -112,28 +110,47 @@ public class MainTradeContentModelImpl implements MainTradeListener.MainTradeCon
     }
 
 
-    public void sendMessageToSubThread(String subSymbolPre) {
-        Message messagePre = new Message();
-        messagePre.obj = subSymbolPre;
-        mHandler.sendMessage(messagePre);
-    }
-
-
-
+//    public void sendMessageToSubThread(String subSymbolPre) {
+//        Message messagePre = new Message();
+//        messagePre.obj = subSymbolPre;
+//        mHandler.sendMessage(messagePre);
+//    }
 
 
     public void sendHistoryRequest(String symbol, String period, int count) {
-        //取消订阅
-        if (oldSubSymbol != null)
-            sendMessageToSubThread("{\"msg_type\":1020,\"symbol\":\"" + oldSubSymbol + "\"}");
-        oldSubSymbol = symbol;
-//        //订阅
-        sendMessageToSubThread("{\"msg_type\":1010,\"symbol\":\"" + symbol + "\"}");
-        String request = new Gson().toJson(new BeanHistoryRequest(symbol, count, period), BeanHistoryRequest.class);
-        sendMessageToSubThread(request);
+        TreeMap<String ,String> map=new TreeMap<>();
+        map.put(RequestConstant.API_ID, ACache.get(mContext).getAsString(RequestConstant.API_ID));
+        map.put(RequestConstant.API_TIME,DateUtils.getShowTime(BeanCurrentServerTime.instance.getCurrentServerTime()));
+        map.put(RequestConstant.SYMBOL, AesEncryptionUtil.stringBase64toString(symbol));
+        map.put(RequestConstant.PERIOD,period);
+        map.put(RequestConstant.BARNUM,String.valueOf(count));
+        map.put(RequestConstant.API_SIGN,AesEncryptionUtil.getApiSign(URL_MT4_PRICE,map));
+        sendRequest(URL_MT4_PRICE, map, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                BeanHistory beanHistory=new Gson().fromJson(response.body().string(),new TypeToken<BeanHistory>(){}.getType());
+                if(beanHistory.getStatus()==1){
+                    Log.i(TAG, "onResponse: 请求历史数据 "+new Gson().toJson(beanHistory,new TypeToken<BeanHistory>(){}.getType()));
+                    mMainTradeContentPreListener.refreshView(beanHistory);
+                }
+            }
+        });
     }
 
-    @Override
+    /**
+     * 发送请求数据；
+     */
+    Request request;
+
+    private void sendRequest(String url, Map<String,String> map, Callback callback) {
+        OkhttpUtils.enqueue(url,map,callback);
+    }
+
     public void refreshIndicator(ArrayList<BeanSymbolConfig.SymbolsBean> subTradeSymbol) {
         mMainTradeContentPreListener.refreshIndicator(subTradeSymbol);
     }

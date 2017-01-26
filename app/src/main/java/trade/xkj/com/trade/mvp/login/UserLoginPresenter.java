@@ -1,5 +1,7 @@
 package trade.xkj.com.trade.mvp.login;
 
+import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 
 import trade.xkj.com.trade.bean.BeanUserLoginData;
@@ -7,6 +9,7 @@ import trade.xkj.com.trade.utils.SystemUtil;
 
 /**
  * Created by admin on 2016-11-17.
+ * todo
  */
 
 public class UserLoginPresenter {
@@ -18,22 +21,30 @@ public class UserLoginPresenter {
     private UserLoginModel mUserLoginModel;
     private UserLoginActivityInterface mLoginActivityInterface;
     private int result;
-    public UserLoginPresenter(UserLoginActivityInterface mLoginActivityInterface){
-        mUserLoginModel=new UserLoginModelImpl(this);
+    private Handler mHandler;
+    public UserLoginPresenter(UserLoginActivityInterface mLoginActivityInterface, Handler handler, Context context){
+        mUserLoginModel=new UserLoginModelImpl(this,context);
         this.mLoginActivityInterface=mLoginActivityInterface;
+        mHandler=handler;
     }
     public void login(BeanUserLoginData beanLoginData){
 //        mLoginActivityInterface.showLoading();
        result=mUserLoginModel.login(beanLoginData);
     }
     //登入结果处理
-    public void loginResult(UserLoginModelImpl.ResultEnum mResultEnum){
+    public void loginResult(final UserLoginModelImpl.ResultEnum mResultEnum){
         Log.i(TAG, "loginResult: 执行了");
-        mLoginActivityInterface.hintLoading();
-        if(mResultEnum== UserLoginModelImpl.ResultEnum.succ){
-            mLoginActivityInterface.toMainActivity();
-        }else {
-            mLoginActivityInterface.showFaidPromt(mResultEnum);
-        }
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mLoginActivityInterface.hintLoading();
+                if(mResultEnum== UserLoginModelImpl.ResultEnum.succ){
+                    mLoginActivityInterface.toMainActivity();
+                }else {
+                    mLoginActivityInterface.showFaidPromt(mResultEnum);
+                }
+            }
+        });
+
     }
 }

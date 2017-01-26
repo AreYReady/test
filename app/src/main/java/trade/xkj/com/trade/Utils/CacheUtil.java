@@ -3,6 +3,8 @@ package trade.xkj.com.trade.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import trade.xkj.com.trade.constant.RequestConstant;
+
 /**
  * @author xjunda
  * @date 2016-08-09

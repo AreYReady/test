@@ -1,28 +1,26 @@
 package trade.xkj.com.trade.mvp.main_trade.p;
 
+import android.content.Context;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.utils.ACache;
-import trade.xkj.com.trade.utils.DataUtil;
-import trade.xkj.com.trade.utils.SystemUtil;
-import trade.xkj.com.trade.base.MyApplication;
 import trade.xkj.com.trade.bean.BeanCurrentServerTime;
 import trade.xkj.com.trade.bean.BeanIndicatorData;
 import trade.xkj.com.trade.bean.BeanSymbolConfig;
 import trade.xkj.com.trade.bean.HistoryData;
 import trade.xkj.com.trade.bean.HistoryDataList;
 import trade.xkj.com.trade.bean.RealTimeDataList;
+import trade.xkj.com.trade.bean_.BeanHistory;
 import trade.xkj.com.trade.mvp.main_trade.m.MainTradeContentModelImpl;
 import trade.xkj.com.trade.mvp.main_trade.v.MainTradeListener;
+import trade.xkj.com.trade.utils.ACache;
+import trade.xkj.com.trade.utils.DataUtil;
+import trade.xkj.com.trade.utils.SystemUtil;
 
 /**
  * Created by hsc on 2016-11-23.
@@ -45,40 +43,43 @@ public class MainTradeContentPreListenerImpl implements MainTradeListener.MainTr
     //作为准确判断是否是，本地数据加上网络后补的唯一标识:symbol+period+count   例如period：　60
     private String swithKey;
 
-    public MainTradeContentPreListenerImpl(MainTradeListener.MainTradeContentLFragListener mListener, Handler mHandler) {
+    @Override
+    public void refreshView(BeanHistory data) {
+//    public void refreshView(HistoryDataList data) {
+        //只有数据符合当前需要的要求是，才做操作
+//        if (data.getSymbol().equals(currentSymbol) && data.getPeriod() == DataUtil.selectPeriod(currentPeriod)) {
+////            isLastCount=false;
+////        mMainTradeContentLFragListener.freshView(oldData, isCountDown || (oldData.getSymbol().concat(String.valueOf(oldData.getPeriod())).concat(String.valueOf(oldData.getCount()))).equals(swithKey));
+//            //当本地数据不全是，本地数据要等后补网咯数据回来时，补全再显示
+//            if ((data.getSymbol().concat(String.valueOf(data.getPeriod())).concat(String.valueOf(data.getCount()))).equals(swithKey)) {
+//                data = repairData(oldData, data);
+//            } else if (isCountDown) {
+//                //倒计时生效，更新数据
+//                data = repairData(oldData, data);
+//            } else if (data.getCount() < 100) {
+//                //暂时埋给个坑，以为后台不能相对应提供修改。所以，暂时将item《100以下，默认都为后补
+//                data = repairData(oldData, data);
+//            }
+//            swithKey = "";
+//            oldData = data;
+//            mMainTradeContentLFragListener.freshView(data, isCountDown);
+////            countDownRefresh(data);
+//            //暂时不做，没办法完全确认
+//        }
+        mMainTradeContentLFragListener.freshView(data.getData(),false);
+    }
+
+    public MainTradeContentPreListenerImpl(MainTradeListener.MainTradeContentLFragListener mListener, Handler mHandler, Context context) {
         mMainTradeContentLFragListener = mListener;
-        mMainTradeContentModel = new MainTradeContentModelImpl(this, mHandler);
+        mMainTradeContentModel = new MainTradeContentModelImpl(this,context);
         this.mHandler = mHandler;
     }
+
 
     @Override
     public void loading() {
 //        mMainTradeContentModel.sendHistoryRequest("AUDCAD", TradeDateConstant.count);
-    }
 
-
-    @Override
-    public void refreshView(HistoryDataList data) {
-        //只有数据符合当前需要的要求是，才做操作
-        if (data.getSymbol().equals(currentSymbol) && data.getPeriod() == DataUtil.selectPeriod(currentPeriod)) {
-//            isLastCount=false;
-//        mMainTradeContentLFragListener.freshView(oldData, isCountDown || (oldData.getSymbol().concat(String.valueOf(oldData.getPeriod())).concat(String.valueOf(oldData.getCount()))).equals(swithKey));
-            //当本地数据不全是，本地数据要等后补网咯数据回来时，补全再显示
-            if ((data.getSymbol().concat(String.valueOf(data.getPeriod())).concat(String.valueOf(data.getCount()))).equals(swithKey)) {
-                data = repairData(oldData, data);
-            } else if (isCountDown) {
-                //倒计时生效，更新数据
-                data = repairData(oldData, data);
-            } else if (data.getCount() < 100) {
-                //暂时埋给个坑，以为后台不能相对应提供修改。所以，暂时将item《100以下，默认都为后补
-                data = repairData(oldData, data);
-            }
-            swithKey = "";
-            oldData = data;
-            mMainTradeContentLFragListener.freshView(data, isCountDown);
-//            countDownRefresh(data);
-            //暂时不做，没办法完全确认
-        }
     }
 
     /**
@@ -143,32 +144,7 @@ public class MainTradeContentPreListenerImpl implements MainTradeListener.MainTr
 
     @Override
     public void loadingHistoryData(String symbol, String period, int count) {
-        currentSymbol = symbol;
-        currentPeriod = period;
-        Log.i(TAG, "loadingHistoryData: " + currentPeriod);
-        if (aCache == null) {
-            aCache = ACache.get(MyApplication.getInstance().getApplicationContext());
-        }
-        if (timer != null) {
-            timer.cancel();
-        }
-        String asString = aCache.getAsString(symbol.concat(period));
-        if (asString == null) {
-            Log.i(TAG, "loadHistoryNativeOrNet: 网络加载数据" + symbol + " " + period + " " + count);
-            mMainTradeContentModel.sendHistoryRequest(symbol, period, count);
-        } else {
-            Log.i(TAG, "loadHistoryNativeOrNet: 本地加载数据");
-            oldData = new Gson().fromJson(asString, new TypeToken<HistoryDataList>() {
-            }.getType());
-            int lostCount = (int) (BeanCurrentServerTime.instance.getCurrentServerTime() - (oldData.getItems().get(0).getT() + oldData.getItems().get(oldData.getCount() - 1).getT()) * 1000) / (DataUtil.selectPeriod(period) * 60 * 1000);
-            if (lostCount > 0) {
-                swithKey = oldData.getSymbol().concat(String.valueOf(oldData.getPeriod())).concat(String.valueOf(lostCount));
-                Log.i(TAG, "loadingHistoryData: 本地数据缺少" + lostCount + "  period" + period);
-                mMainTradeContentModel.sendHistoryRequest(symbol, period, lostCount);
-            } else {
-                refreshView(oldData);
-            }
-        }
+     mMainTradeContentModel.sendHistoryRequest(symbol,period,count);
     }
 
     /**

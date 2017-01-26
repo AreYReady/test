@@ -1,40 +1,40 @@
 package trade.xkj.com.trade.mvp.login;
 
-import android.os.Handler;
+import android.content.Context;
 import android.os.HandlerThread;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
-import trade.xkj.com.trade.IO.sslsocket.Decoder;
-import trade.xkj.com.trade.IO.sslsocket.Encoder;
-import trade.xkj.com.trade.IO.sslsocket.SSLDecoderImp;
-import trade.xkj.com.trade.IO.sslsocket.SSLEncodeImp;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+import trade.xkj.com.trade.IO.okhttp.OkhttpUtils;
 import trade.xkj.com.trade.IO.sslsocket.SSLSocketChannel;
-import trade.xkj.com.trade.base.MyApplication;
+import trade.xkj.com.trade.bean.BeanCurrentServerTime;
 import trade.xkj.com.trade.bean.BeanSymbolConfig;
 import trade.xkj.com.trade.bean.BeanUnRegister;
 import trade.xkj.com.trade.bean.BeanUserLoginData;
 import trade.xkj.com.trade.bean.EventBusAllSymbol;
-import trade.xkj.com.trade.bean.ResponseEvent;
-import trade.xkj.com.trade.constant.MessageType;
-import trade.xkj.com.trade.constant.ServerIP;
-import trade.xkj.com.trade.handler.HandlerSend;
+import trade.xkj.com.trade.bean_.BeanResponse;
+import trade.xkj.com.trade.constant.RequestConstant;
+import trade.xkj.com.trade.constant.UrlConstant;
 import trade.xkj.com.trade.handler.HandlerWrite;
+import trade.xkj.com.trade.utils.ACache;
+import trade.xkj.com.trade.utils.AesEncryptionUtil;
+import trade.xkj.com.trade.utils.DateUtils;
 import trade.xkj.com.trade.utils.SystemUtil;
 
-import static android.util.Log.i;
+import static trade.xkj.com.trade.constant.UrlConstant.URL_LOGIN;
+
 
 /**
  * Created by admin on 2016-11-16.
@@ -53,10 +53,12 @@ public class UserLoginModelImpl implements UserLoginModel {
     private ResultEnum mResultEnum;
     private UserLoginPresenter mUserLoginPresenter;
     private EventBusAllSymbol mEventBusAllSymbol;
+    private Context mContext;
     private ArrayList<BeanSymbolConfig.SymbolsBean> subTradeSymbol;
-    public UserLoginModelImpl(UserLoginPresenter mUserLoginPresenter){
+    public UserLoginModelImpl(UserLoginPresenter mUserLoginPresenter, Context context){
         this.mUserLoginPresenter=mUserLoginPresenter;
         EventBus.getDefault().register(this);
+        mContext=context;
     }
     @Override
     public int login(BeanUserLoginData beanLoginData) {
@@ -77,75 +79,37 @@ public class UserLoginModelImpl implements UserLoginModel {
      * 发送数据
      * @param beanLoginData
      */
-    private void sendData(final BeanUserLoginData beanLoginData) {
-        mHandlerThread = new HandlerThread("SSL"){
+    private void sendData(final BeanUserLoginData beanLoginData)  {
+        TreeMap<String,String> map=new TreeMap<>();
+        map.put(RequestConstant.LOGIN_NAME,AesEncryptionUtil.stringBase64toString(beanLoginData.getLogin()));
+        map.put(RequestConstant.API_ID, ACache.get(mContext).getAsString(RequestConstant.API_ID));
+        map.put(RequestConstant.API_TIME,DateUtils.getShowTime(BeanCurrentServerTime.instance.getCurrentServerTime()));
+        map.put(RequestConstant.LOGIN_PASSWORD, AesEncryptionUtil.stringBase64toString(beanLoginData.getPassword()));
+        String apiSign;
+        apiSign=AesEncryptionUtil.getApiSign(UrlConstant.URL_LOGIN,map);
+        map.put(RequestConstant.API_SIGN,apiSign);
+        OkhttpUtils.enqueue(URL_LOGIN,map, new Callback() {
             @Override
-            public void run() {
-                try {
-                    i("123", "run: sslTest");
-                    sslTest(String.valueOf(beanLoginData.getLogin()), beanLoginData.getPassword());
-                } catch (KeyManagementException e) {
-                    e.printStackTrace();
+            public void onFailure(Call call, IOException e) {
+                Log.i(TAG, "onFailure: 登入失败");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                String result;
+                BeanResponse beanResponse = new Gson().fromJson(result = response.body().string(), new TypeToken<BeanResponse>() {
+                }.getType());
+                if(beanResponse.getStatus()==1){
+                    Log.i(TAG, "onResponse: 登入成功"+result);
+                    mResultEnum=ResultEnum.succ;
+                }else{
+                    Log.i(TAG, "onResponse: 登入失败"+result);
                     mResultEnum=ResultEnum.erro;
                 }
-                super.run();
+                mUserLoginPresenter.loginResult(mResultEnum);
             }
-        };
-        mHandlerThread.start();
-        Handler handlerRead = new HandlerSend(mHandlerThread.getLooper(),
-                MyApplication.getInstance().getApplicationContext(),mHandlerThread, mSSLSocketChannel, mHandlerWrite);
-        ///		Map<String, Object> map = new HashMap<>();
-        EventBus.getDefault().postSticky(handlerRead);
-
-//        //先获取服务器时间，再由服务器时间作为参数处理；
-//        Request request=new Request.Builder().url(HttpKeyConstant.URL_SERVICE_TIME).build();
-//        OkhttpUtils.enqueue(request, new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                Log.i(TAG, "onFailure: ");
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                Log.i(TAG, "onResponse: "+response.toString());
-//            }
-//        });
-//
-//
-//
-//        RequestBody body=new FormBody.Builder()
-//                .add(HttpKeyConstant.LOGIN_NAME, AesEncryptionUtil.stringBase64toString(beanLoginData.getLogin()))
-//                .add(HttpKeyConstant.LOGIN_PASSWORD,AesEncryptionUtil.stringBase64toString(beanLoginData.getPassword()))
-//                .build();
-
-    }
-    private void sslTest(String name, String passwd) throws KeyManagementException {
-//        //暂时用固定的
-//        final SocketAddress address = new InetSocketAddress(BuildConfig.API_URL, ServerIP.PORT);
-        final SocketAddress address = new InetSocketAddress(ServerIP.API_URL_MGF, ServerIP.PORT);
-
-        Encoder<String> encoder = new SSLEncodeImp();
-        Decoder<String> decoder = new SSLDecoderImp();
-        i("123", "doLogin: Opening channel");
-        try {
-            mSSLSocketChannel = SSLSocketChannel.open(address, encoder, decoder, 1024*1024, 1024*1024);
-            HandlerThread writeThread = new HandlerThread("write");
-            writeThread.start();
-            mHandlerWrite = new HandlerWrite(writeThread.getLooper(), mSSLSocketChannel);
-            i("123", "doLogin: Channel opened, initial handshake done");
-///		map.put(SSL_SOCKET, sslSocketChannel);
-///		map.put(THREAD_READ, mHandlerThread
-            i("123", "doLogin: Sending request");
-            BeanUserLoginData userLogin = new BeanUserLoginData(Integer.valueOf(name), passwd,ServerIP.PORT_MGF);
-            String loginStr = new Gson().toJson(userLogin, BeanUserLoginData.class);
-            mSSLSocketChannel.send(loginStr);
-            i("123", "doLogin: Receiving response");
-            mHandlerWrite.sendEmptyMessage(0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+        });
     }
     public enum ResultEnum{
         succ,
@@ -155,58 +119,4 @@ public class UserLoginModelImpl implements UserLoginModel {
         erro;//各种错误
 
     }
-    @Subscribe(threadMode=ThreadMode.MAIN)
-    public void loginResult(ResponseEvent responseEvent){
-        i(TAG, "loginResult:responseEvent "+responseEvent.toString());
-        int result_code = responseEvent.getResult_code();
-        if(responseEvent==null||(responseEvent.getMsg_type()!= MessageType.TYPE_BINARY_LOGIN_RESULT)){
-            mResultEnum=ResultEnum.erro;
-        }else if(result_code==100){
-            mResultEnum=ResultEnum.erroNet;
-        }else if(result_code==0){
-            mResultEnum=ResultEnum.succ;
-        }else{
-            mResultEnum=ResultEnum.erro;
-        }
-        mUserLoginPresenter.loginResult(mResultEnum);
-    }
-
-//    @Subscribe(sticky = true)
-//    public void onGetAllSymbol(EventBusAllSymbol eventBusAllSymbol){
-//        mEventBusAllSymbol=eventBusAllSymbol;
-//    }
-//
-//
-//    @Subscribe(sticky = true)
-//    public void onGetShowSymbol(BeanSymbolConfig beanSymbolConfig){
-//        BeanSymbolConfig mBeanSymbolConfig1=beanSymbolConfig;
-//        TradeDateConstant.tz_delta = mBeanSymbolConfig1.getTz_delta();
-//        sendSubSymbol(beanSymbolConfig);
-//        Log.i(TAG, "onGetShowSymbol: tz_delta"+ TradeDateConstant.tz_delta);
-//    }
-//
-//    /**
-//     * 发送订阅的商品类型
-//     * @param beanSymbolConfig
-//     */
-//    private void sendSubSymbol(BeanSymbolConfig beanSymbolConfig) {
-//
-//        if(mEventBusAllSymbol!=null) {
-//            if(subTradeSymbol==null)
-//                subTradeSymbol=new ArrayList<>();
-//            subTradeSymbol.clear();
-//            Log.i(TAG, "sendSubSymbol: 发送订阅商品实时数据请求");
-//            ArrayList<BeanSymbolConfig.SymbolsBean> showSymbolsList = beanSymbolConfig.getSymbols();
-//            for (BeanSymbolConfig.SymbolsBean allsymbol : beanSymbolConfig.getSymbols()) {
-//                for (BeanSymbolConfig.SymbolsBean symbol : showSymbolsList) {
-//                    if (!symbol.getSymbol().equalsIgnoreCase(allsymbol.getSymbol())) {
-//                        continue;
-//                    } else {
-//                        subTradeSymbol.add(symbol);
-//                    }
-////                    sendMessageToSubThread("{\"msg_type\":1010,\"symbol\":\"" + symbol.getSymbol() + "\"}");
-//                }
-//            }
-//        }
-//    }
 }

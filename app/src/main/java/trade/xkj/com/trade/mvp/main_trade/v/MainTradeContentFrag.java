@@ -19,14 +19,29 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import cn.bingoogolapple.badgeview.BGABadgeImageView;
 import trade.xkj.com.trade.R;
+import trade.xkj.com.trade.adapter.OpenAdapter;
+import trade.xkj.com.trade.base.BaseFragment;
+import trade.xkj.com.trade.bean.BeanDrawPriceData;
+import trade.xkj.com.trade.bean.BeanDrawRealTimePriceData;
+import trade.xkj.com.trade.bean.BeanIndicatorData;
+import trade.xkj.com.trade.bean.BeanOpenPositionData;
+import trade.xkj.com.trade.bean.RealTimeDataList;
+import trade.xkj.com.trade.bean_.BeanHistory;
+import trade.xkj.com.trade.constant.CacheKeyConstant;
+import trade.xkj.com.trade.constant.TradeDateConstant;
+import trade.xkj.com.trade.mvp.main_trade.p.MainTradeContentPreListenerImpl;
 import trade.xkj.com.trade.utils.ACache;
 import trade.xkj.com.trade.utils.DataUtil;
 import trade.xkj.com.trade.utils.MoneyUtil;
@@ -41,16 +56,6 @@ import trade.xkj.com.trade.utils.view.HistoryTradeView;
 import trade.xkj.com.trade.utils.view.MyHorizontalScrollView;
 import trade.xkj.com.trade.utils.view.MyScrollView;
 import trade.xkj.com.trade.utils.view.ZoomOutPageTransformer;
-import trade.xkj.com.trade.adapter.OpenAdapter;
-import trade.xkj.com.trade.base.BaseFragment;
-import trade.xkj.com.trade.bean.BeanDrawPriceData;
-import trade.xkj.com.trade.bean.BeanDrawRealTimePriceData;
-import trade.xkj.com.trade.bean.BeanIndicatorData;
-import trade.xkj.com.trade.bean.BeanOpenPositionData;
-import trade.xkj.com.trade.bean.HistoryDataList;
-import trade.xkj.com.trade.bean.RealTimeDataList;
-import trade.xkj.com.trade.constant.TradeDateConstant;
-import trade.xkj.com.trade.mvp.main_trade.p.MainTradeContentPreListenerImpl;
 
 import static android.R.attr.x;
 import static android.os.Build.VERSION_CODES.M;
@@ -83,7 +88,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeListe
     private String symbol;
     private CustomPeriodButtons mCustomPeriodButtons;
     private CustomDashedLinkView mCustomDashedLinkView;
-
+    private LinkedList<BeanIndicatorData> subSymbols;
 
     @Nullable
     @Override
@@ -99,6 +104,11 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeListe
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.i(TAG, "onActivityCreated: ");
+
+        subSymbols = new Gson().fromJson(aCache.getAsString(CacheKeyConstant.SUB_SYMBOLS), new TypeToken<LinkedList<BeanIndicatorData>>() {
+        }.getType());
+        refreshIndicator(subSymbols);
+
         mHistoryTradeView = new HistoryTradeView(context);
         ViewTreeObserver vto = mHScrollView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -132,12 +142,12 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeListe
                                                                            int oldx, int oldy) {
 //                                                   if (x != oldx) {
 //                                                       if (Math.abs(x - mX) >= z) {
-                                                           mX = x;
-                                                           mHistoryTradeView.postInvalidate(x, 0, x + w, h, currentScaleSize);
+                                                   mX = x;
+                                                   mHistoryTradeView.postInvalidate(x, 0, x + w, h, currentScaleSize);
 //                                                       }
 //                                                   } else {
 //                                                       mX = x;
-                                                       mY = y;
+                                                   mY = y;
 //                                                   }
                                                    Log.i(TAG, "onScrollChanged: w");
                                                }
@@ -183,7 +193,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeListe
         });
     }
 
-
     @Override
     protected void initView() {
         mHeaderCustomViewPager = (CustomViewPager) view.findViewById(R.id.vp_indicator_trade_content);
@@ -197,30 +206,40 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeListe
     @Override
     protected void initData() {
         context = this.getActivity();
-        mMainTradeContentPre = new MainTradeContentPreListenerImpl(this, mHandler);
+        mMainTradeContentPre = new MainTradeContentPreListenerImpl(this, mHandler,getContext());
         mMainTradeContentPre.loading();
         mBeanOpenList = new ArrayList<>();
         for (int i = 0; i <= 20; i++) {
             mBeanOpenList.add(new BeanOpenPositionData());
         }
+        if (aCache == null) {
+            aCache = ACache.get(context);
+        }
+
+        BeanIndicatorData beanIndicatorData;
+        if (aCache.getAsString(CacheKeyConstant.SUB_SYMBOLS) == null) {
+            LinkedList<BeanIndicatorData> symbols = new LinkedList<BeanIndicatorData>();
+            beanIndicatorData = new BeanIndicatorData(DataUtil.getSymbolFlag("EURUSD"), "EURUSD", "1.03561", "1.03151");
+            symbols.add(beanIndicatorData);
+            beanIndicatorData = new BeanIndicatorData(DataUtil.getSymbolFlag("EURJPY"), "EURJPY", "1.03561", "1.03151");
+            symbols.add(beanIndicatorData);
+            beanIndicatorData = new BeanIndicatorData(DataUtil.getSymbolFlag("GBPUSD"), "GBPUSD", "1.03561", "1.03151");
+            symbols.add(beanIndicatorData);
+            beanIndicatorData = new BeanIndicatorData(DataUtil.getSymbolFlag("XAUUSD"), "XAUUSD", "1.03561", "1.03151");
+            symbols.add(beanIndicatorData);
+            aCache.put(CacheKeyConstant.SUB_SYMBOLS, new Gson().toJson(symbols, new TypeToken<LinkedList<BeanIndicatorData>>() {
+            }.getType()));
+        }
     }
 
-    HistoryDataList data;
+    BeanHistory.BeanHistoryData data;
 
     @Override
-    public void freshView(final HistoryDataList data, boolean isCountDown) {
+    public void freshView(final BeanHistory.BeanHistoryData data, boolean isCountDown) {
         Log.i(TAG, "freshView: ");
+
         if (data.getSymbol().equals(symbol) && data.getPeriod() == DataUtil.selectPeriod(mPeriod)) {
-//            //处理数据
-//            List<HistoryData> items = this.data.getItems();
-//            for (HistoryData historyData : data.getItems()) {
-//                items.remove(0);
-//                items.add(historyData);
-//            }
-//            this.data.setItems(items);
-//        } else {
             this.data = data;
-//        }
             Log.i(TAG, "freshView: data");
             initScrollView(isCountDown);
             saveCache();
@@ -238,7 +257,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeListe
     }
 
     @Override
-    public void refreshIndicator(final ArrayList<BeanIndicatorData> mBeanIndicatorDataArrayList) {
+    public void refreshIndicator(final List<BeanIndicatorData> mBeanIndicatorDataArrayList) {
 
         Log.i(TAG, "refreshIndicator: ");
         mIndicatorDatas = mBeanIndicatorDataArrayList;
@@ -278,7 +297,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeListe
             }
         });
         setViewPagerSpeed(250);
-        mHeaderCustomViewPager.postInvalidate();
+//        mHeaderCustomViewPager.postInvalidate();
     }
 
     private Handler handler = new Handler() {
@@ -288,8 +307,8 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeListe
         handler.post(new Runnable() {
             @Override
             public void run() {
-                if (TradeDateConstant.count != data.getCount()) {
-                    wChild = data.getCount() * (SystemUtil.dp2px(context, TradeDateConstant.juli + TradeDateConstant.jianju));
+                if (TradeDateConstant.count != data.getBarnum()) {
+                    wChild = data.getBarnum() * (SystemUtil.dp2px(context, TradeDateConstant.juli + TradeDateConstant.jianju));
                     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(wChild, h);
                     mHistoryTradeView.setLayoutParams(layoutParams);
                 }

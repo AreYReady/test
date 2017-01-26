@@ -1,12 +1,16 @@
 package trade.xkj.com.trade.IO.okhttp;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -36,8 +40,13 @@ public class OkhttpUtils {
      * @param request
      * @param responseCallback
      */
-    public static void enqueue(Request request, Callback responseCallback){
+    public static void enqueue(Request request, Callback responseCallback) {
         mOkHttpClient.newCall(request).enqueue(responseCallback);
+
+    }
+    public static void enqueue(String url,Map map, Callback responseCallback) {
+        mOkHttpClient.newCall(new Request.Builder().url(url).post(getRequestPost(map)).build()).enqueue(responseCallback);
+
     }
     /**
      * 开启异步线程访问网络, 且不在意返回结果（实现空callback）
@@ -68,32 +77,21 @@ public class OkhttpUtils {
             throw new IOException("Unexpected code " + response);
         }
     }
-//    private static final String CHARSET_NAME = "UTF-8";
-//    /**
-//     * 这里使用了HttpClinet的API。只是为了方便
-//     * @param params
-//     * @return
-//     */
-//    public static String formatParams(List<BasicNameValuePair> params){
-//        return URLEncodedUtils.format(params, CHARSET_NAME);
-//    }
-//    /**
-//     * 为HttpGet 的 url 方便的添加多个name value 参数。
-//     * @param url
-//     * @param params
-//     * @return
-//     */
-//    public static String attachHttpGetParams(String url, List<BasicNameValuePair> params){
-//        return url + "?" + formatParams(params);
-//    }
-//    /**
-//     * 为HttpGet 的 url 方便的添加1个name value 参数。
-//     * @param url
-//     * @param name
-//     * @param value
-//     * @return
-//     */
-//    public static String attachHttpGetParam(String url, String name, String value){
-//        return url + "?" + name + "=" + value;
-//    }
+
+    /**
+     * 组装body
+     * @param map
+     * @return
+     */
+    public static RequestBody getRequestPost(Map<String ,String> map){
+        FormBody.Builder builder = new FormBody.Builder();
+        if(map!=null){
+            Set<Map.Entry<String, String>> entries = map.entrySet();
+            for(Map.Entry<String ,String> item:entries){
+                builder.add(item.getKey(),item.getValue());
+            }
+        }
+        return builder.build();
+    }
+
 }

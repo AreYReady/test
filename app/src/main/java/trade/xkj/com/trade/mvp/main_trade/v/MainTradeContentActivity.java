@@ -29,12 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.utils.ACache;
-import trade.xkj.com.trade.utils.ToashUtil;
-import trade.xkj.com.trade.utils.view.CustomSwitch;
-import trade.xkj.com.trade.utils.view.CustomViewPager;
-import trade.xkj.com.trade.utils.view.PullBottomViewDragLayout;
-import trade.xkj.com.trade.utils.view.ZoomOutPageTransformer;
 import trade.xkj.com.trade.adapter.FragmentAdapter;
 import trade.xkj.com.trade.adapter.MyViewPagerAdapterItem;
 import trade.xkj.com.trade.base.BaseActivity;
@@ -44,6 +38,11 @@ import trade.xkj.com.trade.bean.BeanMasterInfo;
 import trade.xkj.com.trade.mvp.master.FragmentMaster;
 import trade.xkj.com.trade.mvp.master.FragmentMasterInfo;
 import trade.xkj.com.trade.mvp.operate.OperatePositionActivity;
+import trade.xkj.com.trade.utils.ToashUtil;
+import trade.xkj.com.trade.utils.view.CustomSwitch;
+import trade.xkj.com.trade.utils.view.CustomViewPager;
+import trade.xkj.com.trade.utils.view.PullBottomViewDragLayout;
+import trade.xkj.com.trade.utils.view.ZoomOutPageTransformer;
 
 public class MainTradeContentActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, BaseFragment.BackInterface {
@@ -78,7 +77,7 @@ public class MainTradeContentActivity extends BaseActivity
     public void initData() {
 
         context = this;
-        ACache.get(context).clear();
+//        ACache.get(context).clear();
         activity = this;
         mDataItem = new ArrayList<>();
         mDataItem.add("我关注的操盘手");

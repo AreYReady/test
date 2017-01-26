@@ -1,11 +1,12 @@
 package trade.xkj.com.trade.mvp.main_trade.v;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import trade.xkj.com.trade.bean.BeanIndicatorData;
 import trade.xkj.com.trade.bean.BeanSymbolConfig;
-import trade.xkj.com.trade.bean.HistoryDataList;
 import trade.xkj.com.trade.bean.RealTimeDataList;
+import trade.xkj.com.trade.bean_.BeanHistory;
 
 /**
  * Created by huangsc on 2017-01-10.
@@ -17,9 +18,10 @@ public class MainTradeListener {
     /**
      * view的接口类
      */
-    public interface MainTradeContentLFragListener  {
-         void freshView(HistoryDataList data,boolean isCountDown);
-         void refreshIndicator(ArrayList <BeanIndicatorData> mBeanIndicatorDataList);
+    public interface MainTradeContentLFragListener {
+        void freshView(BeanHistory.BeanHistoryData data, boolean isCountDown);
+
+        void refreshIndicator(List<BeanIndicatorData> mBeanIndicatorDataList);
     }
 
     /**
@@ -29,29 +31,34 @@ public class MainTradeListener {
         /**
          * 加载数据
          */
-         void loading();
+        void loading();
+
         /**
-         *从服务器获取数据完成,刷新分时图view
+         * 从服务器获取数据完成,刷新分时图view
          */
-         void refreshView(HistoryDataList data );
+        void refreshView(BeanHistory data);
 
         /**
          * 刷新事实数据
+         *
          * @param realTimeDataList
          */
-         void refreshRealTimeView(RealTimeDataList realTimeDataList);
-         void refreshIndicator(ArrayList<BeanSymbolConfig.SymbolsBean> subTradeSymbol);
-         void loadingHistoryData(String symbol, String period,int count);
-    }
+        void refreshRealTimeView(RealTimeDataList realTimeDataList);
 
+        void refreshIndicator(ArrayList<BeanSymbolConfig.SymbolsBean> subTradeSymbol);
+
+        void loadingHistoryData(String symbol, String period, int count);
+    }
 
 
     /**
      * model的接口类
      */
     public interface MainTradeContentModelListener {
-         void sendHistoryRequest(String symbol,String period,int count);
-         void refreshIndicator(ArrayList<BeanSymbolConfig.SymbolsBean> subTradeSymbol);
+        void sendHistoryRequest(String symbol, String period, int count);
+
+        //         void refreshIndicator(ArrayList<BeanSymbolConfig.SymbolsBean> subTradeSymbol);
+//        void sendSubSymbol(String Symbol);
     }
 
 }

@@ -9,6 +9,13 @@ public class BeanIndicatorData {
     private int imageResource;
     private String symbolTag;
 
+    public BeanIndicatorData(){};
+    public BeanIndicatorData(int imageResource,String symbolTag,String leftString,String rightString){
+        this.imageResource = imageResource;
+        this.symbolTag=symbolTag;
+        this.leftString=leftString;
+        this.rightString=rightString;
+    }
     public int getImageResource() {
         return imageResource;
     }
@@ -34,13 +41,13 @@ public class BeanIndicatorData {
     }
 
     public String getRightString() {
-        return RightString;
+        return rightString;
     }
 
     public void setRightString(String rightString) {
-        RightString = rightString;
+        this.rightString = rightString;
     }
 
     private String leftString;
-    private String RightString;
+    private String rightString;
 }

@@ -81,7 +81,7 @@ public class SSLSocketClientThread implements Runnable {
                     new ReceiveThread(sslSocket).start();
                 }
             });
-            BeanUserLoginData userLogin = new BeanUserLoginData(Integer.valueOf(userName), password);
+            BeanUserLoginData userLogin = new BeanUserLoginData(userName, password);
             String loginStr = new Gson().toJson(userLogin, BeanUserLoginData.class);
             outputStream = new DataOutputStream(sslSocket.getOutputStream());
             outputStream.write(SocketUtil.writePureByte(loginStr));

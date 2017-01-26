@@ -8,7 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
-import java.util.TreeMap;
+import java.util.Map;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -164,6 +164,15 @@ public class AesEncryptionUtil {
     }
 
     /**
+     * 获取签名
+     * @param url
+     * @param map
+     * @return
+     */
+    public static String getApiSign(String url, Map<String,String> map){
+      return getMD5(getUrl(url,map).concat("v66YKULHFld2JElhm"));
+    }
+    /**
      * md5-32位加密,小写
      * @param info
      * @return
@@ -216,7 +225,7 @@ public class AesEncryptionUtil {
      * @param params
      * @return
      */
-    public static String getUrl(String url,TreeMap<String, String> params) {
+    public static String getUrl(String url,Map<String, String> params) {
         // 添加url参数
         if (params != null) {
             Iterator<String> it = params.keySet().iterator();
