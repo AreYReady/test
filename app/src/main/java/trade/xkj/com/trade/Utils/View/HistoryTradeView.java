@@ -224,34 +224,36 @@ public class HistoryTradeView extends View {
             //注意,这里还缺少划线数都是整数,所以需要计算.曲余数,+100;
             int wholeNumber = (int) (price[1] * Math.pow(10, digits));
             Log.i(TAG, "drawLine: " + data.getBarnum() + " " + ints[1] + " " + ints[0]);
-            double remainder=0.00000000;
+            double remainder = 0.00000000;
             int i2 = wholeNumber % ints[0];
 //            double v = 12.0 / 100000.0;
-            double div;
+            double div=0;
             try {
-                 div = MoneyUtil.div(12.0000, 10000.0, 5);
+                div = MoneyUtil.div(12.0000, 10000.0, 5);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
-            remainder = ((wholeNumber % ints[0])/ Math.pow(10, digits));
-                Log.i(TAG, "drawLine:显示出来的数据最大最小值 " + price[1] + "  " + price[0]);
-                canvas.drawLine(showDataLeftX, 0, showDataRightX, 0, mGarkPaint);
-                canvas.drawLine(showDataLeftX, getMeasuredHeight() - SystemUtil.dp2pxFloat(mContext, TradeDateConstant.showTimeSpace), showDataRightX, getMeasuredHeight() - SystemUtil.dp2pxFloat(mContext, TradeDateConstant.showTimeSpace), mGarkPaint);
-                Log.i(TAG, "drawLine: " + digits);
-                for (int i = 0; i < ints[1]; i++) {
-                    if ((int) ((remainder + ints[0]/Math.pow(10,digits) * i) / unit) < showDataHeight) {
-                        int i1 = (int) ((remainder + ints[0] * i) / unit);
-//                    String s = MoneyUtil.moneyFormat(((price[1] - remainder - ints[0] * i) / Math.pow(10, digits)), digits);
-                        String s = String.valueOf((int) (price[1] - remainder - ints[0] * i) / Math.pow(10, digits));
-                        canvas.drawLine(showDataLeftX, i1, showDataRightX, i1, mGarkPaint);
-                        mBeanDrawPriceData = new BeanDrawPriceData();
-                        mBeanDrawPriceData.setPriceY(i1);
-                        mBeanDrawPriceData.setPriceString(String.valueOf((price[1] - remainder - ints[0] * i) / Math.pow(10, digits)));
-                        mDrawPriceDataList.add(mBeanDrawPriceData);
-                    }
-                }
+            Log.i(TAG, "drawLine: "+div+i2);
+            remainder = ((wholeNumber % ints[0]) / Math.pow(10, digits));
 
-                //计算虚线的位置和传实时值：
+            Log.i(TAG, "drawLine:显示出来的数据最大最小值 " + price[1] + "  " + price[0]);
+            canvas.drawLine(showDataLeftX, 0, showDataRightX, 0, mGarkPaint);
+            canvas.drawLine(showDataLeftX, getMeasuredHeight() - SystemUtil.dp2pxFloat(mContext, TradeDateConstant.showTimeSpace), showDataRightX, getMeasuredHeight() - SystemUtil.dp2pxFloat(mContext, TradeDateConstant.showTimeSpace), mGarkPaint);
+            Log.i(TAG, "drawLine: " + digits);
+            for (int i = 0; i < ints[1]; i++) {
+                if ((int) ((remainder + ints[0] / Math.pow(10, digits) * i) / unit) < showDataHeight) {
+                    int i1 = (int) ((remainder + ints[0] * i) / unit);
+//                    String s = MoneyUtil.moneyFormat(((price[1] - remainder - ints[0] * i) / Math.pow(10, digits)), digits);
+                    String s = String.valueOf((int) (price[1] - remainder - ints[0] * i) / Math.pow(10, digits));
+                    canvas.drawLine(showDataLeftX, i1, showDataRightX, i1, mGarkPaint);
+                    mBeanDrawPriceData = new BeanDrawPriceData();
+                    mBeanDrawPriceData.setPriceY(i1);
+                    mBeanDrawPriceData.setPriceString(String.valueOf((price[1] - remainder - ints[0] * i) / Math.pow(10, digits)));
+                    mDrawPriceDataList.add(mBeanDrawPriceData);
+                }
+            }
+
+            //计算虚线的位置和传实时值：
 //            if(realTimePrice!=-1&&price[1] - realTimePrice>0){
 //                double y = (price[1] - realTimePrice) / unit;
 //                mBeanDrawPriceData=new BeanDrawPriceData();
@@ -260,8 +262,8 @@ public class HistoryTradeView extends View {
 //                mDrawPriceDataList.add(mBeanDrawPriceData);
 //
 //            }
-                if (mDrawPriceListener != null)
-                    mDrawPriceListener.drawPriceData(mDrawPriceDataList);
+            if (mDrawPriceListener != null)
+                mDrawPriceListener.drawPriceData(mDrawPriceDataList);
 
         }
     }
@@ -303,7 +305,7 @@ public class HistoryTradeView extends View {
         showDataHeight = (getMeasuredHeight() - SystemUtil.dp2pxFloat(mContext, TradeDateConstant.showTimeSpace));
 //        unit = blance / showDataHeight;
         try {
-            unit = MoneyUtil.div(blance, (double) this.showDataHeight, digits);
+            unit = MoneyUtil.div(blance, (double) this.showDataHeight);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
