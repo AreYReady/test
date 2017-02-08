@@ -17,7 +17,6 @@
         android:layout_marginTop="@dimen/logo_margin"
         android:contentDescription="@string/logo"
         android:src="@drawable/ic_menu_manage" />
-
     <LinearLayout
         android:id="@+id/welcome_abroad"
         android:layout_width="fill_parent"

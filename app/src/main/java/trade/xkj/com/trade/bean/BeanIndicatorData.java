@@ -1,5 +1,7 @@
 package trade.xkj.com.trade.bean;
 
+import trade.xkj.com.trade.utils.DataUtil;
+
 /**
  * Created by huangsc on 2016-12-05.
  * TODO:
@@ -10,11 +12,11 @@ public class BeanIndicatorData {
     private String symbolTag;
 
     public BeanIndicatorData(){};
-    public BeanIndicatorData(int imageResource,String symbolTag,String leftString,String rightString){
-        this.imageResource = imageResource;
+      public BeanIndicatorData(String symbolTag,String leftString,String rightString){
         this.symbolTag=symbolTag;
         this.leftString=leftString;
         this.rightString=rightString;
+        this.imageResource = DataUtil.getSymbolFlag(symbolTag);
     }
     public int getImageResource() {
         return imageResource;

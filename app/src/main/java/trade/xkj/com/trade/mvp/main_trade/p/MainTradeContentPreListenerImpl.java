@@ -8,13 +8,9 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.bean.BeanCurrentServerTime;
-import trade.xkj.com.trade.bean.BeanIndicatorData;
-import trade.xkj.com.trade.bean.BeanSymbolConfig;
 import trade.xkj.com.trade.bean.HistoryData;
 import trade.xkj.com.trade.bean.HistoryDataList;
-import trade.xkj.com.trade.bean.RealTimeDataList;
 import trade.xkj.com.trade.bean_.BeanHistory;
 import trade.xkj.com.trade.mvp.main_trade.m.MainTradeContentModelImpl;
 import trade.xkj.com.trade.mvp.main_trade.v.MainTradeListener;
@@ -42,7 +38,7 @@ public class MainTradeContentPreListenerImpl implements MainTradeListener.MainTr
     private String currentPeriod;
     //作为准确判断是否是，本地数据加上网络后补的唯一标识:symbol+period+count   例如period：　60
     private String swithKey;
-
+    private Context mContext;
     @Override
     public void refreshView(BeanHistory data) {
 //    public void refreshView(HistoryDataList data) {
@@ -73,13 +69,13 @@ public class MainTradeContentPreListenerImpl implements MainTradeListener.MainTr
         mMainTradeContentLFragListener = mListener;
         mMainTradeContentModel = new MainTradeContentModelImpl(this,context);
         this.mHandler = mHandler;
+        mContext=context;
     }
 
 
     @Override
-    public void loading() {
-//        mMainTradeContentModel.sendHistoryRequest("AUDCAD", TradeDateConstant.count);
-
+    public void loadingSubSymbols(ArrayList<String> symbolsName,boolean subOrCancel) {
+        mMainTradeContentModel.sendSubSymbolsRequest(symbolsName,subOrCancel);
     }
 
     /**
@@ -118,33 +114,12 @@ public class MainTradeContentPreListenerImpl implements MainTradeListener.MainTr
     }
 
     @Override
-    public void refreshRealTimeView(RealTimeDataList realTimeDataList) {
-    }
-
-    /**
-     * 刷新头部Indicator
-     *
-     * @param subTradeSymbol
-     */
-    @Override
-    public void refreshIndicator(ArrayList<BeanSymbolConfig.SymbolsBean> subTradeSymbol) {
-        ArrayList<BeanIndicatorData> mBeanIndicatorDataList = new ArrayList<>();
-        mBeanIndicatorDataList.clear();
-        BeanIndicatorData mBeanIndicatorData;
-        for (BeanSymbolConfig.SymbolsBean symbolsBean : subTradeSymbol) {
-            mBeanIndicatorData = new BeanIndicatorData();
-            mBeanIndicatorData.setSymbolTag(symbolsBean.getSymbol());
-            mBeanIndicatorData.setLeftString(String.valueOf(symbolsBean.getVol_min()));
-            mBeanIndicatorData.setRightString(String.valueOf(symbolsBean.getVol_max()));
-            mBeanIndicatorData.setImageResource(R.mipmap.ic_instrument_audjpy);
-            mBeanIndicatorDataList.add(mBeanIndicatorData);
-        }
-        mMainTradeContentLFragListener.refreshIndicator(mBeanIndicatorDataList);
-    }
-
-    @Override
     public void loadingHistoryData(String symbol, String period, int count) {
-     mMainTradeContentModel.sendHistoryRequest(symbol,period,count);
+        if(symbol==null){
+            mMainTradeContentModel.sendAllSymbolsRequest();
+            return;
+        }
+         mMainTradeContentModel.sendHistoryRequest(symbol,period,count);
     }
 
     /**

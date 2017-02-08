@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import trade.xkj.com.trade.IO.okhttp.ChatWebSocket;
 import trade.xkj.com.trade.IO.okhttp.OkhttpUtils;
 import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.base.BaseActivity;
@@ -49,6 +50,9 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
     };
     @Override
     public void toMainActivity() {
+        ACache.get(this).put(RequestConstant.LOGIN_NAME,etUserName.getText().toString());
+        ACache.get(this).put(RequestConstant.LOGIN_PASSWORD,etUserPassWord.getText().toString());
+        ChatWebSocket.getChartWebSocket();
         startActivity(new Intent(this, MainTradeContentActivity.class));
         CacheUtil.saveuserInfo(this,etUserName.getText().toString(), AesEncryptionUtil.encrypt(etUserPassWord.getText().toString()));
         finish();
@@ -70,6 +74,7 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
+
     }
 
     public static int[] scrren;
@@ -97,6 +102,7 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
                 BeanServerTimeForHttp beanServerTimeForHttp = new Gson().fromJson(s=response.body().string(), BeanServerTimeForHttp.class);
                 Log.i(TAG, "onResponse: "+s);
                 BeanCurrentServerTime.getInstance(DateUtils.getOrderStartTime(beanServerTimeForHttp.getData(),"yyyyMMddHHmmss"));
+                Log.i(TAG, "onResponse: "+DateUtils.getShowTime(DateUtils.getOrderStartTime(beanServerTimeForHttp.getData(),"yyyyMMddHHmmss")));
             }
         });
     }

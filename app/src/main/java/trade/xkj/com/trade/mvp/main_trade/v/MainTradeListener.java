@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import trade.xkj.com.trade.bean.BeanIndicatorData;
-import trade.xkj.com.trade.bean.BeanSymbolConfig;
-import trade.xkj.com.trade.bean.RealTimeDataList;
 import trade.xkj.com.trade.bean_.BeanHistory;
 
 /**
@@ -31,21 +29,21 @@ public class MainTradeListener {
         /**
          * 加载数据
          */
-        void loading();
+        void loadingSubSymbols(ArrayList<String> symbolsName,boolean subOrCancel);
 
         /**
          * 从服务器获取数据完成,刷新分时图view
          */
         void refreshView(BeanHistory data);
 
-        /**
-         * 刷新事实数据
-         *
-         * @param realTimeDataList
-         */
-        void refreshRealTimeView(RealTimeDataList realTimeDataList);
-
-        void refreshIndicator(ArrayList<BeanSymbolConfig.SymbolsBean> subTradeSymbol);
+//        /**
+//         * 刷新事实数据
+//         *
+//         * @param realTimeDataList
+//         */
+//        void refreshRealTimeView(RealTimeDataList realTimeDataList);
+//
+//        void initIndicator(ArrayList<BeanSymbolConfig.SymbolsBean> subTradeSymbol);
 
         void loadingHistoryData(String symbol, String period, int count);
     }
@@ -56,8 +54,9 @@ public class MainTradeListener {
      */
     public interface MainTradeContentModelListener {
         void sendHistoryRequest(String symbol, String period, int count);
-
-        //         void refreshIndicator(ArrayList<BeanSymbolConfig.SymbolsBean> subTradeSymbol);
+        void sendAllSymbolsRequest();
+        void sendSubSymbolsRequest(ArrayList<String> symbolsName,boolean subOrCancel);
+        //         void initIndicator(ArrayList<BeanSymbolConfig.SymbolsBean> subTradeSymbol);
 //        void sendSubSymbol(String Symbol);
     }
 

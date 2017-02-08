@@ -21,6 +21,8 @@ import trade.xkj.com.trade.utils.DateUtils;
 import trade.xkj.com.trade.utils.MoneyUtil;
 import trade.xkj.com.trade.utils.SystemUtil;
 
+import static java.math.BigDecimal.ROUND_DOWN;
+
 /**
  * Created by admin on 2016-11-23.
  */
@@ -32,6 +34,7 @@ public class HistoryTradeView extends View {
     private Context mContext;
     private Paint mBluePaint;
     private Paint mGarkPaint;
+    private Paint mSilverPaint;
     private List<BeanDrawPriceData> mDrawPriceDataList;
     /**
      * @param data
@@ -111,17 +114,21 @@ public class HistoryTradeView extends View {
         mRedPaint = new Paint();
         mRedPaint.setStyle(Paint.Style.FILL);
         mRedPaint.setColor(getResources().getColor(R.color.risk_slippage_max_red_dark));
+        mRedPaint.setStrokeWidth(3);
         mBluePaint = new Paint();
         mBluePaint.setStyle(Paint.Style.FILL);
         mBluePaint.setColor(getResources().getColor(R.color.risk_slippage_max_green_dark));
+        mBluePaint.setStrokeWidth(3);
+        mSilverPaint = new Paint();
+        mSilverPaint.setStyle(Paint.Style.FILL);
+        mSilverPaint.setColor(getResources().getColor(R.color.text_color_primary_disabled_dark));
+        mSilverPaint.setStrokeWidth(3);
         mGarkPaint = new Paint();
         mGarkPaint.setColor(getResources().getColor(R.color.text_color_primary_dark_with_opacity));
         mGarkPaint.setStrokeWidth(3);
         mGarkPaint.setTextAlign(Paint.Align.CENTER);
         mGarkPaint.setTextSize(SystemUtil.dp2pxFloat(mContext, 10));
-
         mDrawPriceDataList = new ArrayList<>();
-
     }
 
 
@@ -199,18 +206,32 @@ public class HistoryTradeView extends View {
                 closePrice = historyData.getClose();
                 maxPrice = historyData.getHigh();
                 minPrice = historyData.getLow();
-                yTop = (float) (Math.abs(price[1] - openPrice) / unit);
-                yBottom = (float) (Math.abs(price[1] - closePrice) / unit);
-                yMaxTop = (float) (Math.abs(price[1] - maxPrice) / unit);
-                yMinBottom = (float) (Math.abs(price[1] - minPrice) / unit);
+                try {
+                    yTop = (float) MoneyUtil.div(Math.abs(price[1] - openPrice), unit);
+                    yBottom = (float) MoneyUtil.div(Math.abs(price[1] - closePrice), unit);
+                    yMaxTop = (float) MoneyUtil.div(Math.abs(price[1] - maxPrice), unit);
+                    yMinBottom = (float) MoneyUtil.div(Math.abs(price[1] - minPrice), unit);
+
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
                 startX = showDataLeftX + (i - startIndex) * (simpleDataSpace + dataViewSpace);
                 stopX = startX + simpleDataSpace;
+                //说明打开价和关闭价相等或者太多相近，人工画出值
                 if (historyData.getClose() > historyData.getOpen()) {
                     canvas.drawRect(startX, yBottom, stopX, yTop, mBluePaint);
                     canvas.drawLine(startX + (stopX - startX) / 2, yMinBottom, startX + (stopX - startX) / 2, yMaxTop, mBluePaint);
-                } else {
+                } else if(historyData.getClose() < historyData.getOpen()){
                     canvas.drawRect(startX, yTop, stopX, yBottom, mRedPaint);
                     canvas.drawLine(startX + (stopX - startX) / 2, yMaxTop, startX + (stopX - startX) / 2, yMinBottom, mRedPaint);
+                }else{
+                    if(yMaxTop>yMinBottom){
+                        canvas.drawLine(startX + (stopX - startX) / 2, yMaxTop, startX + (stopX - startX) / 2, yMinBottom, mSilverPaint);
+                    }else{
+                        canvas.drawLine(startX + (stopX - startX) / 2, yMinBottom, startX + (stopX - startX) / 2,yMaxTop , mSilverPaint);
+                    }
+                    canvas.drawRect(startX, yTop, stopX, yBottom+3, mSilverPaint);
+
                 }
             }
         }
@@ -227,13 +248,13 @@ public class HistoryTradeView extends View {
             double remainder = 0.00000000;
             int i2 = wholeNumber % ints[0];
 //            double v = 12.0 / 100000.0;
-            double div=0;
+            double div = 0;
             try {
                 div = MoneyUtil.div(12.0000, 10000.0, 5);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
-            Log.i(TAG, "drawLine: "+div+i2);
+            Log.i(TAG, "drawLine: " + div + i2);
             remainder = ((wholeNumber % ints[0]) / Math.pow(10, digits));
 
             Log.i(TAG, "drawLine:显示出来的数据最大最小值 " + price[1] + "  " + price[0]);
@@ -242,13 +263,17 @@ public class HistoryTradeView extends View {
             Log.i(TAG, "drawLine: " + digits);
             for (int i = 0; i < ints[1]; i++) {
                 if ((int) ((remainder + ints[0] / Math.pow(10, digits) * i) / unit) < showDataHeight) {
-                    int i1 = (int) ((remainder + ints[0] * i) / unit);
+                    int i1 = (int) ((remainder + ints[0] / Math.pow(10, digits) * i) / unit);
 //                    String s = MoneyUtil.moneyFormat(((price[1] - remainder - ints[0] * i) / Math.pow(10, digits)), digits);
-                    String s = String.valueOf((int) (price[1] - remainder - ints[0] * i) / Math.pow(10, digits));
+                    String s = String.valueOf((int) (price[1] - remainder - ints[0] / Math.pow(10, digits) * i) / Math.pow(10, digits));
                     canvas.drawLine(showDataLeftX, i1, showDataRightX, i1, mGarkPaint);
                     mBeanDrawPriceData = new BeanDrawPriceData();
                     mBeanDrawPriceData.setPriceY(i1);
-                    mBeanDrawPriceData.setPriceString(String.valueOf((price[1] - remainder - ints[0] * i) / Math.pow(10, digits)));
+                    try {
+                        mBeanDrawPriceData.setPriceString(String.valueOf(MoneyUtil.div((price[1] - remainder - ints[0] / Math.pow(10, digits) * i),1,digits,ROUND_DOWN)));
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
                     mDrawPriceDataList.add(mBeanDrawPriceData);
                 }
             }

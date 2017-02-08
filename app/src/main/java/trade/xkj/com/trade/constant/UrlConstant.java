@@ -10,4 +10,6 @@ public class UrlConstant {
     public static String URL_SERVICE_TIME = "http://"+API_URL+"/WebAPI/Public/servertime";
     public static String URL_LOGIN = "http://"+API_URL+"/WebAPI/Public/login";
     public static String URL_MT4_PRICE = "http://"+API_URL+"/WebAPI/Public/mt4price";
+    public static   String WS_URL="ws://115.29.50.147:9984";
+
 }

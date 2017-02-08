@@ -35,6 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dip"/>
 
+
             <trade.xkj.com.trade.utils.view.CustomPeriodButtons
                 android:id="@+id/cpb_period"
                 android:layout_width="match_parent"
@@ -45,106 +46,152 @@
             </trade.xkj.com.trade.utils.view.CustomPeriodButtons>
 
             <LinearLayout
-                android:id="@+id/ll_draw_trade_context"
+                android:id="@+id/ll_k_link_content"
                 android:layout_width="match_parent"
-                android:layout_height="150dip"
-                android:layout_below="@id/rll_trade_indicator"
-                android:background="@color/background_show_trade"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <FrameLayout
-                    android:layout_width="0dip"
-                    android:layout_height="match_parent"
-                    android:layout_weight="6">
+                <LinearLayout
+                    android:id="@+id/ll_draw_trade_context"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dip"
+                    android:layout_below="@id/rll_trade_indicator"
+                    android:background="@color/background_show_trade"
+                    android:orientation="horizontal">
 
-                    <trade.xkj.com.trade.utils.view.MyHorizontalScrollView
-                        android:id="@+id/hsv_trade"
-                        android:layout_width="match_parent"
+                    <FrameLayout
+                        android:layout_width="0dip"
                         android:layout_height="match_parent"
-                        >
+                        android:layout_weight="6">
 
-                        <RelativeLayout
-                            android:id="@+id/rl"
+                        <trade.xkj.com.trade.utils.view.MyHorizontalScrollView
+                            android:id="@+id/hsv_trade"
                             android:layout_width="match_parent"
-                            android:layout_height="200dip"
+                            android:layout_height="match_parent"
                             >
 
-                        </RelativeLayout>
-                    </trade.xkj.com.trade.utils.view.MyHorizontalScrollView>
+                            <RelativeLayout
+                                android:id="@+id/rl"
+                                android:layout_width="match_parent"
+                                android:layout_height="200dip"
+                                >
 
-                    <trade.xkj.com.trade.utils.view.CustomDashedLinkView
-                        android:id="@+id/cdlv_"
+                            </RelativeLayout>
+                        </trade.xkj.com.trade.utils.view.MyHorizontalScrollView>
+
+                        <trade.xkj.com.trade.utils.view.CustomDashedLinkView
+                            android:id="@+id/cdlv_"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+                    </FrameLayout>
+
+                    <trade.xkj.com.trade.utils.view.DrawPriceView
+                        android:id="@+id/dp_draw_price"
+                        android:layout_width="0dip"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dip"
+                    android:background="@color/background_"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/space_big"
+                    android:paddingRight="@dimen/space_big"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_open_position_count"
+                        style="@style/TextDesc"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="20持仓位"/>
+
+                    <TextView
+                        style="@style/TextDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="利润总额"/>
+
+                    <Space
+                        android:layout_width="10dip"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/tv_profit_count"
+                        style="@style/TextDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-$3,514.53"/>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_trade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background_trade_item">
+
+                    <LinearLayout
+                        android:id="@+id/trade_title"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-                </FrameLayout>
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-                <trade.xkj.com.trade.utils.view.DrawPriceView
-                    android:id="@+id/dp_draw_price"
-                    android:layout_width="0dip"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"/>
+                        <include
+                            android:id="@+id/title_content"
+                            layout="@layout/v_positions_opened_header_impl"/>
+                    </LinearLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_trade_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/trade_title"/>
+                </RelativeLayout>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_my_favorites"
                 android:layout_width="match_parent"
-                android:layout_height="50dip"
-                android:background="@color/background_"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/space_big"
-                android:paddingRight="@dimen/space_big"
-
+                android:layout_height="match_parent"
+                android:background="@color/background_master_info_content"
+                android:orientation="vertical"
+                android:visibility="gone"
                 >
 
-                <TextView
-                    android:id="@+id/tv_open_position_count"
-                    style="@style/TextDesc"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="20持仓位"/>
-
-                <TextView
-                    style="@style/TextDesc"
+                <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="利润总额"/>
+                    android:background="@color/background_indicator"
+                    android:clipChildren="false"
+                    android:layerType="software"
+                    >
 
-                <Space
-                    android:layout_width="10dip"
-                    android:layout_height="wrap_content"/>
+                    <trade.xkj.com.trade.utils.view.CustomViewPager
+                        android:id="@+id/cvp_my_favorites_indicator"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dip"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginRight="100dp"
+                        />
+                </FrameLayout>
 
-                <TextView
-                    android:id="@+id/tv_profit_count"
-                    style="@style/TextDesc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-$3,514.53"/>
-            </LinearLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_trade"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/background_trade_item">
-
-                <LinearLayout
-                    android:id="@+id/trade_title"
+                <SearchView
+                    android:id="@+id/sv_my_favorites"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <include
-                        android:id="@+id/title_content"
-                        layout="@layout/v_positions_opened_header_impl"/>
-                </LinearLayout>
+                    android:layout_height="wrap_content">
+                </SearchView>
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_trade_content"
+                    android:id="@+id/rv_my_favorites_content"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/trade_title"/>
-            </RelativeLayout>
+                    android:layout_height="match_parent">
+                </android.support.v7.widget.RecyclerView>
+
+            </LinearLayout>
         </LinearLayout>
 
     </trade.xkj.com.trade.utils.view.MyScrollView>
@@ -154,12 +201,50 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background_"
-        android:orientation="horizontal"
-        android:visibility="gone">
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:id="@+id/ll_show_symbol_info"
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_symbol_flag"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"/>
 
-        <include
-            android:id="@+id/title_content"
-            layout="@layout/v_positions_opened_header_impl"/>
+            <TextView
+                android:id="@+id/tv_symbol_name"
+                android:layout_width="0dip"
+                android:layout_weight="2.0"
+                style="@style/TextDesc"
+                android:layout_height="wrap_content"
+                />
+            <TextView
+                android:id="@+id/tv_symbol_ask"
+                android:layout_width="0dip"
+                android:layout_weight="1.5"
+                style="@style/TextDesc"
+                android:layout_height="wrap_content"
+                />
+            <TextView
+                android:id="@+id/tv_symbol_bid"
+                android:layout_width="0dip"
+                android:layout_weight="1.5"
+                style="@style/TextDesc"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+            <include
+                android:id="@+id/title_content"
+                layout="@layout/v_positions_opened_header_impl"/>
+        </LinearLayout>
     </LinearLayout>
-
 </RelativeLayout>

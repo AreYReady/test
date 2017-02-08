@@ -65,6 +65,20 @@ public class MainTradeContentActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initEvent();
+    }
+
+    private void initEvent() {
+        connectSocket();
+    }
+
+    private void connectSocket() {
+        Log.i(TAG, "connectSocket: 连接socket");
+//        ChatWebSocket socket=ChatWebSocket.getChartWebSocket();
+//        BeanUserLoginDataSocket beanUserLoginData = new BeanUserLoginDataSocket(Integer.valueOf(ACache.get(context).getAsString(RequestConstant.LOGIN_NAME)), AesEncryptionUtil.encrypt(ACache.get(context).getAsString(RequestConstant.LOGIN_PASSWORD)), 9988);
+//                String s = new Gson().toJson(beanUserLoginData, BeanUserLoginDataSocket.class);
+//        Log.i(TAG, "connectSocket: "+s);
+//        socket.sendMessage(s);
     }
 
     @Override
@@ -77,7 +91,6 @@ public class MainTradeContentActivity extends BaseActivity
     public void initData() {
 
         context = this;
-//        ACache.get(context).clear();
         activity = this;
         mDataItem = new ArrayList<>();
         mDataItem.add("我关注的操盘手");
@@ -91,7 +104,6 @@ public class MainTradeContentActivity extends BaseActivity
         mFragmentList.add(new FragmentOpenPosition());
         mFragmentList.add(new FragmentPendingPosition());
         mFragmentList.add(new FragmentClosePosition());
-
     }
 
 
@@ -102,7 +114,6 @@ public class MainTradeContentActivity extends BaseActivity
         llNetworkPrompt=(LinearLayout) findViewById(R.id.ll_net_exception_prompt);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
         mCSSwitch = (CustomSwitch) findViewById(R.id.cs_switch_tag);
         mCSSwitch.setSelectedChangeListener(new CustomSwitch.SelectedChangedListener() {
             @Override

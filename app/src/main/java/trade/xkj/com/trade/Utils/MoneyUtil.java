@@ -2,8 +2,10 @@ package trade.xkj.com.trade.utils;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.style.SuperscriptSpan;
 import android.text.style.TextAppearanceSpan;
 
 import java.math.BigDecimal;
@@ -158,6 +160,16 @@ public class MoneyUtil {
         BigDecimal b2 = new BigDecimal(Double.toString(value2));
         return b1.divide(b2,BigDecimal.ROUND_HALF_UP).doubleValue();
     }
+    public static double div(double value1, double value2, int scale,int mode) throws IllegalAccessException {
+        //如果精确范围小于0，抛出异常信息
+        if(scale<0){
+            throw new IllegalArgumentException(
+                    "The scale must be a positive integer or zero");
+        }
+        BigDecimal b1 = new BigDecimal(Double.toString(value1));
+        BigDecimal b2 = new BigDecimal(Double.toString(value2));
+        return b1.divide(b2,scale,mode).doubleValue();
+    }
 
 
 
@@ -166,12 +178,27 @@ public class MoneyUtil {
      * 最后3个字放大
      */
     public static SpannableString getRealTimePriceTextBig(Context context, String realTimeText) {
+        int index=realTimeText.indexOf(".");
         SpannableString spannableString = new SpannableString(realTimeText);
-        if(spannableString.length()>3){
+        if(index>-1) {
+            if (spannableString.length() - index > 3) {
+                //小数点>=3位的
+                spannableString.setSpan(new TextAppearanceSpan(context, R.style.realTimeLeftText),
+                        0, spannableString.length() - 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableString.setSpan(new TextAppearanceSpan(context, R.style.realTimeRightText),
+                        spannableString.length() - 3, spannableString.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableString.setSpan(new SuperscriptSpan(), spannableString.length() - 1, spannableString.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            }else{
+                //小数点小于3位。
+                spannableString.setSpan(new TextAppearanceSpan(context, R.style.realTimeLeftText),
+                        0, index, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableString.setSpan(new TextAppearanceSpan(context, R.style.realTimeRightText),
+                        index, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }else{
+            //不存在小数
             spannableString.setSpan(new TextAppearanceSpan(context, R.style.realTimeLeftText),
-                    0, spannableString.length() - 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannableString.setSpan(new TextAppearanceSpan(context, R.style.realTimeRightText),
-                    spannableString.length() - 3, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return spannableString;
     }

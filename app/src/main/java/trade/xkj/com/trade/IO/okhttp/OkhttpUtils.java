@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.WebSocketListener;
 
 /**
  * Created by huangsc on 2017-01-23.
@@ -42,7 +43,9 @@ public class OkhttpUtils {
      */
     public static void enqueue(Request request, Callback responseCallback) {
         mOkHttpClient.newCall(request).enqueue(responseCallback);
-
+        }
+    public static void enqueue(Request request, WebSocketListener responseListener) {
+        mOkHttpClient.newWebSocket(request,responseListener);
     }
     public static void enqueue(String url,Map map, Callback responseCallback) {
         mOkHttpClient.newCall(new Request.Builder().url(url).post(getRequestPost(map)).build()).enqueue(responseCallback);

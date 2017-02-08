@@ -1,13 +1,6 @@
 package trade.xkj.com.trade.utils;
 
 
-import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
-
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -18,7 +11,7 @@ import java.util.TimeZone;
  * Created by huangsc on 2016-12-01.
  * TODO:时间格式工具类
  */
-public class DateUtils{
+public class DateUtils {
     public static String getXTime(long time) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone(getCurrentTimeZone()));
@@ -39,21 +32,24 @@ public class DateUtils{
 
     /**
      * 获取当前时间yy:MM:dd HH:mm:ss
+     *
      * @return
      */
-    public static String getCurrenTime(){
-    return DateUtils.getXTShowTime(Calendar.getInstance().getTimeInMillis());
-}
+    public static String getCurrenTime() {
+        return DateUtils.getXTShowTime(Calendar.getInstance().getTimeInMillis());
+    }
 
     /**
      * 获取以手机当前时区的时间yyyyMMddHHmmss
+     *
      * @param date
      * @return
      */
-    public static String getShowTime(Long date){
-        SimpleDateFormat format=new SimpleDateFormat("yyyyMMddHHmmss");
+    public static String getShowTime(Long date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
         return format.format(new Date(date));
     }
+
     // string类型转换为date类型
     // strTime要转换的string类型的时间，formatType要转换的格式yyyy-MM-dd HH:mm:ss//yyyy年MM月dd日
     // HH时mm分ss秒，
@@ -86,7 +82,7 @@ public class DateUtils{
 
     /**
      * @author huangsc
-     *
+     * <p>
      * 获取当前时间格式:=
      */
     public static String getXTShowTime(long time) {
@@ -94,14 +90,16 @@ public class DateUtils{
         sdf.setTimeZone(TimeZone.getTimeZone(getCurrentTimeZone()));
         return sdf.format(new Date(time));
     }
-    public static String getShowTime(Date date){
+
+    public static String getShowTime(Date date) {
         return (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(date);
     }
+
     /**
      * @author huangsc
      * 获取当前时间格式:=
      */
-    public static String getShowTime(long time,String format) {
+    public static String getShowTime(long time, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         sdf.setTimeZone(TimeZone.getTimeZone(getCurrentTimeZone()));
         return sdf.format(new Date(time));
@@ -111,24 +109,12 @@ public class DateUtils{
     /**
      * @author huangsc.
      * 获取当前时间格式没有时区
-     *
      */
     public static String getShowTimeNoTimeZone(long time) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return sdf.format(new Date(time+xiuzhenTime()));
+        return sdf.format(new Date(time));
     }
 
-    /**
-     * 如果初始时间不是1970年。
-     * @return
-     */
-    public static long xiuzhenTime(){
-     if(getOrderStartTimeNoTimeZone("1970-01-01 00:00:00")!=0){
-         return getOrderStartTimeNoTimeZone("1970-01-01 00:00:00");
-     }
-        long orderStartTimeNoTimeZone = getOrderStartTimeNoTimeZone("1970-01-01 00:00:00");
-        return 0;
-    };
     /**
      * 获取订单开始时间
      *
@@ -136,11 +122,12 @@ public class DateUtils{
      * @return
      */
     public static long getOrderStartTime(String open_time) {
-        return getOrderStartTime(open_time,"yyyy-MM-dd HH:mm:ss");
+        return getOrderStartTime(open_time, "yyyy-MM-dd HH:mm:ss");
     }
-    public static long getOrderStartTime(String open_time,String format) {
+
+    public static long getOrderStartTime(String open_time, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
-        sdf.setTimeZone(TimeZone.getTimeZone(getCurrentTimeZone()));
+//        sdf.setTimeZone(TimeZone.getTimeZone(getCurrentTimeZone()));
         try {
             return sdf.parse(open_time).getTime();
         } catch (ParseException e) {
@@ -200,29 +187,4 @@ public class DateUtils{
         builder.append(string);
     }
 
-    public static final int SERVICER_TIME = 1;
-
-    /**
-     * 获取服务器时间
-     */
-    public static void getServiceTime(final Context context, final String url, final Handler handler) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL urlTime = new URL(url);//取得资源对象
-                    URLConnection uc = urlTime.openConnection();//生成连接对象
-                    uc.connect(); //发出连接
-                    long ld = uc.getDate(); //取得网站日期时间
-                    Date date = new Date(ld); //转换为标准时间对象
-                    Message message = new Message();
-                    message.what = SERVICER_TIME;
-                    message.obj = date;
-                    handler.sendMessage(message);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
 }

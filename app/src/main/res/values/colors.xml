@@ -16,8 +16,10 @@
     <color name ="background_master_head">#383c45</color>
     <color name ="background_master_content">#272936</color>
     <color name ="background_master_info_content">#17171f</color>
+    <color name ="background_my_favorite_content">@color/background_master_info_content</color>
     <color name ="text_color_pull_head_text_desc">#686a7a</color>
     <color name ="text_color_pull_head_text_content">#4e4e58</color>
+
 
 
 
