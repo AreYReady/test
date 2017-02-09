@@ -33,7 +33,7 @@ public class SubSymbolsIndicatorDiff extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return mOldDatas.get(oldItemPosition).getSymbolTag().equals(mNewDatas.get(newItemPosition).getSymbolTag());
+        return mOldDatas.get(oldItemPosition).getSymbol().equals(mNewDatas.get(newItemPosition).getSymbol());
     }
 
 
@@ -41,10 +41,10 @@ public class SubSymbolsIndicatorDiff extends DiffUtil.Callback {
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
         BeanIndicatorData beanOld = mOldDatas.get(oldItemPosition);
         BeanIndicatorData beanNew = mNewDatas.get(newItemPosition);
-        if (!beanOld.getLeftString().equals(beanNew.getLeftString())) {
+        if (!beanOld.getAsk().equals(beanNew.getAsk())) {
             return false;//如果有内容不同，就返回false
         }
-        if (beanOld.getRightString() != beanNew.getRightString()) {
+        if (beanOld.getBid() != beanNew.getBid()) {
             return false;//如果有内容不同，就返回false
         }
         return true; //默认两个data内容是相同的

@@ -9,13 +9,21 @@ import trade.xkj.com.trade.utils.DataUtil;
 
 public class BeanIndicatorData {
     private int imageResource;
-    private String symbolTag;
+    private String symbol;
 
     public BeanIndicatorData(){};
-      public BeanIndicatorData(String symbolTag,String leftString,String rightString){
-        this.symbolTag=symbolTag;
-        this.leftString=leftString;
-        this.rightString=rightString;
+    public BeanIndicatorData(String symbolTag,String askString,String bidString){
+        this.symbol =symbolTag;
+        this.ask =askString;
+        this.bid =bidString;
+        this.imageResource = DataUtil.getSymbolFlag(symbolTag);
+    }
+    public BeanIndicatorData(String symbolTag,String askString,String bidString,int askColor,int bidColor){
+        this.symbol =symbolTag;
+        this.ask =askString;
+        this.bid =bidString;
+        this.askColor=askColor;
+        this.bidColor =bidColor;
         this.imageResource = DataUtil.getSymbolFlag(symbolTag);
     }
     public int getImageResource() {
@@ -26,30 +34,49 @@ public class BeanIndicatorData {
         this.imageResource = imageResource;
     }
 
-    public String getSymbolTag() {
-        return symbolTag;
+    public String getSymbol() {
+        return symbol;
     }
 
-    public void setSymbolTag(String symbolTag) {
-        this.symbolTag = symbolTag;
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
-    public String getLeftString() {
-        return leftString;
+    public String getAsk() {
+        return ask;
     }
 
-    public void setLeftString(String leftString) {
-        this.leftString = leftString;
+    public void setAsk(String ask) {
+        this.ask = ask;
     }
 
-    public String getRightString() {
-        return rightString;
+    public String getBid() {
+        return bid;
     }
 
-    public void setRightString(String rightString) {
-        this.rightString = rightString;
+    public void setBid(String bid) {
+        this.bid = bid;
     }
 
-    private String leftString;
-    private String rightString;
+    private String ask;
+    private String bid;
+
+    public int getAskColor() {
+        return askColor;
+    }
+
+    public void setAskColor(int askColor) {
+        this.askColor = askColor;
+    }
+
+    private int askColor;
+    private int bidColor;
+
+    public int getBidColor() {
+        return bidColor;
+    }
+
+    public void setBidColor(int bidColor) {
+        this.bidColor = bidColor;
+    }
 }

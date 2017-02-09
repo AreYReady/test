@@ -7,9 +7,10 @@ import java.util.ArrayList;
  * TODO:当前所有交易的报价
  */
 
-public class BeanAllSymbols extends BeanBaseResponse{
+public class BeanAllSymbols extends BeanBaseResponse {
     ArrayList<SymbolPrices> data;
-    public class SymbolPrices{
+
+    public class SymbolPrices  implements Cloneable {
 
         String symbol;
         String time;
@@ -20,6 +21,25 @@ public class BeanAllSymbols extends BeanBaseResponse{
         String digits;
         String spread;
         Boolean sign;
+        int askColor;
+
+        public int getAskColor() {
+            return askColor;
+        }
+
+        public void setAskColor(int askColor) {
+            this.askColor = askColor;
+        }
+
+        public int getBidColor() {
+            return bidColor;
+        }
+
+        public void setBidColor(int bidColor) {
+            this.bidColor = bidColor;
+        }
+
+        int bidColor;
 
         public String getSymbol() {
             return symbol;
@@ -91,6 +111,16 @@ public class BeanAllSymbols extends BeanBaseResponse{
 
         public void setSign(Boolean sign) {
             this.sign = sign;
+        }
+        @Override
+        public SymbolPrices clone(){
+            SymbolPrices symbolPrices = null;
+            try {
+                symbolPrices = (SymbolPrices) super.clone();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+            return symbolPrices;
         }
     }
 

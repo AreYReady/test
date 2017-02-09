@@ -75,8 +75,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         ViewHolder viewHolder = new ViewHolder(view);
         viewHolder.mImg = (ImageView) view
                 .findViewById(R.id.id_index_gallery_item_image);
-        viewHolder.mleft=(TextView)view.findViewById(R.id.id_index_gallery_item_text_left);
-        viewHolder.mRight=(TextView)view.findViewById(R.id.id_index_gallery_item_text_right);
+        viewHolder.mleft=(TextView)view.findViewById(R.id.id_index_gallery_item_text_ask);
+        viewHolder.mRight=(TextView)view.findViewById(R.id.id_index_gallery_item_text_bid);
 
 //        AlphaAnimation alam=new AlphaAnimation(1, 0);
 //        //设置动画
@@ -100,9 +100,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     public void onBindViewHolder(final ViewHolder viewHolder, final int i)
     {
         viewHolder.mImg.setImageResource(mDatas.get(i).getImageResource());
-        viewHolder.itemView.setTag(mDatas.get(i).getSymbolTag());
-        viewHolder.mRight.setText(mDatas.get(i).getRightString());
-        viewHolder.mleft.setText(mDatas.get(i).getLeftString());
+        viewHolder.itemView.setTag(mDatas.get(i).getSymbol());
+        viewHolder.mRight.setText(mDatas.get(i).getBid());
+        viewHolder.mleft.setText(mDatas.get(i).getAsk());
     }
 
 

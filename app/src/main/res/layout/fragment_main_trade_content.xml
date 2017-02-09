@@ -209,6 +209,7 @@
             android:layout_height="40dip"
             android:gravity="center"
             android:orientation="horizontal"
+            android:visibility="gone"
             >
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/civ_symbol_flag"

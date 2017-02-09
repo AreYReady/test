@@ -29,7 +29,7 @@
              />
 
         <TextView
-            android:id="@+id/id_index_gallery_item_text_left"
+            android:id="@+id/id_index_gallery_item_text_ask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/v_temp"
@@ -38,7 +38,7 @@
             android:textSize="15dp" />
 
         <TextView
-            android:id="@+id/id_index_gallery_item_text_right"
+            android:id="@+id/id_index_gallery_item_text_bid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/v_temp"
