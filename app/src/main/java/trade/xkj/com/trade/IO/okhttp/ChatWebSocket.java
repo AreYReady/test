@@ -74,7 +74,7 @@ public class ChatWebSocket  extends WebSocketListener {
         Log.i(TAG, "onClosing: "+reason);
         webSocket.close(1000, null);
         mChatWebSocket=null;
-
+        getChartWebSocket();
     }
 
     @Override

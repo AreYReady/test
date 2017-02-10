@@ -16,6 +16,7 @@ import java.util.TreeMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.Response;
 import trade.xkj.com.trade.IO.okhttp.OkhttpUtils;
 import trade.xkj.com.trade.IO.sslsocket.SSLSocketChannel;
@@ -25,6 +26,7 @@ import trade.xkj.com.trade.bean.BeanUnRegister;
 import trade.xkj.com.trade.bean.BeanUserLoginData;
 import trade.xkj.com.trade.bean.EventBusAllSymbol;
 import trade.xkj.com.trade.bean_.BeanResponse;
+import trade.xkj.com.trade.bean_.BeanServerTimeForHttp;
 import trade.xkj.com.trade.constant.RequestConstant;
 import trade.xkj.com.trade.constant.UrlConstant;
 import trade.xkj.com.trade.handler.HandlerWrite;
@@ -34,6 +36,7 @@ import trade.xkj.com.trade.utils.DateUtils;
 import trade.xkj.com.trade.utils.SystemUtil;
 
 import static trade.xkj.com.trade.constant.UrlConstant.URL_LOGIN;
+import static trade.xkj.com.trade.constant.UrlConstant.URL_SERVICE_TIME;
 
 
 /**
@@ -80,36 +83,54 @@ public class UserLoginModelImpl implements UserLoginModel {
      * @param beanLoginData
      */
     private void sendData(final BeanUserLoginData beanLoginData)  {
-        TreeMap<String,String> map=new TreeMap<>();
-        map.put(RequestConstant.LOGIN_NAME,AesEncryptionUtil.stringBase64toString(beanLoginData.getLogin()));
-        map.put(RequestConstant.API_ID, ACache.get(mContext).getAsString(RequestConstant.API_ID));
-        map.put(RequestConstant.API_TIME,DateUtils.getShowTime(BeanCurrentServerTime.instance.getCurrentServerTime()));
-        map.put(RequestConstant.LOGIN_PASSWORD, AesEncryptionUtil.stringBase64toString(beanLoginData.getPassword()));
-        String apiSign;
-        apiSign=AesEncryptionUtil.getApiSign(UrlConstant.URL_LOGIN,map);
-        map.put(RequestConstant.API_SIGN,apiSign);
-        OkhttpUtils.enqueue(URL_LOGIN,map, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i(TAG, "onFailure: 登入失败");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-
-                String result;
-                BeanResponse beanResponse = new Gson().fromJson(result = response.body().string(), new TypeToken<BeanResponse>() {
-                }.getType());
-                if(beanResponse.getStatus()==1){
-                    Log.i(TAG, "onResponse: 登入成功"+result);
-                    mResultEnum=ResultEnum.succ;
-                }else{
-                    Log.i(TAG, "onResponse: 登入失败"+result);
-                    mResultEnum=ResultEnum.erro;
+            //获取时间后，登入
+            okhttp3.Request request=new okhttp3.Request.Builder().url(URL_SERVICE_TIME).post(new FormBody.Builder().build()).build();
+            OkhttpUtils.enqueue(request, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Log.i(TAG, "onFailure: "+call.request()
+                    );
                 }
-                mUserLoginPresenter.loginResult(mResultEnum);
-            }
-        });
+
+                @Override
+                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                    String s;
+                    BeanServerTimeForHttp beanServerTimeForHttp = new Gson().fromJson(s=response.body().string(), BeanServerTimeForHttp.class);
+                    Log.i(TAG, "onResponse: "+s);
+                    BeanCurrentServerTime.getInstance(DateUtils.getOrderStartTime(beanServerTimeForHttp.getData(),"yyyyMMddHHmmss"));
+                    Log.i(TAG, "onResponse: "+DateUtils.getShowTime(DateUtils.getOrderStartTime(beanServerTimeForHttp.getData(),"yyyyMMddHHmmss")));
+                    TreeMap<String,String> map=new TreeMap<>();
+                    map.put(RequestConstant.LOGIN_NAME,AesEncryptionUtil.stringBase64toString(beanLoginData.getLogin()));
+                    map.put(RequestConstant.API_ID, ACache.get(mContext).getAsString(RequestConstant.API_ID));
+                    map.put(RequestConstant.API_TIME,DateUtils.getShowTime(BeanCurrentServerTime.instance.getCurrentServerTime()));
+                    map.put(RequestConstant.LOGIN_PASSWORD, AesEncryptionUtil.stringBase64toString(beanLoginData.getPassword()));
+                    String apiSign;
+                    apiSign=AesEncryptionUtil.getApiSign(UrlConstant.URL_LOGIN,map);
+                    map.put(RequestConstant.API_SIGN,apiSign);
+                    OkhttpUtils.enqueue(URL_LOGIN,map, new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Log.i(TAG, "onFailure: 登入失败");
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+
+                            String result;
+                            BeanResponse beanResponse = new Gson().fromJson(result = response.body().string(), new TypeToken<BeanResponse>() {
+                            }.getType());
+                            if(beanResponse.getStatus()==1){
+                                Log.i(TAG, "onResponse: 登入成功"+result);
+                                mResultEnum=ResultEnum.succ;
+                            }else{
+                                Log.i(TAG, "onResponse: 登入失败"+result);
+                                mResultEnum=ResultEnum.erro;
+                            }
+                            mUserLoginPresenter.loginResult(mResultEnum);
+                        }
+                    });
+                }
+            });
     }
     public enum ResultEnum{
         succ,

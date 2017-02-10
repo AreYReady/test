@@ -25,6 +25,7 @@
         </activity>
         <activity
             android:name=".mvp.main_trade.v.MainTradeContentActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".mvp.operate.OperatePositionActivity"

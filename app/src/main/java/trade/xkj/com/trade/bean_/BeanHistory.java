@@ -8,7 +8,7 @@ import java.util.List;
  * TODO:历史bean
  */
 
-public class BeanHistory {
+public class BeanHistory{
     int status;
     String msg;
     BeanHistoryData data;

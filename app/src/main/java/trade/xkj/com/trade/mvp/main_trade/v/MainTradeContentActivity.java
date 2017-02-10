@@ -19,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -61,6 +62,7 @@ public class MainTradeContentActivity extends BaseActivity
     public static float descHeight;
     public static float flIndicatorHeight;
     public LinearLayout llNetworkPrompt;
+    private FrameLayout mFrameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,11 +76,6 @@ public class MainTradeContentActivity extends BaseActivity
 
     private void connectSocket() {
         Log.i(TAG, "connectSocket: 连接socket");
-//        ChatWebSocket socket=ChatWebSocket.getChartWebSocket();
-//        BeanUserLoginDataSocket beanUserLoginData = new BeanUserLoginDataSocket(Integer.valueOf(ACache.get(context).getAsString(RequestConstant.LOGIN_NAME)), AesEncryptionUtil.encrypt(ACache.get(context).getAsString(RequestConstant.LOGIN_PASSWORD)), 9988);
-//                String s = new Gson().toJson(beanUserLoginData, BeanUserLoginDataSocket.class);
-//        Log.i(TAG, "connectSocket: "+s);
-//        socket.sendMessage(s);
     }
 
     @Override
@@ -115,6 +112,7 @@ public class MainTradeContentActivity extends BaseActivity
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mCSSwitch = (CustomSwitch) findViewById(R.id.cs_switch_tag);
+        mFrameLayout=(FrameLayout)findViewById(R.id.fl_main_trade_content);
         mCSSwitch.setSelectedChangeListener(new CustomSwitch.SelectedChangedListener() {
             @Override
             public void SelectChange(Boolean select) {
@@ -303,4 +301,6 @@ public class MainTradeContentActivity extends BaseActivity
             llNetworkPrompt.setVisibility(View.VISIBLE);
         }
     }
+
+
 }

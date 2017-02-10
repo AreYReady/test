@@ -75,6 +75,7 @@ public class HistoryTradeView extends View {
     private long showBeginTime;
     private int indexCount = TradeDateConstant.count;
     private int period;
+    private Paint mDashedPaint;
     /**
      * 每单位px的秒数
      */
@@ -87,6 +88,7 @@ public class HistoryTradeView extends View {
      * 最高价和最低价的差价
      */
     private double blance;
+    private double lastItemOpenPrice;
     private DrawPriceListener mDrawPriceListener;
 
     public HistoryTradeView(Context context) {
@@ -128,6 +130,9 @@ public class HistoryTradeView extends View {
         mGarkPaint.setStrokeWidth(3);
         mGarkPaint.setTextAlign(Paint.Align.CENTER);
         mGarkPaint.setTextSize(SystemUtil.dp2pxFloat(mContext, 10));
+        mDashedPaint=new Paint();
+        mDashedPaint.setStyle(Paint.Style.FILL);
+        mDashedPaint.setStrokeWidth(3);
         mDrawPriceDataList = new ArrayList<>();
     }
 
@@ -201,6 +206,7 @@ public class HistoryTradeView extends View {
         if (data != null) {
             BeanHistory.BeanHistoryData.HistoryItem historyData;
             for (int i = startIndex; i < endIndex; i++) {
+
                 historyData = data.getList().get(i);
                 openPrice = historyData.getOpen();
                 closePrice = historyData.getClose();
@@ -217,21 +223,23 @@ public class HistoryTradeView extends View {
                 }
                 startX = showDataLeftX + (i - startIndex) * (simpleDataSpace + dataViewSpace);
                 stopX = startX + simpleDataSpace;
+                if(i==999) {
+                    Log.i(TAG, "drawRect: " + endIndex+" showDataRightX "+showDataRightX+" stopX "+stopX);
+                }
                 //说明打开价和关闭价相等或者太多相近，人工画出值
                 if (historyData.getClose() > historyData.getOpen()) {
                     canvas.drawRect(startX, yBottom, stopX, yTop, mBluePaint);
                     canvas.drawLine(startX + (stopX - startX) / 2, yMinBottom, startX + (stopX - startX) / 2, yMaxTop, mBluePaint);
-                } else if(historyData.getClose() < historyData.getOpen()){
+                } else if (historyData.getClose() < historyData.getOpen()) {
                     canvas.drawRect(startX, yTop, stopX, yBottom, mRedPaint);
                     canvas.drawLine(startX + (stopX - startX) / 2, yMaxTop, startX + (stopX - startX) / 2, yMinBottom, mRedPaint);
-                }else{
-                    if(yMaxTop>yMinBottom){
+                } else {
+                    if (yMaxTop > yMinBottom) {
                         canvas.drawLine(startX + (stopX - startX) / 2, yMaxTop, startX + (stopX - startX) / 2, yMinBottom, mSilverPaint);
-                    }else{
-                        canvas.drawLine(startX + (stopX - startX) / 2, yMinBottom, startX + (stopX - startX) / 2,yMaxTop , mSilverPaint);
+                    } else {
+                        canvas.drawLine(startX + (stopX - startX) / 2, yMinBottom, startX + (stopX - startX) / 2, yMaxTop, mSilverPaint);
                     }
-                    canvas.drawRect(startX, yTop, stopX, yBottom+3, mSilverPaint);
-
+                    canvas.drawRect(startX, yTop, stopX, yBottom + 3, mSilverPaint);
                 }
             }
         }
@@ -258,6 +266,7 @@ public class HistoryTradeView extends View {
             remainder = ((wholeNumber % ints[0]) / Math.pow(10, digits));
 
             Log.i(TAG, "drawLine:显示出来的数据最大最小值 " + price[1] + "  " + price[0]);
+
             canvas.drawLine(showDataLeftX, 0, showDataRightX, 0, mGarkPaint);
             canvas.drawLine(showDataLeftX, getMeasuredHeight() - SystemUtil.dp2pxFloat(mContext, TradeDateConstant.showTimeSpace), showDataRightX, getMeasuredHeight() - SystemUtil.dp2pxFloat(mContext, TradeDateConstant.showTimeSpace), mGarkPaint);
             Log.i(TAG, "drawLine: " + digits);
@@ -270,7 +279,7 @@ public class HistoryTradeView extends View {
                     mBeanDrawPriceData = new BeanDrawPriceData();
                     mBeanDrawPriceData.setPriceY(i1);
                     try {
-                        mBeanDrawPriceData.setPriceString(String.valueOf(MoneyUtil.div((price[1] - remainder - ints[0] / Math.pow(10, digits) * i),1,digits,ROUND_DOWN)));
+                        mBeanDrawPriceData.setPriceString(String.valueOf(MoneyUtil.div((price[1] - remainder - ints[0] / Math.pow(10, digits) * i), 1, digits, ROUND_DOWN)));
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
@@ -278,20 +287,34 @@ public class HistoryTradeView extends View {
                 }
             }
 
-            //计算虚线的位置和传实时值：
-//            if(realTimePrice!=-1&&price[1] - realTimePrice>0){
-//                double y = (price[1] - realTimePrice) / unit;
-//                mBeanDrawPriceData=new BeanDrawPriceData();
-//                mBeanDrawPriceData.setPriceY((int)((price[1] - realTimePrice) / unit));
-//                mBeanDrawPriceData.setPriceString(String.valueOf(realTimePrice/Math.pow(10,digits)));
-//                mDrawPriceDataList.add(mBeanDrawPriceData);
-//
-//            }
+//            计算虚线的位置和传实时值：
+            if (realTimePrice != -1 && price[1] - realTimePrice > 0) {
+                try {
+                    double y = MoneyUtil.div((price[1] - realTimePrice), unit);
+                    mBeanDrawPriceData = new BeanDrawPriceData();
+                    mBeanDrawPriceData.setPriceY((int) ((price[1] - realTimePrice) / unit));
+                    String temp;
+                    mBeanDrawPriceData.setPriceString(String.valueOf(realTimePrice));
+                    mDrawPriceDataList.add(mBeanDrawPriceData);
+                    if(realTimePrice<lastItemOpenPrice){
+                        mDashedPaint.setColor(getResources().getColor(R.color.risk_slippage_max_red_dark));
+                        mBeanDrawPriceData.setColor(getResources().getColor(R.color.risk_slippage_max_red_dark));
+                    }else{
+                        mDashedPaint.setColor(getResources().getColor(R.color.risk_slippage_max_green_dark));
+                        mBeanDrawPriceData.setColor(getResources().getColor(R.color.risk_slippage_max_green_dark));
+                    }
+                    canvas.drawLine(showDataLeftX, (float) y, showDataRightX, (float) y,mDashedPaint);
+                } catch (IllegalAccessException e) {
+                    Log.i(TAG, "drawLine: 异常");
+                    e.printStackTrace();
+                }
+            }
             if (mDrawPriceListener != null)
                 mDrawPriceListener.drawPriceData(mDrawPriceDataList);
 
         }
     }
+
 
 
     public void setHistoryData(BeanHistory.BeanHistoryData data, int left, int right) {
@@ -320,11 +343,17 @@ public class HistoryTradeView extends View {
     private void decodeHistoryData() {
         mDrawPriceDataList.clear();
         digits = data.getDigits();
-        dataViewSpace = (float) (SystemUtil.dp2pxFloat(mContext, TradeDateConstant.jianju) * scaleSize);
-        simpleDataSpace = (float) (SystemUtil.dp2pxFloat(mContext, TradeDateConstant.juli) * scaleSize);
-        startIndex = (int) Math.abs(showDataLeftX / (simpleDataSpace + dataViewSpace));
+        dataViewSpace = (SystemUtil.dp2pxFloat(mContext, TradeDateConstant.jianju) * scaleSize);
+        simpleDataSpace =(SystemUtil.dp2pxFloat(mContext, TradeDateConstant.juli) * scaleSize);
+//        startIndex = (int) Math.abs(showDataLeftX / (simpleDataSpace + dataViewSpace));
         //下标是从零开始
-        endIndex = (int) Math.abs(showDataRightX / (simpleDataSpace + dataViewSpace)) - 1;
+//        endIndex = (int) Math.abs(showDataRightX / (simpleDataSpace + dataViewSpace));
+        try {
+            endIndex=(int)Math.abs(MoneyUtil.div((double) showDataRightX,(double) (simpleDataSpace + dataViewSpace)));
+            startIndex=(int)Math.abs(MoneyUtil.div((double) showDataLeftX,(double) (simpleDataSpace + dataViewSpace)));
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         price = DataUtil.calcMaxMinPrice(data, digits, startIndex, endIndex);
         blance = MoneyUtil.subPrice(price[1], price[0]);
         showDataHeight = (getMeasuredHeight() - SystemUtil.dp2pxFloat(mContext, TradeDateConstant.showTimeSpace));
@@ -341,52 +370,40 @@ public class HistoryTradeView extends View {
         dataStopTime = dataBeginTime + data.getList().get(data.getList().size() - 1).getQuoteTime();
         showBeginTime = dataBeginTime + data.getList().get(startIndex).getQuoteTime();
         period = data.getPeriod();
+        lastItemOpenPrice=data.getList().get(data.getBarnum()-1).getOpen();
         if (!isReady)
             isReady = true;
     }
-
     //组装实时数据。
     BeanDrawRealTimePriceData beanDrawRealTimePriceData;
     BeanHistory.BeanHistoryData.HistoryItem lastHistoryData;
-
     double realTimePrice = -1;
-
     public BeanDrawRealTimePriceData refreshRealTimePrice(RealTimeDataList.BeanRealTime beanRealTime) {
-//        /**
-//         * 接收实时数据，画虚线。（可以在画横线的时候画）
-//         * 传送实时数据的y轴（可以给drawPrice的时候,一起传送
-//         * 更新data，以便刷新最后一个item的值
-//         * 所以这个有刷新的功能，也就是更新data然后刷新
-//         */
-//        if(DateUtils.getOrderStartTime(beanRealTime.getTime())/1000>=dataStopTime+period*60){
-//            //新的时间阶段。
-//            Log.i(TAG, "refreshRealTimePrice: 新的最后一个item");
-//        }else{
-//            Log.i(TAG, "refreshRealTimePrice: 更新最后一个item");
-//            lastHistoryData  = data.getList().get(data.getBarnum() - 1);
-//            String[] split = lastHistoryData.getO().split("\\|");
-//            realTimePrice = beanRealTime.getBid() * Math.pow(10, digits);
-//            StringBuffer stringBuffer=new StringBuffer();
-////             Double.valueOf(split[0])+Double.valueOf(split[1]);
-////            Double.valueOf(split[0])+Double.valueOf(split[2]);
-//            stringBuffer.append(split[0]).append("|");
-//            if(Double.valueOf(split[0])+Double.valueOf(split[1])>realTimePrice){
-//                //说明比最小值还小
-//                stringBuffer.append((int)(realTimePrice-Double.valueOf(split[0]))).append("|");
-//                stringBuffer.append(split[2]).append("|");
-//            }else if(Double.valueOf(0)+Double.valueOf(split[2])<realTimePrice){
-//                //说明比最大值还大
-//                stringBuffer.append(split[1]).append("|");
-//                stringBuffer.append((int)(realTimePrice-Double.valueOf(split[0]))).append("|");
-//            }else{
-//                stringBuffer.append(split[1]).append("|");
-//                stringBuffer.append(split[2]).append("|");
-//            }
-//            stringBuffer.append((int)(realTimePrice-Double.valueOf(split[0])));
-////            data.getList().get(data.getBarnum()-1).setO(stringBuffer.toString());
-//            Log.i(TAG, "refreshRealTimePrice: 前后对比"+lastHistoryData.getO()+"  "+stringBuffer.toString());
-//            postInvalidate((int)showDataLeftX,0,(int)showDataRightX,getHeight());
-//        }
+        //两种保存方式。1：当前显示的。如果实时值对最后一个值有所更改，则实时更改。
+        BeanHistory.BeanHistoryData.HistoryItem historyItem = data.getList().get(data.getBarnum() - 1);
+        if (DateUtils.getOrderStartTime(beanRealTime.getTime()) < DateUtils.getOrderStartTime(historyItem.getTime()) + period * 60 * 1000) {
+            //还属于最后一个item的时间范围
+            if (historyItem.getHigh() < beanRealTime.getBid()) {
+                historyItem.setHigh(beanRealTime.getBid());
+            }
+            if (beanRealTime.getBid() < historyItem.getLow()) {
+                historyItem.setLow(beanRealTime.getBid());
+            }
+            historyItem.setClose(beanRealTime.getBid());
+        } else {
+            //不属于最有一个item的时间范围。数据删除第一个时间点，在最后增加一个
+            data.getList().remove(0);
+            BeanHistory.BeanHistoryData.HistoryItem lastItem = new BeanHistory().new BeanHistoryData().new HistoryItem();
+            lastItem.setOpen(beanRealTime.getBid());
+            lastItem.setClose(beanRealTime.getBid());
+            lastItem.setHigh(beanRealTime.getBid());
+            lastItem.setLow(beanRealTime.getBid());
+            lastItem.setTime(beanRealTime.getTime());
+            lastItem.setQuoteTime((int) DateUtils.getOrderStartTime(beanRealTime.getTime()));
+            data.getList().add(lastItem);
+        }
+        this.realTimePrice = beanRealTime.getBid();
+        postInvalidate((int) showDataLeftX, 0, (int) showDataRightX, getHeight(), scaleSize);
         return beanDrawRealTimePriceData;
     }
 }

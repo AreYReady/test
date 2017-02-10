@@ -4,36 +4,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.gson.Gson;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
 import trade.xkj.com.trade.IO.okhttp.ChatWebSocket;
-import trade.xkj.com.trade.IO.okhttp.OkhttpUtils;
 import trade.xkj.com.trade.R;
 import trade.xkj.com.trade.base.BaseActivity;
-import trade.xkj.com.trade.bean.BeanCurrentServerTime;
 import trade.xkj.com.trade.bean.BeanUserLoginData;
-import trade.xkj.com.trade.bean_.BeanServerTimeForHttp;
 import trade.xkj.com.trade.constant.RequestConstant;
 import trade.xkj.com.trade.mvp.main_trade.v.MainTradeContentActivity;
 import trade.xkj.com.trade.utils.ACache;
 import trade.xkj.com.trade.utils.AesEncryptionUtil;
 import trade.xkj.com.trade.utils.CacheUtil;
-import trade.xkj.com.trade.utils.DateUtils;
 import trade.xkj.com.trade.utils.SystemUtil;
 import trade.xkj.com.trade.utils.ToashUtil;
 import trade.xkj.com.trade.utils.view.LoadingDialog;
 
 import static android.util.Log.i;
-import static trade.xkj.com.trade.constant.UrlConstant.URL_SERVICE_TIME;
 
 
 public class UserLoginActivity extends BaseActivity implements UserLoginActivityInterface,View.OnClickListener{
@@ -83,29 +71,10 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
     public void initData() {
         mUserLoginPresenter=new UserLoginPresenter(this,Handler,getContext());
        scrren = SystemUtil.getScrren(this);
-        getServiceTime();
         ACache.get(this).put(RequestConstant.API_ID,"crm1");
     }
 
-    //保存时间
-    private void getServiceTime() {
-        okhttp3.Request request=new okhttp3.Request.Builder().url(URL_SERVICE_TIME).build();
-        OkhttpUtils.enqueue(request, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i(TAG, "onFailure: ");
-            }
 
-            @Override
-            public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                String s;
-                BeanServerTimeForHttp beanServerTimeForHttp = new Gson().fromJson(s=response.body().string(), BeanServerTimeForHttp.class);
-                Log.i(TAG, "onResponse: "+s);
-                BeanCurrentServerTime.getInstance(DateUtils.getOrderStartTime(beanServerTimeForHttp.getData(),"yyyyMMddHHmmss"));
-                Log.i(TAG, "onResponse: "+DateUtils.getShowTime(DateUtils.getOrderStartTime(beanServerTimeForHttp.getData(),"yyyyMMddHHmmss")));
-            }
-        });
-    }
 
 
     @Override

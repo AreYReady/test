@@ -2,17 +2,19 @@ package trade.xkj.com.trade.utils.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
 import java.util.List;
 
-import trade.xkj.com.trade.base.MyApplication;
 import trade.xkj.com.trade.R;
-import trade.xkj.com.trade.utils.SystemUtil;
+import trade.xkj.com.trade.base.MyApplication;
 import trade.xkj.com.trade.bean.BeanDrawPriceData;
 import trade.xkj.com.trade.bean.BeanDrawRealTimePriceData;
+import trade.xkj.com.trade.utils.SystemUtil;
 
 /**
  * Created by huangsc on 2016-12-02.
@@ -61,8 +63,21 @@ public class DrawPriceView extends View {
             return;
         }
         for (BeanDrawPriceData beanDrawPriceData : mDrawPrice) {
-            canvas.drawText(beanDrawPriceData.getPriceString(), getResources().getDimension(R.dimen.space_big), beanDrawPriceData.getPriceY(), mGarkPaint);
+            if(beanDrawPriceData.getColor()!=0){
+                //实时数据
+                mRealTimePaint.setColor(beanDrawPriceData.getColor());
+                RectF oval3 = new RectF(20, beanDrawPriceData.getPriceY()-50, getWidth()-20, beanDrawPriceData.getPriceY()+20);// 设置个新的长方形
+                canvas.drawRoundRect(oval3, 200, 200, mRealTimePaint);//第二个参数是x半径，第三个参数是y半径
+                mRealTimePaint.setColor(Color.WHITE);
+                canvas.drawText(beanDrawPriceData.getPriceString(), getResources().getDimension(R.dimen.space_big), beanDrawPriceData.getPriceY(), mRealTimePaint);
+                mRealTimePaint.setStyle(Paint.Style.FILL);//充满
+                mRealTimePaint.setColor(beanDrawPriceData.getColor());
+                mRealTimePaint.setAntiAlias(true);// 设置画笔的锯齿效果
+            }else{
+                canvas.drawText(beanDrawPriceData.getPriceString(), getResources().getDimension(R.dimen.space_big), beanDrawPriceData.getPriceY(), mGarkPaint);
+            }
         }
+
         if(mBeanDrawRealTimePriceData!=null){
             mRealTimePaint.setColor(mBeanDrawRealTimePriceData.getColor());
             canvas.drawText(mBeanDrawRealTimePriceData.getRealTimePrice(),getResources().getDimension(R.dimen.space_big),mBeanDrawRealTimePriceData.getY(),mRealTimePaint);
