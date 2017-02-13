@@ -9,7 +9,7 @@
     android:padding="20dp"
     android:orientation="vertical">
 
-    <trade.xkj.com.trade.utils.view.LVCircularRing
+    <com.xkj.trade.utils.view.LVCircularRing
         android:id="@+id/lv_circularring"
         android:layout_width="50dp"
         android:layout_height="50dp"/>

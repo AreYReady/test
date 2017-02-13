@@ -4,7 +4,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <trade.xkj.com.trade.utils.view.AddSubEditText
+    <com.xkj.trade.utils.view.AddSubEditText
         android:id="@+id/aset_aset"
         android:layout_width="250dip"
         android:layout_height="50dip"

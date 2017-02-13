@@ -40,7 +40,7 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/tv_avg_daily_pl"
+            android:id="@+id/tv_huiceper"
             style="@style/TextDescBigGreen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,8 +53,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/tv_avg_daily_pl"
-            android:text="@string/avg_daily_pl" />
+            android:layout_below="@id/tv_huiceper"
+            android:text="@string/huiceper" />
     </RelativeLayout>
 
     <View
@@ -68,7 +68,7 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/tv_success_rate"
+            android:id="@+id/tv_profitper"
             style="@style/TextDescBigGreen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/tv_success_rate"
-            android:text="@string/success_rate" />
+            android:layout_below="@id/tv_profitper"
+            android:text="@string/profitper" />
     </RelativeLayout>
 </LinearLayout>

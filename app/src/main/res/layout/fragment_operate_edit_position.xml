@@ -100,11 +100,11 @@
         android:paddingRight="@dimen/space_big"
         android:orientation="vertical">
 
-        <trade.xkj.com.trade.utils.view.CustomASETGroup
+        <com.xkj.trade.utils.view.CustomASETGroup
             android:layout_width="match_parent"
             android:layout_height="@dimen/y150" />
 
-        <trade.xkj.com.trade.utils.view.CustomASETGroup
+        <com.xkj.trade.utils.view.CustomASETGroup
             android:layout_width="match_parent"
             android:layout_height="@dimen/y150" />
         <Space

@@ -86,29 +86,29 @@
                 android:paddingTop="20dip"
                 android:text="选择金额" />
 
-            <trade.xkj.com.trade.utils.view.CustomSeekBar
+            <com.xkj.trade.utils.view.CustomSeekBar
                 android:layout_width="match_parent"
                 android:layout_height="100dip" />
 
-            <trade.xkj.com.trade.utils.view.CustomASETGroup
+            <com.xkj.trade.utils.view.CustomASETGroup
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 hsc:desc_text="价格为"
                 hsc:iamge_visibility="false" />
 
-            <trade.xkj.com.trade.utils.view.CustomASETGroup
+            <com.xkj.trade.utils.view.CustomASETGroup
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 hsc:desc_text="止损" />
 
-            <trade.xkj.com.trade.utils.view.CustomASETGroup
+            <com.xkj.trade.utils.view.CustomASETGroup
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 hsc:desc_text="获利" />
 
-            <trade.xkj.com.trade.utils.view.CustomDateSelect
+            <com.xkj.trade.utils.view.CustomDateSelect
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></trade.xkj.com.trade.utils.view.CustomDateSelect>
+                android:layout_height="wrap_content"></com.xkj.trade.utils.view.CustomDateSelect>
         </LinearLayout>
 
     </ScrollView>

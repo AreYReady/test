@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="trade.xkj.com.trade.mvp.main_trade.v.MainTradeContentActivity">
+    tools:context=".mvp.main_trade.activity.v.MainTradeContentActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -23,13 +23,13 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="@dimen/x30"
                >
-                <trade.xkj.com.trade.utils.view.CustomSwitch
+                <com.xkj.trade.utils.view.CustomSwitch
                     android:id="@+id/cs_switch_tag"
                     android:layout_toLeftOf="@+id/ib_"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true">
-                </trade.xkj.com.trade.utils.view.CustomSwitch>
+                </com.xkj.trade.utils.view.CustomSwitch>
                 <ImageButton
                     android:id="@+id/ib_"
                     android:layout_alignParentRight="true"

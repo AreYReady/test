@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="trade.xkj.com.trade.mvp.main_trade.v.MainTradeContentActivity"
+    tools:context=".mvp.main_trade.activity.v.MainTradeContentActivity"
     android:background="@color/background_"
     tools:showIn="@layout/app_bar_main">
 
@@ -41,7 +41,7 @@
             />
     </LinearLayout>
 
-    <trade.xkj.com.trade.utils.view.PullBottomViewDragLayout
+    <com.xkj.trade.utils.view.PullBottomViewDragLayout
         android:layout_below="@+id/ll_net_exception_prompt"
         android:id="@+id/dragLayout"
         android:layout_width="match_parent"
@@ -67,7 +67,7 @@
                 android:clipChildren="false"
                 android:layerType="software">
 
-                <trade.xkj.com.trade.utils.view.CustomViewPager
+                <com.xkj.trade.utils.view.CustomViewPager
                     android:id="@+id/cvp_indicator_item"
                     android:layout_width="match_parent"
                     android:layout_height="50dip"
@@ -81,5 +81,5 @@
                 android:layout_height="match_parent"
                 android:paddingBottom="@dimen/space_big"/>
         </LinearLayout>
-    </trade.xkj.com.trade.utils.view.PullBottomViewDragLayout>
+    </com.xkj.trade.utils.view.PullBottomViewDragLayout>
 </RelativeLayout>

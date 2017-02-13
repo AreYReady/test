@@ -43,7 +43,7 @@
         android:paddingTop="20dip"
         android:text="选择金额" />
 
-    <trade.xkj.com.trade.utils.view.CustomSeekBar
+    <com.xkj.trade.utils.view.CustomSeekBar
         android:id="@+id/csb_vp_item_order_frag"
         android:layout_width="match_parent"
         android:layout_height="100dip" />

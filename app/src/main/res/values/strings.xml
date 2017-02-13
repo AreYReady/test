@@ -89,6 +89,8 @@
     <string name="back_to_trading">返回交易</string>
     <string name="balance">余额</string>
     <string name="become_part_of_community">加入社区</string>
+    <string name="huiceper">最大回撤率</string>
+    <string name="profitper">总收益率</string>
     <string name="button_to_trade">按钮进行交易。</string>
     <string name="buy">买进</string>
     <string name="buy_action">买进%s</string>

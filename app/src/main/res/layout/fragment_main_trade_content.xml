@@ -10,7 +10,7 @@
         android:background="@color/background_indicator"
         android:clipChildren="false">
 
-        <trade.xkj.com.trade.utils.view.CustomViewPager
+        <com.xkj.trade.utils.view.CustomViewPager
             android:id="@+id/vp_indicator_trade_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
 
     </RelativeLayout>
 
-    <trade.xkj.com.trade.utils.view.MyScrollView
+    <com.xkj.trade.utils.view.MyScrollView
         android:id="@+id/msv_my_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -36,14 +36,14 @@
                 android:layout_height="150dip"/>
 
 
-            <trade.xkj.com.trade.utils.view.CustomPeriodButtons
+            <com.xkj.trade.utils.view.CustomPeriodButtons
                 android:id="@+id/cpb_period"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/background_show_trade"
                 android:padding="@dimen/space_big">
 
-            </trade.xkj.com.trade.utils.view.CustomPeriodButtons>
+            </com.xkj.trade.utils.view.CustomPeriodButtons>
 
             <LinearLayout
                 android:id="@+id/ll_k_link_content"
@@ -64,7 +64,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="6">
 
-                        <trade.xkj.com.trade.utils.view.MyHorizontalScrollView
+                        <com.xkj.trade.utils.view.MyHorizontalScrollView
                             android:id="@+id/hsv_trade"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -77,15 +77,15 @@
                                 >
 
                             </RelativeLayout>
-                        </trade.xkj.com.trade.utils.view.MyHorizontalScrollView>
+                        </com.xkj.trade.utils.view.MyHorizontalScrollView>
 
-                        <trade.xkj.com.trade.utils.view.CustomDashedLinkView
+                        <com.xkj.trade.utils.view.CustomDashedLinkView
                             android:id="@+id/cdlv_"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"/>
                     </FrameLayout>
 
-                    <trade.xkj.com.trade.utils.view.DrawPriceView
+                    <com.xkj.trade.utils.view.DrawPriceView
                         android:id="@+id/dp_draw_price"
                         android:layout_width="0dip"
                         android:layout_height="match_parent"
@@ -128,10 +128,11 @@
                         android:text="-$3,514.53"/>
                 </LinearLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:id="@+id/rl_trade"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:background="@color/background_trade_item">
 
                     <LinearLayout
@@ -149,8 +150,8 @@
                         android:id="@+id/rv_trade_content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/trade_title"/>
-                </RelativeLayout>
+                        />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -170,7 +171,7 @@
                     android:layerType="software"
                     >
 
-                    <trade.xkj.com.trade.utils.view.CustomViewPager
+                    <com.xkj.trade.utils.view.CustomViewPager
                         android:id="@+id/cvp_my_favorites_indicator"
                         android:layout_width="match_parent"
                         android:layout_height="50dip"
@@ -194,7 +195,7 @@
             </LinearLayout>
         </LinearLayout>
 
-    </trade.xkj.com.trade.utils.view.MyScrollView>
+    </com.xkj.trade.utils.view.MyScrollView>
 
     <LinearLayout
         android:id="@+id/trade_title_hint"
