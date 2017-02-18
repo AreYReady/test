@@ -11,6 +11,7 @@ import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.text.InputFilter;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,9 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.lang.reflect.Field;
-
 import com.xkj.trade.constant.NetworkType;
+
+import java.lang.reflect.Field;
 
 /**
  * @author huangsc
@@ -277,6 +278,23 @@ public class SystemUtil {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             //透明导航栏
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+    }
+    public static void show(String str,Class classname) {
+        str = str.trim();
+        int index = 0;
+        int maxLength = 4000;
+        String sub;
+        while (index < str.length()) {
+            // java的字符不允许指定超过总的长度end
+            if (str.length() <= index + maxLength) {
+                sub = str.substring(index);
+            } else {
+                sub = str.substring(index, maxLength);
+            }
+
+            index += maxLength;
+            Log.i("hsc ："+classname.getSimpleName(), "response： "+sub.trim());
         }
     }
 }

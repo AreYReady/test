@@ -34,6 +34,11 @@ import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean.BeanMasterInfo;
 import com.xkj.trade.bean_.BeanUserListInfo;
+import com.xkj.trade.mvp.main_trade.FragmentClosePosition;
+import com.xkj.trade.mvp.main_trade.FragmentMasterCopy;
+import com.xkj.trade.mvp.main_trade.FragmentMasterWatch;
+import com.xkj.trade.mvp.main_trade.FragmentOpenPosition;
+import com.xkj.trade.mvp.main_trade.FragmentPendingPosition;
 import com.xkj.trade.mvp.main_trade.activity.p.MainActPreImpl;
 import com.xkj.trade.mvp.main_trade.fragment_content.v.MainTradeContentFrag;
 import com.xkj.trade.mvp.master.FragmentMaster;
@@ -209,7 +214,6 @@ public class MainTradeContentActivity extends BaseActivity
                 }
                 Log.i(TAG, "onPageSelected: mPosition" + position);
                 mViewPagerFrag.setCurrentItem(position, true);
-
             }
 
             @Override
@@ -333,14 +337,14 @@ public class MainTradeContentActivity extends BaseActivity
             switch (msg.what) {
                 case refreshUserInfo:
                     BeanUserListInfo.BeanUserList.BeanUserInfo beanUserInfo = beanUserListInfo.getData().getList().get(0);
-                    mEquity.setText(beanUserInfo.getEquity());
-                    mBalance.setText(beanUserInfo.getBalance());
-                    mCredit.setText(beanUserInfo.getCredit());
-                    mMargin.setText(beanUserInfo.getMargin());
-                    mOpenPl.setText(String.valueOf(MoneyUtil.subPrice(beanUserInfo.getEquity(), MoneyUtil.addPrice(beanUserInfo.getBalance(), beanUserInfo.getCredit()))));
+                    mEquity.setText(MoneyUtil.moneyFormat(beanUserInfo.getEquity()));
+                    mBalance.setText(MoneyUtil.moneyFormat(beanUserInfo.getBalance()));
+                    mCredit.setText(MoneyUtil.moneyFormat(beanUserInfo.getCredit()));
+                    mMargin.setText(MoneyUtil.moneyFormat(beanUserInfo.getMargin()));
+                    mOpenPl.setText(MoneyUtil.moneyFormat(String.valueOf(MoneyUtil.subPrice(beanUserInfo.getEquity(), MoneyUtil.addPrice(beanUserInfo.getBalance(), beanUserInfo.getCredit())))));
                     try {
                         if (!beanUserInfo.getMargin().equals("0"))
-                            mMarginLevel.setText(String.valueOf(MoneyUtil.div(beanUserInfo.getBalance(), beanUserInfo.getMargin())));
+                            mMarginLevel.setText(MoneyUtil.moneyFormat(String.valueOf(MoneyUtil.div(beanUserInfo.getBalance(), beanUserInfo.getMargin()))));
                         else {
                             mMarginLevel.setText("0.0");
                         }

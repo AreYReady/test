@@ -1,6 +1,10 @@
 package com.xkj.trade.IO.okhttp;
 
+import com.xkj.trade.constant.RequestConstant;
+import com.xkj.trade.utils.AesEncryptionUtil;
+import com.xkj.trade.utils.DataUtil;
 import com.xkj.trade.utils.SystemUtil;
+import com.xkj.trade.utils.ThreadHelper;
 
 import java.io.IOException;
 import java.util.Map;
@@ -50,8 +54,17 @@ public class OkhttpUtils {
     public static void enqueue(Request request, WebSocketListener responseListener) {
         mOkHttpClient.newWebSocket(request,responseListener);
     }
-    public static void enqueue(String url,Map map, Callback responseCallback) {
-        mOkHttpClient.newCall(new Request.Builder().url(url).post(getRequestPost(map)).build()).enqueue(responseCallback);
+    public static void enqueue(final String url, final Map map, final Callback responseCallback) {
+        ThreadHelper.instance().runOnWorkThread(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> treeMap = DataUtil.postMap();
+                treeMap.putAll(map);
+                treeMap.put(RequestConstant.API_SIGN, AesEncryptionUtil.getApiSign(url, treeMap));
+                mOkHttpClient.newCall(new Request.Builder().url(url).post(getRequestPost(treeMap)).build()).enqueue(responseCallback);
+            }
+        });
+
 
     }
     /**

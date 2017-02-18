@@ -26,16 +26,16 @@
             style="@style/TextDesc"
             android:text="16/12/6"/>
 
-        <Space
-            android:layout_width="@dimen/space_mini"
-            android:layout_height="@dimen/one_pixel" />
+        <!--<Space-->
+            <!--android:layout_width="@dimen/space_mini"-->
+            <!--android:layout_height="@dimen/one_pixel" />-->
 
-        <TextView
-            android:id="@+id/open_time2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TextDesc"
-            android:text="上午7:26"/>
+        <!--<TextView-->
+            <!--android:id="@+id/open_time2"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--style="@style/TextDesc"-->
+            <!--android:text="上午7:26"/>-->
 
         <Space
             android:layout_width="@dimen/one_pixel"

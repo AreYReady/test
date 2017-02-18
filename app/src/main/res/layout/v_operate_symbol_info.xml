@@ -1,40 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="left|center_vertical"
-    android:background="@color/toolbars_title_dark"
-    android:paddingLeft="@dimen/space_big"
-    android:paddingRight="@dimen/space_big"
-    android:orientation="horizontal">
-<com.xkj.trade.utils.RoundImageView
-    android:id="@+id/riv_trade_symbol"
-    android:layout_width="0dip"
-    android:layout_height="@dimen/y60"
-    android:paddingTop="10dip"
-    android:src="@mipmap/ic_instrument_audhuf"
-    android:layout_weight="2"/>
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/toolbars_title_dark"
+              android:gravity="left|center_vertical"
+              android:orientation="horizontal"
+              android:paddingLeft="@dimen/space_big"
+              android:paddingRight="@dimen/space_big">
+
+    <com.xkj.trade.utils.RoundImageView
+        android:id="@+id/riv_trade_symbol"
+        android:layout_width="0dip"
+        android:layout_height="@dimen/y60"
+        android:layout_weight="2"
+        android:paddingTop="10dip"
+        android:src="@mipmap/ic_instrument_audhuf"/>
+
     <TextView
+        android:id="@+id/tv_symbol_name"
+        style="@style/TextDesc"
         android:layout_width="0dip"
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:gravity="center_vertical"
-        android:text="EURUSD"
-        style="@style/TextDesc"/>
+        android:text="EURUSD"/>
+
     <TextView
         android:id="@+id/price_left"
-        android:gravity="center_vertical"
+        style="@style/TextDesc"
         android:layout_width="0dip"
         android:layout_height="match_parent"
-        android:text="1.06285"
-        style="@style/TextDesc"
-        android:layout_weight="3"/>
+        android:layout_weight="3"
+        android:gravity="center_vertical"
+        android:text="1.06285"/>
+
     <TextView
         android:id="@+id/price_right"
-        android:gravity="center_vertical"
-        android:layout_width="0dip"
         style="@style/TextDesc"
-        android:text="1.06283"
+        android:layout_width="0dip"
         android:layout_height="match_parent"
-        android:layout_weight="3"/>
+        android:layout_weight="3"
+        android:gravity="center_vertical"
+        android:text="1.06283"/>
 </LinearLayout>

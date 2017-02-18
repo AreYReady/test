@@ -14,7 +14,7 @@
         android:textAppearance="@style/TextHeader" />
 
     <TextView
-        android:id="@+id/commission"
+        android:id="@+id/tv_play_action"
         android:textSize="20dip"
         android:textColor="@color/link_text_material_light"
         android:text="@string/buy"

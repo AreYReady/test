@@ -27,25 +27,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"/>
 
-            <include layout="@layout/v_stack_commission" />
-
-            <include layout="@layout/v_stack_stop_loss" />
-
-            <include layout="@layout/v_stack_take_profit" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/space_big"
-            android:paddingRight="@dimen/space_big">
-            <Space
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"/>
-
             <include layout="@layout/v_stack_expiry_time" />
 
             <include layout="@layout/v_stack_stop_loss" />
@@ -91,7 +72,5 @@
                 android:background="@color/toolbars_title_dark"
                 android:text="删除" />
         </LinearLayout>
-
     </LinearLayout>
-
 </LinearLayout>

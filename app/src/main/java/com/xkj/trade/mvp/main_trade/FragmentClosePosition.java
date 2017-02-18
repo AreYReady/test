@@ -1,10 +1,11 @@
-package com.xkj.trade.mvp.main_trade.activity.v;
+package com.xkj.trade.mvp.main_trade;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,26 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
 import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.bean.BeanOpenPositionData;
+import com.xkj.trade.constant.RequestConstant;
+import com.xkj.trade.constant.UrlConstant;
+import com.xkj.trade.mvp.main_trade.activity.v.MainTradeContentActivity;
+import com.xkj.trade.utils.ACache;
+import com.xkj.trade.utils.AesEncryptionUtil;
+import com.xkj.trade.utils.SystemUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by huangsc on 2016-12-07.
@@ -48,8 +63,29 @@ public class FragmentClosePosition extends BaseFragment {
             @Override
             public void onGlobalLayout() {
                 mRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                mRecyclerView.setLayoutParams(new LinearLayout.LayoutParams(mRecyclerView.getWidth(),(int)MainTradeContentActivity.descHeight
+                mRecyclerView.setLayoutParams(new LinearLayout.LayoutParams(mRecyclerView.getWidth(),(int) MainTradeContentActivity.descHeight
                         -(int)MainTradeContentActivity.flIndicatorHeight -view.findViewById(R.id.v_period_buttons).getHeight()));
+            }
+        });
+        requestData();
+    }
+
+    private void requestData() {
+        Map<String,String> map=new TreeMap<>();
+        map.put(RequestConstant.LOGIN, AesEncryptionUtil.stringBase64toString(ACache.get(context).getAsString(RequestConstant.ACCOUNT)));
+        OkhttpUtils.enqueue(UrlConstant.URL_TRADE_HISTORY_LIST, map, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i(TAG, "onFailure: "+call.request());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String re=response.body().string();
+                Log.i(TAG, "onResponse: "+call.request());
+                SystemUtil.show(re,FragmentClosePosition.class);
+//                mBeanOpenPosition=new Gson().fromJson(re,new TypeToken<BeanOpenPosition>(){}.getType());
+//                responseData();
             }
         });
     }
@@ -114,11 +150,11 @@ public class FragmentClosePosition extends BaseFragment {
                 tvMoney =(TextView)itemView.findViewById(R.id.tv_money);
                 tvProfit =(TextView)itemView.findViewById(R.id.tv_profit);
                 ivType =(ImageView) itemView.findViewById(R.id.iv_type);
-                tvCommission =(TextView)itemView.findViewById(R.id.commission);
+                tvCommission =(TextView)itemView.findViewById(R.id.amount);
                 tvStopLoss =(TextView)itemView.findViewById(R.id.stop_loss);
                 tvTakeProfit =(TextView)itemView.findViewById(R.id.take_profit);
                 tvOpenTime1 =(TextView)itemView.findViewById(R.id.open_time1);
-                tvOpenTime2 =(TextView)itemView.findViewById(R.id.open_time2);
+//                tvOpenTime2 =(TextView)itemView.findViewById(R.id.open_time2);
                 tvSwap =(TextView)itemView.findViewById(R.id.swap);
                 tvOpenRate =(TextView)itemView.findViewById(R.id.open_rate);
             }
@@ -133,7 +169,7 @@ public class FragmentClosePosition extends BaseFragment {
             TextView tvStopLoss;
             TextView tvTakeProfit;
             TextView tvOpenTime1;
-            TextView tvOpenTime2;
+//            TextView tvOpenTime2;
             TextView tvSwap;
             TextView tvOpenRate;
         }

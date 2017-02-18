@@ -126,4 +126,7 @@ public class CustomASETGroup extends FrameLayout{
         }
         return super.onInterceptTouchEvent(ev);
     }
+    public int getMoney(){
+        return Integer.valueOf(mASET.getNumbel().replace(",",""));
+    }
 }

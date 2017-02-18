@@ -11,11 +11,11 @@ import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.mvp.main_trade.activity.v.MainTradeActListener;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
-import com.xkj.trade.utils.DataUtil;
 import com.xkj.trade.utils.SystemUtil;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.TreeMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -47,9 +47,9 @@ public class MainActModelImpl implements MainTradeActListener.ModelListener {
 //        Map<String, String> map = new TreeMap<>();
 //        map.put(RequestConstant.API_ID, ACache.get(mContext).getAsString(RequestConstant.API_ID));
 //        map.put(RequestConstant.API_TIME, DateUtils.getShowTime(BeanCurrentServerTime.instance.getCurrentServerTime()));
-        Map<String, String> map = DataUtil.postMap();
+        Map<String, String> map = new TreeMap<>();
         map.put(RequestConstant.LOGIN, AesEncryptionUtil.stringBase64toString(ACache.get(mContext).getAsString(RequestConstant.ACCOUNT)));
-        map.put(RequestConstant.API_SIGN, AesEncryptionUtil.getApiSign(URL_MT4_USERLIST, map));
+//        map.put(RequestConstant.API_SIGN, AesEncryptionUtil.getApiSign(URL_MT4_USERLIST, map));
         OkhttpUtils.enqueue(URL_MT4_USERLIST, map, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

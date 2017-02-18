@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class BeanAllSymbols extends BeanBaseResponse {
     ArrayList<SymbolPrices> data;
 
-    public class SymbolPrices  implements Cloneable {
+    public static class SymbolPrices  implements Cloneable {
 
         String symbol;
         String time;

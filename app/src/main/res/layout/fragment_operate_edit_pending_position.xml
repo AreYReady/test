@@ -36,7 +36,6 @@
 
         <include layout="@layout/v_stack_amount" />
 
-
     </LinearLayout>
 
     <ScrollView

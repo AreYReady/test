@@ -15,20 +15,19 @@ import com.xkj.trade.base.BaseFragment;
  * TODO:
  */
 
-public class EditPositionFrament extends BaseFragment {
+public class DeletePositionFragment extends BaseFragment {
     private TextView tvAction;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.fragment_operate_edit_position,null);
+        view=inflater.inflate(R.layout.fragment_operate_delete_pending_position,null);
         return view;
     }
 
     @Override
     protected void initView() {
         tvAction=(TextView)view.findViewById(R.id.tv_enter_button);
-        tvAction.setText(this.getString(R.string.edit_position));
-
+        tvAction.setText(this.getString(R.string.delete_pending_order));
     }
 
     @Override

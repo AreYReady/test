@@ -56,4 +56,12 @@ public  abstract class BaseFragment extends Fragment {
     public void onStart() {
         super.onStart();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().unregister(this);
+        }
+    }
 }

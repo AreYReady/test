@@ -40,6 +40,7 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
         ACache.get(this).put(RequestConstant.LOGIN_PASSWORD,etUserPassWord.getText().toString());
         ChatWebSocket.getChartWebSocket();
         startActivity(new Intent(this, MainTradeContentActivity.class));
+
         finish();
     }
 

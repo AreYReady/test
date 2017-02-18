@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -18,7 +19,9 @@ import com.xkj.trade.R;
 import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.SystemUtil;
 
-import static com.xkj.trade.R.id.tv_add;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import static com.xkj.trade.R.id.tv_sub;
 
 
@@ -33,10 +36,10 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
     private TextView subView;
     private EditText editText;
     private int amount;
-    private int minPrice = 10000;
+    private int minPrice = 1000;
     //加减的基数
-    private int baseNumber = 10000;
-    private int maxPrice=100000000;
+    private int baseNumber = 1000;
+    private int maxPrice=10000000;
     //判断是否是跟随SeekBar改变操作
     private boolean isFollow=false;
 
@@ -56,6 +59,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         subView = (TextView) inflate.findViewById(tv_sub);
         editText = (EditText) inflate.findViewById(R.id.et_amount);
         editText.setText(MoneyUtil.parseMoney(amount));
+        hideSoftInputMethod(editText);
         subView.setLongClickable(true);
         subView.setOnTouchListener(this);
         addView.setOnTouchListener(this);
@@ -219,10 +223,47 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         this.baseNumber =baseNumber;
         editText.setText(MoneyUtil.parseMoney(minPrice));
     }
+    public String getNumbel(){
+        return editText.getText().toString();
+    }
     public void setNumberTextInvisible(){
         editText.setVisibility(INVISIBLE);
     }
     public void setNumberTextVisible(){
         editText.setVisibility(VISIBLE);
+    }
+    // 隐藏系统键盘
+    public void hideSoftInputMethod(EditText ed){
+
+        int currentVersion = android.os.Build.VERSION.SDK_INT;
+        String methodName = null;
+        if(currentVersion >= 16){
+            // 4.2
+            methodName = "setShowSoftInputOnFocus";
+        }
+        else if(currentVersion >= 14){
+            // 4.0
+            methodName = "setSoftInputShownOnFocus";
+        }
+
+        if(methodName == null){
+            ed.setInputType(InputType.TYPE_NULL);
+        }
+        else{
+            Class<EditText> cls = EditText.class;
+            Method setShowSoftInputOnFocus;
+            try {
+                setShowSoftInputOnFocus = cls.getMethod(methodName, boolean.class);
+                setShowSoftInputOnFocus.setAccessible(true);
+                setShowSoftInputOnFocus.invoke(ed, false);
+            } catch (NoSuchMethodException e) {
+                ed.setInputType(InputType.TYPE_NULL);
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

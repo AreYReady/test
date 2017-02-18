@@ -96,7 +96,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dip"
                 android:layout_weight="3" />
-
         </LinearLayout>
         <LinearLayout
             android:id="@+id/ll_cover"
@@ -121,7 +120,6 @@
                 android:id="@+id/csb_rv_item_master"
                 android:layout_width="match_parent"
                 android:layout_height="100dip"
-
                >
             </com.xkj.trade.utils.view.CustomSeekBar>
             <TextView

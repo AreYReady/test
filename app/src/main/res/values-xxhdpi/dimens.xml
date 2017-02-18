@@ -1,0 +1,15 @@
+<resources>
+    <dimen name="px45">15dip</dimen>
+    <dimen name="px51">17dip</dimen>
+    <dimen name="px100">33.3dip</dimen>
+    <dimen name="px117">39dip</dimen>
+    <dimen name="px198">66dip</dimen>
+    <dimen name="px214">71dip</dimen>
+    <dimen name="px372">124dip</dimen>
+    <dimen name="px520">173dip</dimen>
+    <dimen name="px734">244dip</dimen>
+    <dimen name="px120">40dip</dimen>
+    <dimen name="px150">50dip</dimen>
+
+
+</resources>

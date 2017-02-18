@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/black"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/black"
+              android:orientation="vertical">
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dip" />
+        android:layout_height="1dip"/>
 
     <include
         layout="@layout/v_operate_symbol_info"
         android:layout_width="match_parent"
-        android:layout_height="70dip" />
+        android:layout_height="70dip"/>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dip" />
+        android:layout_height="1dip"/>
 
 
     <LinearLayout
@@ -28,13 +28,13 @@
         <Space
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.5"/>
 
-        <include layout="@layout/v_stack_operate" />
+        <include layout="@layout/v_stack_operate"/>
 
-        <include layout="@layout/v_stack_amount" />
+        <include layout="@layout/v_stack_amount"/>
 
-        <include layout="@layout/v_stack_open_rate" />
+        <include layout="@layout/v_stack_open_rate"/>
 
     </LinearLayout>
 
@@ -43,25 +43,25 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="@dimen/space_big"
-     >
+        >
 
         <Space
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.5"/>
 
 
-        <include layout="@layout/v_stack_open_time" />
+        <include layout="@layout/v_stack_open_time"/>
 
-        <include layout="@layout/v_stack_stop_loss" />
+        <include layout="@layout/v_stack_stop_loss"/>
 
-        <include layout="@layout/v_stack_take_profit" />
+        <include layout="@layout/v_stack_take_profit"/>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dip"
-        android:background="@color/toolbars_title_dark" />
+        android:background="@color/toolbars_title_dark"/>
 
     <LinearLayout
         android:id="@+id/ll_copy_from"
@@ -75,19 +75,59 @@
         <Space
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.5"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="0dip"
             android:layout_height="40dip"
             android:layout_weight="2"
-            android:src="@mipmap/menu_avatar" />
+            android:src="@mipmap/menu_avatar"/>
 
-        <include layout="@layout/v_stack_copy_from" />
+        <include layout="@layout/v_stack_copy_from"/>
 
-        <include layout="@layout/v_stack_stop_loss" />
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="left"
+            android:orientation="vertical">
 
-        <include layout="@layout/v_stack_take_profit" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_normal"
+                android:text="@string/stop_loss"
+                android:textAppearance="@style/TextHeader"/>
+
+            <TextView
+                android:id="@+id/tv_copy_stop_loss"
+                style="@style/TextDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1.07564"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:gravity="left"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_normal"
+                android:text="@string/take_profit"
+                android:textAppearance="@style/TextHeader"/>
+
+            <TextView
+                android:id="@+id/tv_copy_take_profit"
+                style="@style/TextDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1.07559"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -102,12 +142,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/select_amount" />
+            android:visibility="invisible"
+            android:text="@string/select_amount"/>
 
         <com.xkj.trade.utils.view.AddSubEditText
             android:layout_width="250dip"
             android:layout_height="50dip"
-            android:layout_gravity="center" />
+            android:visibility="invisible"
+            android:layout_gravity="center"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -121,30 +163,34 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
-                android:text="@string/estimated_profit" />
+                android:text="@string/estimated_profit"/>
 
             <TextView
+                android:id="@+id/tv_estimated_profit_amount"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
                 android:text="$1.00"
                 android:textColor="@color/link_text_material_light"
-                android:textSize="20dip" />
+                android:textSize="20dip"/>
         </LinearLayout>
+
         <TextView
             android:id="@+id/tv_close_position_prompt"
+            style="@style/TextDesc"
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="3"
             android:gravity="center_horizontal"
             android:text="@string/partial_closure_will_unlink_copied_positions_from_the_master_position"
-            style="@style/TextDesc"
             />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="0.1dip"
-            android:background="@android:color/black" />
-        <include layout="@layout/v_order_one_button_bottom" />
+            android:background="@android:color/black"/>
+
+        <include layout="@layout/v_order_one_button_bottom"/>
     </LinearLayout>
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.xkj.trade.mvp.main_trade.activity.v;
+package com.xkj.trade.mvp.main_trade;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +14,7 @@ import com.xkj.trade.R;
 import com.xkj.trade.adapter.MyRecycleAdapter;
 import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.bean.BeanAttentionTraderData;
+import com.xkj.trade.mvp.main_trade.activity.v.MainTradeContentActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.List;
  * TODO:
  */
 
-public class FragmentMasterWatch extends BaseFragment {
+public class FragmentMasterCopy extends BaseFragment {
     private RecyclerView mRecyclerView;
     private List<BeanAttentionTraderData> mDataList;
     private BeanAttentionTraderData mData;
@@ -43,7 +44,7 @@ public class FragmentMasterWatch extends BaseFragment {
             @Override
             public void onGlobalLayout() {
                 mRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                mRecyclerView.setLayoutParams(new RelativeLayout.LayoutParams(mRecyclerView.getWidth(),(int)MainTradeContentActivity.descHeight
+                mRecyclerView.setLayoutParams(new RelativeLayout.LayoutParams(mRecyclerView.getWidth(),(int) MainTradeContentActivity.descHeight
                         -(int)MainTradeContentActivity.flIndicatorHeight));
             }
         });
@@ -57,7 +58,7 @@ public class FragmentMasterWatch extends BaseFragment {
             mData.setCopyCount(100);
             mData.setName("huangshunchao");
             mData.setImageResouce(R.mipmap.menu_avatar);
-            mData.setButtonText("复制");
+            mData.setButtonText("取消关注");
             mDataList.add(mData);
         }
     }

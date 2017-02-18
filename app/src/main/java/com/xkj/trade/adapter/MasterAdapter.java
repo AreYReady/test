@@ -9,6 +9,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.xkj.trade.R;
 import com.xkj.trade.bean.BeanMasterInfo;
@@ -28,7 +29,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
     private int position;
     int[] ints= new int[]{100,120,140,200,300};
     private BeanMasterRank mBeanMasterRank;
-
+    private BeanMasterRank.MasterRank masterRank;
     //    private OnItemClickListener onItemClickListener;
     public MasterAdapter(Context context, BeanMasterRank beanMasterRank) {
         this.context = context;
@@ -44,7 +45,13 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
 
     @Override
     public void onBindViewHolder(final MyHolder holder, final int position) {
+        masterRank = mBeanMasterRank.getResponse().get(position);
         this.position = position;
+        holder.mName.setText(masterRank.getName());
+        holder.mTvCopyCount.setText(String.valueOf(masterRank.getCopynumber()));
+        holder.mTvExperienceTime.setText(masterRank.getTradeexperience()+" 天");
+        holder.mTvProfitper.setText(String.valueOf(masterRank.getProfitper()));
+        holder.mTvHuiceper.setText(String.valueOf(masterRank.getHuiceper())+"%");
         holder.mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,6 +59,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                 EventBus.getDefault().post(new BeanMasterInfo());
             }
         });
+
         holder.mCustomSeekBar.setData(ints,1);
         holder.bCopyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +87,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
 
     @Override
     public int getItemCount() {
-        return 20;
+        return mBeanMasterRank.getResponse().size();
     }
 
 
@@ -94,6 +102,11 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
             mLlButtons = (LinearLayout) itemView.findViewById(R.id.ll_buttons);
             mImageView=(ImageView)itemView.findViewById(R.id.civ_master);
             mCustomSeekBar=(CustomSeekBar) itemView.findViewById(R.id.csb_rv_item_master);
+            mName=(TextView)itemView.findViewById(R.id.tv_name);
+            mTvCopyCount=(TextView)itemView.findViewById(R.id.tv_Copy_count);
+            mTvHuiceper =(TextView)itemView.findViewById(R.id.tv_huiceper);
+            mTvProfitper =(TextView)itemView.findViewById(R.id.tv_profitper);
+            mTvExperienceTime =(TextView)itemView.findViewById(R.id.tv_experience_time);
         }
         ImageView mImageView;
         LinearLayout mLlButtons;
@@ -102,5 +115,10 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
         Button bCopyButton;
         Button bCompleteButton;
         CustomSeekBar mCustomSeekBar;
+        TextView mName;
+        TextView mTvCopyCount;
+        TextView mTvHuiceper;
+        TextView mTvProfitper;
+        TextView mTvExperienceTime;
     }
 }

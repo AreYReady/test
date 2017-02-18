@@ -2,6 +2,7 @@ package com.xkj.trade.mvp.main_trade.fragment_content.v;
 
 import com.xkj.trade.bean.BeanIndicatorData;
 import com.xkj.trade.bean_.BeanHistory;
+import com.xkj.trade.bean_.BeanOpenPosition;
 import com.xkj.trade.bean_.BeanUserListInfo;
 
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ public class MainTradeFragListener {
         void refreshView(BeanHistory.BeanHistoryData data, boolean isCountDown);
         void refreshIndicator(List<BeanIndicatorData> mBeanIndicatorDataList);
         void refreshUserInfo(BeanUserListInfo info);
+        void refreshOpenPosition(BeanOpenPosition info);
+        void responseAllSymbolsData(String response);
     }
 
     /**
@@ -30,14 +33,18 @@ public class MainTradeFragListener {
         /**
          * 加载当前订阅数据
          */
-        void loadingSubSymbols(ArrayList<String> symbolsName,boolean subOrCancel);
+        void requestSubSymbols(ArrayList<String> symbolsName, boolean subOrCancel);
         /**
          * 从服务器获取数据完成,刷新分时图view
          */
-        void refreshView(BeanHistory data);
-        void loadingHistoryData(String symbol, String period, int count);
-        void loadingUserList();
-        void userListResponse(BeanUserListInfo beanUserListInfo);
+        void responseHistoryData(BeanHistory data);
+        void requestHistoryData(String symbol, String period, int count);
+        void requestUserList();
+        void ResponseUserList(BeanUserListInfo info);
+        //获取单个持仓数据
+        void requestOpenPosition();
+        void responseOpenPosition(BeanOpenPosition beanOpenPosition);
+        void responseAllSymbolsData(String response);
     }
 
 
@@ -45,12 +52,13 @@ public class MainTradeFragListener {
      * model的接口类
      */
     public interface MainTradeContentModelListener {
-        void sendHistoryRequest(String symbol, String period, int count);
-        void sendAllSymbolsRequest();
-        void sendSubSymbolsRequest(ArrayList<String> symbolsName,boolean subOrCancel);
-        void loadingUserList(String mt4Login);
+        void requestHistoryData(String symbol, String period, int count);
+        void requestAllSymbolsData();
+        void requestSubSymbolsData(ArrayList<String> symbolsName, boolean subOrCancel);
+        void requestUserListData(String mt4Login);
         //         void initIndicator(ArrayList<BeanSymbolConfig.SymbolsBean> subTradeSymbol);
 //        void sendSubSymbol(String Symbol);
+        void requestOpenPositionData();
     }
 
 }

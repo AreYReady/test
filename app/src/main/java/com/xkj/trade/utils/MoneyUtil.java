@@ -38,12 +38,22 @@ public class MoneyUtil {
     public static String moneyFormat(double numble, int digist) {
         BigDecimal b = new BigDecimal(numble);
         return String.valueOf(b.setScale(digist, BigDecimal.ROUND_HALF_UP).doubleValue());
-
     }
 
     public static String moneyFormat(String money) {
-        DecimalFormat df = new DecimalFormat("0.00000");
-        return df.format(Double.valueOf(money));
+        if(money.indexOf(".")>=0){
+            if(money.length()-money.indexOf(".")>3){
+                return money.substring(0,7);
+            }else{
+                return money;
+            }
+        }else{
+            if(money.length()<=6)
+                return money;
+            else{
+               return money.substring(0,6);
+            }
+        }
     }
 
     /**

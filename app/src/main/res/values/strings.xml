@@ -362,7 +362,7 @@
     <string name="others">其他</string>
     <string name="partial_closure_will_unlink_copied_positions_from_the_master_position">"部分关闭将取消关联已复制的仓位
 从操盘大师仓位"</string>
-    <string name="password">密码</string>
+    <string name="password">请输入密码：</string>
     <string name="password_mismatch">密码不匹配。请重试</string>
     <string name="pending">挂单</string>
     <string name="pending_order_was_deleted">挂单已删除</string>

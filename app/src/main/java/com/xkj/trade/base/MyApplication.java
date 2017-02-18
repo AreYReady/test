@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Handler;
 
+import com.xkj.trade.bean.BeanIndicatorData;
+
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.LinkedList;
@@ -15,6 +17,7 @@ import java.util.List;
 
 public class MyApplication extends Application {
     private static MyApplication instance;
+    public static BeanIndicatorData beanIndicatorData=new BeanIndicatorData();
 
     public static MyApplication getInstance() {
         return instance;

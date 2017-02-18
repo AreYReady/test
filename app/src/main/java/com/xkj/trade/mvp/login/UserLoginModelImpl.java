@@ -6,6 +6,20 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.xkj.trade.IO.okhttp.OkhttpUtils;
+import com.xkj.trade.IO.sslsocket.SSLSocketChannel;
+import com.xkj.trade.bean.BeanCurrentServerTime;
+import com.xkj.trade.bean.BeanSymbolConfig;
+import com.xkj.trade.bean.BeanUnRegister;
+import com.xkj.trade.bean.BeanUserLoginData;
+import com.xkj.trade.bean.EventBusAllSymbol;
+import com.xkj.trade.bean_.BeanResponse;
+import com.xkj.trade.bean_.BeanServerTimeForHttp;
+import com.xkj.trade.constant.RequestConstant;
+import com.xkj.trade.handler.HandlerWrite;
+import com.xkj.trade.utils.AesEncryptionUtil;
+import com.xkj.trade.utils.DateUtils;
+import com.xkj.trade.utils.SystemUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -18,22 +32,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.Response;
-import com.xkj.trade.IO.okhttp.OkhttpUtils;
-import com.xkj.trade.IO.sslsocket.SSLSocketChannel;
-import com.xkj.trade.bean.BeanCurrentServerTime;
-import com.xkj.trade.bean.BeanSymbolConfig;
-import com.xkj.trade.bean.BeanUnRegister;
-import com.xkj.trade.bean.BeanUserLoginData;
-import com.xkj.trade.bean.EventBusAllSymbol;
-import com.xkj.trade.bean_.BeanResponse;
-import com.xkj.trade.bean_.BeanServerTimeForHttp;
-import com.xkj.trade.constant.RequestConstant;
-import com.xkj.trade.constant.UrlConstant;
-import com.xkj.trade.handler.HandlerWrite;
-import com.xkj.trade.utils.ACache;
-import com.xkj.trade.utils.AesEncryptionUtil;
-import com.xkj.trade.utils.DateUtils;
-import com.xkj.trade.utils.SystemUtil;
 
 import static com.xkj.trade.constant.UrlConstant.URL_LOGIN;
 import static com.xkj.trade.constant.UrlConstant.URL_SERVICE_TIME;
@@ -101,12 +99,12 @@ public class UserLoginModelImpl implements UserLoginModel {
                     Log.i(TAG, "onResponse: "+DateUtils.getShowTime(DateUtils.getOrderStartTime(beanServerTimeForHttp.getData(),"yyyyMMddHHmmss")));
                     TreeMap<String,String> map=new TreeMap<>();
                     map.put(RequestConstant.ACCOUNT,AesEncryptionUtil.stringBase64toString(beanLoginData.getLogin()));
-                    map.put(RequestConstant.API_ID, ACache.get(mContext).getAsString(RequestConstant.API_ID));
-                    map.put(RequestConstant.API_TIME,DateUtils.getShowTime(BeanCurrentServerTime.instance.getCurrentServerTime()));
+//                    map.put(RequestConstant.API_ID, ACache.get(mContext).getAsString(RequestConstant.API_ID));
+//                    map.put(RequestConstant.API_TIME,DateUtils.getShowTime(BeanCurrentServerTime.instance.getCurrentServerTime()));
                     map.put(RequestConstant.LOGIN_PASSWORD, AesEncryptionUtil.stringBase64toString(beanLoginData.getPassword()));
                     String apiSign;
-                    apiSign=AesEncryptionUtil.getApiSign(UrlConstant.URL_LOGIN,map);
-                    map.put(RequestConstant.API_SIGN,apiSign);
+//                    apiSign=AesEncryptionUtil.getApiSign(UrlConstant.URL_LOGIN,map);
+//                    map.put(RequestConstant.API_SIGN,apiSign);
                     OkhttpUtils.enqueue(URL_LOGIN,map, new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {

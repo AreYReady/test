@@ -24,12 +24,12 @@ public class CustomSeekBar extends FrameLayout {
     private TextView tv0, tv1, tv2, tv3, tv4;
     private SeekBar mSeekBar;
     private String TAG = SystemUtil.getTAG(this);
-    private String tvString0 = "10k", tvString1 = "100k", tvString2 = "1M", tvString3 = "10M", tvString4 = "100M";
+    private String tvString0 = "1k", tvString1 = "10k", tvString2 = "100k", tvString3 = "1M", tvString4 = "10M";
     private AddSubEditText mASEditText;
     private int max = 40000;
     //加减的基数
-    private int baseNumber = 10000;
-    private int[] ints = new int[]{10000, 100000, 1000000, 10000000, 100000000};
+    private int baseNumber = 1000;
+    private int[] ints = new int[]{1000, 10000, 100000, 1000000, 10000000};
     private double setProgress;
     private boolean isAmountChange = false;
     int i = max / 4;
@@ -162,6 +162,7 @@ public class CustomSeekBar extends FrameLayout {
         Log.i(TAG, "getXPosition: "+v);
         return v;
     }
-
-
+    public int getMoney(){
+      return Integer.valueOf(mASEditText.getNumbel().replace(",",""));
+    }
 }

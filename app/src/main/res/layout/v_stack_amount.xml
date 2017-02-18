@@ -14,7 +14,7 @@
         android:textAppearance="@style/TextHeader" />
 
     <TextView
-        android:id="@+id/commission"
+        android:id="@+id/amount"
         style="@style/TextDesc"
         android:text="10,000"
         android:layout_width="wrap_content"

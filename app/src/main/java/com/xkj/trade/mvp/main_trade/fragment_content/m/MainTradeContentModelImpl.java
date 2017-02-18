@@ -2,28 +2,31 @@ package com.xkj.trade.mvp.main_trade.fragment_content.m;
 
 import android.content.Context;
 import android.os.Handler;
+import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.ChatWebSocket;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
+import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean.BeanSymbolConfig;
 import com.xkj.trade.bean.EventBusAllSymbol;
 import com.xkj.trade.bean_.BeanBaseResponse;
 import com.xkj.trade.bean_.BeanHistory;
-import com.xkj.trade.constant.CacheKeyConstant;
+import com.xkj.trade.bean_.BeanOpenPosition;
 import com.xkj.trade.constant.RequestConstant;
+import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.mvp.main_trade.fragment_content.v.MainTradeFragListener;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
-import com.xkj.trade.utils.DataUtil;
 import com.xkj.trade.utils.SystemUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.TreeMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -56,12 +59,12 @@ public class MainTradeContentModelImpl implements MainTradeFragListener.MainTrad
     }
 
 
-    public void sendHistoryRequest(String symbol, String period, int count) {
-        Map<String, String> map = DataUtil.postMap();
+    public void requestHistoryData(String symbol, String period, int count) {
+        Map<String, String> map = new TreeMap<>();
         map.put(RequestConstant.SYMBOL, AesEncryptionUtil.stringBase64toString(symbol));
         map.put(RequestConstant.PERIOD, period);
         map.put(RequestConstant.BARNUM, String.valueOf(count));
-        map.put(RequestConstant.API_SIGN, AesEncryptionUtil.getApiSign(URL_MT4_PRICE, map));
+//        map.put(RequestConstant.API_SIGN, AesEncryptionUtil.getApiSign(URL_MT4_PRICE, map));
         sendRequest(URL_MT4_PRICE, map, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -77,7 +80,7 @@ public class MainTradeContentModelImpl implements MainTradeFragListener.MainTrad
                 if (beanHistory.getStatus() == 1) {
                     Log.i(TAG, "onResponse: 请求历史数据 " + new Gson().toJson(beanHistory, new TypeToken<BeanHistory>() {
                     }.getType()));
-                    mMainTradeContentPreListener.refreshView(beanHistory);
+                    mMainTradeContentPreListener.responseHistoryData(beanHistory);
 //                    ChatWebSocket.getChartWebSocket().sendMessage("{\"msg_type\":1010,\"symbol\":\"" +beanHistory.getData().getSymbol() + "\"}");
                 }
             }
@@ -85,9 +88,11 @@ public class MainTradeContentModelImpl implements MainTradeFragListener.MainTrad
     }
 
     @Override
-    public void sendAllSymbolsRequest() {
-        Map<String, String> map = DataUtil.postMap();
-        map.put(RequestConstant.API_SIGN, AesEncryptionUtil.getApiSign(URL_MT4_PRICE, map));
+    public void requestAllSymbolsData() {
+//        Map<String, String> map = DataUtil.postMap();
+//        map.put(RequestConstant.API_SIGN, AesEncryptionUtil.getApiSign(URL_MT4_PRICE, map));
+        Map<String,String> map=new ArrayMap<>();
+        map.put(RequestConstant.IS_FILTER,"notbo");
         sendRequest(URL_MT4_PRICE, map, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -101,30 +106,61 @@ public class MainTradeContentModelImpl implements MainTradeFragListener.MainTrad
                 BeanBaseResponse beanBaseResponse = new Gson().fromJson(body, new TypeToken<BeanBaseResponse>() {
                 }.getType());
                 if (beanBaseResponse.getStatus() == 1) {
-                    ACache.get(mContext).put(CacheKeyConstant.ALL_SYMBOLS_PRICES, body);
+//                    ACache.get(mContext).put(CacheKeyConstant.ALL_SYMBOLS_PRICES, body);
+                    mMainTradeContentPreListener.responseAllSymbolsData(body);
                 }
             }
         });
     }
 
     @Override
-    public void sendSubSymbolsRequest(ArrayList<String> symbolsName, boolean subOrCancel) {
-        Log.i(TAG, "sendSubSymbolsRequest: ");
+    public void requestSubSymbolsData(ArrayList<String> symbolsName, boolean subOrCancel) {
+        Log.i(TAG, "requestSubSymbolsData: ");
         ChatWebSocket chartWebSocket = ChatWebSocket.getChartWebSocket();
         for (String name : symbolsName) {
+
             if (chartWebSocket != null) {
                 if (subOrCancel)
                     chartWebSocket.sendMessage("{\"msg_type\":1010,\"symbol\":\"" + name + "\"}");
                 else {
-                    chartWebSocket.sendMessage("{\"msg_type\":1020,\"symbol\":\"" + name + "\"}");
+                    //后面这个是为了尾部为USD的，都不取消订阅。
+                    if(!name.substring(name.length()-3,name.length()).equals("USD")) {
+                        chartWebSocket.sendMessage("{\"msg_type\":1020,\"symbol\":\"" + name + "\"}");
+                    }
                 }
             }
         }
     }
 
     @Override
-    public void loadingUserList(String mt4Login) {
+    public void requestUserListData(String mt4Login) {
 
+    }
+
+    @Override
+    public void requestOpenPositionData() {
+        Map<String,String> map=new TreeMap<>();
+        map.put(RequestConstant.LOGIN,AesEncryptionUtil.stringBase64toString(ACache.get(mContext).getAsString(RequestConstant.ACCOUNT)));
+        map.put(RequestConstant.SYMBOL,AesEncryptionUtil.stringBase64toString(MyApplication.getInstance().beanIndicatorData.getSymbol()));
+        OkhttpUtils.enqueue(UrlConstant.URL_TRADE_MAKET_LIST, map, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i(TAG, "onFailure: "+call.request());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String temp;
+                Log.i(TAG, "onResponse: "+call.request());
+                Log.i(TAG, "onResponse: "+(temp=response.body().string()));
+                BeanBaseResponse info=new Gson().fromJson(temp,new TypeToken<BeanBaseResponse>(){}.getType());
+//                BeanOpenPosition info=new Gson().fromJson(temp,new TypeToken<BeanOpenPosition>(){}.getType());
+                if(info.getStatus()==1){
+                    BeanOpenPosition beanOpenPosition= new Gson().fromJson(temp,new TypeToken<BeanOpenPosition>(){}.getType());
+                    mMainTradeContentPreListener.responseOpenPosition(beanOpenPosition);
+                }
+            }
+        });
     }
 
     /**
