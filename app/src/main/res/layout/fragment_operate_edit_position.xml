@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:hsc="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
@@ -101,12 +102,15 @@
         android:orientation="vertical">
 
         <com.xkj.trade.utils.view.CustomASETGroup
+            android:id="@+id/c_stop_lost"
             android:layout_width="match_parent"
             android:layout_height="@dimen/y150" />
 
         <com.xkj.trade.utils.view.CustomASETGroup
+            android:id="@+id/c_take_profit"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/y150" />
+            android:layout_height="@dimen/y150"
+            hsc:desc_text="止盈"/>
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dip"

@@ -5,7 +5,7 @@
               android:background="@color/background_trade_item"
     android:orientation="vertical">
     <include layout="@layout/v_period_buttons"
-        android:id="@+id/v_period_buttons"/>
+       />
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

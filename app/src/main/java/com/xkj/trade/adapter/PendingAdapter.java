@@ -2,6 +2,7 @@ package com.xkj.trade.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.xkj.trade.R;
 import com.xkj.trade.bean_.BeanPendingPosition;
 import com.xkj.trade.mvp.operate.OperatePositionActivity;
@@ -21,6 +23,8 @@ import com.xkj.trade.utils.SystemUtil;
 import java.util.List;
 import java.util.Map;
 
+import static com.xkj.trade.constant.RequestConstant.CURRENT_PRICE;
+import static com.xkj.trade.constant.RequestConstant.PROFIT;
 import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY;
 
 /**
@@ -34,7 +38,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
     private List<BeanPendingPosition.DataBean.ListBean> mDataList;
     private int mPosition;
     private BeanPendingPosition.DataBean.ListBean mData;
-//    private List<Boolean> isClick;
     private Map<Integer,Boolean> isClick=new ArrayMap<Integer,Boolean>();
 
     public PendingAdapter(Context context, List<BeanPendingPosition.DataBean.ListBean> mDataList){
@@ -50,6 +53,28 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
         return viewHolder;
     }
 
+    @Override
+    public void onBindViewHolder(PendingAdapter.MyViewHolder holder, int position, List<Object> payloads) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position);
+        } else {
+            Bundle payload = (Bundle) payloads.get(0);
+            for(String key:payload.keySet()){
+                switch (key){
+                    case PROFIT:
+                        holder.tvProfit.setText(mDataList.get(position).getProfit());
+                        if(Double.valueOf(mDataList.get(position).getProfit())>0)
+                            holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
+                        else
+                            holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
+                        break;
+                    case CURRENT_PRICE:
+                        holder.bEditPendingPosition.setText("修改"+mDataList.get(position).getPrice());
+                        break;
+                }
+            }
+        }
+    }
     @Override
     public void onBindViewHolder(final PendingAdapter.MyViewHolder holder, final int position) {
         mData=mDataList.get(position);
@@ -80,7 +105,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
         holder.bEditPendingPosition.setOnClickListener(this);
         holder.tvCountyName.setText(mData.getSymbol());
         holder.tvMoney.setText(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY));
-        if (mData.getCmd().equals("sell")) {
+        if (mData.getCmd().contains("sell")) {
             holder.tvOperate.setText("卖");
             holder.tvOperate.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
         } else {
@@ -94,8 +119,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
             holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
         holder.tvStopLoss.setText(mData.getSl());
         holder.tvTakeProfit.setText(mData.getTp());
-//        holder.tvOpenTime1.setText(mData.getOpentime());
-//        holder.tvOpenRate.setText(mData.getOpenprice());
     }
     @Override
     public int getItemCount() {
@@ -110,7 +133,8 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
                 context.startActivity(new Intent(context, OperatePositionActivity.class).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.DELETE_PENDING_POSITION));
                 break;
             case R.id.b_edit:
-                context.startActivity(new Intent(context, OperatePositionActivity.class).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.EDIT_PENDING_POSITION));
+                context.startActivity(new Intent(context, OperatePositionActivity.class).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.EDIT_PENDING_POSITION)
+                        .putExtra(OperatePositionActivity.JSON_DATA,new Gson().toJson(mDataList.get(mPosition), BeanPendingPosition.DataBean.ListBean.class)));
                 break;
         }
     }
@@ -131,7 +155,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
             tvStopLoss = (TextView) itemView.findViewById(R.id.stop_loss);
             tvTakeProfit = (TextView) itemView.findViewById(R.id.take_profit);
             tvOpenTime1 = (TextView) itemView.findViewById(R.id.open_time1);
-//                tvOpenTime2 = (TextView) itemView.findViewById(R.id.open_time2);
             tvSwap = (TextView) itemView.findViewById(R.id.swap);
             tvOpenRate = (TextView) itemView.findViewById(R.id.open_rate);
             bEditPendingPosition = (Button) itemView.findViewById(R.id.b_edit);
@@ -149,7 +172,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
         TextView tvStopLoss;
         TextView tvTakeProfit;
         TextView tvOpenTime1;
-        //            TextView tvOpenTime2;
         TextView tvSwap;
         TextView tvOpenRate;
         Button bDeletePendingPosition;

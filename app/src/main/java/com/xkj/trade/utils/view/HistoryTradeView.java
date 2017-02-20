@@ -291,19 +291,22 @@ public class HistoryTradeView extends View {
             if (realTimePrice != -1 && price[1] - realTimePrice > 0) {
                 try {
                     double y = MoneyUtil.div((price[1] - realTimePrice), unit);
-                    mBeanDrawPriceData = new BeanDrawPriceData();
-                    mBeanDrawPriceData.setPriceY((int) ((price[1] - realTimePrice) / unit));
-                    String temp;
-                    mBeanDrawPriceData.setPriceString(String.valueOf(realTimePrice));
-                    mDrawPriceDataList.add(mBeanDrawPriceData);
-                    if(realTimePrice<lastItemOpenPrice){
-                        mDashedPaint.setColor(getResources().getColor(R.color.risk_slippage_max_red_dark));
-                        mBeanDrawPriceData.setColor(getResources().getColor(R.color.risk_slippage_max_red_dark));
-                    }else{
-                        mDashedPaint.setColor(getResources().getColor(R.color.risk_slippage_max_green_dark));
-                        mBeanDrawPriceData.setColor(getResources().getColor(R.color.risk_slippage_max_green_dark));
+                    if(y<showDataHeight) {
+                        mBeanDrawPriceData = new BeanDrawPriceData();
+                        mBeanDrawPriceData.setPriceY((int) ((price[1] - realTimePrice) / unit));
+                        String temp;
+                        mBeanDrawPriceData.setPriceString(String.valueOf(realTimePrice));
+                        mDrawPriceDataList.add(mBeanDrawPriceData);
+                        if (realTimePrice < lastItemOpenPrice) {
+                            mDashedPaint.setColor(getResources().getColor(R.color.risk_slippage_max_red_dark));
+                            mBeanDrawPriceData.setColor(getResources().getColor(R.color.risk_slippage_max_red_dark));
+                        } else {
+                            mDashedPaint.setColor(getResources().getColor(R.color.risk_slippage_max_green_dark));
+                            mBeanDrawPriceData.setColor(getResources().getColor(R.color.risk_slippage_max_green_dark));
+                        }
+
+                        canvas.drawLine(showDataLeftX, (float) y, showDataRightX, (float) y, mDashedPaint);
                     }
-                    canvas.drawLine(showDataLeftX, (float) y, showDataRightX, (float) y,mDashedPaint);
                 } catch (IllegalAccessException e) {
                     Log.i(TAG, "drawLine: 异常");
                     e.printStackTrace();
@@ -380,6 +383,9 @@ public class HistoryTradeView extends View {
     double realTimePrice = -1;
     public BeanDrawRealTimePriceData refreshRealTimePrice(RealTimeDataList.BeanRealTime beanRealTime) {
         //两种保存方式。1：当前显示的。如果实时值对最后一个值有所更改，则实时更改。
+        if(data==null){
+            return null;
+        }
         BeanHistory.BeanHistoryData.HistoryItem historyItem = data.getList().get(data.getBarnum() - 1);
         if (DateUtils.getOrderStartTime(beanRealTime.getTime()) < DateUtils.getOrderStartTime(historyItem.getTime()) + period * 60 * 1000) {
             //还属于最后一个item的时间范围

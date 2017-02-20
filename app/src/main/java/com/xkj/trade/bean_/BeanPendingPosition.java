@@ -83,6 +83,7 @@ public class BeanPendingPosition {
              * symbol : AUDJPY
              * tp : 0.0
              * volume : 0.10
+             * price:不是网络的数据，后期加入。表示当前价格
              */
 
             private String closeprice;
@@ -92,6 +93,7 @@ public class BeanPendingPosition {
             private String openprice;
             private String opentime;
             private int order;
+            private String price;
             private String profit;
             private String sl;
             private String swap;
@@ -201,6 +203,14 @@ public class BeanPendingPosition {
 
             public void setVolume(String volume) {
                 this.volume = volume;
+            }
+
+            public String getPrice() {
+                return price;
+            }
+
+            public void setPrice(String price) {
+                this.price = price;
             }
         }
     }

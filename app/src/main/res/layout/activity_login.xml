@@ -29,7 +29,7 @@
         android:src="@mipmap/login_bg_2"/>
 
     <LinearLayout
-        android:layout_marginTop="@dimen/px372"
+        android:layout_marginTop="@dimen/px214"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="@dimen/px150"

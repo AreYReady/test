@@ -16,10 +16,10 @@ import static com.xkj.trade.constant.RequestConstant.PROFIT;
  * TODO:
  */
 
-public class SingleOpenPositionDiff extends DiffUtil.Callback {
+public class OpenPositionDiff extends DiffUtil.Callback {
     private List<BeanOpenPosition.DataBean.ListBean> mOldDatas, mNewDatas;//看名字
 
-    public SingleOpenPositionDiff(List<BeanOpenPosition.DataBean.ListBean> mOldDatas, List<BeanOpenPosition.DataBean.ListBean> mNewDatas) {
+    public OpenPositionDiff(List<BeanOpenPosition.DataBean.ListBean> mOldDatas, List<BeanOpenPosition.DataBean.ListBean> mNewDatas) {
         this.mOldDatas = mOldDatas;
         this.mNewDatas = mNewDatas;
     }
@@ -49,12 +49,6 @@ public class SingleOpenPositionDiff extends DiffUtil.Callback {
         if(!beanOld.getProfit().equals(beanNew.getProfit())){
             return false;
         }
-//        if (!beanOld.getPrice().equals(beanNew.getPrice())) {
-//            return false;//如果有内容不同，就返回false
-//        }
-//        if (beanOld.getBid() != beanNew.getBid()) {
-//            return false;//如果有内容不同，就返回false
-//        }
         return true; //默认两个data内容是相同的
     }
 

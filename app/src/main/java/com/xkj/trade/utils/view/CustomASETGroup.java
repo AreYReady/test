@@ -40,7 +40,6 @@ public class CustomASETGroup extends FrameLayout{
         super(context, attrs, defStyleAttr);
         this.context=context;
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CustomGroup);
-
         descString = ta.getString(R.styleable.CustomGroup_desc_text);
         isVisibity=ta.getBoolean(R.styleable.CustomGroup_iamge_visibility,true);
         ta.recycle();
@@ -89,12 +88,11 @@ public class CustomASETGroup extends FrameLayout{
         }
     }
 
-    public AddSubEditText getmASET() {
-        return mASET;
+    public void setData(double minPrice,double maxPrice,double baseNumbel,double amount){
+        mASET.setData(minPrice,maxPrice,baseNumbel,amount);
     }
-
-    public void setmASET(AddSubEditText mASET) {
-        this.mASET = mASET;
+    public void setData(String minPrice,String maxPrice,String baseNumbel,String amount){
+        mASET.setData(minPrice,maxPrice,baseNumbel,amount);
     }
 
     public ImageView getmImageView() {
@@ -129,4 +127,5 @@ public class CustomASETGroup extends FrameLayout{
     public int getMoney(){
         return Integer.valueOf(mASET.getNumbel().replace(",",""));
     }
+
 }

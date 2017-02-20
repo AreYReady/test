@@ -182,6 +182,4 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
         }
         mLoadingDialog.show();
     }
-
-
 }

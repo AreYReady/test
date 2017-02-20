@@ -56,7 +56,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="4"
                 android:background="@color/toolbars_title_dark"
-                android:text="修改1.07593" />
+                android:text="修改" />
             <Space
                 android:layout_weight="0.5"
                 android:layout_width="0dip"

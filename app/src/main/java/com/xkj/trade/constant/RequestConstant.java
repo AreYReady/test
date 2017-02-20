@@ -37,6 +37,12 @@ public interface RequestConstant {
     String TP = "tp";
     String ORDERNO = "orderno";
     String IS_FILTER = "isfilter";
+    String OPEN_START_TIME = "openstarttime";
+    String OPEN_END_TIME = "openendtime";
+    String CLOSE_START_TIME = "closestarttime";
+    String CLOSE_END_TIME = "closeendtime";
+
+
 
      enum Exc {
          BUY("BUY"),//买
@@ -76,5 +82,4 @@ public interface RequestConstant {
 
     String PROFIT="profit";
     String CURRENT_PRICE="CURRENT_PRICE";
-
 }

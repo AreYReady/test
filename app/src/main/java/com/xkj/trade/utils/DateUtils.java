@@ -36,7 +36,7 @@ public class DateUtils {
      * @return
      */
     public static String getCurrenTime() {
-        return DateUtils.getXTShowTime(Calendar.getInstance().getTimeInMillis());
+        return DateUtils.getShowTimeNoTimeZone(Calendar.getInstance().getTimeInMillis());
     }
 
     /**
@@ -47,6 +47,16 @@ public class DateUtils {
      */
     public static String getShowTime(Long date) {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        return format.format(new Date(date));
+    }
+    /**
+     * 获取以手机当前时区的时间formatType
+     *
+     * @param date
+     * @return
+     */
+    public static String getShowTime(Long date,String formatType) {
+        SimpleDateFormat format = new SimpleDateFormat(formatType);
         return format.format(new Date(date));
     }
 
@@ -86,7 +96,7 @@ public class DateUtils {
      * 获取当前时间格式:=
      */
     public static String getXTShowTime(long time) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yy:MM:dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone(getCurrentTimeZone()));
         return sdf.format(new Date(time));
     }

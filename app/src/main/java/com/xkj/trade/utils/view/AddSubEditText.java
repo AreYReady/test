@@ -35,11 +35,12 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
     private TextView addView;
     private TextView subView;
     private EditText editText;
-    private int amount;
-    private int minPrice = 1000;
+    private String amount="0";
+    private int mDitigs=0;
+    private String minPrice = "1000";
     //加减的基数
-    private int baseNumber = 1000;
-    private int maxPrice=10000000;
+    private String baseNumber = "1000";
+    private String maxPrice="10000000";
     //判断是否是跟随SeekBar改变操作
     private boolean isFollow=false;
 
@@ -58,7 +59,8 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         addView = (TextView) inflate.findViewById(R.id.tv_add);
         subView = (TextView) inflate.findViewById(tv_sub);
         editText = (EditText) inflate.findViewById(R.id.et_amount);
-        editText.setText(MoneyUtil.parseMoney(amount));
+//        editText.setText(String.valueof(amount));
+        editText.setText(String.valueOf(amount));
         hideSoftInputMethod(editText);
         subView.setLongClickable(true);
         subView.setOnTouchListener(this);
@@ -76,14 +78,14 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (amount < minPrice) {
+                if (Double.valueOf(amount) < Double.valueOf(minPrice)) {
                     amount = minPrice;
-                    editText.setText(MoneyUtil.parseMoney(amount));
+                    editText.setText(amount);
                 }
-                if(maxPrice!=-1&&amount>maxPrice){
+                if(Double.valueOf(maxPrice)!=-1&&Double.valueOf(amount)>Double.valueOf(maxPrice)){
                     Log.i(TAG, "afterTextChanged: amount"+amount);
                     amount=maxPrice;
-                    editText.setText(MoneyUtil.parseMoney(maxPrice));
+                    editText.setText(maxPrice);
                 }
 
             }
@@ -140,12 +142,12 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
                 try {
                     Thread.sleep(100);
                     Log.i(TAG, "run: ");
-                    if(amount<=minPrice){
+                    if(Double.valueOf(amount)<=Double.valueOf(minPrice)){
                         amount=minPrice;
                     }
-                    amount = amount - baseNumber;
+                    amount=MoneyUtil.subPriceToString(amount,baseNumber);
                     handler.sendEmptyMessage(0);
-//                    editText.setText(MoneyUtil.parseMoney(amount));
+//                    editText.setText(String.valueOf(amount));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -160,10 +162,11 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
             while (isOnLongClick) {
                 try {
                     Thread.sleep(100);
-//                    editText.setText(MoneyUtil.parseMoney(amount));
+//                    editText.setText(String.valueOf(amount));
 //                    myHandler.sendEmptyMessage(2);
-                    amount = amount + baseNumber;
-                    if(amount>=maxPrice){
+                    amount= MoneyUtil.addPrice(amount,baseNumber);
+//                    amount = amount + baseNumber;
+                    if(Double.valueOf(amount)>=Double.valueOf(maxPrice)){
                         amount=maxPrice;
                     }
                     handler.sendEmptyMessage(0);
@@ -183,7 +186,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
                 //onTouch
                 case 0:
                     if(listener!=null&&!isFollow) {
-                        listener.amountChange(amount);
+                        listener.amountChange(Double.valueOf(amount).intValue());
                     }
                     break;
                 //follow
@@ -191,7 +194,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
                     isFollow=false;
                     break;
             }
-            editText.setText(MoneyUtil.parseMoney(amount));
+            editText.setText(String.valueOf(amount));
             if(editText.getVisibility()!=VISIBLE){
                 editText.setVisibility(VISIBLE);
             }
@@ -203,7 +206,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
 
     public void followSeekBarChange(int count) {
         isFollow=true;
-        amount = baseNumber * count;
+        amount=MoneyUtil.mulPrice(baseNumber,String.valueOf(count));
         handler.sendEmptyMessage(1);
         if(editText.getVisibility()!=VISIBLE){
             editText.setVisibility(VISIBLE);
@@ -218,10 +221,26 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         this.listener=listener;
     }
     public void setData(int minPrice, int maxPrice, int baseNumber){
+        this.maxPrice=String.valueOf(maxPrice);
+        this.minPrice=String.valueOf(minPrice);
+        this.baseNumber =String.valueOf(baseNumber);
+        editText.setText(String.valueOf(minPrice));
+    }
+    public void setData(double minPrice, double maxPrice, double baseNumber,double amount){
+        this.maxPrice=String.valueOf(maxPrice);
+        this.minPrice=String.valueOf(minPrice);
+        this.baseNumber =String.valueOf(baseNumber);
+        this.amount=String.valueOf(amount);
+        mDitigs=MoneyUtil.getDigits(String.valueOf(amount));
+        editText.setText(String.valueOf(amount));
+    }
+    public void setData(String minPrice, String maxPrice, String baseNumber,String amount){
         this.maxPrice=maxPrice;
         this.minPrice=minPrice;
         this.baseNumber =baseNumber;
-        editText.setText(MoneyUtil.parseMoney(minPrice));
+        this.amount=amount;
+        mDitigs=MoneyUtil.getDigits(amount);
+        editText.setText(amount);
     }
     public String getNumbel(){
         return editText.getText().toString();

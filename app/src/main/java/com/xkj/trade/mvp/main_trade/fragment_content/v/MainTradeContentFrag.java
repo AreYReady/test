@@ -47,7 +47,7 @@ import com.xkj.trade.bean_.BeanUserListInfo;
 import com.xkj.trade.constant.CacheKeyConstant;
 import com.xkj.trade.constant.TradeDateConstant;
 import com.xkj.trade.diffcallback.MyFavoritesDiffCallBack;
-import com.xkj.trade.diffcallback.SingleOpenPositionDiff;
+import com.xkj.trade.diffcallback.OpenPositionDiff;
 import com.xkj.trade.mvp.main_trade.fragment_content.p.MainTradeContentPreListenerImpl;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.DataUtil;
@@ -67,6 +67,7 @@ import com.xkj.trade.utils.view.ZoomOutPageTransformer;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -838,7 +839,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
 
     private ArrayList<BeanIndicatorData> realTimeIndicatorData = new ArrayList<>();
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void getRealTimeData(RealTimeDataList realTimeDataList) {
         Log.i(TAG, "getRealTimeData: ");
 
@@ -879,6 +880,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
      * 刷新当前持有仓的数据
      * @param beanRealTime
      */
+    DiffUtil.DiffResult diffResult;
     private void realTimeOpenPositionData(RealTimeDataList.BeanRealTime beanRealTime) {
         //复制数据
         mBeanDupOpenList=  (new Gson().fromJson(new Gson().toJson(mBeanOpenList),new TypeToken<List<BeanOpenPosition.DataBean.ListBean>>(){}.getType()));
@@ -892,14 +894,15 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                 bean.setPrice(String.valueOf(beanRealTime.getAsk()));
             }
         }
-        ThreadHelper.instance().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                DiffUtil.calculateDiff(new SingleOpenPositionDiff(mBeanDupOpenList,mBeanOpenList),true).dispatchUpdatesTo(mOpenAdapter);
-
-            }
-        });
+        diffResult = DiffUtil.calculateDiff(new OpenPositionDiff(mBeanDupOpenList, mBeanOpenList), true);
+        ThreadHelper.instance().runOnUiThread(mRunnable);
     }
+    Runnable mRunnable=new Runnable() {
+        @Override
+        public void run() {
+            diffResult.dispatchUpdatesTo(mOpenAdapter);
+        }
+    };
 
     @Subscribe
     public void enterOrder(BeanOpenPosition beanOpenPosition){

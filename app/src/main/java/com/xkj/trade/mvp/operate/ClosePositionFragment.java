@@ -100,7 +100,7 @@ public class ClosePositionFragment extends BaseFragment {
     @Override
     protected void initView() {
         getCurrentSymbol(MyApplication.getInstance().beanIndicatorData);
-        if (mData.getCmd().equals("sell")) {
+        if (mData.getCmd().contains("sell")) {
             mTvPlayAction.setText("卖出");
             mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
         } else {

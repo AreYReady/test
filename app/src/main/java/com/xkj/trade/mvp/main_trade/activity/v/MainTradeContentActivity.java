@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,6 +83,7 @@ public class MainTradeContentActivity extends BaseActivity
     private TextView mMargin;
     private TextView mMarginLevel;
     private TextView mCredit;
+    private ImageView mOpenPositionCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +183,7 @@ public class MainTradeContentActivity extends BaseActivity
 
         mViewPagerFrag = (ViewPager) findViewById(R.id.vp_indicator_content);
         mViewPagerFrag.setAdapter(new FragmentAdapter(fragmentManager, mFragmentList));
+        mViewPagerFrag.setOffscreenPageLimit(mFragmentList.size());
         mViewPagerFrag.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -194,7 +197,6 @@ public class MainTradeContentActivity extends BaseActivity
         mHeadViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         mHeadViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             int mPosition = 0;
-
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 mPosition = position;
@@ -221,18 +223,16 @@ public class MainTradeContentActivity extends BaseActivity
 
             }
         });
-
         mPullViewDragLayout = (PullBottomViewDragLayout) findViewById(R.id.dragLayout);
         mViewPagerFrag = (ViewPager) findViewById(R.id.vp_indicator_content);
         mHeadViewPager = (CustomViewPager) findViewById(R.id.cvp_indicator_item);
-
         mEquity = (TextView) findViewById(R.id.tv_pull_equity);
         mCredit = (TextView) findViewById(R.id.tv_pull_credit);
         mMargin = (TextView) findViewById(R.id.tv_pull_margin);
         mMarginLevel = (TextView) findViewById(R.id.tv_pull_margin_level);
         mBalance = (TextView) findViewById(R.id.tv_pull_balance);
         mOpenPl = (TextView) findViewById(R.id.tv_pull_open_p_l);
-
+        mOpenPositionCount=(ImageView)findViewById(R.id.iv_suitcase);
     }
 
     @Override
@@ -365,4 +365,5 @@ public class MainTradeContentActivity extends BaseActivity
         this.beanUserListInfo = beanUserListInfo;
         handler.sendEmptyMessage(refreshUserInfo);
     }
+
 }

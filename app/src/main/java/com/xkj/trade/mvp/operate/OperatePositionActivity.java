@@ -106,6 +106,7 @@ public class OperatePositionActivity extends OperateBaseActivity {
                 break;
             case EDIT_PENDING_POSITION:
                 mBaseFragment = new EditPendingPositionFrament();
+                mBaseFragment.setArguments(mBundle);
 //                fragmentTransaction.add(R.id.fl_operate_content, new EditPendingPositionFrament());
                 break;
             default:

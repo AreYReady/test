@@ -27,6 +27,7 @@ import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.RoundImageView;
+import com.xkj.trade.utils.view.CustomASETGroup;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -77,9 +78,15 @@ public class EditPositionFragment extends BaseFragment {
     TextView mTvEnterButtonPrompt;
     @Bind(R.id.tv_enter_button)
     TextView mTvEnterButton;
+    @Bind(R.id.c_stop_lost)
+    CustomASETGroup mCStopLost;
+    @Bind(R.id.c_take_profit)
+    CustomASETGroup mCTakeProfit;
     private TextView tvAction;
     private String jsonData;
     private BeanOpenPosition.DataBean.ListBean mData;
+    private int mDigits;
+    private String mBaseNumble;
 
     @Nullable
     @Override
@@ -104,40 +111,57 @@ public class EditPositionFragment extends BaseFragment {
         mAmount.setText(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY));
         mOpenRate.setText(mData.getOpenprice());
         mOpenTime1.setText(mData.getOpentime());
-    mTvEnterButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            enterOrder();
+        mTvEnterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enterOrder();
+            }
+        });
+        mCStopLost = (CustomASETGroup) view.findViewById(R.id.c_stop_lost);
+        mDigits = MoneyUtil.getDigits(mData.getOpenprice());
+            mBaseNumble = MoneyUtil.getBaseNumble(mDigits);
+        if (Double.valueOf(mData.getSl()) == 0) {
+            //没有止损有效值
+            mCStopLost.setData("0", "10000", mBaseNumble, MoneyUtil.subPriceToString(mData.getOpenprice(), String.valueOf(mBaseNumble)));
+        } else {
+            mCStopLost.setData("0", "10000", mBaseNumble, MoneyUtil.subPriceToString(mData.getSl(), String.valueOf(mBaseNumble)));
         }
-    });
+
+        mCTakeProfit = (CustomASETGroup) view.findViewById(R.id.c_take_profit);
+        if (Double.valueOf(mData.getTp()) == 0) {
+            //没有获利有效值
+            mCTakeProfit.setData("0", "10000", mBaseNumble, MoneyUtil.addPrice(mData.getOpenprice(), String.valueOf(mBaseNumble)));
+        } else {
+            mCTakeProfit.setData("0", "10000", mBaseNumble, MoneyUtil.addPrice(mData.getSl(), String.valueOf(mBaseNumble)));
+        }
     }
 
     private void enterOrder() {
-        Map<String,String> map=new TreeMap<>();
+        Map<String, String> map = new TreeMap<>();
         map.put(RequestConstant.LOGIN, AesEncryptionUtil.stringBase64toString(ACache.get(context).getAsString(RequestConstant.ACCOUNT)));
-        map.put(RequestConstant.SYMBOL,AesEncryptionUtil.stringBase64toString(MyApplication.getInstance().beanIndicatorData.getSymbol()));
-        map.put(RequestConstant.ORDERNO,String.valueOf(mData.getOrder()));
-        map.put(RequestConstant.PRICE,String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY));
-        if(Double.valueOf(mData.getSl())>=Double.valueOf(mData.getPrice())){
-            Toast.makeText(context,"止损金额不能大于开仓价",Toast.LENGTH_SHORT).show();
+        map.put(RequestConstant.SYMBOL, AesEncryptionUtil.stringBase64toString(MyApplication.getInstance().beanIndicatorData.getSymbol()));
+        map.put(RequestConstant.ORDERNO, String.valueOf(mData.getOrder()));
+        map.put(RequestConstant.PRICE, String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY));
+        if (Double.valueOf(mData.getSl()) >= Double.valueOf(mData.getPrice())) {
+            Toast.makeText(context, "止损金额不能大于开仓价", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(Double.valueOf(mData.getTp())<=Double.valueOf(mData.getPrice())){
-            Toast.makeText(context,"获利金额不能小于开仓价",Toast.LENGTH_SHORT).show();
+        if (Double.valueOf(mData.getTp()) <= Double.valueOf(mData.getPrice())) {
+            Toast.makeText(context, "获利金额不能小于开仓价", Toast.LENGTH_SHORT).show();
             return;
         }
-        map.put(RequestConstant.SL,mData.getSl());
-        map.put(RequestConstant.TP,mData.getTp());
+        map.put(RequestConstant.SL, mData.getSl());
+        map.put(RequestConstant.TP, mData.getTp());
         OkhttpUtils.enqueue(UrlConstant.URL_TRADE_ORDER_EXE, map, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.i(TAG, "onFailure: "+call.request());
+                Log.i(TAG, "onFailure: " + call.request());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.i(TAG, "onResponse: "+call.request());
-                Log.i(TAG, "onResponse: "+response.body().string());
+                Log.i(TAG, "onResponse: " + call.request());
+                Log.i(TAG, "onResponse: " + response.body().string());
 
             }
         });

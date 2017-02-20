@@ -13,6 +13,8 @@ import com.xkj.trade.R;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
+import static java.math.BigDecimal.ROUND_HALF_EVEN;
+
 
 /**
  * @author xjunda
@@ -35,7 +37,12 @@ public class MoneyUtil {
         return df.format(money);
     }
 
+
     public static String moneyFormat(double numble, int digist) {
+        BigDecimal b = new BigDecimal(String.valueOf(numble));
+        return b.setScale(digist, BigDecimal.ROUND_HALF_UP).toString();
+    }
+    public static String moneyFormat(String numble, int digist) {
         BigDecimal b = new BigDecimal(numble);
         return String.valueOf(b.setScale(digist, BigDecimal.ROUND_HALF_UP).doubleValue());
     }
@@ -68,6 +75,11 @@ public class MoneyUtil {
         BigDecimal bDecimal = new BigDecimal(b + "");
         return aDecimal.add(bDecimal).doubleValue();
     }
+    public static double addPrice(double a, double b,int ditigs) {
+        BigDecimal aDecimal = new BigDecimal(Double.toString(a));
+        BigDecimal bDecimal = new BigDecimal(Double.toString(b));
+        return aDecimal.add(bDecimal).setScale(ditigs,ROUND_HALF_EVEN ).doubleValue();
+    }
 
     /**
      * 提供精确加法计算的add方法
@@ -81,6 +93,7 @@ public class MoneyUtil {
         BigDecimal bDecimal = new BigDecimal(b);
         return aDecimal.add(bDecimal).toString();
     }
+
 
     /**
      * 提供精确减法运算的sub方法
@@ -107,6 +120,21 @@ public class MoneyUtil {
         BigDecimal b2 = new BigDecimal(Double.valueOf(value2));
         return b1.subtract(b2).doubleValue();
     }
+    public static double subPrice(double value1, double value2,int ditigs) {
+        BigDecimal b1 = new BigDecimal(Double.valueOf(value1));
+        BigDecimal b2 = new BigDecimal(Double.valueOf(value2));
+        return b1.subtract(b2).setScale(ditigs, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+    public static double subPrice(String value1, String value2,int ditigs) {
+        BigDecimal b1 = new BigDecimal(value1);
+        BigDecimal b2 = new BigDecimal(value2);
+        return b1.subtract(b2).setScale(ditigs, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+    public static String subPriceToString(String value1, String value2) {
+        BigDecimal b1 = new BigDecimal(value1);
+        BigDecimal b2 = new BigDecimal(value2);
+        return b1.subtract(b2).toString();
+    }
 
     /**
      * 提供精确乘法运算的mul方法
@@ -119,6 +147,11 @@ public class MoneyUtil {
         BigDecimal aDecimal = new BigDecimal(a + "");
         BigDecimal bDecimal = new BigDecimal(b + "");
         return aDecimal.multiply(bDecimal).doubleValue();
+    }
+    public static String mulPrice(String a,String b){
+        BigDecimal aDecimal = new BigDecimal(a );
+        BigDecimal bDecimal = new BigDecimal(b);
+        return aDecimal.multiply(bDecimal).toString();
     }
 
     public static String mulPriceToString(double a, double b) {
@@ -177,7 +210,7 @@ public class MoneyUtil {
         }
         BigDecimal b1 = new BigDecimal(Double.toString(value1));
         BigDecimal b2 = new BigDecimal(Double.toString(value2));
-        return b1.divide(b2, scale, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        return b1.divide(b2, scale, ROUND_HALF_EVEN).doubleValue();
     }
 
     public static double div(double value1, double value2) throws IllegalAccessException {
@@ -186,6 +219,7 @@ public class MoneyUtil {
         BigDecimal b2 = new BigDecimal(Double.toString(value2));
         return b1.divide(b2, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
+
 
     public static double div(double value1, double value2, int scale, int mode) throws IllegalAccessException {
         //如果精确范围小于0，抛出异常信息
@@ -239,5 +273,21 @@ public class MoneyUtil {
         BigDecimal bd = new BigDecimal(money);
         DecimalFormat df = new DecimalFormat(",###,###");
         return df.format(bd);
+    }
+    public static int getDigits(String money){
+        int dcimalDigits=0;
+        int indexOf = money.indexOf(".");
+        if(indexOf > 0){
+            dcimalDigits = money.length() - 1 - indexOf;
+        }
+        return dcimalDigits;
+    }
+    public static String getBaseNumble(int digits){
+        StringBuffer b=new StringBuffer();
+        b.append("0.");
+        for(int i=0;i<digits-1;i++){
+            b.append("0");
+        }
+        return b.append("1").toString();
     }
 }
