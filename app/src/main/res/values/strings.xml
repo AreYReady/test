@@ -257,6 +257,7 @@
     <string name="invalid_password">无效密码</string>
     <string name="invalid_price">价格无效</string>
     <string name="invalid_stop_loss">无效止损</string>
+
     <string name="invalid_stop_loss_or_take_profit">无效的止损或获利</string>
     <string name="invalid_take_profit">无效获利</string>
     <string name="it_so_nice_to_see_you_again">欢迎您。</string>

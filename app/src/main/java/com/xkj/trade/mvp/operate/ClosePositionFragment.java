@@ -14,11 +14,13 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.xkj.trade.IO.okhttp.ChatWebSocket;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
 import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean.BeanIndicatorData;
+import com.xkj.trade.bean.RealTimeDataList;
 import com.xkj.trade.bean_.BeanBaseResponse;
 import com.xkj.trade.bean_.BeanOpenPosition;
 import com.xkj.trade.constant.RequestConstant;
@@ -99,7 +101,6 @@ public class ClosePositionFragment extends BaseFragment {
 
     @Override
     protected void initView() {
-        getCurrentSymbol(MyApplication.getInstance().beanIndicatorData);
         if (mData.getCmd().contains("sell")) {
             mTvPlayAction.setText("卖出");
             mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
@@ -119,6 +120,7 @@ public class ClosePositionFragment extends BaseFragment {
             }
         });
         setTvEstimatedProfitAmount(MyApplication.getInstance().beanIndicatorData);
+        requestSubSymbol();
 
     }
 
@@ -165,22 +167,34 @@ public class ClosePositionFragment extends BaseFragment {
         ButterKnife.unbind(this);
     }
 
+    private void requestSubSymbol() {
+        ChatWebSocket chartWebSocket = ChatWebSocket.getChartWebSocket();
+        if (chartWebSocket != null) {
+            chartWebSocket.sendMessage("{\"msg_type\":1010,\"symbol\":\"" + mData.getSymbol() + "\"}");
+        }
+    }
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getCurrentSymbol(BeanIndicatorData beanIndicatorData) {
-        Log.i(TAG, "getCurrentSymbol: " + beanIndicatorData.getSymbol());
-        SpannableString askTextBig = MoneyUtil.getRealTimePriceTextBig(context, beanIndicatorData.getBid());
-        SpannableString bidTextBig = MoneyUtil.getRealTimePriceTextBig(context, beanIndicatorData.getAsk());
-        if (beanIndicatorData.getBidColor() != 0) {
-            bidTextBig.setSpan(new ForegroundColorSpan(beanIndicatorData.getBidColor()), 0, bidTextBig.length(),
+    public void getRealTimeData(RealTimeDataList realTimeDataList) {
+        Log.i(TAG, "getRealTimeData: ");
+        for(RealTimeDataList.BeanRealTime beanRealTime:realTimeDataList.getQuotes()){
+            if(beanRealTime.getSymbol().equals(mData.getSymbol())){
+                setHeader(String.valueOf(beanRealTime.getSymbol()),String.valueOf(beanRealTime.getAsk()),String.valueOf(beanRealTime.getBid()));
+            }
+        }
+    }
+    public void setHeader(String symbol,String ask,String bid){
+        SpannableString askTextBig = MoneyUtil.getRealTimePriceTextBig(context, bid);
+        SpannableString bidTextBig = MoneyUtil.getRealTimePriceTextBig(context, ask);
+        if(mPriceRight.getText().toString()!=""){
+            askTextBig.setSpan(new ForegroundColorSpan(getResources().getColor(Double.valueOf(ask) > Double.valueOf(mPriceLeft.getText().toString()) ? R.color.text_color_price_rise : R.color.text_color_price_fall)), 0, bidTextBig.length(),
                     Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
-        if (beanIndicatorData.getAskColor() != 0) {
-            askTextBig.setSpan(new ForegroundColorSpan(beanIndicatorData.getAskColor()), 0, askTextBig.length(),
+        if(mPriceRight.getText().toString()!=""){
+            bidTextBig.setSpan(new ForegroundColorSpan(getResources().getColor(Double.valueOf(bid) > Double.valueOf(mPriceRight.getText().toString()) ? R.color.text_color_price_rise : R.color.text_color_price_fall)), 0, bidTextBig.length(),
                     Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
-        mTvSymbolName.setText(beanIndicatorData.getSymbol());
+        mTvSymbolName.setText(symbol);
         mPriceLeft.setText(askTextBig);
         mPriceRight.setText(bidTextBig);
-        setTvEstimatedProfitAmount(beanIndicatorData);
     }
 }

@@ -446,7 +446,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                     if(i==mHeaderCustomViewPager.getCurrentItem()){
                         //说明是当前
                         EventBus.getDefault().post(subData);
-
                     }
                 }
             }

@@ -2,6 +2,7 @@ package com.xkj.trade.mvp.main_trade;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -52,6 +53,7 @@ public class FragmentOpenPosition extends BaseFragment {
     private OpenAdapter mOpenAdapter;
     private Map<String,Boolean> symbols=new TreeMap<>();
     private final int REFRESH_OPEN_POSITION =0;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,6 +64,13 @@ public class FragmentOpenPosition extends BaseFragment {
     @Override
     protected void initView() {
         mRecyclerView=(RecyclerView)view.findViewById(R.id.rv_open_content);
+        mSwipeRefreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh_widget);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestOpenPosition();
+            }
+        });
         if(mDataList==null){
             mDataList=new ArrayList<BeanOpenPosition.DataBean.ListBean>();
         }
@@ -111,6 +120,7 @@ public class FragmentOpenPosition extends BaseFragment {
         ThreadHelper.instance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
                 mDataList=mBeanOpenPosition.getData().getList();
                 mOpenAdapter.setData(mDataList);
                 mOpenAdapter.notifyDataSetChanged();

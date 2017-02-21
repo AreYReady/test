@@ -102,6 +102,7 @@ public class OperatePositionActivity extends OperateBaseActivity {
                 break;
             case DELETE_PENDING_POSITION:
                 mBaseFragment = new DeletePositionFragment();
+                mBaseFragment.setArguments(mBundle);
 //                fragmentTransaction.add(R.id.fl_operate_content, new DeletePositionFragment());
                 break;
             case EDIT_PENDING_POSITION:

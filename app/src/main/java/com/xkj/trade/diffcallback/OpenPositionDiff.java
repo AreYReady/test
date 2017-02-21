@@ -10,6 +10,8 @@ import java.util.List;
 
 import static com.xkj.trade.constant.RequestConstant.CURRENT_PRICE;
 import static com.xkj.trade.constant.RequestConstant.PROFIT;
+import static com.xkj.trade.constant.RequestConstant.STOP_LOSS;
+import static com.xkj.trade.constant.RequestConstant.TAKE_PROFIT;
 
 /**
  * Created by huangsc on 2017-02-07.
@@ -49,6 +51,10 @@ public class OpenPositionDiff extends DiffUtil.Callback {
         if(!beanOld.getProfit().equals(beanNew.getProfit())){
             return false;
         }
+        if(!beanOld.getSl().equals(beanNew.getSl()))
+            return false;
+        if(!beanOld.getTp().equals(beanNew.getTp()))
+            return false;
         return true; //默认两个data内容是相同的
     }
 
@@ -62,6 +68,11 @@ public class OpenPositionDiff extends DiffUtil.Callback {
             payload.putString(PROFIT,PROFIT);
         }
         payload.putString(CURRENT_PRICE,CURRENT_PRICE);
+        if(!beanOld.getTp().equals(beanNew.getTp())){
+            payload.putString(TAKE_PROFIT,TAKE_PROFIT);
+        }
+        if(!beanOld.getSl().equals(beanNew.getSl()))
+            payload.putString(STOP_LOSS,STOP_LOSS);
         if (payload.size() == 0)//如果没有变化 就传空
             return null;
         return payload;

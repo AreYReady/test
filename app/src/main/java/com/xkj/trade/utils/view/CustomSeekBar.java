@@ -46,9 +46,11 @@ public class CustomSeekBar extends FrameLayout {
         super(context, attrs, defStyleAttr);
         View inflate = LayoutInflater.from(context).inflate(R.layout.v_seekbar, null);
         mASEditText = (AddSubEditText) inflate.findViewById(R.id.aset_aset);
+        mASEditText.hideSoftInputMethod();
         mASEditText.setAmountChangeListener(new AddSubEditText.AmountChangeListener() {
             @Override
-            public void amountChange(int amount) {
+            public void amountChange(String amountString) {
+                int amount=Double.valueOf(amountString).intValue();
                 try {
 
 //                    Log.i(TAG, "amountChange: " + amount);

@@ -2,6 +2,7 @@ package com.xkj.trade.mvp.main_trade;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -52,6 +53,8 @@ public class FragmentPendingPosition extends BaseFragment  {
     private RecyclerView mRecyclerView;
     private BeanPendingPosition info;
     private Map<String,Boolean> symbols=new TreeMap<>();
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
 
 
     @Nullable
@@ -63,6 +66,13 @@ public class FragmentPendingPosition extends BaseFragment  {
 
     @Override
     protected void initView() {
+        mSwipeRefreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh_widget);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestData();
+            }
+        });
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_pending_content);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.setAdapter(mPendingAdapter=new PendingAdapter(context,mDataList));
@@ -107,10 +117,12 @@ public class FragmentPendingPosition extends BaseFragment  {
         ThreadHelper.instance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
                 mPendingAdapter.setData(mDataList);
                 mPendingAdapter.notifyDataSetChanged();
             }
         });
+
     }
 
     @Override

@@ -82,4 +82,6 @@ public interface RequestConstant {
 
     String PROFIT="profit";
     String CURRENT_PRICE="CURRENT_PRICE";
+    String STOP_LOSS="STOP_loss";
+    String TAKE_PROFIT="take_profit";
 }

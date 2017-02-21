@@ -23,6 +23,8 @@ import java.util.List;
 
 import static com.xkj.trade.constant.RequestConstant.CURRENT_PRICE;
 import static com.xkj.trade.constant.RequestConstant.PROFIT;
+import static com.xkj.trade.constant.RequestConstant.STOP_LOSS;
+import static com.xkj.trade.constant.RequestConstant.TAKE_PROFIT;
 import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY;
 
 
@@ -80,6 +82,12 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
                         break;
                     case CURRENT_PRICE:
                             holder.bClosePosition.setText("平仓"+mDataList.get(position).getPrice());
+                        break;
+                    case TAKE_PROFIT:
+                        holder.tvTakeProfit.setText(mDataList.get(position).getTp());
+                        break;
+                    case STOP_LOSS:
+                        holder.tvStopLoss.setText(mDataList.get(position).getSl());
                         break;
                 }
             }

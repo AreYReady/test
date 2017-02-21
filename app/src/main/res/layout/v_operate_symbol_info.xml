@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:gravity="center_vertical"
-        android:text="EURUSD"/>
+        />
 
     <TextView
         android:id="@+id/price_left"
@@ -32,7 +32,7 @@
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:gravity="center_vertical"
-        android:text="1.06285"/>
+        />
 
     <TextView
         android:id="@+id/price_right"
@@ -41,5 +41,5 @@
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:gravity="center_vertical"
-        android:text="1.06283"/>
+        />
 </LinearLayout>

@@ -290,4 +290,18 @@ public class MoneyUtil {
         }
         return b.append("1").toString();
     }
+    public static String deleteZero(String s){
+        if(s.contains(".")){
+            for(int i=s.length()-1;i>s.indexOf(".");i--){
+                if(!String.valueOf(s.charAt(i)).equals("0")){
+                    s=s.substring(0,i+1);
+                    break;
+                }
+                else if(i==s.indexOf(".")+1){
+                    s=s.substring(0,i+1);
+                }
+            }
+        }
+        return s;
+    }
 }

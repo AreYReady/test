@@ -46,6 +46,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
     }
     public void setData(List<BeanPendingPosition.DataBean.ListBean> mDataList){
         this.mDataList=mDataList;
+        isClick.clear();
     }
     @Override
     public PendingAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -81,6 +82,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
         holder.llOnclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mPosition=position;
                 if(isClick.containsKey(position)){
                     isClick.remove(position);
                     holder.llHide.setVisibility(View.GONE);
@@ -130,7 +132,8 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
         Log.i(TAG, "onClick: ");
         switch (v.getId()) {
             case R.id.b_delete_pending_position:
-                context.startActivity(new Intent(context, OperatePositionActivity.class).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.DELETE_PENDING_POSITION));
+                context.startActivity(new Intent(context, OperatePositionActivity.class).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.DELETE_PENDING_POSITION)
+                        .putExtra(OperatePositionActivity.JSON_DATA,new Gson().toJson(mDataList.get(mPosition), BeanPendingPosition.DataBean.ListBean.class)));
                 break;
             case R.id.b_edit:
                 context.startActivity(new Intent(context, OperatePositionActivity.class).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.EDIT_PENDING_POSITION)

@@ -61,7 +61,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         editText = (EditText) inflate.findViewById(R.id.et_amount);
 //        editText.setText(String.valueof(amount));
         editText.setText(String.valueOf(amount));
-        hideSoftInputMethod(editText);
+//        hideSoftInputMethod(editText);
         subView.setLongClickable(true);
         subView.setOnTouchListener(this);
         addView.setOnTouchListener(this);
@@ -78,14 +78,12 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (Double.valueOf(amount) < Double.valueOf(minPrice)) {
-                    amount = minPrice;
-                    editText.setText(amount);
-                }
-                if(Double.valueOf(maxPrice)!=-1&&Double.valueOf(amount)>Double.valueOf(maxPrice)){
-                    Log.i(TAG, "afterTextChanged: amount"+amount);
-                    amount=maxPrice;
-                    editText.setText(maxPrice);
+                amount=editText.getText().toString();
+                if(listener!=null){
+                    if(editText.getText().toString().equals("")||editText.getText().toString().endsWith(".")){
+                        amount="0";
+                    }
+                    listener.amountChange(amount);
                 }
 
             }
@@ -142,12 +140,11 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
                 try {
                     Thread.sleep(100);
                     Log.i(TAG, "run: ");
-                    if(Double.valueOf(amount)<=Double.valueOf(minPrice)){
-                        amount=minPrice;
-                    }
                     amount=MoneyUtil.subPriceToString(amount,baseNumber);
+                    if(Double.valueOf(amount)>=Double.valueOf(maxPrice)){
+                        amount=maxPrice;
+                    }
                     handler.sendEmptyMessage(0);
-//                    editText.setText(String.valueOf(amount));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -165,9 +162,8 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
 //                    editText.setText(String.valueOf(amount));
 //                    myHandler.sendEmptyMessage(2);
                     amount= MoneyUtil.addPrice(amount,baseNumber);
-//                    amount = amount + baseNumber;
-                    if(Double.valueOf(amount)>=Double.valueOf(maxPrice)){
-                        amount=maxPrice;
+                    if(Double.valueOf(amount)<=Double.valueOf(minPrice)){
+                        amount=minPrice;
                     }
                     handler.sendEmptyMessage(0);
                 } catch (InterruptedException e) {
@@ -186,7 +182,10 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
                 //onTouch
                 case 0:
                     if(listener!=null&&!isFollow) {
-                        listener.amountChange(Double.valueOf(amount).intValue());
+                        if(editText.getText().equals("")||editText.getText().equals(".")){
+                            amount="0";
+                        }
+                            listener.amountChange(amount);
                     }
                     break;
                 //follow
@@ -194,7 +193,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
                     isFollow=false;
                     break;
             }
-            editText.setText(String.valueOf(amount));
+            editText.setText(amount);
             if(editText.getVisibility()!=VISIBLE){
                 editText.setVisibility(VISIBLE);
             }
@@ -214,7 +213,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
     }
     public interface AmountChangeListener{
 //        void amountChange(int count);
-        void amountChange(int amount);
+        void amountChange(String amount);
     }
     private AmountChangeListener listener;
     public void setAmountChangeListener(AmountChangeListener listener){
@@ -225,7 +224,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         this.minPrice=String.valueOf(minPrice);
         this.baseNumber =String.valueOf(baseNumber);
         editText.setText(String.valueOf(minPrice));
-    }
+        }
     public void setData(double minPrice, double maxPrice, double baseNumber,double amount){
         this.maxPrice=String.valueOf(maxPrice);
         this.minPrice=String.valueOf(minPrice);
@@ -233,6 +232,12 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         this.amount=String.valueOf(amount);
         mDitigs=MoneyUtil.getDigits(String.valueOf(amount));
         editText.setText(String.valueOf(amount));
+        if(listener!=null&&!isFollow) {
+            if(editText.getText().equals("")||editText.getText().equals(".")){
+                this.amount="0";
+            }
+            listener.amountChange(this.amount);
+        }
     }
     public void setData(String minPrice, String maxPrice, String baseNumber,String amount){
         this.maxPrice=maxPrice;
@@ -241,6 +246,12 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         this.amount=amount;
         mDitigs=MoneyUtil.getDigits(amount);
         editText.setText(amount);
+        if(listener!=null&&!isFollow) {
+            if(editText.getText().equals("")||editText.getText().equals(".")){
+                this.amount="0";
+            }
+            listener.amountChange(amount);
+        }
     }
     public String getNumbel(){
         return editText.getText().toString();
@@ -248,11 +259,14 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
     public void setNumberTextInvisible(){
         editText.setVisibility(INVISIBLE);
     }
+    public int getNumberTextVisible(){
+        return editText.getVisibility();
+    }
     public void setNumberTextVisible(){
         editText.setVisibility(VISIBLE);
     }
     // 隐藏系统键盘
-    public void hideSoftInputMethod(EditText ed){
+    public void hideSoftInputMethod(){
 
         int currentVersion = android.os.Build.VERSION.SDK_INT;
         String methodName = null;
@@ -266,7 +280,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         }
 
         if(methodName == null){
-            ed.setInputType(InputType.TYPE_NULL);
+            editText.setInputType(InputType.TYPE_NULL);
         }
         else{
             Class<EditText> cls = EditText.class;
@@ -274,9 +288,9 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
             try {
                 setShowSoftInputOnFocus = cls.getMethod(methodName, boolean.class);
                 setShowSoftInputOnFocus.setAccessible(true);
-                setShowSoftInputOnFocus.invoke(ed, false);
+                setShowSoftInputOnFocus.invoke(editText, false);
             } catch (NoSuchMethodException e) {
-                ed.setInputType(InputType.TYPE_NULL);
+                editText.setInputType(InputType.TYPE_NULL);
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
@@ -285,4 +299,5 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
             }
         }
     }
+
 }

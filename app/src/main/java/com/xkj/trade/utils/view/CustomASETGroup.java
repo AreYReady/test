@@ -59,19 +59,21 @@ public class CustomASETGroup extends FrameLayout{
         if(!isVisibity){
             mImageView.setVisibility(INVISIBLE);
         }
-        mASET.setAmountChangeListener(new AddSubEditText.AmountChangeListener() {
+//
+//        mImageView.setOnTouchListener(new OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if(event.getAction()==MotionEvent.ACTION_DOWN){
+//                    Log.i(TAG, "onTouch: ");
+//                  onTouchShow();
+//                }
+//                return true;
+//            }
+//        });
+        mImageView.setOnClickListener(new OnClickListener() {
             @Override
-            public void amountChange(int count) {
-            }
-        });
-        inflate.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction()==MotionEvent.ACTION_DOWN){
-                    Log.i(TAG, "onTouch: ");
-                  onTouchShow();
-                }
-                return true;
+            public void onClick(View v) {
+                onTouchShow();
             }
         });
 
@@ -94,38 +96,45 @@ public class CustomASETGroup extends FrameLayout{
     public void setData(String minPrice,String maxPrice,String baseNumbel,String amount){
         mASET.setData(minPrice,maxPrice,baseNumbel,amount);
     }
+    public void setVisible(){
+        onTouchShow();
+    }
 
     public ImageView getmImageView() {
         return mImageView;
+    }
+    public int getDataVisitity(){
+        return mASET.getNumberTextVisible();
     }
 
     public void setmImageView(ImageView mImageView) {
         this.mImageView = mImageView;
     }
 
-
-
     public void setmTVDesc(String mTVDescString) {
         this.mTVDesc.setText(mTVDescString);
     }
 
-
-
-    public void setmTVDescPrompt(TextView mTVDescPrompt) {
-        this.mTVDescPrompt = mTVDescPrompt;
+    public void setmTVDescPrompt(String prompt) {
+        this.mTVDescPrompt.setText(prompt);
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if(MotionEvent.ACTION_DOWN==ev.getAction()&&!mImageView.isSelected()){
-            Log.i(TAG, "onInterceptTouchEvent: ");
             onTouchShow();
             return true;
         }
         return super.onInterceptTouchEvent(ev);
     }
     public int getMoney(){
-        return Integer.valueOf(mASET.getNumbel().replace(",",""));
+        return Integer.valueOf(mASET.getNumbel());
+    }
+    public String getMoneyString(){
+        return mASET.getNumbel();
+    }
+    public void setMoneyChangeListener(AddSubEditText.AmountChangeListener listener){
+        mASET.setAmountChangeListener(listener);
     }
 
 }

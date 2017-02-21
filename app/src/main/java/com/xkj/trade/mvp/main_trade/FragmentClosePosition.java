@@ -3,6 +3,7 @@ package com.xkj.trade.mvp.main_trade;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -53,6 +54,7 @@ public class FragmentClosePosition extends BaseFragment {
     private CloseAdapter mCloseAdapter;
     private RadioGroup mRadioGroup;
     private String mBeginOpenTime;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Nullable
     @Override
@@ -64,6 +66,13 @@ public class FragmentClosePosition extends BaseFragment {
     @Override
     protected void initView() {
         mRadioGroup=(RadioGroup)view.findViewById(R.id.period_group);
+        mSwipeRefreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh_widget);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestData();
+            }
+        });
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -113,6 +122,7 @@ public class FragmentClosePosition extends BaseFragment {
             public void onResponse(Call call, Response response) throws IOException {
                 String re = response.body().string();
                 Log.i(TAG, "onResponse: " + call.request());
+                Log.i(TAG, "onResponse: "+re);
                 SystemUtil.show(re, FragmentClosePosition.class);
                 mBeanClosePosition = new Gson().fromJson(re, new TypeToken<BeanClosePosition>() {
                 }.getType());
@@ -133,6 +143,7 @@ public class FragmentClosePosition extends BaseFragment {
         ThreadHelper.instance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
                 if(mDataList.size()==0){
                 mCloseAdapter.notifyDataSetChanged();
                 }else {
