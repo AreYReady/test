@@ -64,6 +64,9 @@ public class CustomSeekBar extends FrameLayout {
                     } else if (amount <= ints[4]) {
                         setProgress =BigdecimalUtils.mul(BigdecimalUtils.div(amount - ints[3], ints[4] - ints[3], 5),i)+3*i;
                     }
+                    if(listener!=null){
+                        listener.textChange(amountString);
+                    }
                     handler.sendEmptyMessage(0);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
@@ -108,6 +111,7 @@ public class CustomSeekBar extends FrameLayout {
                         }
                         Log.i(TAG, "onProgressChanged: count " + count + "  progress " + progress);
                         mASEditText.followSeekBarChange((int) count);
+
                     }
                     //一次操作结束
                     isAmountChange = false;
@@ -165,6 +169,13 @@ public class CustomSeekBar extends FrameLayout {
         return v;
     }
     public int getMoney(){
-      return Integer.valueOf(mASEditText.getNumbel().replace(",",""));
+      return Integer.valueOf(mASEditText.getNumbel());
+    }
+    public interface TextChangeListener{
+      void  textChange(String amount);
+    }
+    private TextChangeListener listener;
+    public void setTextChangeListener(TextChangeListener listener){
+        this.listener=listener;
     }
 }

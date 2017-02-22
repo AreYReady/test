@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY;
+import static com.xkj.trade.utils.MoneyUtil.subPrice;
 
 /**
  * Created by admin on 2016-11-24.
@@ -51,9 +52,9 @@ public class DataUtil {
                     maxPrice = historyItem.getHigh();
                 }
             }
-            double offset = MoneyUtil.mulPrice(MoneyUtil.subPrice(maxPrice, minPrice), 0.1);
+            double offset = MoneyUtil.mulPrice(subPrice(maxPrice, minPrice), 0.1);
             maxPrice = MoneyUtil.addPrice(maxPrice, offset);//最大值上面部分的空间
-            minPrice = MoneyUtil.subPrice(minPrice, offset);//最小值下面部分的空间
+            minPrice = subPrice(minPrice, offset);//最小值下面部分的空间
             result[0] = minPrice;
             result[1] = maxPrice;
         }
@@ -183,24 +184,29 @@ public class DataUtil {
     public static String getProfit(String symbol,double ask,double bid,String action,String openPrices,String volume) {
         try {
             double currentPrices;
-            if (action.equalsIgnoreCase("buy")) {
+            double diffSpace;
+            if (action.contains("buy")) {
                 currentPrices=bid;
+                diffSpace= subPrice(Double.valueOf(currentPrices), Double.valueOf(openPrices));
             } else {
                 currentPrices=ask;
+                diffSpace= MoneyUtil.subPrice( Double.valueOf(openPrices),Double.valueOf(currentPrices));
             }
             if (symbol.substring(0, 2).equals("USD")) {
-                //直接盘
-              return   MoneyUtil.moneyFormat(MoneyUtil.mulPrice(MoneyUtil.subPrice(Double.valueOf(currentPrices), Double.valueOf(openPrices)), VOLUME_MONEY*Double.valueOf(volume)), 2);
+                //直接盘:1手一点的点值为 10美元,
+              return   MoneyUtil.moneyFormat(MoneyUtil.mulPrice(diffSpace, VOLUME_MONEY*Double.valueOf(volume)), 2);
             } else if (symbol.substring(symbol.length() - 3, symbol.length()).equals("USD")) {
                 //间接盘
-             return   String.valueOf(MoneyUtil.div(VOLUME_MONEY*Double.valueOf(volume)* MoneyUtil.subPrice(Double.valueOf(currentPrices), Double.valueOf(openPrices)), Double.valueOf(currentPrices), 2));
+                // * 例如,USD/JPY 报价 91.28 的时候点值计算如下（USD/JPY最小变动价格为 0.01）：
+//                * 1手一点点差 = （100,000 X 0.01） / 91.28 = $ 10.96
+             return   String.valueOf(MoneyUtil.div(MoneyUtil.mulPrice(VOLUME_MONEY*Double.valueOf(volume),diffSpace), Double.valueOf(currentPrices), 2));
             } else {
                 BeanAllSymbols.SymbolPrices symbolPrices = MainTradeContentFrag.realTimeMap.get(symbol.substring(0, 3).concat("USD"));
                 //交叉盘
                 //例如： EUR/GBP报价为 0.9036, 于此同时 EUR/USD报价为 1.5021,点值计算如下（EUR/GBP最小变动价格为 0.0001）：
 //                标准手一点点差 = （100,000 X 0.0001 X 1.5021）/ 0.9036 = $16.62
                   return String.valueOf(MoneyUtil.div(VOLUME_MONEY*Double.valueOf(volume)
-                          * MoneyUtil.subPrice(Double.valueOf(currentPrices), Double.valueOf(openPrices))
+                          * diffSpace
                           * (Double.valueOf((MainTradeContentFrag.realTimeMap.get(symbol.substring(0, 3).concat("USD"))).getBid())),Double.valueOf(currentPrices), 2));
             }
         } catch (IllegalAccessException e) {

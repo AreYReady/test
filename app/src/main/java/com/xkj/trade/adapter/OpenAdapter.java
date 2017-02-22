@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.xkj.trade.R;
 import com.xkj.trade.bean_.BeanOpenPosition;
 import com.xkj.trade.mvp.operate.OperatePositionActivity;
+import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.SystemUtil;
 
 import java.util.ArrayList;
@@ -126,7 +127,7 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
         holder.bEditPosition.setOnClickListener(this);
 
         holder.tvCountyName.setText(mData.getSymbol());
-        holder.tvMoney.setText(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY));
+        holder.tvMoney.setText(MoneyUtil.deleteZero(MoneyUtil.mulPrice(mData.getVolume(),String.valueOf(VOLUME_MONEY))));
 
         holder.tvCommission.setText("$" + mData.getCommission());
         if (mData.getCmd().equals("sell")) {

@@ -682,11 +682,10 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
             switch (msg.what) {
                 case REFRESH_INDICATOR:
                     if (!isScroll) {
-                        Log.i(TAG, "handleMessage: 0" + "  " + refreshIndicatorIndex);
                         View childAt = mHeaderCustomViewPager.getChildAt(refreshIndicatorIndex);
                         BeanIndicatorData beanIndicatorData = subSymbols.get(refreshIndicatorIndex);
-                        SpannableString askTextBig = MoneyUtil.getRealTimePriceTextBig(context, beanIndicatorData.getBid());
-                        SpannableString bidTextBig = MoneyUtil.getRealTimePriceTextBig(context, beanIndicatorData.getAsk());
+                        SpannableString askTextBig = MoneyUtil.getRealTimePriceTextBig(context, beanIndicatorData.getAsk());
+                        SpannableString bidTextBig = MoneyUtil.getRealTimePriceTextBig(context, beanIndicatorData.getBid());
                         if (beanIndicatorData.getBidColor() != 0) {
                             bidTextBig.setSpan(new ForegroundColorSpan(beanIndicatorData.getBidColor()), 0, bidTextBig.length(),
                                     Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -841,7 +840,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void getRealTimeData(RealTimeDataList realTimeDataList) {
         Log.i(TAG, "getRealTimeData: ");
-
         realTimeIndicatorData.clear();
         for (RealTimeDataList.BeanRealTime beanRealTime : realTimeDataList.getQuotes()) {
             //维护最新的实时数据列表
@@ -909,13 +907,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         mMainTradeContentPre.requestOpenPosition();
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-//        Log.i(TAG, "enterOrder: 下单成功，通知更新开仓数据");
-//        mMainTradeContentPre.requestOpenPosition();
-    }
 
     /**
      * 处理实时数据对历史图的影响

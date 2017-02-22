@@ -110,9 +110,6 @@
                 android:layout_height="match_parent"
                 hsc:desc_text="获利" />
 
-            <com.xkj.trade.utils.view.CustomDateSelect
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"></com.xkj.trade.utils.view.CustomDateSelect>
         </LinearLayout>
 
     </ScrollView>

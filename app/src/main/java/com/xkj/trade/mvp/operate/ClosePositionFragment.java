@@ -22,6 +22,7 @@ import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean.BeanIndicatorData;
 import com.xkj.trade.bean.RealTimeDataList;
 import com.xkj.trade.bean_.BeanBaseResponse;
+import com.xkj.trade.bean_.BeanClosePosition;
 import com.xkj.trade.bean_.BeanOpenPosition;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
@@ -148,7 +149,8 @@ public class ClosePositionFragment extends BaseFragment {
             public void onResponse(Call call, Response response) throws IOException {
                 Log.i(TAG, "onResponse: " + call.request());
                 Log.i(TAG, "onResponse: " + response.body().string());
-                EventBus.getDefault().post(new BeanOpenPosition());
+                //通知刷新
+                EventBus.getDefault().post(new BeanClosePosition());
                 //发送通知activity关闭
                 EventBus.getDefault().post(new BeanBaseResponse());
             }

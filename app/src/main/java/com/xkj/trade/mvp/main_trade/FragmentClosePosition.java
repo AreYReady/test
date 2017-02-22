@@ -29,6 +29,8 @@ import com.xkj.trade.utils.DateUtils;
 import com.xkj.trade.utils.SystemUtil;
 import com.xkj.trade.utils.ThreadHelper;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -158,4 +160,5 @@ public class FragmentClosePosition extends BaseFragment {
         mDataList = new ArrayList<>();
         mBeginOpenTime=  DateUtils.getShowTime((Calendar.getInstance().getTimeInMillis()-7*24*60*60*1000),"yyyy-MM-dd HH:mm:ss");
     }
+
 }

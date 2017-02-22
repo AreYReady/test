@@ -19,6 +19,7 @@ import com.xkj.trade.R;
 import com.xkj.trade.adapter.PendingAdapter;
 import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.bean.RealTimeDataList;
+import com.xkj.trade.bean_.BeanClosePosition;
 import com.xkj.trade.bean_.BeanPendingPosition;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
@@ -161,4 +162,9 @@ public class FragmentPendingPosition extends BaseFragment  {
             diffResult.dispatchUpdatesTo(mPendingAdapter);
         }
     };
+    @Subscribe
+    public void getInform(BeanClosePosition beanClosePosition){
+        Log.i(TAG, "getInform: ");
+        requestData();
+    }
 }

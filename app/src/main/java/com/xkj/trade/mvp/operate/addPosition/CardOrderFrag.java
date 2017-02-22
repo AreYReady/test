@@ -191,6 +191,7 @@ public class CardOrderFrag extends BaseFragment implements View.OnClickListener 
             mTvBuyAsk.setText(beanIndicatorData.getBid());
         }
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
