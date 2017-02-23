@@ -178,4 +178,10 @@ public class CustomSeekBar extends FrameLayout {
     public void setTextChangeListener(TextChangeListener listener){
         this.listener=listener;
     }
+    public int getProgress(){
+        return mSeekBar.getProgress();
+    }
+    public int getVisible(){
+        return mASEditText.getNumberTextVisible();
+    }
 }

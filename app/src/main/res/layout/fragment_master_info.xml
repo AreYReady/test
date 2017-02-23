@@ -32,6 +32,7 @@
                 android:layout_centerInParent="true" />
 
             <TextView
+                android:id="@+id/tv_master_name"
                 style="@style/TextDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -39,6 +40,7 @@
                 android:text="ohorzin" />
 
             <TextView
+                android:id="@+id/tv_copy_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/s_temp"
@@ -81,10 +83,13 @@
 
                     <include layout="@layout/v_stack_master_" />
                 </FrameLayout>
-
-                <Space
+                <com.xkj.trade.utils.view.CustomMasterLink
+                    android:id="@+id/c_master_link"
                     android:layout_width="match_parent"
-                    android:layout_height="130dip" />
+                    android:layout_height="130dip"
+                    android:layout_margin="10dip"
+                    />
+
                 <include layout="@layout/v_progress_resk_level" />
             </LinearLayout>
 
@@ -119,6 +124,7 @@
                 </RelativeLayout>
 
                 <com.xkj.trade.utils.view.CustomSeekBar
+                    android:id="@+id/csb_select_voloum"
                     android:layout_width="match_parent"
                     android:layout_height="100dip"
                     android:paddingTop="@dimen/space_big">

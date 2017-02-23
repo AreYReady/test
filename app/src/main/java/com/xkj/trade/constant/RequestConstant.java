@@ -41,6 +41,22 @@ public interface RequestConstant {
     String OPEN_END_TIME = "openendtime";
     String CLOSE_START_TIME = "closestarttime";
     String CLOSE_END_TIME = "closeendtime";
+    String MASTER_ID = "masterid";
+    String FOLLOW_ID = "followid";
+    String COPY_WAY = "copyway";
+    String COPY_MONEY = "copymoney";
+    String COPY_VOLUME = "copyvolume";
+    String ISMIN_COPY = "ismin_copy";
+    String IS_REVERSE = "is_reverse";
+    /**
+     * 关注人账号
+     */
+    String ACCOUNT_ID = "accountid";
+    /**
+     * 被关注人账号
+     */
+    String FOCUS_ID = "focusid";
+
 
 
 

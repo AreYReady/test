@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/rv_master_height"
-    android:layout_marginLeft="20dip"
-    android:layout_marginRight="20dip"
-    android:layout_marginTop="30dip"
-    android:background="@color/background_master_content"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/rv_master_height"
+              android:layout_marginLeft="20dip"
+              android:layout_marginRight="20dip"
+              android:layout_marginTop="30dip"
+              android:background="@color/background_master_content"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:layout_width="@dimen/image_common"
             android:layout_height="@dimen/image_common"
             android:layout_gravity="center_vertical"
-            android:background="@mipmap/menu_avatar" />
+            android:background="@mipmap/menu_avatar"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
                 android:id="@+id/s_temp"
                 android:layout_width="1dip"
                 android:layout_height="1dip"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"/>
 
             <TextView
                 android:id="@+id/tv_name"
@@ -41,25 +41,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/s_temp"
-                android:text="ohorzin" />
+                android:text="ohorzin"/>
 
 
             <RelativeLayout
-                android:layout_below="@+id/s_temp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tv_Copy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="复制者" />
-            <TextView
-                android:id="@+id/tv_Copy_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/space_big"
-                android:layout_toRightOf="@id/tv_Copy"
-                android:text="复制者" />
+                android:layout_below="@+id/s_temp">
+
+                <TextView
+                    android:id="@+id/tv_Copy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="复制者"/>
+
+                <TextView
+                    android:id="@+id/tv_copy_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/tv_Copy"
+                    android:paddingLeft="@dimen/space_big"
+                    android:text="复制者"/>
             </RelativeLayout>
         </RelativeLayout>
 
@@ -70,7 +72,7 @@
             <Space
                 android:id="@+id/s_temp2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
         </RelativeLayout>
     </LinearLayout>
 
@@ -89,14 +91,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dip"
                 android:layout_weight="1">
-                <include layout="@layout/v_stack_master_" />
+
+                <include layout="@layout/v_stack_master_"/>
             </FrameLayout>
 
             <Space
+                android:layout_width="wrap_content"
+                android:layout_height="0dip"
+                android:layout_weight="0.5"/>
+
+            <com.xkj.trade.utils.view.CustomMasterLink
+                android:id="@+id/c_master_link"
                 android:layout_width="match_parent"
                 android:layout_height="0dip"
-                android:layout_weight="3" />
+                android:layout_margin="10dip"
+                android:layout_weight="2.5"/>
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/ll_cover"
             android:layout_width="match_parent"
@@ -108,24 +119,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/space_big">
+
                 <TextView
                     style="@style/TextDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/select_amount" />
+                    android:text="@string/select_amount"/>
             </RelativeLayout>
 
             <com.xkj.trade.utils.view.CustomSeekBar
                 android:id="@+id/csb_rv_item_master"
                 android:layout_width="match_parent"
                 android:layout_height="100dip"
-               >
+                >
             </com.xkj.trade.utils.view.CustomSeekBar>
+
             <TextView
+                style="@style/TextDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/TextDesc"
                 android:gravity="center"
                 android:paddingTop="@dimen/space_big"
                 android:text="通过ohorzin$306.00,按比例复制策略"
@@ -135,19 +148,21 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/background_master_content"
-        android:layout_height="50dip">
+        android:layout_height="50dip"
+        android:background="@color/background_master_content">
+
         <Button
             android:id="@+id/b_complete"
+            style="@style/Button.Action.Secondary.Small"
             android:layout_width="200dip"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dip"
-            android:layout_marginBottom="10dip"
             android:layout_centerInParent="true"
-            style="@style/Button.Action.Secondary.Small"
-            android:visibility="gone"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip"
             android:text="完成"
+            android:visibility="gone"
             />
+
         <LinearLayout
             android:id="@+id/ll_buttons"
             android:layout_width="match_parent"
@@ -155,6 +170,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/b_watch"
                 style="@style/Button.Action.Secondary.Small"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -163,7 +179,7 @@
                 android:layout_marginRight="10dip"
                 android:layout_marginTop="10dip"
                 android:layout_weight="1"
-                android:text="关注" />
+                android:text="关注"/>
 
             <Button
                 android:id="@+id/b_copy"
@@ -175,7 +191,7 @@
                 android:layout_marginRight="20dip"
                 android:layout_marginTop="10dip"
                 android:layout_weight="1"
-                android:text="复制" />
+                android:text="复制"/>
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

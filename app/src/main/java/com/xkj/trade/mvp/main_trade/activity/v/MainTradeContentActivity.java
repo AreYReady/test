@@ -27,13 +27,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.xkj.trade.R;
 import com.xkj.trade.adapter.FragmentAdapter;
 import com.xkj.trade.adapter.MyViewPagerAdapterItem;
 import com.xkj.trade.base.BaseActivity;
 import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.base.MyApplication;
-import com.xkj.trade.bean.BeanMasterInfo;
+import com.xkj.trade.bean_.BeanMasterRank;
 import com.xkj.trade.bean_.BeanUserListInfo;
 import com.xkj.trade.mvp.main_trade.FragmentClosePosition;
 import com.xkj.trade.mvp.main_trade.FragmentMasterCopy;
@@ -57,6 +58,8 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.xkj.trade.mvp.master.FragmentMasterInfo.MASTER_INFO;
 
 public class MainTradeContentActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, BaseFragment.BackInterface, MainTradeActListener.ViewListener {
@@ -84,6 +87,7 @@ public class MainTradeContentActivity extends BaseActivity
     private TextView mMarginLevel;
     private TextView mCredit;
     private ImageView mOpenPositionCount;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -279,9 +283,13 @@ public class MainTradeContentActivity extends BaseActivity
     private FragmentMasterInfo mFragmentMasterInfo;
 
     @Subscribe
-    public void getShowMasterInfo(BeanMasterInfo mBeanMasterInfo) {
+    public void getShowMasterInfo(BeanMasterRank.MasterRank rank) {
         Log.i(TAG, "getShowMasterInfo: 展示高手个人信息");
-        fragmentManager.beginTransaction().add(R.id.fl_main_trade_content, mFragmentMasterInfo = new FragmentMasterInfo()).addToBackStack("tag").commit();
+        mFragmentMasterInfo = new FragmentMasterInfo();
+        Bundle bundle=new Bundle();
+        bundle.putString(MASTER_INFO,new Gson().toJson(rank));
+        mFragmentMasterInfo.setArguments(bundle);
+        fragmentManager.beginTransaction().add(R.id.fl_main_trade_content, mFragmentMasterInfo).addToBackStack("tag").commit();
     }
 
     //退出时的时间

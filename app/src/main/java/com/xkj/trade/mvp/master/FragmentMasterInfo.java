@@ -12,13 +12,19 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Space;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.R;
 import com.xkj.trade.adapter.FragmentAdapter;
 import com.xkj.trade.adapter.MyViewPagerAdapterItem;
 import com.xkj.trade.base.BaseFragment;
+import com.xkj.trade.bean_.BeanMasterRank;
+import com.xkj.trade.utils.view.CustomMasterLink;
+import com.xkj.trade.utils.view.CustomSeekBar;
 import com.xkj.trade.utils.view.CustomViewPager;
 import com.xkj.trade.utils.view.ZoomOutPageTransformer;
 
@@ -42,6 +48,17 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
     private LinearLayout mLlButtons;
     private Button mCompleteButton;
     private TextView mTvRebound;
+    private ProgressBar mProgressBar;
+    private TextView mTvMasterName;
+    private TextView mTvCopyCount;
+    private TextView mTvExperienceTime;
+    private TextView mTvHuiceper;
+    private TextView mTvProfitper;
+    private CustomMasterLink mCustomMasterLink;
+    private CustomSeekBar mCustomSeekBar;
+    public static final String MASTER_INFO="masterInfo";
+    BeanMasterRank.MasterRank rank;
+    int[] ints= new int[]{1,10,100,500,1000};
 
     @Nullable
     @Override
@@ -53,6 +70,7 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
         } else {
             this.mBackInterface = (BackInterface) getActivity();
         }
+        rank = new Gson().fromJson(this.getArguments().getString(MASTER_INFO),new TypeToken<BeanMasterRank.MasterRank>(){}.getType());
         return view;
     }
 
@@ -78,6 +96,8 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
 
     @Override
     protected void initView() {
+        mCustomMasterLink=(CustomMasterLink)view.findViewById(R.id.c_master_link);
+        mCustomMasterLink.postInvalidate(rank,0);
         mCustomViewPager = (CustomViewPager) view.findViewById(R.id.cvp_master_info_indicator);
         mCustomViewPager.setAdapter(new MyViewPagerAdapterItem(context, mDataItem));
         mCustomViewPager.setOffscreenPageLimit(mDataItem.size());
@@ -144,7 +164,29 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
         mTvRebound.setOnClickListener(this);
         mCopyButton.setOnClickListener(this);
         mCompleteButton.setOnClickListener(this);
-
+        mProgressBar=(ProgressBar)view.findViewById(R.id.progressBar);
+        mTvMasterName=(TextView)view.findViewById(R.id.tv_master_name);
+        mTvMasterName.setText(rank.getName());
+        mTvCopyCount=(TextView)view.findViewById(R.id.tv_copy_count);
+        mTvCopyCount.setText("复制者："+rank.getCopynumber());
+        mTvExperienceTime=(TextView)view.findViewById(R.id.tv_experience_time);
+        mTvExperienceTime.setText(rank.getTradeexperience()+" 天");
+        mTvHuiceper=(TextView)view.findViewById(R.id.tv_huiceper);
+        mTvHuiceper.setText(rank.getHuiceper()+"%");
+        mTvProfitper=(TextView)view.findViewById(R.id.tv_profitper);
+        mTvProfitper.setText(rank.getProfitper()+"%");
+        int i=0;
+        if(rank.getData()!=null) {
+            for (String profit : rank.getData()) {
+                if (Double.valueOf(profit) < 0) {
+                    i++;
+                }
+            }
+            mProgressBar.setMax(rank.getData().size());
+        }
+        mProgressBar.setProgress(i);
+        mCustomSeekBar=(CustomSeekBar) view.findViewById(R.id.csb_select_voloum);
+        mCustomSeekBar.setData(ints,1);
     }
 
 

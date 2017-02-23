@@ -212,6 +212,20 @@ public class MoneyUtil {
         BigDecimal b2 = new BigDecimal(Double.toString(value2));
         return b1.divide(b2, scale, ROUND_HALF_EVEN).doubleValue();
     }
+    /**
+     * 提供精确的除法运算方法div
+     *
+     * @param value1 被除数
+     * @param value2 除数
+     * @return 两个参数的商
+     * @throws IllegalAccessException
+     */
+    public static String divString(String value1, String value2) throws IllegalAccessException {
+        //如果精确范围小于0，抛出异常信息
+        BigDecimal b1 = new BigDecimal(value1);
+        BigDecimal b2 = new BigDecimal(value2);
+        return b1.divide(b2,ROUND_HALF_EVEN).toString();
+    }
 
     public static double div(double value1, double value2) throws IllegalAccessException {
         //如果精确范围小于0，抛出异常信息
