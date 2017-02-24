@@ -1,9 +1,9 @@
-package com.xkj.trade.mvp.master.presenter;
+package com.xkj.trade.mvp.master.rank.presenter;
 import android.content.Context;
 
 import com.xkj.trade.bean_.BeanMasterRank;
-import com.xkj.trade.mvp.master.contract.MasterContract;
-import com.xkj.trade.mvp.master.model.MasterModelImpl;
+import com.xkj.trade.mvp.master.rank.contract.MasterContract;
+import com.xkj.trade.mvp.master.rank.model.MasterModelImpl;
 
 /**
 * Created by huangsc on 2017/02/13

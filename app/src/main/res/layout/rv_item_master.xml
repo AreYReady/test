@@ -115,34 +115,84 @@
             android:orientation="vertical"
             android:visibility="gone">
 
-            <RelativeLayout
+            <LinearLayout
+                android:id="@+id/ll_cover_copy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/space_big">
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/space_big">
+
+                    <TextView
+                        style="@style/TextDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="@string/select_amount"/>
+
+                    <ImageView
+                        android:id="@+id/iv_take_rebound"
+                        style="@style/TextDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:clickable="true"
+                        android:paddingRight="@dimen/space_xxxbig"
+                        android:src="@mipmap/down_arrow"
+                        />
+                </RelativeLayout>
+
+                <com.xkj.trade.utils.view.CustomSeekBar
+                    android:id="@+id/csb_rv_item_master"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dip"
+                    >
+                </com.xkj.trade.utils.view.CustomSeekBar>
 
                 <TextView
                     style="@style/TextDesc"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="@string/select_amount"/>
-            </RelativeLayout>
+                    android:gravity="center"
+                    android:paddingTop="@dimen/space_big"
+                    android:text="通过ohorzin$306.00,按比例复制策略"
+                    />
+            </LinearLayout>
 
-            <com.xkj.trade.utils.view.CustomSeekBar
-                android:id="@+id/csb_rv_item_master"
+            <RelativeLayout
+                android:id="@+id/rl_cover_uncopy"
                 android:layout_width="match_parent"
-                android:layout_height="100dip"
+                android:layout_height="match_parent"
                 >
-            </com.xkj.trade.utils.view.CustomSeekBar>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/space_big">
 
-            <TextView
-                style="@style/TextDesc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="@dimen/space_big"
-                android:text="通过ohorzin$306.00,按比例复制策略"
-                />
+                    <ImageView
+                        android:id="@+id/iv_uncopy_take_rebound"
+                        style="@style/TextDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:clickable="true"
+                        android:paddingRight="@dimen/space_xxxbig"
+                        android:src="@mipmap/down_arrow"
+                        />
+                </RelativeLayout>
+                <TextView
+                    style="@style/TextDescBig"
+                    android:id="@+id/tv_cover_uncopy_prompt"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/are_you_sure_uncopy_follow_master"
+                    />
+            </RelativeLayout>
         </LinearLayout>
     </FrameLayout>
 

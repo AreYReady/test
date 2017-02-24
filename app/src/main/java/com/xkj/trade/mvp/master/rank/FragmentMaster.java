@@ -1,4 +1,4 @@
-package com.xkj.trade.mvp.master;
+package com.xkj.trade.mvp.master.rank;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,13 +8,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.xkj.trade.R;
 import com.xkj.trade.adapter.MasterAdapter;
 import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.bean_.BeanMasterRank;
-import com.xkj.trade.mvp.master.contract.MasterContract;
-import com.xkj.trade.mvp.master.presenter.MasterPresenterImpl;
+import com.xkj.trade.mvp.master.rank.contract.MasterContract;
+import com.xkj.trade.mvp.master.rank.presenter.MasterPresenterImpl;
 
 /**
  * Created by huangsc on 2016-12-20.
@@ -25,6 +29,7 @@ public class FragmentMaster extends BaseFragment implements MasterContract.View 
     private RecyclerView mRvMaster;
     private MasterAdapter mMasterAdapter;
     private MasterContract.Presenter mPresenter;
+
 
     @Nullable
     @Override

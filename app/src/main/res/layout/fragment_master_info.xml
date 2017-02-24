@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background_master_head"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/background_master_head"
+              android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/ll_master_head"
@@ -29,7 +29,7 @@
                 android:id="@+id/s_temp"
                 android:layout_width="1dip"
                 android:layout_height="1dip"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"/>
 
             <TextView
                 android:id="@+id/tv_master_name"
@@ -37,14 +37,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/s_temp"
-                android:text="ohorzin" />
+                android:text="ohorzin"/>
 
             <TextView
                 android:id="@+id/tv_copy_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/s_temp"
-                android:text="复制者  1" />
+                android:text="复制者  1"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -54,7 +54,7 @@
             <Space
                 android:id="@+id/s_temp2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
         </RelativeLayout>
     </LinearLayout>
 
@@ -81,8 +81,9 @@
                     android:layout_height="50dip"
                     android:layout_gravity="center_vertical">
 
-                    <include layout="@layout/v_stack_master_" />
+                    <include layout="@layout/v_stack_master_"/>
                 </FrameLayout>
+
                 <com.xkj.trade.utils.view.CustomMasterLink
                     android:id="@+id/c_master_link"
                     android:layout_width="match_parent"
@@ -90,7 +91,7 @@
                     android:layout_margin="10dip"
                     />
 
-                <include layout="@layout/v_progress_resk_level" />
+                <include layout="@layout/v_progress_resk_level"/>
             </LinearLayout>
 
             <LinearLayout
@@ -100,47 +101,91 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
+                <LinearLayout
+                    android:id="@+id/ll_cover_copy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/space_big">
+
+                        <TextView
+                            style="@style/TextDesc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="@string/select_amount"/>
+
+                        <ImageView
+                            android:id="@+id/iv_copy_take_rebound"
+                            style="@style/TextDesc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:clickable="true"
+                            android:paddingRight="@dimen/space_xxxbig"
+                            android:src="@mipmap/down_arrow"
+                            />
+                    </RelativeLayout>
+
+                    <com.xkj.trade.utils.view.CustomSeekBar
+                        android:id="@+id/csb_select_voloum"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dip"
+                        android:paddingTop="@dimen/space_big">
+                    </com.xkj.trade.utils.view.CustomSeekBar>
+
+                    <TextView
+                        style="@style/TextDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingBottom="@dimen/space_big"
+                        android:paddingTop="@dimen/space_big"
+                        android:text="通过ohorzin$306.00,按比例复制策略"
+                        />
+
+                    <include
+                        layout="@layout/v_progress_resk_level"
+                        android:paddingTop="@dimen/space_big"/>
+                </LinearLayout>
+
                 <RelativeLayout
+                    android:id="@+id/rl_cover_uncopy"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/space_big">
+                    android:layout_height="match_parent"
+                    >
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/space_big">
+
+                        <ImageView
+                            android:id="@+id/iv_uncopy_take_rebound"
+                            style="@style/TextDesc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:clickable="true"
+                            android:paddingRight="@dimen/space_xxxbig"
+                            android:src="@mipmap/down_arrow"
+                            />
+                    </RelativeLayout>
 
                     <TextView
-                        style="@style/TextDesc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="@string/select_amount" />
-
-                    <TextView
-                        android:id="@+id/tv_take_rebound"
-                        style="@style/TextDesc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:paddingRight="@dimen/space_xxxbig"
-                        android:clickable="true"
-                        android:text="v" />
+                        android:id="@+id/tv_cover_uncopy_prompt"
+                        style="@style/TextDescBig"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/are_you_sure_uncopy_follow_master"
+                        />
                 </RelativeLayout>
-
-                <com.xkj.trade.utils.view.CustomSeekBar
-                    android:id="@+id/csb_select_voloum"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dip"
-                    android:paddingTop="@dimen/space_big">
-                </com.xkj.trade.utils.view.CustomSeekBar>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/TextDesc"
-                    android:text="通过ohorzin$306.00,按比例复制策略"
-                    android:paddingTop="@dimen/space_big"
-                    android:paddingBottom="@dimen/space_big"
-                    android:gravity="center"
-                    />
-                <include
-                    layout="@layout/v_progress_resk_level"
-                    android:paddingTop="@dimen/space_big" />
             </LinearLayout>
 
         </FrameLayout>
@@ -157,7 +202,7 @@
                 <Space
                     android:id="@+id/s_cover_master_base_info"
                     android:layout_width="wrap_content"
-                    android:layout_height="204dip" />
+                    android:layout_height="204dip"/>
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -178,26 +223,28 @@
                     android:id="@+id/vp_master_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/background_master_info_content" />
+                    android:background="@color/background_master_info_content"/>
             </LinearLayout>
         </com.xkj.trade.utils.view.MyScrollView>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/background_master_info_content"
-        android:layout_height="50dip">
+        android:layout_height="50dip"
+        android:background="@color/background_master_info_content">
+
         <Button
             android:id="@+id/b_complete"
+            style="@style/Button.Action.Secondary.Small"
             android:layout_width="200dip"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dip"
-            android:layout_marginBottom="10dip"
             android:layout_centerInParent="true"
-            style="@style/Button.Action.Secondary.Small"
-            android:visibility="gone"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip"
             android:text="完成"
+            android:visibility="gone"
             />
+
         <LinearLayout
             android:id="@+id/ll_buttons"
             android:layout_width="match_parent"
@@ -205,6 +252,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/b_watch"
                 style="@style/Button.Action.Secondary.Small"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -213,7 +261,7 @@
                 android:layout_marginRight="10dip"
                 android:layout_marginTop="10dip"
                 android:layout_weight="1"
-                android:text="关注" />
+                android:text="关注"/>
 
             <Button
                 android:id="@+id/b_copy"
@@ -225,7 +273,7 @@
                 android:layout_marginRight="20dip"
                 android:layout_marginTop="10dip"
                 android:layout_weight="1"
-                android:text="复制" />
+                android:text="复制"/>
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

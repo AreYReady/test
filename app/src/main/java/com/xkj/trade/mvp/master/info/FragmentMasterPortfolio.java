@@ -1,4 +1,4 @@
-package com.xkj.trade.mvp.master;
+package com.xkj.trade.mvp.master.info;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -219,6 +219,9 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
     public void setAmountChangeListener(AmountChangeListener listener){
         this.listener=listener;
     }
+    public void setEditText(String text){
+        editText.setText(text);
+    }
     public void setData(int minPrice, int maxPrice, int baseNumber){
         this.maxPrice=String.valueOf(maxPrice);
         this.minPrice=String.valueOf(minPrice);

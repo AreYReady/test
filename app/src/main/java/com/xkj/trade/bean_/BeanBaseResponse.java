@@ -1,5 +1,7 @@
 package com.xkj.trade.bean_;
 
+import com.google.gson.Gson;
+
 /**
  * Created by huangsc on 2017-02-03.
  * TODO:基础的相应实体父类
@@ -8,6 +10,7 @@ package com.xkj.trade.bean_;
 public class BeanBaseResponse {
     int status;
     String msg;
+    String response;
 
     public int getStatus() {
         return status;
@@ -27,6 +30,14 @@ public class BeanBaseResponse {
 
     @Override
     public String toString() {
-        return "status "+status+" msg "+msg;
+        return new Gson().toJson(this);
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
     }
 }

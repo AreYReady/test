@@ -1,4 +1,4 @@
-package com.xkj.trade.mvp.master;
+package com.xkj.trade.mvp.master.info;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,13 +16,13 @@ import com.xkj.trade.base.BaseFragment;
  * TODO:
  */
 
-public class FragmentMasterComnunity extends BaseFragment {
+public class FragmentMasterPosition extends BaseFragment {
     private RecyclerView mRecyclerView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_master_community, null);
+        view = inflater.inflate(R.layout.fragment_master_position, null);
         return view;
     }
 
@@ -33,7 +33,7 @@ public class FragmentMasterComnunity extends BaseFragment {
 
     @Override
     protected void initView() {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_master_community);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_master_position);
         mRecyclerView.setAdapter(new MyAdapter());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
     }
@@ -42,7 +42,7 @@ public class FragmentMasterComnunity extends BaseFragment {
 
         @Override
         public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            MyHolder holder = new MyHolder(LayoutInflater.from(context).inflate(R.layout.rv_item_master_community, parent,false));
+            MyHolder holder = new MyHolder(LayoutInflater.from(context).inflate(R.layout.rv_item_master_position, parent,false));
             return holder;
         }
 

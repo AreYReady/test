@@ -1,4 +1,4 @@
-package com.xkj.trade.mvp.master.model;
+package com.xkj.trade.mvp.master.rank.model;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,8 +8,8 @@ import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.bean_.BeanMasterRank;
 import com.xkj.trade.constant.RequestConstant;
-import com.xkj.trade.mvp.master.contract.MasterContract;
-import com.xkj.trade.mvp.master.presenter.MasterPresenterImpl;
+import com.xkj.trade.mvp.master.rank.contract.MasterContract;
+import com.xkj.trade.mvp.master.rank.presenter.MasterPresenterImpl;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.SystemUtil;
 

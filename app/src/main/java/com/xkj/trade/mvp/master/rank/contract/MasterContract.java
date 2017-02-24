@@ -1,4 +1,4 @@
-package com.xkj.trade.mvp.master.contract;
+package com.xkj.trade.mvp.master.rank.contract;
 
 import com.xkj.trade.bean_.BeanMasterRank;
 

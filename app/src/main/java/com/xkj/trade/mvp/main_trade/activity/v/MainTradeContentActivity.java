@@ -43,8 +43,8 @@ import com.xkj.trade.mvp.main_trade.FragmentOpenPosition;
 import com.xkj.trade.mvp.main_trade.FragmentPendingPosition;
 import com.xkj.trade.mvp.main_trade.activity.p.MainActPreImpl;
 import com.xkj.trade.mvp.main_trade.fragment_content.v.MainTradeContentFrag;
-import com.xkj.trade.mvp.master.FragmentMaster;
-import com.xkj.trade.mvp.master.FragmentMasterInfo;
+import com.xkj.trade.mvp.master.rank.FragmentMaster;
+import com.xkj.trade.mvp.master.info.FragmentMasterInfo;
 import com.xkj.trade.mvp.operate.OperatePositionActivity;
 import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.ToashUtil;
@@ -59,7 +59,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.xkj.trade.mvp.master.FragmentMasterInfo.MASTER_INFO;
+import static com.xkj.trade.mvp.master.info.FragmentMasterInfo.MASTER_INFO;
 
 public class MainTradeContentActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, BaseFragment.BackInterface, MainTradeActListener.ViewListener {

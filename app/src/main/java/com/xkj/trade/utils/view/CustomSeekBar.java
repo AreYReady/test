@@ -171,6 +171,9 @@ public class CustomSeekBar extends FrameLayout {
     public int getMoney(){
       return Integer.valueOf(mASEditText.getNumbel());
     }
+    public void setMoney(String amount){
+        mASEditText.setEditText(amount);
+    }
     public interface TextChangeListener{
       void  textChange(String amount);
     }

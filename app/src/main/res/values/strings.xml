@@ -498,6 +498,8 @@
     <string name="unable_to_start_mobile_trader">无法开始移动交易</string>
     <string name="uncopied_all_linked_positions_were_unlinked">"已取消复制。所有关联的仓位都已取消关联。  "</string>
     <string name="uncopy">取消复制</string>
+    <string name="are_you_sure_uncopy_follow_master">确定取消复制跟随高手：%s</string>
+
     <string name="unexpected_error_occurred">发生意外错误</string>
     <string name="unknown_error_contact_support">未知错误。请联系支持人员。</string>
     <string name="unlink">取消关联</string>
