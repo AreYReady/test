@@ -26,6 +26,8 @@ public interface RequestConstant {
     String BARNUM = "barnum";
     //是否分页
     String IS_PAGE = "ispage";
+    //每页数量
+    String PAGE_LIMIT = "pagelimit";
 
     String RANK_TYPE = "rankType";
     //操作动作
@@ -48,6 +50,7 @@ public interface RequestConstant {
     String COPY_VOLUME = "copyvolume";
     String ISMIN_COPY = "ismin_copy";
     String IS_REVERSE = "is_reverse";
+    String DATE_RANGE = "daterange";
     /**
      * 关注人账号
      */

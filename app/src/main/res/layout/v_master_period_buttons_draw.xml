@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RadioButton
+        android:id="@+id/rb_period"
+        style="@style/Branded.Button.Small.Radio.white"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/pl_chart_label_text_size"
+        android:text="1个月>" />
+
+    <RadioGroup
+        android:visibility="gone"
+        android:id="@+id/rg_period_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_month1"
+            style="@style/Branded.Button.Small.Radio.white"
+            android:layout_width="0dip"
+            android:checked="true"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/pl_chart_label_text_size"
+            android:tag="1"
+            android:text="1个月" />
+
+
+        <RadioButton
+            android:textSize="@dimen/pl_chart_label_text_size"
+            android:id="@+id/rb_month3"
+            style="@style/Branded.Button.Small.Radio.white"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x20"
+            android:tag="3"
+            android:layout_weight="1"
+            android:text="3个月" />
+
+        <RadioButton
+            android:id="@+id/rb_month6"
+            style="@style/Branded.Button.Small.Radio.white"
+            android:textSize="@dimen/pl_chart_label_text_size"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_width="0dip"
+            android:tag="6"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="6个月" />
+
+        <RadioButton
+            android:id="@+id/rb_month12"
+            style="@style/Branded.Button.Small.Radio.white"
+            android:textSize="@dimen/pl_chart_label_text_size"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_width="0dip"
+            android:tag="12"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="12个月" />
+    </RadioGroup>
+</RelativeLayout>

@@ -2,6 +2,7 @@ package com.xkj.trade.utils.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
@@ -57,7 +58,7 @@ private Context context;
         basePaint.setStrokeWidth(strokeWidth);
         basePaint.setStyle(Paint.Style.STROKE);
         basePaint.setAntiAlias(true);
-        portfolioPaint.setStrokeWidth(strokeWidth);
+        portfolioPaint.setStrokeWidth(strokeWidth+10);
         portfolioPaint.setStyle(Paint.Style.STROKE);
         portfolioPaint.setAntiAlias(true);
         textPaint=new Paint();
@@ -85,21 +86,29 @@ private Context context;
     @Override
     protected void onDraw(Canvas canvas) {
         if (data != null) {
-            centerPoint=new Point();
-            centerPoint.x = getWidth()/2;
-            centerPoint.y=getHeight()/2;
-            radius =(int) SystemUtil.dp2px(context,100);
-            RectF rectf = new RectF(centerPoint.x - radius, centerPoint.y - radius, centerPoint.x + radius, centerPoint.y + radius);
-            canvas.drawCircle(centerPoint.x , centerPoint.y, radius, basePaint);
-            for (int i = 0; i < data.size(); i++) {
-
-                BeanPortfolioData portfolioData=data.get(i);
-                portfolioPaint.setColor(getResources().getColor(selectColors.get(i%selectColors.size())));
-                textPaint.setColor(getResources().getColor(selectColors.get(i%selectColors.size())));
-                canvas.drawArc(rectf, portfolioData.getBeginAngle(), portfolioData.getSweepAngle(), false, portfolioPaint);
-                //画标识
-//                 getXY((portfolioData.getBeginAngle() + portfolioData.getSweepAngle()) / 2);
-                drawText(canvas,getXY((portfolioData.getBeginAngle()*2 + portfolioData.getSweepAngle()) / 2),portfolioData);
+            if (data.size() != 0) {
+                centerPoint = new Point();
+                centerPoint.x = getWidth() / 2;
+                centerPoint.y = getHeight() / 2;
+                radius = (int) SystemUtil.dp2px(context, 100);
+                RectF rectf = new RectF(centerPoint.x - radius, centerPoint.y - radius, centerPoint.x + radius, centerPoint.y + radius);
+                RectF rectf2 = new RectF(centerPoint.x - radius, centerPoint.y - radius, centerPoint.x + radius, centerPoint.y + radius);
+//            canvas.drawCircle(centerPoint.x , centerPoint.y, radius, basePaint);
+                for (int i = 0; i < data.size(); i++) {
+                    BeanPortfolioData portfolioData = data.get(i);
+                    portfolioPaint.setColor(getResources().getColor(selectColors.get(i % selectColors.size())));
+                    textPaint.setColor(getResources().getColor(selectColors.get(i % selectColors.size())));
+                    if (data.get(i).getSymbol().contains("其他")) {
+                        canvas.drawArc(rectf, portfolioData.getBeginAngle(), portfolioData.getSweepAngle(), false, basePaint);
+                    } else {
+                        canvas.drawArc(rectf, portfolioData.getBeginAngle(), portfolioData.getSweepAngle(), false, portfolioPaint);
+                    }
+                    drawText(canvas, getXY((portfolioData.getBeginAngle() * 2 + portfolioData.getSweepAngle()) / 2), portfolioData);
+                }
+            }else{
+                textPaint.setTextSize(SystemUtil.dp2px(context,30));
+                textPaint.setColor(Color.WHITE);
+                canvas.drawText("没有数据",getWidth()/2,getHeight()/2,textPaint);
             }
         }
     }
@@ -109,7 +118,7 @@ private Context context;
      * @param canvas
      * @param xy
      */
-    private int linkLendth=100;
+    private int linkLendth=150;
     private void drawText(Canvas canvas, Point point,BeanPortfolioData data) {
         Point endPoint=new Point();
         if(Math.abs(centerPoint.x-point.x)>Math.abs(centerPoint.y-point.y)){

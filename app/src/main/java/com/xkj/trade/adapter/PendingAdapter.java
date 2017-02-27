@@ -149,7 +149,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
             super(itemView);
             llHide = (LinearLayout) itemView.findViewById(R.id.ll_hide_layout);
             llOnclick = (LinearLayout) itemView.findViewById(R.id.ll_onclick);
-            tvCountyName = (TextView) itemView.findViewById(R.id.tv_county_name);
+            tvCountyName = (TextView) itemView.findViewById(R.id.tv_symbol_name);
             tvOperate = (TextView) itemView.findViewById(R.id.tv_operater);
             tvMoney = (TextView) itemView.findViewById(R.id.tv_money);
             tvProfit = (TextView) itemView.findViewById(R.id.tv_profit);

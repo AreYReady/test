@@ -5,6 +5,12 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/space_big"
     android:paddingRight="@dimen/space_big">
+<com.xkj.trade.utils.view.CustomPeriodButtons2
+    android:id="@+id/cpb_master_period"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+</com.xkj.trade.utils.view.CustomPeriodButtons2>
 
     <RelativeLayout
         android:layout_width="match_parent"

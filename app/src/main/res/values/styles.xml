@@ -135,9 +135,8 @@
 
     <style name="Branded.Button.Small.Radio" parent="@style/Branded.Button.Small">
         <item name="android:textColor">@color/abc_primary_text_material_light</item>
-        <item name="android:button">@drawable/brand_oval_dark</item>
+        <item name="android:button">@drawable/brand_oval_orange</item>
     </style>
-
     <style name="Branded.Button.Small" parent="@style/Branded.Button">
         <item name="android:textAppearance">@style/TextSmaller</item>
         <item name="android:background">@drawable/branded_button_small_dark</item>

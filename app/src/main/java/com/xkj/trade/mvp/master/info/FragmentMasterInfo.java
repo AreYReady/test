@@ -107,10 +107,18 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
         mDataItem.add("仓位");
         mDataItem.add("投资组合");
         mListFragment = new ArrayList<>();
-        mListFragment.add(new FragmentMasterComnunity());
-        mListFragment.add(new FragmentMasterStream());
-        mListFragment.add(new FragmentMasterPosition());
-        mListFragment.add(new FragmentMasterPortfolio());
+        BaseFragment baseFragment1 = new FragmentMasterComnunity();
+        baseFragment1.setArguments(this.getArguments());
+        BaseFragment baseFragment2 = new FragmentMasterStream();
+        baseFragment2.setArguments(this.getArguments());
+        BaseFragment baseFragment3 = new FragmentMasterPosition();
+        baseFragment3.setArguments(this.getArguments());
+        BaseFragment baseFragment4 = new FragmentMasterPortfolio();
+        baseFragment4.setArguments(this.getArguments());
+        mListFragment.add(baseFragment1);
+        mListFragment.add(baseFragment2);
+        mListFragment.add(baseFragment3);
+        mListFragment.add(baseFragment4);
         mPresenterListener=new MasterInfoPresenterImpl(this);
     }
 
@@ -120,7 +128,7 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
         mCustomMasterLink.postInvalidate(rank, 0);
         mCustomViewPager = (CustomViewPager) view.findViewById(R.id.cvp_master_info_indicator);
         mCustomViewPager.setAdapter(new MyViewPagerAdapterItem(context, mDataItem));
-        mCustomViewPager.setOffscreenPageLimit(mDataItem.size());
+        mCustomViewPager.setOffscreenPageLimit(4);
         mCustomViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         mCustomViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             int mPosition = 0;
@@ -230,7 +238,9 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
         }
         mWatch.setOnClickListener(this);
         mCoverUncopyPrompt.setText(String.format(getResources().getString(R.string.are_you_sure_uncopy_follow_master),rank.getName()));
+//        request();
     }
+
 
 
     @Override

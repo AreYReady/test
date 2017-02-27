@@ -42,7 +42,7 @@ public class MainActPreImpl implements MainTradeActListener.PreListener {
     public void refreshUserInfo(BeanUserListInfo beanUserListInfo) {
         //刷新定时器
         mViewListener.refreshUserInfo(beanUserListInfo);
-        timeCountDown();
+//        timeCountDown();
     }
 
     private void timeCountDown() {

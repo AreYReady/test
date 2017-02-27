@@ -23,6 +23,5 @@ public class UrlConstant {
     public static String URL_MASTER_FOLLOW_INFO ="http://"+API_URL+"/WebAPI/Master/info";//获取高手基本信息
     public static String URL_MASTER_FOLLOW_FOCUS ="http://"+API_URL+"/WebAPI/Master/focus";//关注高手
     public static String URL_MASTER_FOLLOW_NOFOCUS ="http://"+API_URL+"/WebAPI/Master/nofocus";//取消关注高手
-
-
+    public static String URL_MASTER_FOLLOW_DETAIL ="http://"+API_URL+"/WebAPI/Master/detail";//取消关注高手
 }

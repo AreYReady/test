@@ -69,6 +69,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
 
     @Override
     public void onBindViewHolder(final MyHolder holder, final int position) {
+        Log.i(TAG, "onBindViewHolder: ");
         masterRank = mBeanMasterRank.getResponse().get(position);
         holder.mName.setText(masterRank.getName());
         holder.mTvCopyCount.setText(String.valueOf(masterRank.getCopynumber()));

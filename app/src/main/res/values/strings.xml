@@ -371,7 +371,7 @@
     <string name="pending_orders_num">挂单 (%s)</string>
     <string name="phone_number">电话号码</string>
     <string name="pips">点</string>
-    <string name="pl">盈亏率(%)</string>
+    <string name="tp">盈亏率(%)</string>
     <string name="pl_caps">盈亏</string>
     <string name="place_order">下单</string>
     <string name="please_contact_your_broker">请联系您的经纪人。</string>
