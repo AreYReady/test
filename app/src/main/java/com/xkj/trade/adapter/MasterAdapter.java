@@ -23,6 +23,7 @@ import com.xkj.trade.R;
 import com.xkj.trade.bean_.BeanBaseResponse;
 import com.xkj.trade.bean_.BeanMasterInfo;
 import com.xkj.trade.bean_.BeanMasterRank;
+import com.xkj.trade.bean_.BeanWatchInfo;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.utils.ACache;
@@ -217,6 +218,9 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                         }
                     });
                     masterRank.setFstatus(0);
+                    //通知关注状态改变
+                    if(masterRank.getStatus()==0)
+                    EventBus.getDefault().post(new BeanWatchInfo.ResponseBean(masterRank.getFstatus(),masterRank.getFace_url(),masterRank.getCopynumber(),masterRank.getLogin(),masterRank.getName()));
                 }
             });
         } else {
@@ -232,6 +236,8 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                         }
                     });
                     masterRank.setFstatus(1);
+                    if(masterRank.getStatus()==0)
+                    EventBus.getDefault().post(new BeanWatchInfo.ResponseBean(masterRank.getFstatus(),masterRank.getFace_url(),masterRank.getCopynumber(),masterRank.getLogin(),masterRank.getName()));
                 }
             });
         }

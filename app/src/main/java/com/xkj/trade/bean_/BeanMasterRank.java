@@ -54,6 +54,12 @@ public class BeanMasterRank {
          * tradeway : 长线交易
          */
 
+        public MasterRank(){}
+        public MasterRank(String login,int fstatus,int status){
+            this.fstatus=fstatus;
+            this.status=status;
+            this.login=login;
+        }
         private int copymoney;
         private int copynumber;
         private String country;

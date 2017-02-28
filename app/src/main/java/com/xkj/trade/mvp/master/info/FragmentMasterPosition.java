@@ -239,7 +239,7 @@ public class FragmentMasterPosition extends BaseFragment {
                         mMyAdapter.notifyDataSetChanged();
                     }
                 });
-//                    mOpenDupDataList = mOpenDataList;
+//                  mOpenDupDataList = mOpenDataList;
 //                }else{
 //        if (this.url.equals(url)) {
 //            mMyAdapter.setData(dataList);

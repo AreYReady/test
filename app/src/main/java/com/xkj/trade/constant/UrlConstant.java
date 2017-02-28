@@ -20,8 +20,10 @@ public class UrlConstant {
     public static String URL_MASTER_FOLLOW_TICKETS ="http://"+API_URL+"/WebAPI/Master/followtickets";//获取跟随高手当前订单/历史订单
     public static String URL_MASTER_FOLLOW ="http://"+API_URL+"/WebAPI/Master/follow";//跟随复制高手
     public static String URL_MASTER_NOFOLLOW ="http://"+API_URL+"/WebAPI/Master/nofollow";//取消跟随复制高手
+    public static String URL_MASTER_MY_COPY ="http://"+API_URL+"/WebAPI/Master/mycopy";//账户复制的高手信息
     public static String URL_MASTER_FOLLOW_INFO ="http://"+API_URL+"/WebAPI/Master/info";//获取高手基本信息
     public static String URL_MASTER_FOLLOW_FOCUS ="http://"+API_URL+"/WebAPI/Master/focus";//关注高手
+    public static String URL_MASTER_FOLLOW_FOCUS_INFO ="http://"+API_URL+"/WebAPI/Master/focusinfo";//账户关注高手的信息
     public static String URL_MASTER_FOLLOW_NOFOCUS ="http://"+API_URL+"/WebAPI/Master/nofocus";//取消关注高手
     public static String URL_MASTER_FOLLOW_DETAIL ="http://"+API_URL+"/WebAPI/Master/detail";//取消关注高手
 }

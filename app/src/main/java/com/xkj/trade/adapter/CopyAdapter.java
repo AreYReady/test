@@ -21,22 +21,22 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * TODO:
  */
 
-public class MyRecycleAdapter extends RecyclerView.Adapter<MyRecycleAdapter.MyViewHolder>{
+public class CopyAdapter extends RecyclerView.Adapter<CopyAdapter.MyViewHolder>{
     private Context context;
     private List<BeanAttentionTraderData> mDataList;
     private String TAG= SystemUtil.getTAG(this);
-    public MyRecycleAdapter(Context context, List<BeanAttentionTraderData> mDataList){
+    public CopyAdapter(Context context, List<BeanAttentionTraderData> mDataList){
         this.context=context;
         this.mDataList=mDataList;
     }
     @Override
-    public MyRecycleAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CopyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         MyViewHolder viewHolder=new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.rv_item_social_card_master_brief,parent,false));
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(MyRecycleAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(CopyAdapter.MyViewHolder holder, int position) {
         holder.tvName.setText(mDataList.get(position).getName());
         holder.copyCount.setText(String.valueOf(mDataList.get(position).getCopyCount()));
         holder.imageView.setImageResource(mDataList.get(position).getImageResouce());

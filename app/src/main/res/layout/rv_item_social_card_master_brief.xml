@@ -7,13 +7,12 @@
               android:paddingTop="10dip">
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginRight="0.0dip"
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/space_normal"
         android:paddingLeft="@dimen/space_big"
-        android:paddingRight="0.0dip"
         android:paddingTop="@dimen/space_normal">
 
         <FrameLayout
@@ -92,7 +91,7 @@
                 android:layout_height="@dimen/action_button_height_traders_i"
                 android:layout_marginRight="@dimen/space_big"
                 android:text="@string/unwatch"
-                android:visibility="gone"/>
+                />
 
             <Button
                 android:id="@+id/action_button"
@@ -103,4 +102,51 @@
                 android:visibility="visible"/>
         </LinearLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:paddingBottom="@dimen/space_normal"
+        android:paddingLeft="@dimen/space_big"
+        android:paddingRight="0.0dip"
+        android:paddingTop="@dimen/space_normal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_unwatch_prompt"
+            android:layout_width="match_parent"
+            style="@style/TextDescBig"
+            android:layout_height="wrap_content"
+            android:text="@string/are_you_sure_you_want_to_unwatch"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <Button
+                android:id="@+id/b_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Button.Action.Secondary.Small"
+                android:layout_marginRight="@dimen/space_big"
+                android:text="@string/yes"/>
+
+            <Button
+                android:id="@+id/b_no"
+                android:layout_width="wrap_content"
+                style="@style/Button.Action.Secondary.Small"
+                android:layout_height="wrap_content"
+                android:text="@string/no"
+                android:layout_marginRight="@dimen/space_big"
+                />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

@@ -8,17 +8,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.xkj.trade.R;
 import com.xkj.trade.adapter.MasterAdapter;
 import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.bean_.BeanMasterRank;
+import com.xkj.trade.bean_notification.NotificationWatchStatus;
 import com.xkj.trade.mvp.master.rank.contract.MasterContract;
 import com.xkj.trade.mvp.master.rank.presenter.MasterPresenterImpl;
+import com.xkj.trade.utils.ThreadHelper;
+
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by huangsc on 2016-12-20.
@@ -29,6 +29,7 @@ public class FragmentMaster extends BaseFragment implements MasterContract.View 
     private RecyclerView mRvMaster;
     private MasterAdapter mMasterAdapter;
     private MasterContract.Presenter mPresenter;
+    private BeanMasterRank mBeanMasterRank;
 
 
     @Nullable
@@ -59,6 +60,7 @@ public class FragmentMaster extends BaseFragment implements MasterContract.View 
 
     @Override
     public void responseMasterRank(final BeanMasterRank beanMasterRank) {
+        mBeanMasterRank=beanMasterRank;
         Log.i(TAG, "responseMasterRank: ");
         mHandler.post(new Runnable() {
             @Override
@@ -66,7 +68,21 @@ public class FragmentMaster extends BaseFragment implements MasterContract.View 
                 mRvMaster.setAdapter(mMasterAdapter = new MasterAdapter(context, beanMasterRank));
             }
         });
-
     }
-
+    @Subscribe
+    public void getStatusChange(final NotificationWatchStatus notificationWatchStatus){
+        for(int i=0;i<mBeanMasterRank.getResponse().size();i++){
+            if(mBeanMasterRank.getResponse().get(i).getLogin().equals(notificationWatchStatus.getLogin())){
+                mBeanMasterRank.getResponse().get(i).setFstatus(notificationWatchStatus.getStatus());
+                final int finalI = i;
+                ThreadHelper.instance().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMasterAdapter.notifyItemChanged(finalI);
+                    }
+                });
+                break;
+            }
+        }
+    }
 }
