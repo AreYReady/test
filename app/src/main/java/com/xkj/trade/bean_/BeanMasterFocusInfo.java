@@ -3,19 +3,28 @@ package com.xkj.trade.bean_;
 import java.util.List;
 
 /**
- * Created by huangsc on 2017-02-28.
- * TODO:
+ * Created by huangsc on 2017-03-01.
+ * TODO:用户关注的高手信息
  */
 
-public class BeanWatchInfo {
+public class BeanMasterFocusInfo {
 
     /**
      * status : 1
-     * response : [{"status":0,"face_url":"","copynumber":10,"copymoney":5115,"name":"123123","focusid":"88079553","profitper":5.31,"huiceper":-20.15},{"status":0,"face_url":"","copynumber":0,"copymoney":0,"name":"mingjie","focusid":"88051194","profitper":0,"huiceper":0},{"status":1,"face_url":"","copynumber":6,"copymoney":200,"name":"喵碧咪mt4-01","focusid":"88002253","profitper":-130.01,"huiceper":-103.97},{"status":0,"face_url":"","copynumber":1,"copymoney":100,"name":"喵碧咪","focusid":"88056792","profitper":-103.39,"huiceper":-99.15}]
+     * response : [{"status":1,"face_url":"","copynumber":11,"copymoney":5238,"name":"123123","focusid":"88079553","profitper":4.87,"huiceper":-18.49},{"status":1,"face_url":"","copynumber":5,"copymoney":5000,"name":"12233","focusid":"88024509","profitper":14.82,"huiceper":-3.91},{"status":1,"face_url":"/Uploads/faces/face1_20161121172051_154_TS1Y3ZOU.jpg","copynumber":3,"copymoney":300,"name":"陈玲玲","focusid":"88059448","profitper":-2.57,"huiceper":-1.43},{"status":1,"face_url":"","copynumber":6,"copymoney":200,"name":"喵碧咪mt4-01","focusid":"88002253","profitper":-130.01,"huiceper":-103.97},{"status":0,"face_url":"","copynumber":1,"copymoney":100,"name":"喵碧咪","focusid":"88056792","profitper":-103.39,"huiceper":-99.15}]
      */
 
     private int status;
     private List<ResponseBean> response;
+    private String error;
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
 
     public int getStatus() {
         return status;
@@ -35,40 +44,15 @@ public class BeanWatchInfo {
 
     public static class ResponseBean {
         /**
-         * status : 0
+         * status : 1
          * face_url :
-         * copynumber : 10
-         * copymoney : 5115
+         * copynumber : 11
+         * copymoney : 5238
          * name : 123123
          * focusid : 88079553
-         * profitper : 5.31
-         * huiceper : -20.15
-         * ui_states://false或者null,正常，ture 改变状态
+         * profitper : 4.87
+         * huiceper : -18.49
          */
-        public ResponseBean(){
-            init();
-        }
-
-        private void init() {
-            uiStatues=false;
-        }
-
-        public ResponseBean(int status,String face_url,int copynumber,String focusid,String name){
-            this.status=status;
-            this.face_url=face_url;
-            this.copynumber=copynumber;
-            this.focusid=focusid;
-            this.name=name;
-            init();
-        }
-
-        public boolean isUiStatues() {
-            return uiStatues;
-        }
-
-        public void setUiStatues(boolean uiStatues) {
-            this.uiStatues = uiStatues;
-        }
 
         private int status;
         private String face_url;
@@ -78,7 +62,6 @@ public class BeanWatchInfo {
         private String focusid;
         private double profitper;
         private double huiceper;
-        private boolean uiStatues=false;
 
         public int getStatus() {
             return status;

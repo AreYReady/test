@@ -25,5 +25,8 @@ public class UrlConstant {
     public static String URL_MASTER_FOLLOW_FOCUS ="http://"+API_URL+"/WebAPI/Master/focus";//关注高手
     public static String URL_MASTER_FOLLOW_FOCUS_INFO ="http://"+API_URL+"/WebAPI/Master/focusinfo";//账户关注高手的信息
     public static String URL_MASTER_FOLLOW_NOFOCUS ="http://"+API_URL+"/WebAPI/Master/nofocus";//取消关注高手
-    public static String URL_MASTER_FOLLOW_DETAIL ="http://"+API_URL+"/WebAPI/Master/detail";//取消关注高手
+    public static String URL_MASTER_FOLLOW_DETAIL ="http://"+API_URL+"/WebAPI/Master/detail";//
+    public static String URL_MASTER_focusinfo ="http://"+API_URL+"/WebAPI/Master/focusinfo";//关注的高手信息
+    public static String URL_MASTER_FOLLOW_mycopy ="http://"+API_URL+"/WebAPI/Master/mycopy";//已复制的高手信息
+    public static String URL_MASTER_FOLLOW_master_Relation ="http://"+API_URL+"/WebAPI/Master/masterRelation";//高手被复制或被关注信息
 }

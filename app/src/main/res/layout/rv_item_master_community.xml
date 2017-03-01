@@ -9,18 +9,20 @@
     >
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_image"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:src="@mipmap/menu_avatar" />
 
     <TextView
+        android:id="@+id/tv_name"
         style="@style/TextDesc"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="4"
         android:gravity="left"
-        android:text="ALEXS16" />
+         />
 
     <TextView
         style="@style/TextDesc"
@@ -28,9 +30,10 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:gravity="right"
-        android:text="盈亏" />
+        android:text="总收益率" />
 
     <TextView
+        android:id="@+id/tv_tp"
         style="@style/TextDesc"
         android:layout_width="0dip"
         android:layout_height="wrap_content"

@@ -9,6 +9,7 @@ public class TradeDateConstant {
     public static  int jianju=3;
     public static int count=1000;
     public static double   VOLUME_MONEY=100000;
+    public static String VOLUME_MONEY_STRING="100000";
     public static long diffTimeServiceAndNative=0;
     /**
      * 服务器时间偏移量

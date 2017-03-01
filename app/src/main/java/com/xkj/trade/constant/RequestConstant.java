@@ -30,6 +30,8 @@ public interface RequestConstant {
     String PAGE_LIMIT = "pagelimit";
 
     String RANK_TYPE = "rankType";
+
+    String TYPE = "type";
     //操作动作
     String ACTION = "action";
     String EXC = "exc";

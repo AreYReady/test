@@ -357,6 +357,10 @@
     <string name="open_time">建仓时间</string>
     <string name="order">订单</string>
     <string name="order_closed_successfully">订单已成功关闭</string>
+    <string name="closed_position_is">已关闭%s</string>
+    <string name="closed_position_is_close_price">关闭仓位在%s</string>
+    <string name="open_position_is">已开仓%s</string>
+    <string name="open_position_is_open_price">已开仓在%s</string>
     <string name="order_is_already_closed">订单已平仓</string>
     <string name="order_type">订单类型</string>
     <string name="order_was_updated">%1$s %2$s订单已更新</string>

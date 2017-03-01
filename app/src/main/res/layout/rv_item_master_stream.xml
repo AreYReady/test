@@ -11,6 +11,7 @@
         android:layout_weight="0.7">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_image"
             android:layout_width="30dip"
             android:layout_height="30dip"
             android:layout_alignParentLeft="true"
@@ -25,18 +26,20 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_position"
             style="@style/TextDesc"
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="1"
-            android:text="已关闭GBPUSD" />
+            />
 
         <TextView
+            android:id="@+id/tv_position_price"
             style="@style/TextDesc"
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="1"
-            android:text="买进仓位在1.23814" />
+             />
     </LinearLayout>
 
     <LinearLayout
@@ -54,32 +57,13 @@
             android:text="获利" />
 
         <TextView
+            android:id="@+id/tv_tp"
             style="@style/TextDesc"
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="1"
-            android:text="0.09%" />
+             />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:orientation="vertical">
 
-        <TextView
-            style="@style/TextDesc"
-            android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1"
-            android:text="复制者" />
-
-        <TextView
-            style="@style/TextDesc"
-            android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1"
-            android:text="0" />
-    </LinearLayout>
 </LinearLayout>

@@ -5,9 +5,9 @@ package com.xkj.trade.bean_notification;
  * TODO:用来作为通知高手排名关注变化的实体类
  */
 
-public class NotificationWatchStatus {
+public class NotificationMasterStatus {
     String login;int fstatus;int status;
-    public NotificationWatchStatus(String login, int fstatus, int status){
+    public NotificationMasterStatus(String login, int fstatus, int status){
         this.fstatus=fstatus;
         this.status=status;
         this.login=login;
@@ -36,4 +36,6 @@ public class NotificationWatchStatus {
     public void setStatus(int status) {
         this.status = status;
     }
+
+
 }

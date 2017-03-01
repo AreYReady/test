@@ -3,20 +3,28 @@ package com.xkj.trade.bean_;
 import java.util.List;
 
 /**
- * Created by huangsc on 2017-02-28.
- * TODO:
+ * Created by huangsc on 2017-03-01.
+ * TODO:高手
  */
 
-public class BeanWatchInfo {
+public class BeanMasterMyCopy {
 
     /**
      * status : 1
-     * response : [{"status":0,"face_url":"","copynumber":10,"copymoney":5115,"name":"123123","focusid":"88079553","profitper":5.31,"huiceper":-20.15},{"status":0,"face_url":"","copynumber":0,"copymoney":0,"name":"mingjie","focusid":"88051194","profitper":0,"huiceper":0},{"status":1,"face_url":"","copynumber":6,"copymoney":200,"name":"喵碧咪mt4-01","focusid":"88002253","profitper":-130.01,"huiceper":-103.97},{"status":0,"face_url":"","copynumber":1,"copymoney":100,"name":"喵碧咪","focusid":"88056792","profitper":-103.39,"huiceper":-99.15}]
+     * response : [{"fstatus":0,"face_url":"","copynumber":11,"copymoney":5238,"name":"123123","masterid":"88079553","profitper":4.87,"huiceper":-18.49}]
      */
 
     private int status;
     private List<ResponseBean> response;
+    private String error;
 
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
     public int getStatus() {
         return status;
     }
@@ -35,57 +43,31 @@ public class BeanWatchInfo {
 
     public static class ResponseBean {
         /**
-         * status : 0
+         * fstatus : 0
          * face_url :
-         * copynumber : 10
-         * copymoney : 5115
+         * copynumber : 11
+         * copymoney : 5238
          * name : 123123
-         * focusid : 88079553
-         * profitper : 5.31
-         * huiceper : -20.15
-         * ui_states://false或者null,正常，ture 改变状态
+         * masterid : 88079553
+         * profitper : 4.87
+         * huiceper : -18.49
          */
-        public ResponseBean(){
-            init();
-        }
 
-        private void init() {
-            uiStatues=false;
-        }
-
-        public ResponseBean(int status,String face_url,int copynumber,String focusid,String name){
-            this.status=status;
-            this.face_url=face_url;
-            this.copynumber=copynumber;
-            this.focusid=focusid;
-            this.name=name;
-            init();
-        }
-
-        public boolean isUiStatues() {
-            return uiStatues;
-        }
-
-        public void setUiStatues(boolean uiStatues) {
-            this.uiStatues = uiStatues;
-        }
-
-        private int status;
+        private int fstatus;
         private String face_url;
         private int copynumber;
         private int copymoney;
         private String name;
-        private String focusid;
+        private String masterid;
         private double profitper;
         private double huiceper;
-        private boolean uiStatues=false;
 
-        public int getStatus() {
-            return status;
+        public int getFstatus() {
+            return fstatus;
         }
 
-        public void setStatus(int status) {
-            this.status = status;
+        public void setFstatus(int fstatus) {
+            this.fstatus = fstatus;
         }
 
         public String getFace_url() {
@@ -120,12 +102,12 @@ public class BeanWatchInfo {
             this.name = name;
         }
 
-        public String getFocusid() {
-            return focusid;
+        public String getMasterid() {
+            return masterid;
         }
 
-        public void setFocusid(String focusid) {
-            this.focusid = focusid;
+        public void setMasterid(String masterid) {
+            this.masterid = masterid;
         }
 
         public double getProfitper() {

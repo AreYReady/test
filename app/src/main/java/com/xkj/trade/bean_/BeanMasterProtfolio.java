@@ -112,7 +112,7 @@ public class BeanMasterProtfolio {
             private String totalprofit;
             private String minprofit;
             private String totalvolume;
-            private int maxvolume;
+            private float maxvolume;
             private int copynumber;
             private int copymoney;
             private String profitper;
@@ -255,11 +255,11 @@ public class BeanMasterProtfolio {
                 this.totalvolume = totalvolume;
             }
 
-            public int getMaxvolume() {
+            public float getMaxvolume() {
                 return maxvolume;
             }
 
-            public void setMaxvolume(int maxvolume) {
+            public void setMaxvolume(float maxvolume) {
                 this.maxvolume = maxvolume;
             }
 

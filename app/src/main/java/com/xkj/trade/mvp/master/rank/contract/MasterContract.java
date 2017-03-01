@@ -21,6 +21,4 @@ public class MasterContract {
     public interface Model {
         void requestMasterRank(String rankType);
     }
-
-
 }

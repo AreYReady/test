@@ -87,6 +87,7 @@ private Context context;
     protected void onDraw(Canvas canvas) {
         if (data != null) {
             if (data.size() != 0) {
+                textPaint.setTextSize(40);
                 centerPoint = new Point();
                 centerPoint.x = getWidth() / 2;
                 centerPoint.y = getHeight() / 2;

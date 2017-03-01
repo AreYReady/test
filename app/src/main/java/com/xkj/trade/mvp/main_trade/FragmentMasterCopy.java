@@ -86,4 +86,7 @@ public class FragmentMasterCopy extends BaseFragment {
             mDataList.add(mData);
         }
     }
+   private void requestMasterCopy(){
+
+    }
 }

@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
+import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean_.BeanMasterRank;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.mvp.master.rank.contract.MasterContract;
@@ -21,6 +22,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static com.xkj.trade.base.MyApplication.rank;
 import static com.xkj.trade.constant.UrlConstant.URL_MT4_RANKING;
 
 /**
@@ -53,9 +55,9 @@ public class MasterModelImpl implements MasterContract.Model{
             public void onResponse(Call call, Response response) throws IOException {
                 String resp = "";
                 Log.i(TAG, "onResponse: "+(resp=response.body().string()));
-               BeanMasterRank info= new Gson().fromJson(resp, new TypeToken<BeanMasterRank>(){}.getType());
-                if(info.getStatus()==1){
-                    mPresenterListener.responseMasterRank(info);
+               MyApplication.getInstance().rank= new Gson().fromJson(resp, new TypeToken<BeanMasterRank>(){}.getType());
+                if(rank.getStatus()==1){
+                    mPresenterListener.responseMasterRank(rank);
                 }
             }
         });

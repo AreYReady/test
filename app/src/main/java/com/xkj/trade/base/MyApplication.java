@@ -5,6 +5,7 @@ import android.app.Application;
 import android.os.Handler;
 
 import com.xkj.trade.bean.BeanIndicatorData;
+import com.xkj.trade.bean_.BeanMasterRank;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -18,6 +19,7 @@ import java.util.List;
 public class MyApplication extends Application {
     private static MyApplication instance;
     public static BeanIndicatorData beanIndicatorData=new BeanIndicatorData();
+    public static BeanMasterRank rank;
 
     public static MyApplication getInstance() {
         return instance;

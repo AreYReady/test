@@ -38,6 +38,7 @@ import com.xkj.trade.utils.ToashUtil;
 import com.xkj.trade.utils.view.CustomMasterLink;
 import com.xkj.trade.utils.view.CustomSeekBar;
 import com.xkj.trade.utils.view.CustomViewPager;
+import com.xkj.trade.utils.view.MyScrollView;
 import com.xkj.trade.utils.view.ZoomOutPageTransformer;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ import java.util.List;
  */
 
 public class FragmentMasterInfo extends BaseFragment implements View.OnClickListener, MasterInfoContract.View {
-    private BackInterface mBackInterface;
+//    private BackInterface mBackInterface;
     private CustomViewPager mCustomViewPager;
     private List<String> mDataItem;
     private ViewPager mViewPager;
@@ -73,6 +74,7 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
     LinearLayout mCoverCopy;
     RelativeLayout mCoverUncopy;
     TextView mCoverUncopyPrompt;
+    private MyScrollView mMyScrollView;
     private MasterInfoContract.Presenter mPresenterListener;
     public static final String MASTER_INFO = "masterInfo";
     BeanMasterRank.MasterRank rank;
@@ -83,11 +85,11 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_master_info, null);
         //又来判断关联的activity是否是实现接口的activity
-        if (!(getActivity() instanceof BackInterface)) {
-            throw new ClassCastException("Hosting Activity must implement BackHandledInterface");
-        } else {
-            this.mBackInterface = (BackInterface) getActivity();
-        }
+//        if (!(getActivity() instanceof BackInterface)) {
+//            throw new ClassCastException("Hosting Activity must implement BackHandledInterface");
+//        } else {
+//            this.mBackInterface = (BackInterface) getActivity();
+//        }
         rank = new Gson().fromJson(this.getArguments().getString(MASTER_INFO), new TypeToken<BeanMasterRank.MasterRank>() {
         }.getType());
         return view;
@@ -96,7 +98,7 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
     @Override
     public void onStart() {
         super.onStart();
-        mBackInterface.setSelectedFragment(this);
+//        mBackInterface.setSelectedFragment(this);
     }
 
     @Override
@@ -140,17 +142,20 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
 
             @Override
             public void onPageSelected(int position) {
+//                mViewPager.setFocusable(false);
                 if (mCustomViewPager.getSpeed() < -1800) {
                     mCustomViewPager.setCurrentItem(mPosition + 1);
                     mCustomViewPager.setSpeed(0);
-                    mViewPager.setCurrentItem(mPosition + 1);
+                    mViewPager.setCurrentItem(mPosition + 1,false);
                 } else if (mCustomViewPager.getSpeed() > 1800 && mPosition > 0) {
                     //当手指右滑速度大于2000时viewpager左滑（注意item-1即可）
                     mCustomViewPager.setCurrentItem(mPosition - 1);
                     mCustomViewPager.setSpeed(0);
-                    mViewPager.setCurrentItem(mPosition - 1);
+                    mViewPager.setCurrentItem(mPosition - 1,false);
+                }else {
+                    mViewPager.setCurrentItem(position, false);
                 }
-                mViewPager.setCurrentItem(position, true);
+
             }
 
             @Override
@@ -168,7 +173,6 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
             }
         });
         mViewPager = (ViewPager) view.findViewById(R.id.vp_master_info);
-
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -182,7 +186,10 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
                 mViewPager.setLayoutParams(new LinearLayout.LayoutParams(mViewPager.getWidth(), view.findViewById(R.id.rl_master_middle).getHeight() - mCustomViewPager.getMeasuredHeight()));
             }
         });
+        mMyScrollView=(MyScrollView)view.findViewById(R.id.msv_my_scroll_view);
+        mViewPager.setOffscreenPageLimit(4);
         mViewPager.setAdapter(new FragmentAdapter(getChildFragmentManager(), mListFragment));
+//        mViewPager.setFocusable(false);
         mBaseMasterInfo = view.findViewById(R.id.ll_master_base_info);
         mCoverView = view.findViewById(R.id.ll_cover);
         mCopyButton = (Button) view.findViewById(R.id.b_copy);

@@ -44,6 +44,7 @@ import com.xkj.trade.mvp.main_trade.FragmentPendingPosition;
 import com.xkj.trade.mvp.main_trade.activity.p.MainActPreImpl;
 import com.xkj.trade.mvp.main_trade.fragment_content.v.MainTradeContentFrag;
 import com.xkj.trade.mvp.master.info.FragmentMasterInfo;
+import com.xkj.trade.mvp.master.info.MasterInfoActivity;
 import com.xkj.trade.mvp.master.rank.FragmentMaster;
 import com.xkj.trade.mvp.operate.OperatePositionActivity;
 import com.xkj.trade.utils.MoneyUtil;
@@ -87,6 +88,8 @@ public class MainTradeContentActivity extends BaseActivity
     private TextView mMarginLevel;
     private TextView mCredit;
     private ImageView mOpenPositionCount;
+
+
 
 
     @Override
@@ -285,11 +288,11 @@ public class MainTradeContentActivity extends BaseActivity
     @Subscribe
     public void getShowMasterInfo(BeanMasterRank.MasterRank rank) {
         Log.i(TAG, "getShowMasterInfo: 展示高手个人信息");
-        mFragmentMasterInfo = new FragmentMasterInfo();
         Bundle bundle=new Bundle();
         bundle.putString(MASTER_INFO,new Gson().toJson(rank));
-        mFragmentMasterInfo.setArguments(bundle);
-        fragmentManager.beginTransaction().add(R.id.fl_main_trade_content, mFragmentMasterInfo).addToBackStack("tag").commit();
+        Intent intent =new Intent(this, MasterInfoActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     //退出时的时间
@@ -373,5 +376,4 @@ public class MainTradeContentActivity extends BaseActivity
         this.beanUserListInfo = beanUserListInfo;
         handler.sendEmptyMessage(refreshUserInfo);
     }
-
 }

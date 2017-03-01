@@ -191,6 +191,7 @@
         </FrameLayout>
 
         <com.xkj.trade.utils.view.MyScrollView
+            android:id="@+id/msv_my_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

@@ -19,17 +19,28 @@ import com.xkj.trade.IO.okhttp.MyCallBack;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
 import com.xkj.trade.base.BaseFragment;
+import com.xkj.trade.bean_.BeanAdapterStream;
 import com.xkj.trade.bean_.BeanClosePosition;
 import com.xkj.trade.bean_.BeanMasterPosition;
 import com.xkj.trade.bean_.BeanMasterRank;
 import com.xkj.trade.bean_.BeanOpenPosition;
 import com.xkj.trade.bean_.BeanPendingPosition;
 import com.xkj.trade.constant.RequestConstant;
+import com.xkj.trade.constant.TradeDateConstant;
 import com.xkj.trade.constant.UrlConstant;
+import com.xkj.trade.diffcallback.MasterPositionDiff;
 import com.xkj.trade.utils.AesEncryptionUtil;
+import com.xkj.trade.utils.DateUtils;
+import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.ThreadHelper;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -55,12 +66,10 @@ public class FragmentMasterPosition extends BaseFragment {
     private List<BeanMasterPosition> mOpenDataList = new LinkedList<>();
     private List<BeanMasterPosition> mPendingDataList = new LinkedList<>();
     private List<BeanMasterPosition> mCloseDataList = new LinkedList<>();
-    private List<BeanMasterPosition> mOpenDupDataList = new LinkedList<>();
-    private List<BeanMasterPosition> mPendingDupDataList = new LinkedList<>();
-    private List<BeanMasterPosition> mCloseDupDataList = new LinkedList<>();
     private RadioGroup mRadioGroup;
     private Map<String, String> map = new TreeMap<>();
     private MyAdapter mMyAdapter;
+
 
     @Nullable
     @Override
@@ -79,22 +88,30 @@ public class FragmentMasterPosition extends BaseFragment {
     protected void initView() {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_master_position);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mRecyclerView.setAdapter(mMyAdapter = new MyAdapter());
+
+        mRecyclerView.setFocusable(false);
         mRadioGroup = (RadioGroup) view.findViewById(R.id.rg_type);
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.rb_1:
-                        responseData(mOpenDataList, url = UrlConstant.URL_TRADE_MAKET_LIST);
+                        url = UrlConstant.URL_TRADE_MAKET_LIST;
+                        mMyAdapter.setData(mOpenDataList);
+//                        responseData(mOpenDataList, url = UrlConstant.URL_TRADE_MAKET_LIST);
                         break;
                     case R.id.rb_2:
-                        responseData(mPendingDataList, url = UrlConstant.URL_TRADE_PENDING_LIST);
+                        url = UrlConstant.URL_TRADE_PENDING_LIST;
+                        mMyAdapter.setData(mPendingDataList);
+//                        responseData(mPendingDataList, url = UrlConstant.URL_TRADE_PENDING_LIST);
                         break;
                     case R.id.rb_3:
-                        responseData(mCloseDataList, url = UrlConstant.URL_TRADE_HISTORY_LIST);
+                        url = UrlConstant.URL_TRADE_HISTORY_LIST;
+                        mMyAdapter.setData(mCloseDataList);
+//                        responseData(mCloseDataList, url = UrlConstant.URL_TRADE_HISTORY_LIST);
                         break;
                 }
+                mMyAdapter.notifyDataSetChanged();
             }
         });
         requestData();
@@ -102,6 +119,10 @@ public class FragmentMasterPosition extends BaseFragment {
     }
 
     class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
+        public MyAdapter(List<BeanMasterPosition> mDataList) {
+            this.mDataList = mDataList;
+        }
+
         private List<BeanMasterPosition> mDataList;
 
         @Override
@@ -141,6 +162,10 @@ public class FragmentMasterPosition extends BaseFragment {
             holder.mTvOpenPrice.setText(beanMasterPosition.getOpenPrice());
             holder.mTvOperater.setText(beanMasterPosition.getOperater());
             holder.mTvProfit.setText(beanMasterPosition.getProfit());
+            if (Double.valueOf(mDataList.get(position).getProfit()) > 0)
+                holder.mTvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
+            else
+                holder.mTvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
         }
 
         @Override
@@ -165,6 +190,10 @@ public class FragmentMasterPosition extends BaseFragment {
         }
     }
 
+    BeanOpenPosition beanOpenPosition;
+    BeanPendingPosition beanPendingPosition;
+    BeanClosePosition beanClosePosition;
+
     private void requestData() {
         map.put(RequestConstant.LOGIN, AesEncryptionUtil.stringBase64toString(rank.getLogin()));
         map.put(RequestConstant.IS_PAGE, "1");
@@ -177,45 +206,47 @@ public class FragmentMasterPosition extends BaseFragment {
                 Log.i(TAG, "onResponse: " + s);
                 if (call.request().url().toString().equals(UrlConstant.URL_TRADE_MAKET_LIST)) {
                     //持仓
-                    BeanOpenPosition beanOpenPosition = new Gson().fromJson(s, new TypeToken<BeanOpenPosition>() {
+                    beanOpenPosition = new Gson().fromJson(s, new TypeToken<BeanOpenPosition>() {
                     }.getType());
                     if (beanOpenPosition.getStatus() == 1) {
                         List<BeanMasterPosition> list = new LinkedList<BeanMasterPosition>();
                         for (BeanOpenPosition.DataBean.ListBean bean : beanOpenPosition.getData().getList()) {
                             list.add(new BeanMasterPosition(bean.getSymbol(), bean.getCmd().contains("buy") ? "买" : "卖", bean.getOpenprice(), bean.getProfit()));
                         }
-                        mOpenDataList=list;
-                        responseData(mOpenDataList, UrlConstant.URL_TRADE_MAKET_LIST);
+                        responseData(list, UrlConstant.URL_TRADE_MAKET_LIST);
+                        mOpenDataList = list;
                     }
                 }
                 OkhttpUtils.enqueue(URL_TRADE_PENDING_LIST, map, new MyCallBack() {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         //挂单
-                        BeanPendingPosition beanPendingPosition = new Gson().fromJson(response.body().string(), new TypeToken<BeanPendingPosition>() {
+                        beanPendingPosition = new Gson().fromJson(response.body().string(), new TypeToken<BeanPendingPosition>() {
                         }.getType());
                         if (beanPendingPosition.getStatus() == 1) {
                             List<BeanMasterPosition> list = new LinkedList<BeanMasterPosition>();
                             for (BeanPendingPosition.DataBean.ListBean bean : beanPendingPosition.getData().getList()) {
                                 list.add(new BeanMasterPosition(bean.getSymbol(), bean.getCmd().contains("buy") ? "买" : "卖", bean.getOpenprice(), bean.getProfit()));
                             }
-                            mPendingDataList=list;
-//                            responseData(list, URL_TRADE_PENDING_LIST);
+                            responseData(list, URL_TRADE_PENDING_LIST);
+                            mPendingDataList = list;
                             OkhttpUtils.enqueue(URL_TRADE_HISTORY_LIST, map, new MyCallBack() {
                                 @Override
                                 public void onResponse(Call call, Response response) throws IOException {
                                     //历史
-                                    BeanClosePosition beanClosePosition = new Gson().fromJson(response.body().string(), new TypeToken<BeanClosePosition>() {
+                                    beanClosePosition = new Gson().fromJson(response.body().string(), new TypeToken<BeanClosePosition>() {
                                     }.getType());
                                     if (beanClosePosition.getStatus() == 1) {
                                         List<BeanMasterPosition> list = new LinkedList<BeanMasterPosition>();
                                         for (BeanClosePosition.DataBean.ListBean bean : beanClosePosition.getData().getList()) {
                                             list.add(new BeanMasterPosition(bean.getSymbol(), bean.getCmd().contains("buy") ? "买" : "卖", bean.getOpenprice(), bean.getProfit()));
                                         }
-                                        mCloseDataList=list;
-//                                        responseData(list, URL_TRADE_HISTORY_LIST);
+                                        responseData(list, URL_TRADE_HISTORY_LIST);
+                                        mCloseDataList = list;
                                     }
                                     map.clear();
+                                    sortStream();
+//                                    EventBus.getDefault().post();
                                 }
                             });
                         }
@@ -226,41 +257,82 @@ public class FragmentMasterPosition extends BaseFragment {
 
     }
 
+    //流动表数据
+    private void sortStream() {
+        NumberFormat nt = NumberFormat.getPercentInstance();
+        //设置百分数精确度2即保留两位小数
+        nt.setMinimumFractionDigits(2);
+        List<BeanAdapterStream> listStream = new ArrayList<>();
+        try {
+
+            for (BeanOpenPosition.DataBean.ListBean listBean : beanOpenPosition.getData().getList()) {
+                listStream.add(new BeanAdapterStream(String.valueOf(listBean.getOrder()), listBean.getSymbol(), 1, listBean.getOpenprice(), nt.format(MoneyUtil.div(listBean.getProfit(), MoneyUtil.mulPrice(listBean.getVolume(), TradeDateConstant.VOLUME_MONEY_STRING))), listBean.getOpentime()));
+
+            }
+            for (BeanClosePosition.DataBean.ListBean listBean : beanClosePosition.getData().getList()) {
+                listStream.add(new BeanAdapterStream(String.valueOf(listBean.getOrder()), listBean.getSymbol(), 2, listBean.getCloseprice(), nt.format(MoneyUtil.div(listBean.getProfit(), MoneyUtil.mulPrice(listBean.getVolume(), TradeDateConstant.VOLUME_MONEY_STRING))), listBean.getClosetime()));
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        Collections.sort(listStream, new Comparator<BeanAdapterStream>() {
+            @Override
+            public int compare(BeanAdapterStream o1, BeanAdapterStream o2) {
+                if (DateUtils.getOrderStartTime(o1.getTime()) > DateUtils.getOrderStartTime(o2.getTime())) {
+                    return 1;
+                } else if (DateUtils.getOrderStartTime(o1.getTime()) == DateUtils.getOrderStartTime(o2.getTime())) {
+                    return 0;
+                }
+                return -1;
+            }
+        });
+        EventBus.getDefault().post(listStream);
+    }
+
     DiffUtil.DiffResult diffResult;
 
     private void responseData(final List<BeanMasterPosition> dataList, String url) {
-        if ((url.equals(UrlConstant.URL_TRADE_MAKET_LIST) && dataList == mOpenDataList) || (url.equals(UrlConstant.URL_TRADE_PENDING_LIST) && dataList == mPendingDataList)
-                || (url.equals(UrlConstant.URL_TRADE_HISTORY_LIST) && dataList == mCloseDataList)) {
-            if (mOpenDupDataList.size() == 0) {
-                mMyAdapter.setData(dataList);
-                ThreadHelper.instance().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mMyAdapter.notifyDataSetChanged();
+        switch (mRadioGroup.getCheckedRadioButtonId()) {
+            case R.id.rb_1:
+                if (url.equals(UrlConstant.URL_TRADE_MAKET_LIST)) {
+                    if (mMyAdapter == null) {
+                        ThreadHelper.instance().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mRecyclerView.setAdapter(mMyAdapter = new MyAdapter(dataList));
+                            }
+                        });
+                    } else {
+                        diffResult = DiffUtil.calculateDiff(new MasterPositionDiff(mOpenDataList, dataList), true);
+                        mMyAdapter.setData(dataList);
+                        diffresult();
                     }
-                });
-//                  mOpenDupDataList = mOpenDataList;
-//                }else{
-//        if (this.url.equals(url)) {
-//            mMyAdapter.setData(dataList);
-//            if (url.equals(URL_TRADE_MAKET_LIST)) {
-//                diffResult = DiffUtil.calculateDiff(new MasterPositionDiff(mOpenDupDataList, dataList), true);
-//                mOpenDupDataList = dataList;
-//            } else if (url.equals(URL_TRADE_PENDING_LIST)) {
-//                diffResult = DiffUtil.calculateDiff(new MasterPositionDiff(mPendingDupDataList, dataList), true);
-//                mPendingDupDataList = dataList;
-//            } else if (url.equals(URL_TRADE_HISTORY_LIST)) {
-//                diffResult = DiffUtil.calculateDiff(new MasterPositionDiff(mCloseDupDataList, dataList), true);
-//                mCloseDupDataList = dataList;
-//            }
-//            ThreadHelper.instance().runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    diffResult.dispatchUpdatesTo(mMyAdapter);
-//                }
-//            });
-            }
+                }
+                break;
+            case R.id.rb_2:
+                if (url.equals(URL_TRADE_PENDING_LIST)) {
+                    diffResult = DiffUtil.calculateDiff(new MasterPositionDiff(mPendingDataList, dataList), true);
+                    mMyAdapter.setData(dataList);
+                    diffresult();
+                }
+                break;
+            case R.id.rb_3:
+                if (url.equals(URL_TRADE_HISTORY_LIST)) {
+                    diffResult = DiffUtil.calculateDiff(new MasterPositionDiff(mCloseDataList, dataList), true);
+                    mMyAdapter.setData(dataList);
+                    diffresult();
+                }
+                break;
         }
+    }
+
+    private void diffresult() {
+        ThreadHelper.instance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                diffResult.dispatchUpdatesTo(mMyAdapter);
+            }
+        });
     }
 
 

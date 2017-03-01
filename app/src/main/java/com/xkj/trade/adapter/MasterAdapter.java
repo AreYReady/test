@@ -23,7 +23,7 @@ import com.xkj.trade.R;
 import com.xkj.trade.bean_.BeanBaseResponse;
 import com.xkj.trade.bean_.BeanMasterInfo;
 import com.xkj.trade.bean_.BeanMasterRank;
-import com.xkj.trade.bean_.BeanWatchInfo;
+import com.xkj.trade.bean_notification.NotificationMasterStatus;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.utils.ACache;
@@ -201,11 +201,11 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
     }
     //请求关注高手
 
-    private void requestFocus(final BeanMasterRank.MasterRank masterRank, final MyHolder holder) {
+    private void requestFocus(final BeanMasterRank.MasterRank rank, final MyHolder holder) {
         Map<String, String> map = new TreeMap();
-        map.put(RequestConstant.FOCUS_ID, masterRank.getLogin());
+        map.put(RequestConstant.FOCUS_ID, rank.getLogin());
         map.put(RequestConstant.ACCOUNT_ID, ACache.get(context).getAsString(RequestConstant.ACCOUNT));
-        if (masterRank.getFstatus() == 1) {
+        if (rank.getFstatus() == 1) {
             //已关注，取消关注
             OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW_NOFOCUS, map, new MyCallBack() {
                 @Override
@@ -217,10 +217,11 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                             holder.bWatch.setText(R.string.watch);
                         }
                     });
-                    masterRank.setFstatus(0);
+                    rank.setFstatus(0);
                     //通知关注状态改变
-                    if(masterRank.getStatus()==0)
-                    EventBus.getDefault().post(new BeanWatchInfo.ResponseBean(masterRank.getFstatus(),masterRank.getFace_url(),masterRank.getCopynumber(),masterRank.getLogin(),masterRank.getName()));
+                    if(rank.getStatus()==0)
+//                    EventBus.getDefault().post(new BeanWatchInfo.ResponseBean(rank.getFstatus(),rank.getFace_url(),rank.getCopynumber(),rank.getLogin(),rank.getName()));
+                        EventBus.getDefault().post(new NotificationMasterStatus(rank.getLogin(),rank.getFstatus(),rank.getStatus()));
                 }
             });
         } else {
@@ -235,9 +236,9 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                             holder.bWatch.setText(R.string.unwatch);
                         }
                     });
-                    masterRank.setFstatus(1);
-                    if(masterRank.getStatus()==0)
-                    EventBus.getDefault().post(new BeanWatchInfo.ResponseBean(masterRank.getFstatus(),masterRank.getFace_url(),masterRank.getCopynumber(),masterRank.getLogin(),masterRank.getName()));
+                    rank.setFstatus(1);
+                    if(rank.getStatus()==0)
+                        EventBus.getDefault().post(new NotificationMasterStatus(rank.getLogin(),rank.getFstatus(),rank.getStatus()));
                 }
             });
         }
@@ -254,6 +255,10 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                 if(info.getStatus()==1){
                     Log.i(TAG, "onResponse: "+info.toString());
                     rank.setStatus(0);
+                    if(rank.getFstatus()==1){
+                        EventBus.getDefault().post(new NotificationMasterStatus(rank.getLogin(),rank.getFstatus(),rank.getStatus()));
+                    }
+
                     ThreadHelper.instance().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -290,6 +295,9 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                         if(info.getStatus()==1){
                             Log.i(TAG, "onResponse: "+info.toString());
                             rank.setStatus(1);
+                            if(rank.getFstatus()==1){
+                                EventBus.getDefault().post(new NotificationMasterStatus(rank.getLogin(),rank.getFstatus(),rank.getStatus()));
+                            }
                             ThreadHelper.instance().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {

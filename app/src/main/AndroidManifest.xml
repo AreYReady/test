@@ -28,6 +28,9 @@
         <activity
             android:name=".mvp.operate.OperatePositionActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".mvp.master.info.MasterInfoActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

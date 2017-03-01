@@ -879,6 +879,8 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
      */
     DiffUtil.DiffResult diffResult;
     private void realTimeOpenPositionData(RealTimeDataList.BeanRealTime beanRealTime) {
+        if(mBeanOpenList==null)
+            return;
         //复制数据
         mBeanDupOpenList=  (new Gson().fromJson(new Gson().toJson(mBeanOpenList),new TypeToken<List<BeanOpenPosition.DataBean.ListBean>>(){}.getType()));
         BeanOpenPosition.DataBean.ListBean bean;

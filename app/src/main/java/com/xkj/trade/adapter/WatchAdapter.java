@@ -17,11 +17,15 @@ import com.xkj.trade.IO.okhttp.MyCallBack;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
 import com.xkj.trade.bean_.BeanBaseResponse;
+import com.xkj.trade.bean_.BeanMasterRank;
 import com.xkj.trade.bean_.BeanWatchInfo;
+import com.xkj.trade.bean_notification.NotificationMasterStatus;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.SystemUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,6 +36,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Response;
 
+import static com.xkj.trade.base.MyApplication.rank;
+
 /**
  * Created by huangsc on 2016-12-07.
  * TODO:
@@ -41,7 +47,7 @@ public class WatchAdapter extends RecyclerView.Adapter<WatchAdapter.MyViewHolder
     private Context context;
     private List<BeanWatchInfo.ResponseBean> mDataList;
     private String TAG= SystemUtil.getTAG(this);
-    private Map<Integer,Boolean> status=new TreeMap<>();
+//    private Map<Integer,Boolean> status=new TreeMap<>();
     public WatchAdapter(Context context, List<BeanWatchInfo.ResponseBean> mDataList){
         this.context=context;
         this.mDataList=mDataList;
@@ -62,38 +68,48 @@ public class WatchAdapter extends RecyclerView.Adapter<WatchAdapter.MyViewHolder
         holder.copyCount.setText(String.valueOf(mDataList.get(position).getCopynumber()));
         holder.actionButton.setText(context.getResources().getString(R.string.copy));
         holder.watchButton.setText(R.string.unwatch);
+        if(mDataList.get(position).isUiStatues()){
+            holder.mRlContent.setVisibility(View.GONE);
+            holder.mllCover.setVisibility(View.VISIBLE);
+        }else{
+            holder.mRlContent.setVisibility(View.VISIBLE);
+            holder.mllCover.setVisibility(View.GONE);
+        }
         holder.actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(mWatchListener!=null){
+                    mWatchListener.copy(mDataList.get(position).getFocusid());
+                }
             }
         });
         holder.watchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //取消关注
-                if(status.get(position)==null){
+
+                if(!mDataList.get(position).isUiStatues()){
                     bClickDown(holder,position);
-                    status.put(position,true);
+                    mDataList.get(position).setUiStatues(true);
                 }
             }
         });
         holder.bYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                bClickUp(holder,position);
-                if(status.get(position)!=null){
-                    status.remove(position);
+                if(mDataList.get(position).isUiStatues()){
+                    mDataList.get(position).setUiStatues(false);
                 }
                 requestUnwatch(mDataList.get(position).getFocusid(),position);
+//                bClickUp(holder,position);
             }
         });
         holder.bNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bClickUp(holder, position);
-                if(status.get(position)!=null){
-                    status.remove(position);
+                if(mDataList.get(position).isUiStatues()){
+                    mDataList.get(position).setUiStatues(false);
                 }
             }
         });
@@ -145,11 +161,12 @@ public class WatchAdapter extends RecyclerView.Adapter<WatchAdapter.MyViewHolder
     private WatchListener mWatchListener;
     public interface WatchListener {
         void unWatch(int Position);
+        void copy(String focuid);
     }
     public void setWacthListener(WatchListener listener){
         mWatchListener=listener;
     }
-    private void  requestUnwatch(String focusid, final int position){
+    private void  requestUnwatch(final String focusid, final int position){
         Map<String,String> map=new TreeMap<>();
         map.put(RequestConstant.FOCUS_ID,focusid);
         map.put(RequestConstant.ACCOUNT_ID, ACache.get(context).getAsString(RequestConstant.ACCOUNT));
@@ -158,9 +175,12 @@ public class WatchAdapter extends RecyclerView.Adapter<WatchAdapter.MyViewHolder
             public void onResponse(Call call, Response response) throws IOException {
                BeanBaseResponse beanBaseResponse= new Gson().fromJson(response.body().string(),new TypeToken<BeanBaseResponse>(){}.getType());
                 if(beanBaseResponse.getStatus()==1){
-                    if(mWatchListener!=null){
-                        mWatchListener.unWatch(position);
+                    for(BeanMasterRank.MasterRank masterRank:rank.getResponse()){
+                        if(masterRank.getLogin().equals(focusid)){
+                            masterRank.setFstatus(0);
+                        }
                     }
+                    EventBus.getDefault().post(new NotificationMasterStatus(focusid,0,0));
                 }
             }
         });
