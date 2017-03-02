@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -26,8 +27,6 @@ import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.diffcallback.PendingPositionDiff;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
-import com.xkj.trade.utils.DataUtil;
-import com.xkj.trade.utils.SystemUtil;
 import com.xkj.trade.utils.ThreadHelper;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -55,6 +54,7 @@ public class FragmentPendingPosition extends BaseFragment  {
     private BeanPendingPosition info;
     private Map<String,Boolean> symbols=new TreeMap<>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private TextView mTextView;
 
 
 
@@ -67,6 +67,8 @@ public class FragmentPendingPosition extends BaseFragment  {
 
     @Override
     protected void initView() {
+        mTextView=(TextView)view.findViewById(R.id.tv_4);
+        mTextView.setText(R.string.price);
         mSwipeRefreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -95,7 +97,7 @@ public class FragmentPendingPosition extends BaseFragment  {
                 Log.i(TAG, "onResponse: "+call.request());
                 info=new Gson().fromJson(re,new TypeToken<BeanPendingPosition>(){}.getType());
                 mDataList=info.getData().getList();
-                SystemUtil.show(re,FragmentPendingPosition.class);
+//                SystemUtil.show(re,FragmentPendingPosition.class);
                 responseData();
                 requestSubSymbol();
             }
@@ -139,12 +141,15 @@ public class FragmentPendingPosition extends BaseFragment  {
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void getRealTimeData(RealTimeDataList beanRealTimeList){
         Log.i(TAG, "getRealTimeData: ");
+        if(beanRealTimeList.getQuotes()==null){
+            return;
+        }
         mBeanDupOpenList=  (new Gson().fromJson(new Gson().toJson(mDataList),new TypeToken<List<BeanPendingPosition.DataBean.ListBean>>(){}.getType()));
         for(RealTimeDataList.BeanRealTime beanRealTime:beanRealTimeList.getQuotes()){
             for(int i=0;i<mDataList.size();i++) {
                 listBean = mDataList.get(i);
                 if(listBean.getSymbol().equals(beanRealTime.getSymbol())){
-                    listBean.setProfit(DataUtil.getProfit(beanRealTime,listBean.getCmd(),listBean.getOpenprice(),listBean.getVolume()));
+//                    listBean.setProfit(DataUtil.getProfit(beanRealTime,listBean.getCmd(),listBean.getOpenprice(),listBean.getVolume()));
                     if(listBean.getCmd().contains("buy")){
                         listBean.setPrice(String.valueOf(beanRealTime.getBid()));
                     }else{

@@ -26,7 +26,7 @@
     <style name="TextSmall" parent="@android:style/TextAppearance">
         <item name="android:textSize">15.0sp</item>
         <item name="android:fontFamily">sans-serif-light</item>
-        <item name="android:textColor">@color/text_color_pull_head_text_content</item>
+        <item name="android:textColor">@color/text_color_pull_head_text_content_</item>
 
     </style>
 
@@ -75,7 +75,7 @@
     </style>
 
     <style name="TextHeader" parent="@android:style/TextAppearance.Small">
-        <item name="android:textSize">10.0sp</item>
+        <item name="android:textSize">12.0sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_color_pull_head_text_desc</item>
 
@@ -90,6 +90,7 @@
 
     <style name="TextAverage" parent="@style/TextMedium">
         <item name="android:textSize">15.0sp</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="TextDesc">
@@ -146,6 +147,10 @@
 
     <style name="TextSmaller" parent="@android:style/TextAppearance">
         <item name="android:textSize">10.0sp</item>
+        <item name="android:textColor">@color/highlighted_text_material_dark</item>
+    </style>
+    <style name="TextSmaller_13" parent="@android:style/TextAppearance">
+        <item name="android:textSize">13.0sp</item>
         <item name="android:textColor">@color/highlighted_text_material_dark</item>
     </style>
 

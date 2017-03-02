@@ -86,6 +86,7 @@ public class FragmentMaster extends BaseFragment implements MasterContract.View 
             for (int i = 0; i < rank.getResponse().size(); i++) {
                 if (rank.getResponse().get(i).getLogin().equals(notificationWatchStatus.getLogin())) {
                     rank.getResponse().get(i).setFstatus(notificationWatchStatus.getFstatus());
+                    rank.getResponse().get(i).setStatus(notificationWatchStatus.getStatus());
                     final int finalI = i;
                     ThreadHelper.instance().runOnUiThread(new Runnable() {
                         @Override

@@ -62,6 +62,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/abc_text_size_caption_material"
                         android:text="@string/open_pl"
                         android:textAppearance="@style/TextHeader" />
 
@@ -86,6 +87,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/balance"
+                        android:textSize="@dimen/abc_text_size_caption_material"
                         android:textAppearance="@style/TextHeader" />
 
                     <TextView
@@ -107,6 +109,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/abc_text_size_caption_material"
                         android:text="@string/equity"
                         android:textAppearance="@style/TextHeader" />
 
@@ -149,6 +152,7 @@
 
                     <TextView
                         android:layout_width="wrap_content"
+                        android:textSize="@dimen/abc_text_size_caption_material"
                         android:layout_height="wrap_content"
                         android:text="@string/margin"
                         android:textAppearance="@style/TextHeader" />
@@ -173,6 +177,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/abc_text_size_caption_material"
                         android:text="@string/margin_level"
                         android:textAppearance="@style/TextHeader" />
 
@@ -195,6 +200,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/abc_text_size_caption_material"
                         android:text="@string/credit"
                         android:textAppearance="@style/TextHeader" />
 

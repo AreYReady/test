@@ -148,7 +148,7 @@ public class WatchAdapter extends RecyclerView.Adapter<WatchAdapter.MyViewHolder
             super(itemView);
             tvName=(TextView)itemView.findViewById(R.id.username);
             copyCount=(TextView)itemView.findViewById(R.id.copiers);
-            unWatchPrompt =(TextView)itemView.findViewById(R.id.tv_unwatch_prompt);
+            unWatchPrompt =(TextView)itemView.findViewById(R.id.tv_action_prompt);
             imageView=(CircleImageView)itemView.findViewById(R.id.avatar);
             actionButton=(Button)itemView.findViewById(R.id.action_button);
             watchButton=(Button)itemView.findViewById(R.id.watch_button);

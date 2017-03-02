@@ -219,8 +219,6 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                     });
                     rank.setFstatus(0);
                     //通知关注状态改变
-                    if(rank.getStatus()==0)
-//                    EventBus.getDefault().post(new BeanWatchInfo.ResponseBean(rank.getFstatus(),rank.getFace_url(),rank.getCopynumber(),rank.getLogin(),rank.getName()));
                         EventBus.getDefault().post(new NotificationMasterStatus(rank.getLogin(),rank.getFstatus(),rank.getStatus()));
                 }
             });
@@ -237,7 +235,6 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                         }
                     });
                     rank.setFstatus(1);
-                    if(rank.getStatus()==0)
                         EventBus.getDefault().post(new NotificationMasterStatus(rank.getLogin(),rank.getFstatus(),rank.getStatus()));
                 }
             });
@@ -255,9 +252,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                 if(info.getStatus()==1){
                     Log.i(TAG, "onResponse: "+info.toString());
                     rank.setStatus(0);
-                    if(rank.getFstatus()==1){
                         EventBus.getDefault().post(new NotificationMasterStatus(rank.getLogin(),rank.getFstatus(),rank.getStatus()));
-                    }
 
                     ThreadHelper.instance().runOnUiThread(new Runnable() {
                         @Override
@@ -295,9 +290,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                         if(info.getStatus()==1){
                             Log.i(TAG, "onResponse: "+info.toString());
                             rank.setStatus(1);
-                            if(rank.getFstatus()==1){
                                 EventBus.getDefault().post(new NotificationMasterStatus(rank.getLogin(),rank.getFstatus(),rank.getStatus()));
-                            }
                             ThreadHelper.instance().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {

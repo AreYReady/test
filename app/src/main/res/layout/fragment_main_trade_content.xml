@@ -35,16 +35,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dip"/>
 
-
             <com.xkj.trade.utils.view.CustomPeriodButtons
                 android:id="@+id/cpb_period"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background_show_trade"
+                android:background="@mipmap/rates_carousel_bottom"
                 android:padding="@dimen/space_big">
 
             </com.xkj.trade.utils.view.CustomPeriodButtons>
-
             <LinearLayout
                 android:id="@+id/ll_k_link_content"
                 android:layout_width="match_parent"
@@ -88,16 +86,16 @@
                     <com.xkj.trade.utils.view.DrawPriceView
                         android:id="@+id/dp_draw_price"
                         android:layout_width="0dip"
-                        android:layout_height="match_parent"
+                           android:layout_height="match_parent"
                         android:layout_weight="1"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dip"
-                    android:background="@color/background_"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
+                    android:background="@color/background_indicator"
                     android:paddingLeft="@dimen/space_big"
                     android:paddingRight="@dimen/space_big"
                     >
@@ -201,7 +199,6 @@
         android:id="@+id/trade_title_hint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background_"
         android:orientation="vertical"
         >
         <LinearLayout

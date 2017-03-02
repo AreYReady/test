@@ -312,7 +312,8 @@ public class MoneyUtil {
                     break;
                 }
                 else if(i==s.indexOf(".")+1){
-                    s=s.substring(0,i+1);
+                    s=s.substring(0,i-1);
+                    break;
                 }
             }
         }

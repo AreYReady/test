@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
-              android:background="@color/toolbars_title_dark"
               android:orientation="vertical"
               android:paddingTop="10dip">
 
@@ -64,13 +63,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/space_normal"
                     android:text="@string/copiers"
-                    android:textAppearance="@style/TextHeader"/>
+                    android:textAppearance="@style/TextDesc"/>
 
                 <TextView
                     android:id="@+id/copiers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextRegular"/>
+                    android:textAppearance="@style/TextDesc"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -115,9 +114,9 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_unwatch_prompt"
+            android:id="@+id/tv_action_prompt"
             android:layout_width="match_parent"
-            style="@style/TextDescBig"
+            style="@style/TextAverage"
             android:layout_height="wrap_content"
             android:text="@string/are_you_sure_you_want_to_unwatch"/>
 

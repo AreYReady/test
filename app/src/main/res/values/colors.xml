@@ -19,6 +19,7 @@
     <color name ="background_my_favorite_content">@color/background_master_info_content</color>
     <color name ="text_color_pull_head_text_desc">#686a7a</color>
     <color name ="text_color_pull_head_text_content">#4e4e58</color>
+    <color name ="text_color_pull_head_text_content_">#ffaaaaaa</color>
     <color name ="text_color_price_fall">#21eab4</color>
     <color name ="text_color_price_rise">#df5141</color>
     <color name ="link_master_info_">#52bdc3</color>

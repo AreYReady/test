@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -173,19 +172,19 @@ public class MainTradeContentActivity extends BaseActivity
         fragmentTransaction.commit();
 
         mPullViewDragLayout = (PullBottomViewDragLayout) findViewById(R.id.dragLayout);
-        mPullViewDragLayout.getChildAt(0).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                //将fragment固定在mPullViewDragLayout上面
-                mPullViewDragLayout.getChildAt(0).getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//        mPullViewDragLayout.getChildAt(0).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                //将fragment固定在mPullViewDragLayout上面
+//                mPullViewDragLayout.getChildAt(0).getViewTreeObserver().removeOnGlobalLayoutListener(this);
 //                int initHight = mPullViewDragLayout.getMeasuredHeight() - mPullViewDragLayout.getChildAt(0).getWidth() / 2;
 //                Log.i(TAG, "onGlobalLayout: "+initHight);
 //                mPullViewDragLayout.setPadding(0,initHight,0,0);
-                findViewById(R.id.s_temp).setLayoutParams(new LinearLayout.LayoutParams(1, mPullViewDragLayout.getChildAt(0).getHeight() / 2));
-                descHeight = findViewById(R.id.desc).getHeight();
-                flIndicatorHeight = findViewById(R.id.fl_indicator_item).getHeight();
-            }
-        });
+//                findViewById(R.id.s_temp).setLayoutParams(new LinearLayout.LayoutParams(1, mPullViewDragLayout.getChildAt(0).getHeight() / 2));
+//                descHeight = findViewById(R.id.desc).getHeight();
+//                flIndicatorHeight = findViewById(R.id.fl_indicator_item).getHeight();
+//            }
+//        });
 
 
         mViewPagerFrag = (ViewPager) findViewById(R.id.vp_indicator_content);
@@ -353,6 +352,7 @@ public class MainTradeContentActivity extends BaseActivity
                     mCredit.setText(MoneyUtil.moneyFormat(beanUserInfo.getCredit()));
                     mMargin.setText(MoneyUtil.moneyFormat(beanUserInfo.getMargin()));
                     mOpenPl.setText(MoneyUtil.moneyFormat(String.valueOf(MoneyUtil.subPrice(beanUserInfo.getEquity(), MoneyUtil.addPrice(beanUserInfo.getBalance(), beanUserInfo.getCredit())))));
+                    mOpenPl.setTextColor(context.getResources().getColor(Double.valueOf(mOpenPl.getText().toString())>0?R.color.text_color_price_rise:R.color.text_color_price_fall));
                     try {
                         if (!beanUserInfo.getMargin().equals("0"))
                             mMarginLevel.setText(MoneyUtil.moneyFormat(String.valueOf(MoneyUtil.div(beanUserInfo.getBalance(), beanUserInfo.getMargin()))));

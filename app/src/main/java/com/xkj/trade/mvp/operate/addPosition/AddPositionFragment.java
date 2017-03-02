@@ -158,8 +158,8 @@ public class AddPositionFragment extends BaseFragment implements View.OnClickLis
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getCurrentSymbol(BeanIndicatorData beanIndicatorData) {
         Log.i(TAG, "getCurrentSymbol: " + beanIndicatorData.getSymbol());
-        SpannableString askTextBig = MoneyUtil.getRealTimePriceTextBig(context, beanIndicatorData.getBid());
-        SpannableString bidTextBig = MoneyUtil.getRealTimePriceTextBig(context, beanIndicatorData.getAsk());
+        SpannableString askTextBig = MoneyUtil.getRealTimePriceTextBig(context, beanIndicatorData.getAsk());
+        SpannableString bidTextBig = MoneyUtil.getRealTimePriceTextBig(context, beanIndicatorData.getBid());
         if (beanIndicatorData.getBidColor() != 0) {
             bidTextBig.setSpan(new ForegroundColorSpan(beanIndicatorData.getBidColor()), 0, bidTextBig.length(),
                     Spannable.SPAN_INCLUSIVE_EXCLUSIVE);

@@ -29,6 +29,7 @@
         android:textAppearance="@style/TextHeader" />
 
     <TextView
+        android:id="@+id/tv_4"
         android:layout_width="0.0dip"
         android:layout_height="wrap_content"
         android:layout_weight="3"

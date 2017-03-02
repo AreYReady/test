@@ -51,6 +51,7 @@ public class BeanMasterMyCopy {
          * masterid : 88079553
          * profitper : 4.87
          * huiceper : -18.49
+         * uiStatus//不是网路数据，是为了记录adapter的状态
          */
 
         private int fstatus;
@@ -61,6 +62,37 @@ public class BeanMasterMyCopy {
         private String masterid;
         private double profitper;
         private double huiceper;
+
+        public ResponseBean(int fstatus, String face_url, int copynumber, int copymoney, String name, String masterid, double profitper, double huiceper) {
+            this.fstatus = fstatus;
+            this.face_url = face_url;
+            this.copynumber = copynumber;
+            this.copymoney = copymoney;
+            this.name = name;
+            this.masterid = masterid;
+            this.profitper = profitper;
+            this.huiceper = huiceper;
+            init();
+        }
+
+        public ResponseBean() {
+init();
+        }
+
+        public Boolean getUiStatus() {
+            return uiStatus;
+        }
+
+        public void setUiStatus(Boolean uiStatus) {
+            this.uiStatus = uiStatus;
+        }
+
+        private void init(){
+            this.uiStatus=false;
+
+        }
+
+        private Boolean uiStatus;
 
         public int getFstatus() {
             return fstatus;

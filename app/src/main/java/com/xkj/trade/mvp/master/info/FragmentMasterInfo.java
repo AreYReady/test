@@ -29,6 +29,7 @@ import com.xkj.trade.bean_.BeanBaseResponse;
 import com.xkj.trade.bean_.BeanMasterClosePosition;
 import com.xkj.trade.bean_.BeanMasterOpenPosition;
 import com.xkj.trade.bean_.BeanMasterRank;
+import com.xkj.trade.bean_notification.NotificationMasterStatus;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.mvp.master.info.contract.MasterInfoContract;
 import com.xkj.trade.mvp.master.info.presenter.MasterInfoPresenterImpl;
@@ -40,6 +41,8 @@ import com.xkj.trade.utils.view.CustomSeekBar;
 import com.xkj.trade.utils.view.CustomViewPager;
 import com.xkj.trade.utils.view.MyScrollView;
 import com.xkj.trade.utils.view.ZoomOutPageTransformer;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -317,6 +320,7 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
                 public void run() {
                     mCopyButton.setText(R.string.uncopy);
                     rank.setStatus(1);
+                    sendNotification();
                     mCoverUncopy.setVisibility(View.VISIBLE);
                     mCoverCopy.setVisibility(View.GONE);
                 }
@@ -332,6 +336,7 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
                 public void run() {
                     mCopyButton.setText(R.string.copy);
                     rank.setStatus(0);
+                    sendNotification();
                     mCoverUncopy.setVisibility(View.GONE);
                     mCoverCopy.setVisibility(View.VISIBLE);
                 }
@@ -342,14 +347,18 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
     @Override
     public void responseNoFocus(BeanBaseResponse beanBaseResponse) {
         if(beanBaseResponse.getStatus()==1){
+            rank.setFstatus(0);
+            sendNotification();
             ThreadHelper.instance().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    rank.setFstatus(0);
                     mWatch.setText(R.string.watch);
                 }
             });
         }
+    }
+    private void  sendNotification(){
+        EventBus.getDefault().post(new NotificationMasterStatus(rank.getLogin(),rank.getFstatus(),rank.getStatus()));
     }
 
     @Override
@@ -359,6 +368,7 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
                 @Override
                 public void run() {
                     rank.setFstatus(1);
+                    sendNotification();
                     mWatch.setText(R.string.unwatch);
                 }
             });

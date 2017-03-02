@@ -18,14 +18,14 @@ import com.google.gson.Gson;
 import com.xkj.trade.R;
 import com.xkj.trade.bean_.BeanPendingPosition;
 import com.xkj.trade.mvp.operate.OperatePositionActivity;
+import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.SystemUtil;
 
 import java.util.List;
 import java.util.Map;
 
 import static com.xkj.trade.constant.RequestConstant.CURRENT_PRICE;
-import static com.xkj.trade.constant.RequestConstant.PROFIT;
-import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY;
+import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY_STRING;
 
 /**
  * Created by huangsc on 2017-02-16.
@@ -62,13 +62,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
             Bundle payload = (Bundle) payloads.get(0);
             for(String key:payload.keySet()){
                 switch (key){
-                    case PROFIT:
-                        holder.tvProfit.setText(mDataList.get(position).getProfit());
-                        if(Double.valueOf(mDataList.get(position).getProfit())>0)
-                            holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
-                        else
-                            holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
-                        break;
                     case CURRENT_PRICE:
                         holder.bEditPendingPosition.setText("修改"+mDataList.get(position).getPrice());
                         break;
@@ -106,7 +99,8 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
         holder.bDeletePendingPosition.setOnClickListener(this);
         holder.bEditPendingPosition.setOnClickListener(this);
         holder.tvCountyName.setText(mData.getSymbol());
-        holder.tvMoney.setText(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY));
+//        holder.tvMoney.setText(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY));
+        holder.tvMoney.setText(MoneyUtil.deleteZero(MoneyUtil.mulPrice(mData.getVolume(),VOLUME_MONEY_STRING)));
         if (mData.getCmd().contains("sell")) {
             holder.tvOperate.setText("卖");
             holder.tvOperate.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
@@ -114,11 +108,11 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
             holder.tvOperate.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
             holder.tvOperate.setText("买");
         }
-        holder.tvProfit.setText(mData.getProfit());
-        if(Double.valueOf(mData.getProfit())>0)
-            holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
-        else
-            holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
+        holder.tvProfit.setText(mData.getOpenprice());
+//        if(Double.valueOf(mData.getProfit())>0)
+//            holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
+//        else
+//            holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
         holder.tvStopLoss.setText(mData.getSl());
         holder.tvTakeProfit.setText(mData.getTp());
     }
