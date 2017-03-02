@@ -65,11 +65,17 @@ public class DrawPriceView extends View {
         for (BeanDrawPriceData beanDrawPriceData : mDrawPrice) {
             if(beanDrawPriceData.getColor()!=0){
                 //实时数据
+                Paint.FontMetrics fontMetrics = mRealTimePaint.getFontMetrics();
+                float top = fontMetrics.top;//为基线到字体上边框的距离,即上图中的top
+                float bottom = fontMetrics.bottom;//为基线到字体下边框的距离,即上图中的bottom
                 mRealTimePaint.setColor(beanDrawPriceData.getColor());
-                RectF oval3 = new RectF(20, beanDrawPriceData.getPriceY()-50, getWidth()-20, beanDrawPriceData.getPriceY()+20);// 设置个新的长方形
+                RectF oval3 = new RectF(0, beanDrawPriceData.getPriceY()-SystemUtil.dp2px(mContext,10), getWidth(), beanDrawPriceData.getPriceY()+SystemUtil.dp2px(mContext,10));// 设置个新的长方形
                 canvas.drawRoundRect(oval3, 200, 200, mRealTimePaint);//第二个参数是x半径，第三个参数是y半径
                 mRealTimePaint.setColor(Color.WHITE);
-                canvas.drawText(beanDrawPriceData.getPriceString(), getResources().getDimension(R.dimen.space_big), beanDrawPriceData.getPriceY(), mRealTimePaint);
+                mRealTimePaint.setTextAlign(Paint.Align.CENTER);
+
+
+                canvas.drawText(beanDrawPriceData.getPriceString(), getWidth()/2, beanDrawPriceData.getPriceY()+Math.abs(top/2+bottom/2), mRealTimePaint);
                 mRealTimePaint.setStyle(Paint.Style.FILL);//充满
                 mRealTimePaint.setColor(beanDrawPriceData.getColor());
                 mRealTimePaint.setAntiAlias(true);// 设置画笔的锯齿效果
