@@ -5,15 +5,14 @@
     android:orientation="horizontal"
     android:paddingLeft="@dimen/space_big"
     android:paddingRight="@dimen/space_big"
-    android:paddingTop="@dimen/space_big"
+    android:paddingTop="@dimen/space_xxbig"
     >
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/civ_image"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:src="@mipmap/menu_avatar" />
+        android:layout_width="30dip"
+        android:layout_height="30dip"
+        android:background="@mipmap/menu_avatar" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -21,6 +20,7 @@
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="4"
+        android:layout_marginLeft="@dimen/space_xxbig"
         android:gravity="left"
          />
 
@@ -29,7 +29,7 @@
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:gravity="right"
+        android:layout_gravity="center"
         android:text="总收益率" />
 
     <TextView

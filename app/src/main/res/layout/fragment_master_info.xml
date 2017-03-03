@@ -8,14 +8,14 @@
     <LinearLayout
         android:id="@+id/ll_master_head"
         android:layout_width="match_parent"
-        android:layout_height="50dip"
+        android:layout_height="75dip"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/space_xbig">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/civ_master"
-            android:layout_width="@dimen/image_common"
-            android:layout_height="@dimen/image_common"
+            android:layout_width="57.5dip"
+            android:layout_height="57.5dip"
             android:layout_gravity="center"
             android:background="@mipmap/menu_avatar"
             />

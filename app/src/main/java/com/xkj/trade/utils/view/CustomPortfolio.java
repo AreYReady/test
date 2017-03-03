@@ -65,6 +65,7 @@ private Context context;
         textPaint.setStrokeWidth(5);
         textPaint.setTextSize(40);
         textPaint.setTextAlign(Paint.Align.CENTER);
+        linkLendth=SystemUtil.dp2px(context,50);
     }
 
     //    /**
@@ -119,7 +120,7 @@ private Context context;
      * @param canvas
      * @param xy
      */
-    private int linkLendth=150;
+    private int linkLendth;
     private void drawText(Canvas canvas, Point point,BeanPortfolioData data) {
         Point endPoint=new Point();
         if(Math.abs(centerPoint.x-point.x)>Math.abs(centerPoint.y-point.y)){

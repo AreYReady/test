@@ -20,6 +20,7 @@ import com.xkj.trade.adapter.OpenAdapter;
 import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.bean.RealTimeDataList;
 import com.xkj.trade.bean_.BeanOpenPosition;
+import com.xkj.trade.bean_notification.NotificationPositionCount;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.diffcallback.OpenPositionDiff;
@@ -28,6 +29,7 @@ import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.DataUtil;
 import com.xkj.trade.utils.ThreadHelper;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -122,6 +124,7 @@ public class FragmentOpenPosition extends BaseFragment {
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(false);
                 mDataList=mBeanOpenPosition.getData().getList();
+                EventBus.getDefault().post(new NotificationPositionCount(mDataList.size()));
                 mOpenAdapter.setData(mDataList);
                 mOpenAdapter.notifyDataSetChanged();
             }
@@ -163,4 +166,5 @@ public class FragmentOpenPosition extends BaseFragment {
             diffResult.dispatchUpdatesTo(mOpenAdapter);
         }
     };
+
 }

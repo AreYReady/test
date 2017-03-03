@@ -7,7 +7,7 @@
     <LinearLayout
         android:id="@+id/ll_button_group"
         android:layout_width="match_parent"
-        android:layout_height="100dip"
+        android:layout_height="78dip"
         android:orientation="horizontal">
 
         <Button
@@ -59,6 +59,6 @@
         android:textSize="20dip" />
 
     <include
-        layout="@layout/v_order_button_bottom"
+        layout="@layout/v_order_button_bottom" android:layout_width="match_parent" android:layout_height="78dip"
         />
 </LinearLayout>

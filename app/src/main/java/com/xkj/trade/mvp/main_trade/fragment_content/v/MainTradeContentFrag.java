@@ -131,6 +131,9 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     private int firstItemPosition;
     private int lastItemPosition;
     public static Map<String,BeanAllSymbols.SymbolPrices> realTimeMap=new ArrayMap<>();
+    private TextView mOpenPositionCount;
+    private TextView mProfitCount;
+    private String mProfitCountMoney;
 
 
     @Nullable
@@ -375,6 +378,10 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         mShowSymbolInfo = (LinearLayout) view.findViewById(R.id.ll_show_symbol_info);
         mShowSymbolAsk = (TextView) view.findViewById(R.id.tv_symbol_ask);
         mShowSymbolBid = (TextView) view.findViewById(R.id.tv_symbol_bid);
+        mOpenPositionCount=(TextView)view.findViewById(R.id.tv_open_position_count);
+        mProfitCount=(TextView)view.findViewById(R.id.tv_profit_count);
+
+
     }
 
     @Override
@@ -465,6 +472,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         if(mBeanOpenList==null){
             mBeanOpenList=new ArrayList<>();
         }
+        mProfitCountMoney="0";
         for(BeanOpenPosition.DataBean.ListBean bean:mBeanOpenList){
             if(bean.getCmd().equals("buy")){
                 bean.setPrice(MyApplication.beanIndicatorData.getBid());
@@ -472,6 +480,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                 bean.setPrice(MyApplication.beanIndicatorData.getAsk());
             }
         }
+        mProfitCountMoney=cacleProfitCount();
         handler.sendEmptyMessage(REFRESH_OPEN_POSITION);
     }
 
@@ -696,6 +705,12 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                         }
                         ((TextView) childAt.findViewById(R.id.id_index_gallery_item_text_ask)).setText(askTextBig);
                         ((TextView) childAt.findViewById(R.id.id_index_gallery_item_text_bid)).setText(bidTextBig);
+                        if(beanIndicatorData.getAskColor()==0){
+                        }else if(beanIndicatorData.getAskColor()==getResources().getColor(R.color.text_color_price_rise)){
+                            ((BGABadgeImageView) childAt.findViewById(R.id.id_index_gallery_item_image)).showDrawableBadge(BitmapFactory.decodeResource(getResources(), R.mipmap.rise));
+                        }else if(beanIndicatorData.getAskColor()==getResources().getColor(R.color.text_color_price_fall)){
+                            ((BGABadgeImageView) childAt.findViewById(R.id.id_index_gallery_item_image)).showDrawableBadge(BitmapFactory.decodeResource(getResources(), R.mipmap.fall));
+                        }
 //                        mViewPagerAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -736,6 +751,9 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                     if(mOpenAdapter==null){
                         mTradeContent.setAdapter(mOpenAdapter=new OpenAdapter(context,mBeanOpenList));
                     }
+                    mOpenPositionCount.setText(String.format(getString(R.string.num_open_positions),""+mBeanOpenList.size()));
+                    mProfitCount.setText("$"+mProfitCountMoney);
+                    mProfitCount.setTextColor(Double.valueOf(mProfitCountMoney)>0?getResources().getColor(R.color.text_color_price_rise):getResources().getColor(R.color.text_color_price_fall));
                     mOpenAdapter.setData(mBeanOpenList);
                     mOpenAdapter.notifyDataSetChanged();
                     break;
@@ -768,7 +786,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
             final BeanIndicatorData info = subSymbols.get(position);
             View view = LayoutInflater.from(context).inflate(R.layout.vp_indicator_head, null);
             BGABadgeImageView isSymbol = (BGABadgeImageView) view.findViewById(R.id.id_index_gallery_item_image);
-            isSymbol.showDrawableBadge(BitmapFactory.decodeResource(getResources(), R.drawable.toggle_switch));
             view.setTag(info.getImageResource());
             TextView tvLeft = (TextView) view.findViewById(R.id.id_index_gallery_item_text_ask);
             TextView tvRight = (TextView) view.findViewById(R.id.id_index_gallery_item_text_bid);
@@ -899,9 +916,18 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     Runnable mRunnable=new Runnable() {
         @Override
         public void run() {
+            mProfitCount.setText("$"+cacleProfitCount());
+            mProfitCount.setTextColor(Double.valueOf(mProfitCountMoney)>0?getResources().getColor(R.color.text_color_price_rise):getResources().getColor(R.color.text_color_price_fall));
             diffResult.dispatchUpdatesTo(mOpenAdapter);
         }
     };
+    private String cacleProfitCount(){
+        mProfitCountMoney="0";
+        for(BeanOpenPosition.DataBean.ListBean listBean:mBeanOpenList){
+           mProfitCountMoney=MoneyUtil.addPrice(mProfitCountMoney,listBean.getProfit());
+        }
+        return mProfitCountMoney;
+    }
 
     @Subscribe
     public void enterOrder(BeanOpenPosition beanOpenPosition){

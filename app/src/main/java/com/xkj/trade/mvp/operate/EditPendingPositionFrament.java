@@ -25,6 +25,7 @@ import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
+import com.xkj.trade.utils.DataUtil;
 import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.RoundImageView;
 import com.xkj.trade.utils.view.AddSubEditText;
@@ -157,6 +158,7 @@ public class EditPendingPositionFrament extends BaseFragment {
                 enterOrder();
             }
         });
+        mRivTradeSymbol.setImageResource(DataUtil.getImageId(mData.getSymbol()));
         requestSubSymbol();
     }
     private void requestSubSymbol() {

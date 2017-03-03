@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xkj.trade.R;
@@ -98,6 +99,7 @@ public class FragmentMasterStream extends BaseFragment {
             holder.tvTp.setText(beanAdapterStream.getTp());
 
             holder.tvTp.setTextColor(getResources().getColor(Double.valueOf(beanAdapterStream.getTp().replace("%",""))>0?R.color.text_color_price_rise:R.color.text_color_price_fall));
+            holder.mImageView.setImageResource(beanAdapterStream.getImageId());
         }
 
         @Override
@@ -109,11 +111,13 @@ public class FragmentMasterStream extends BaseFragment {
             TextView tvPosition;
             TextView tvPositionPrices;
             TextView tvTp;
+            ImageView mImageView;
             public MyHolder(View itemView) {
                 super(itemView);
                 tvPosition=(TextView)itemView.findViewById(R.id.tv_position);
                 tvPositionPrices=(TextView)itemView.findViewById(R.id.tv_position_price);
                 tvTp=(TextView)itemView.findViewById(R.id.tv_tp);
+                mImageView=(ImageView)itemView.findViewById(R.id.civ_image);
             }
         }
     }

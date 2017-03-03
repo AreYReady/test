@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingTop="@dimen/space_big">
+    android:paddingTop="@dimen/space_xxbig">
 
     <RelativeLayout
         android:layout_width="0dip"
@@ -15,7 +15,7 @@
             android:layout_width="30dip"
             android:layout_height="30dip"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/ic_country_flag_ad" />
+             />
     </RelativeLayout>
 
     <LinearLayout

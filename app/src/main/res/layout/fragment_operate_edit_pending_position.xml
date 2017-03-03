@@ -38,18 +38,20 @@
 
     </LinearLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:paddingTop="10dip"
-        android:layout_weight="1"
-        android:background="@color/toolbars_title_dark"
-        android:gravity="bottom|center_horizontal">
+    <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dip"-->
+        <!--android:paddingTop="10dip"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@color/toolbars_title_dark"-->
+        <!--android:gravity="bottom|center_horizontal">-->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
             android:paddingTop="@dimen/y50"
+            android:background="@color/toolbars_title_dark"
             android:paddingRight="@dimen/space_big"
             android:orientation="vertical">
 
@@ -75,7 +77,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"></com.xkj.trade.utils.view.CustomDateSelect>
         </LinearLayout>
-    </ScrollView>
+    <!--</ScrollView>-->
         <View
             android:layout_width="match_parent"
             android:layout_height="0.1dp"

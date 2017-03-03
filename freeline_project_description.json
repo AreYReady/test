@@ -1,0 +1,96 @@
+{
+    "project_type": "gradle",
+    "android_gradle_plugin_version": "2.2.2",
+    "freeline_gradle_plugin_version": "0.8.4",
+    "java_home": "D:\\Program Files\\Android\\Android Studio\\jre",
+    "freeline_cache_dir": "D:\\hsc\\Projects\\Trade",
+    "auto_dependency": true,
+    "product_flavor": "",
+    "build_script": "gradlew.bat :app:assembleDebug",
+    "build_script_work_directory": "",
+    "root_dir": "D:\\hsc\\Projects\\Trade",
+    "main_project_name": "app",
+    "main_project_dir": "app",
+    "build_directory": "D:\\hsc\\Projects\\Trade\\app\\build",
+    "build_cache_dir": "D:\\hsc\\Projects\\Trade\\app\\build\\freeline",
+    "build_tools_version": "24.0.0",
+    "sdk_directory": "D:\\xujd\\SDK",
+    "build_tools_directory": "D:\\xujd\\SDK\\build-tools\\24.0.0",
+    "compile_sdk_version": "android-24",
+    "compile_sdk_directory": "D:\\xujd\\SDK\\platforms\\android-24",
+    "package": "trade.xkj.com.trade",
+    "debug_package": "trade.xkj.com.trade",
+    "main_manifest_path": "D:\\hsc\\Projects\\Trade\\app\\src\\main\\AndroidManifest.xml",
+    "launcher": "trade.xkj.com.trade.mvp.login.UserLoginActivity",
+    "apk_path": "D:\\hsc\\Projects\\Trade\\app\\build\\outputs\\apk\\app-debug.apk",
+    "extra_dep_res_paths": [
+        
+    ],
+    "exclude_dep_res_paths": [
+        
+    ],
+    "main_r_path": "D:\\hsc\\Projects\\Trade\\app\\build\\generated\\source\\r\\debug\\R.java",
+    "use_jdk8": true,
+    "main_src_directory": [
+        "D:\\hsc\\Projects\\Trade\\app\\src\\debug\\java",
+        "D:\\hsc\\Projects\\Trade\\app\\src\\main\\java"
+    ],
+    "main_res_directory": [
+        "D:\\hsc\\Projects\\Trade\\app\\src\\debug\\res",
+        "D:\\hsc\\Projects\\Trade\\app\\src\\main\\res"
+    ],
+    "main_assets_directory": [
+        "D:\\hsc\\Projects\\Trade\\app\\src\\debug\\assets",
+        "D:\\hsc\\Projects\\Trade\\app\\src\\main\\assets"
+    ],
+    "main_jni_directory": [
+        "D:\\hsc\\Projects\\Trade\\app\\src\\debug\\jni",
+        "D:\\hsc\\Projects\\Trade\\app\\src\\main\\jni"
+    ],
+    "main_jniLibs_directory": [
+        "D:\\hsc\\Projects\\Trade\\app\\src\\debug\\jniLibs",
+        "D:\\hsc\\Projects\\Trade\\app\\src\\main\\jniLibs"
+    ],
+    "project_source_sets": {
+        "app": {
+            "main_src_directory": [
+                "D:\\hsc\\Projects\\Trade\\app\\src\\debug\\java",
+                "D:\\hsc\\Projects\\Trade\\app\\src\\main\\java"
+            ],
+            "main_res_directory": [
+                "D:\\hsc\\Projects\\Trade\\app\\src\\debug\\res",
+                "D:\\hsc\\Projects\\Trade\\app\\src\\main\\res"
+            ],
+            "main_assets_directory": [
+                "D:\\hsc\\Projects\\Trade\\app\\src\\debug\\assets",
+                "D:\\hsc\\Projects\\Trade\\app\\src\\main\\assets"
+            ],
+            "main_jni_directory": [
+                "D:\\hsc\\Projects\\Trade\\app\\src\\debug\\jni",
+                "D:\\hsc\\Projects\\Trade\\app\\src\\main\\jni"
+            ],
+            "main_jniLibs_directory": [
+                "D:\\hsc\\Projects\\Trade\\app\\src\\debug\\jniLibs",
+                "D:\\hsc\\Projects\\Trade\\app\\src\\main\\jniLibs"
+            ],
+            "main_manifest_path": "D:\\hsc\\Projects\\Trade\\app\\src\\main\\AndroidManifest.xml"
+        }
+    },
+    "modules": [
+        {
+            "name": "app",
+            "path": "D:\\hsc\\Projects\\Trade\\app"
+        }
+    ],
+    "module_dependencies": {
+        "app": [
+            
+        ]
+    },
+    "databinding": [
+        
+    ],
+    "databinding_modules": [
+        
+    ]
+}

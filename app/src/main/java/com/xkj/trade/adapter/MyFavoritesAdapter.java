@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.xkj.trade.R;
 import com.xkj.trade.bean_.BeanAllSymbols;
+import com.xkj.trade.utils.DataUtil;
 import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.SystemUtil;
 
@@ -51,7 +52,7 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
     @Override
     public void onBindViewHolder(final MyFavoritesHolder holder, int position) {
         final BeanAllSymbols.SymbolPrices symbolPrices = data.get(position);
-        holder.flag.setImageResource(select(symbolPrices.getSymbol()));
+        holder.flag.setImageResource(DataUtil.getImageId(symbolPrices.getSymbol()));
         SpannableString askTextBig = MoneyUtil.getRealTimePriceTextBig(context, symbolPrices.getBid());
         SpannableString bidTextBig = MoneyUtil.getRealTimePriceTextBig(context, symbolPrices.getAsk());
         if (symbolPrices.getBidColor() != 0) {

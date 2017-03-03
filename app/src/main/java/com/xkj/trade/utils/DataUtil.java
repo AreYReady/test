@@ -175,44 +175,330 @@ public class DataUtil {
      * 例如： EUR/GBP报价为 0.9036, 于此同时 EUR/USD报价为 1.5021,点值计算如下（EUR/GBP最小变动价格为 0.0001）：
      * 标准手一点点差 = （100,000 X 0.0001 X 1.5021）/ 0.9036 = $16.62
      *
-     * @param openPrices  订单的开仓价格
-     * @param action        buy为买，sell为卖
+     * @param openPrices 订单的开仓价格
+     * @param action     buy为买，sell为卖
      */
     public static String getProfit(RealTimeDataList.BeanRealTime beanRealTime, String action, String openPrices, String volume) {
-        return getProfit(beanRealTime.getSymbol(),beanRealTime.getAsk(),beanRealTime.getBid(),action,openPrices,volume);
+        return getProfit(beanRealTime.getSymbol(), beanRealTime.getAsk(), beanRealTime.getBid(), action, openPrices, volume);
     }
-    public static String getProfit(String symbol,double ask,double bid,String action,String openPrices,String volume) {
+
+    public static String getProfit(String symbol, double ask, double bid, String action, String openPrices, String volume) {
         try {
             double currentPrices;
             double diffSpace;
             if (action.contains("buy")) {
-                currentPrices=bid;
-                diffSpace= subPrice(Double.valueOf(currentPrices), Double.valueOf(openPrices));
+                currentPrices = bid;
+                diffSpace = subPrice(Double.valueOf(currentPrices), Double.valueOf(openPrices));
             } else {
-                currentPrices=ask;
-                diffSpace= MoneyUtil.subPrice( Double.valueOf(openPrices),Double.valueOf(currentPrices));
+                currentPrices = ask;
+                diffSpace = MoneyUtil.subPrice(Double.valueOf(openPrices), Double.valueOf(currentPrices));
             }
             if (symbol.substring(0, 2).equals("USD")) {
                 //直接盘:1手一点的点值为 10美元,
-              return   MoneyUtil.moneyFormat(MoneyUtil.mulPrice(diffSpace, VOLUME_MONEY*Double.valueOf(volume)), 2);
+                return MoneyUtil.moneyFormat(MoneyUtil.mulPrice(diffSpace, VOLUME_MONEY * Double.valueOf(volume)), 2);
             } else if (symbol.substring(symbol.length() - 3, symbol.length()).equals("USD")) {
                 //间接盘
                 // * 例如,USD/JPY 报价 91.28 的时候点值计算如下（USD/JPY最小变动价格为 0.01）：
 //                * 1手一点点差 = （100,000 X 0.01） / 91.28 = $ 10.96
-             return   String.valueOf(MoneyUtil.div(MoneyUtil.mulPrice(VOLUME_MONEY*Double.valueOf(volume),diffSpace), Double.valueOf(currentPrices), 2));
+                return String.valueOf(MoneyUtil.div(MoneyUtil.mulPrice(VOLUME_MONEY * Double.valueOf(volume), diffSpace), Double.valueOf(currentPrices), 2));
             } else {
                 BeanAllSymbols.SymbolPrices symbolPrices = MainTradeContentFrag.realTimeMap.get(symbol.substring(0, 3).concat("USD"));
                 //交叉盘
                 //例如： EUR/GBP报价为 0.9036, 于此同时 EUR/USD报价为 1.5021,点值计算如下（EUR/GBP最小变动价格为 0.0001）：
 //                标准手一点点差 = （100,000 X 0.0001 X 1.5021）/ 0.9036 = $16.62
-                  return String.valueOf(MoneyUtil.div(VOLUME_MONEY*Double.valueOf(volume)
-                          * diffSpace
-                          * (Double.valueOf((MainTradeContentFrag.realTimeMap.get(symbol.substring(0, 3).concat("USD"))).getBid())),Double.valueOf(currentPrices), 2));
+                return String.valueOf(MoneyUtil.div(VOLUME_MONEY * Double.valueOf(volume)
+                        * diffSpace
+                        * (Double.valueOf((MainTradeContentFrag.realTimeMap.get(symbol.substring(0, 3).concat("USD"))).getBid())), Double.valueOf(currentPrices), 2));
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static int getImageId(String symbol) {
+        int id = 0;
+        switch (symbol.toLowerCase()) {
+            case "我的收藏夹":
+                id=R.mipmap.small_my_favourites_icon;
+                break;
+            case "audcad":
+                id = R.mipmap.ic_instrument_audcad;
+                break;
+            case "audchf":
+                id = R.mipmap.ic_instrument_audchf;
+                break;
+            case "audhuf":
+                id = R.mipmap.ic_instrument_audhuf;
+                break;
+            case "audjpy":
+                id = R.mipmap.ic_instrument_audjpy;
+                break;
+            case "audnzd":
+                id = R.mipmap.ic_instrument_audnzd;
+                break;
+            case "audusd":
+                id = R.mipmap.ic_instrument_audusd;
+                break;
+            case "be":
+                id = R.mipmap.ic_instrument_be;
+                break;
+            case "beans":
+                id = R.mipmap.ic_instrument_beans;
+                break;
+            case "br":
+                id = R.mipmap.ic_instrument_br;
+                break;
+            case "brent":
+                id = R.mipmap.ic_instrument_brent;
+                break;
+            case "bronze":
+                id = R.mipmap.ic_instrument_bronze;
+                break;
+            case "btcusd":
+                id = R.mipmap.ic_instrument_btcusd;
+                break;
+            case "ca":
+                id = R.mipmap.ic_instrument_ca;
+                break;
+            case "cadchf":
+                id = R.mipmap.ic_instrument_cadchf;
+                break;
+            case "cadjpy":
+                id = R.mipmap.ic_instrument_cadjpy;
+                break;
+            case "ch":
+                id = R.mipmap.ic_instrument_ch;
+                break;
+            case "chfjpy":
+                id = R.mipmap.ic_instrument_chfjpy;
+                break;
+            case "chile":
+                id = R.mipmap.ic_instrument_chile;
+                break;
+            case "chinese":
+                id = R.mipmap.ic_instrument_chinese;
+                break;
+            case "cocoa":
+                id = R.mipmap.ic_instrument_cocoa;
+                break;
+            case "coffee":
+                id = R.mipmap.ic_instrument_coffee;
+                break;
+            case "copper":
+                id = R.mipmap.ic_instrument_copper;
+                break;
+            case "corn":
+                id = R.mipmap.ic_instrument_corn;
+                break;
+            case "cotton":
+                id = R.mipmap.ic_instrument_cotton;
+                break;
+            case "de":
+                id = R.mipmap.ic_instrument_de;
+                break;
+            case "es":
+                id = R.mipmap.ic_instrument_es;
+                break;
+            case "eu":
+                id = R.mipmap.ic_instrument_eu;
+                break;
+            case "euraud":
+                id = R.mipmap.ic_instrument_euraud;
+                break;
+            case "eurcad":
+                id = R.mipmap.ic_instrument_eurcad;
+                break;
+            case "eurchf":
+                id = R.mipmap.ic_instrument_eurchf;
+                break;
+            case "eurdkk":
+                id = R.mipmap.ic_instrument_eurdkk;
+                break;
+            case "eurgbp":
+                id = R.mipmap.ic_instrument_eurgbp;
+                break;
+            case "eurhuf":
+                id = R.mipmap.ic_instrument_eurhuf;
+                break;
+            case "eurjpy":
+                id = R.mipmap.ic_instrument_eurjpy;
+                break;
+            case "eurnok":
+                id = R.mipmap.ic_instrument_eurnok;
+                break;
+            case "eurnzd":
+                id = R.mipmap.ic_instrument_eurnzd;
+                break;
+            case "eurpln":
+                id = R.mipmap.ic_instrument_eurpln;
+                break;
+            case "eurrub":
+                id = R.mipmap.ic_instrument_eurrub;
+                break;
+            case "eursek":
+                id = R.mipmap.ic_instrument_eursek;
+                break;
+            case "eurtry":
+                id = R.mipmap.ic_instrument_eurtry;
+                break;
+            case "eurusd":
+                id = R.mipmap.ic_instrument_eurusd;
+                break;
+            case "eurzar":
+                id = R.mipmap.ic_instrument_eurzar;
+                break;
+            case "fr":
+                id = R.mipmap.ic_instrument_fr;
+                break;
+            case "gas":
+                id = R.mipmap.ic_instrument_gas;
+                break;
+            case "gbpaud":
+                id = R.mipmap.ic_instrument_gbpaud;
+                break;
+            case "gbpcad":
+                id = R.mipmap.ic_instrument_gbpcad;
+                break;
+            case "gbpchf":
+                id = R.mipmap.ic_instrument_gbpchf;
+                break;
+            case "gbphuf":
+                id = R.mipmap.ic_instrument_gbphuf;
+                break;
+            case "gbpjpy":
+                id = R.mipmap.ic_instrument_gbpjpy;
+                break;
+            case "gbpnzd":
+                id = R.mipmap.ic_instrument_gbpnzd;
+                break;
+            case "gbprub":
+                id = R.mipmap.ic_instrument_gbprub;
+                break;
+            case "gbpusd":
+                id = R.mipmap.ic_instrument_gbpusd;
+                break;
+            case "gbpzar":
+                id = R.mipmap.ic_instrument_gbpzar;
+                break;
+            case "gold":
+                id = R.mipmap.ic_instrument_gold;
+                break;
+            case "hk":
+                id = R.mipmap.ic_instrument_hk;
+                break;
+            case "in":
+                id = R.mipmap.ic_instrument_in;
+                break;
+            case "it":
+                id = R.mipmap.ic_instrument_it;
+                break;
+            case "jp":
+                id = R.mipmap.ic_instrument_jp;
+                break;
+            case "nl":
+                id = R.mipmap.ic_instrument_nl;
+                break;
+            case "nzdcad":
+                id = R.mipmap.ic_instrument_nzdcad;
+                break;
+            case "nzdchf":
+                id = R.mipmap.ic_instrument_nzdchf;
+                break;
+            case "nzdjpy":
+                id = R.mipmap.ic_instrument_nzdjpy;
+                break;
+            case "nzdusd":
+                id = R.mipmap.ic_instrument_nzdusd;
+                break;
+            case "oat":
+                id = R.mipmap.ic_instrument_oat;
+                break;
+            case "oil":
+                id = R.mipmap.ic_instrument_oil;
+                break;
+            case "orange":
+                id = R.mipmap.ic_instrument_orange;
+                break;
+            case "paladium":
+                id = R.mipmap.ic_instrument_paladium;
+                break;
+            case "rice":
+                id = R.mipmap.ic_instrument_rice;
+                break;
+            case "ru":
+                id = R.mipmap.ic_instrument_ru;
+                break;
+            case "silver":
+                id = R.mipmap.ic_instrument_silver;
+                break;
+            case "sugar":
+                id = R.mipmap.ic_instrument_sugar;
+                break;
+            case "uk":
+                id = R.mipmap.ic_instrument_uk;
+                break;
+            case "us":
+                id = R.mipmap.ic_instrument_us;
+                break;
+            case "usdcad":
+                id = R.mipmap.ic_instrument_usdcad;
+                break;
+            case "usdchf":
+                id = R.mipmap.ic_instrument_usdchf;
+                break;
+            case "usdczk":
+                id = R.mipmap.ic_instrument_usdczk;
+                break;
+            case "usddkk":
+                id = R.mipmap.ic_instrument_usddkk;
+                break;
+            case "usdhkd":
+                id = R.mipmap.ic_instrument_usdhkd;
+                break;
+            case "usdhuf":
+                id = R.mipmap.ic_instrument_usdhuf;
+                break;
+            case "usdils":
+                id = R.mipmap.ic_instrument_usdils;
+                break;
+            case "usdjpy":
+                id = R.mipmap.ic_instrument_usdjpy;
+                break;
+            case "usdmxn":
+                id = R.mipmap.ic_instrument_usdmxn;
+                break;
+            case "usdnok":
+                id = R.mipmap.ic_instrument_usdnok;
+                break;
+            case "usdpln":
+                id = R.mipmap.ic_instrument_usdpln;
+                break;
+            case "usdron":
+                id = R.mipmap.ic_instrument_usdron;
+                break;
+            case "usdrub":
+                id = R.mipmap.ic_instrument_usdrub;
+                break;
+            case "usdsek":
+                id = R.mipmap.ic_instrument_usdsek;
+                break;
+            case "usdsgd":
+                id = R.mipmap.ic_instrument_usdsgd;
+                break;
+            case "usdtry":
+                id = R.mipmap.ic_instrument_usdtry;
+                break;
+            case "usdzar":
+                id = R.mipmap.ic_instrument_usdzar;
+                break;
+            case "wheat":
+                id = R.mipmap.ic_instrument_wheat;
+                break;
+            default:
+                break;
+        }
+        return id;
     }
 
 }

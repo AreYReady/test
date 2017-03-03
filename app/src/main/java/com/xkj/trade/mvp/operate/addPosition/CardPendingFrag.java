@@ -20,6 +20,7 @@ import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean_.BeanBaseResponse;
 import com.xkj.trade.bean_.BeanPendingPosition;
+import com.xkj.trade.bean_notification.NotificationKeyBoard;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.utils.ACache;
@@ -32,6 +33,8 @@ import com.xkj.trade.utils.view.CustomASETGroup;
 import com.xkj.trade.utils.view.CustomSeekBar;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.Map;
@@ -151,16 +154,16 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
                 break;
             case R.id.take_profit:
                 switch (exc) {
-                    case SELL_STOP:
                     case SELL_LIMIT:
+                    case SELL_STOP:
                         if (Double.valueOf(amount) > Double.valueOf(mCPrice.getMoneyString())) {
                             mCTakeProfit.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower), mCPrice.getMoneyString()));
                         } else {
-                            mCTakeProfit.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(String.valueOf(mCsbVo.getMoney()), (MoneyUtil.subPriceToString(amount, mCPrice.getMoneyString())))));
+                                mCTakeProfit.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(String.valueOf(mCsbVo.getMoney()), (MoneyUtil.subPriceToString(amount, mCPrice.getMoneyString())))));
                         }
                         break;
-                    case BUY_STOP:
                     case BUY_LIMIT:
+                    case BUY_STOP:
                         if (Double.valueOf(amount) <Double.valueOf(mCPrice.getMoneyString())) {
                             mCTakeProfit.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher), mCPrice.getMoneyString()));
                         } else {
@@ -172,6 +175,12 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
             case R.id.price:
                 switch (exc) {
                     case BUY_LIMIT:
+                        if (Double.valueOf(amount) >Double.valueOf(MyApplication.getInstance().beanIndicatorData.getAsk())) {
+                            mCPrice.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower),MyApplication.getInstance().beanIndicatorData.getAsk()));
+                        }else{
+                            mCPrice.setmTVDescPrompt("");
+                        }
+                        break;
                     case SELL_LIMIT:
                         if (Double.valueOf(amount) <Double.valueOf(MyApplication.getInstance().beanIndicatorData.getBid())) {
                             mCPrice.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher),MyApplication.getInstance().beanIndicatorData.getBid()));
@@ -180,9 +189,15 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
                         }
                         break;
                     case BUY_STOP:
+                        if (Double.valueOf(amount) <Double.valueOf(MyApplication.getInstance().beanIndicatorData.getAsk())) {
+                            mCPrice.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher),MyApplication.getInstance().beanIndicatorData.getAsk()));
+                        }else{
+                            mCPrice.setmTVDescPrompt("");
+                        }
+                        break;
                     case SELL_STOP:
-                        if (Double.valueOf(amount) >Double.valueOf(MyApplication.getInstance().beanIndicatorData.getAsk())) {
-                            mCPrice.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher), MyApplication.getInstance().beanIndicatorData.getAsk()));
+                        if (Double.valueOf(amount) >Double.valueOf(MyApplication.getInstance().beanIndicatorData.getBid())) {
+                            mCPrice.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower), MyApplication.getInstance().beanIndicatorData.getBid()));
                         }else{
                             mCPrice.setmTVDescPrompt("");
                         }
@@ -291,5 +306,15 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getSoftKeyHeight(NotificationKeyBoard notificationKeyBoard){
+//        if(notificationKeyBoard.getHight()==0){
+//            view.findViewById(R.id.s_space).setVisibility(View.GONE);
+//        }else{
+//            view.findViewById(R.id.s_space).setLayoutParams(new LinearLayout.LayoutParams(view.getWidth(),notificationKeyBoard.getHight()));
+//            view.findViewById(R.id.s_space).setVisibility(View.VISIBLE);
+//        }
+////        view.findViewById(R.id.sv_).setFocusable(true);
     }
 }

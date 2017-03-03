@@ -7,7 +7,7 @@
     <com.xkj.trade.utils.view.AddSubEditText
         android:id="@+id/aset_aset"
         android:layout_width="250dip"
-        android:layout_height="50dip"
+        android:layout_height="40dip"
         android:layout_gravity="center_horizontal"/>
 
     <RelativeLayout

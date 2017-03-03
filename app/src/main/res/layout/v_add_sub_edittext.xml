@@ -13,7 +13,7 @@
         android:layout_weight="2"
         android:gravity="center"
         style="@style/TextDesc"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:text="-" />
 
     <View
@@ -46,6 +46,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         style="@style/TextDesc"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:text="+" />
 </LinearLayout>

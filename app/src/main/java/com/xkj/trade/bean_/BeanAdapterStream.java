@@ -25,6 +25,16 @@ public class BeanAdapterStream {
     String time;
     String symbol;
 
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
+    }
+
+    int imageId;
+
     public String getTime() {
         return time;
     }
@@ -33,13 +43,14 @@ public class BeanAdapterStream {
         this.time = time;
     }
 
-    public BeanAdapterStream(String order,String symbol,int status, String prices, String tp, String time) {
+    public BeanAdapterStream(String order,String symbol,int status, String prices, String tp, String time,int imageId) {
         this.status = status;
         this.symbol=symbol;
         this.prices = prices;
-this.order=order;
+        this.order=order;
         this.tp = tp;
         this.time=time;
+        this.imageId=imageId;
     }
 
     public String getOrder() {

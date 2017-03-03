@@ -171,5 +171,6 @@ public class AddPositionFragment extends BaseFragment implements View.OnClickLis
         mTvSymbolName.setText(beanIndicatorData.getSymbol());
         mPriceLeft.setText(askTextBig);
         mPriceRight.setText(bidTextBig);
+        mRivTradeSymbol.setImageResource(beanIndicatorData.getImageResource());
     }
 }

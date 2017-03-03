@@ -1,5 +1,7 @@
 package com.xkj.trade.bean_;
 
+import com.xkj.trade.utils.DataUtil;
+
 /**
  * Created by huangsc on 2017-02-27.
  * TODO:高手仓位信息
@@ -13,11 +15,14 @@ public class BeanMasterPosition {
         this.operater = operater;
         this.openPrice = openPrice;
         this.profit = profit;
+        this.imageId= DataUtil.getImageId(symbol);
     }
+
 
     String operater;
     String openPrice;
     String profit;
+    int imageId;
 
     public String getSymbol() {
         return symbol;
@@ -33,6 +38,14 @@ public class BeanMasterPosition {
 
     public void setOperater(String operater) {
         this.operater = operater;
+    }
+
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
     }
 
     public String getOpenPrice() {

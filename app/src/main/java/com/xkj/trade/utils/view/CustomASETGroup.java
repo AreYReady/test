@@ -3,10 +3,10 @@ package com.xkj.trade.utils.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -117,6 +117,9 @@ public class CustomASETGroup extends FrameLayout{
 
     public void setmTVDescPrompt(String prompt) {
         this.mTVDescPrompt.setText(prompt);
+    }
+    public EditText getEditText(){
+        return mASET.getEditText();
     }
 
     @Override

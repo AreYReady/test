@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ import com.xkj.trade.constant.TradeDateConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.diffcallback.MasterPositionDiff;
 import com.xkj.trade.utils.AesEncryptionUtil;
+import com.xkj.trade.utils.DataUtil;
 import com.xkj.trade.utils.DateUtils;
 import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.ThreadHelper;
@@ -166,6 +168,7 @@ public class FragmentMasterPosition extends BaseFragment {
                 holder.mTvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
             else
                 holder.mTvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
+            holder.mImageView.setImageResource(beanMasterPosition.getImageId());
         }
 
         @Override
@@ -177,12 +180,14 @@ public class FragmentMasterPosition extends BaseFragment {
 
             public MyHolder(View itemView) {
                 super(itemView);
+
                 mTvSymbolName = (TextView) itemView.findViewById(R.id.tv_symbol_name);
                 mTvOperater = (TextView) itemView.findViewById(R.id.tv_operater);
                 mTvOpenPrice = (TextView) itemView.findViewById(R.id.tv_open_price);
                 mTvProfit = (TextView) itemView.findViewById(R.id.tv_profit);
+                mImageView=(ImageView)itemView.findViewById(R.id.civ_image);
             }
-
+            ImageView mImageView;
             TextView mTvSymbolName;
             TextView mTvOperater;
             TextView mTvOpenPrice;
@@ -266,11 +271,11 @@ public class FragmentMasterPosition extends BaseFragment {
         try {
 
             for (BeanOpenPosition.DataBean.ListBean listBean : beanOpenPosition.getData().getList()) {
-                listStream.add(new BeanAdapterStream(String.valueOf(listBean.getOrder()), listBean.getSymbol(), 1, listBean.getOpenprice(), nt.format(MoneyUtil.div(listBean.getProfit(), MoneyUtil.mulPrice(listBean.getVolume(), TradeDateConstant.VOLUME_MONEY_STRING))), listBean.getOpentime()));
+                listStream.add(new BeanAdapterStream(String.valueOf(listBean.getOrder()), listBean.getSymbol(), 1, listBean.getOpenprice(), nt.format(MoneyUtil.div(listBean.getProfit(), MoneyUtil.mulPrice(listBean.getVolume(), TradeDateConstant.VOLUME_MONEY_STRING))), listBean.getOpentime(), DataUtil.getImageId(listBean.getSymbol())));
 
             }
             for (BeanClosePosition.DataBean.ListBean listBean : beanClosePosition.getData().getList()) {
-                listStream.add(new BeanAdapterStream(String.valueOf(listBean.getOrder()), listBean.getSymbol(), 2, listBean.getCloseprice(), nt.format(MoneyUtil.div(listBean.getProfit(), MoneyUtil.mulPrice(listBean.getVolume(), TradeDateConstant.VOLUME_MONEY_STRING))), listBean.getClosetime()));
+                listStream.add(new BeanAdapterStream(String.valueOf(listBean.getOrder()), listBean.getSymbol(), 2, listBean.getCloseprice(), nt.format(MoneyUtil.div(listBean.getProfit(), MoneyUtil.mulPrice(listBean.getVolume(), TradeDateConstant.VOLUME_MONEY_STRING))), listBean.getClosetime(),DataUtil.getImageId(listBean.getSymbol())));
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();

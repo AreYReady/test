@@ -26,7 +26,9 @@ import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
+import com.xkj.trade.utils.DataUtil;
 import com.xkj.trade.utils.MoneyUtil;
+import com.xkj.trade.utils.RoundImageView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -70,8 +72,12 @@ public class DeletePositionFragment extends BaseFragment {
     TextView mTakeProfit;
     @Bind(R.id.tv_enter_button)
     TextView mTvEnterButton;
+    @Bind(R.id.riv_trade_symbol)
+    RoundImageView mRivTradeSymbol;
+
     private TextView tvAction;
     private BeanPendingPosition.DataBean.ListBean mData;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -87,7 +93,7 @@ public class DeletePositionFragment extends BaseFragment {
         tvAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-enterOrder();
+                enterOrder();
             }
         });
         if (mData.getCmd().contains("sell")) {
@@ -101,8 +107,11 @@ enterOrder();
         mStopLoss.setText(mData.getSl());
         mTakeProfit.setText(mData.getTp());
         mTvPrice.setText(mData.getOpenprice());
+        mRivTradeSymbol.setImageResource(DataUtil.getImageId(mData.getSymbol()));
+
         requestSubSymbol();
     }
+
     private void enterOrder() {
         Map<String, String> map = new TreeMap<>();
         map.put(RequestConstant.LOGIN, AesEncryptionUtil.stringBase64toString(ACache.get(context).getAsString(RequestConstant.ACCOUNT)));
@@ -130,40 +139,45 @@ enterOrder();
             }
         });
     }
+
     private void requestSubSymbol() {
         ChatWebSocket chartWebSocket = ChatWebSocket.getChartWebSocket();
         if (chartWebSocket != null) {
             chartWebSocket.sendMessage("{\"msg_type\":1010,\"symbol\":\"" + mData.getSymbol() + "\"}");
         }
     }
+
     @Override
     protected void initData() {
         mData = new Gson().fromJson(this.getArguments().getString(OperatePositionActivity.JSON_DATA), new TypeToken<BeanPendingPosition.DataBean.ListBean>() {
         }.getType());
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getRealTimeData(RealTimeDataList realTimeDataList) {
         Log.i(TAG, "getRealTimeData: ");
-        for(RealTimeDataList.BeanRealTime beanRealTime:realTimeDataList.getQuotes()){
-            if(beanRealTime.getSymbol().equals(mData.getSymbol())){
-                setHeader(String.valueOf(beanRealTime.getSymbol()),String.valueOf(beanRealTime.getAsk()),String.valueOf(beanRealTime.getBid()));
+        for (RealTimeDataList.BeanRealTime beanRealTime : realTimeDataList.getQuotes()) {
+            if (beanRealTime.getSymbol().equals(mData.getSymbol())) {
+                setHeader(String.valueOf(beanRealTime.getSymbol()), String.valueOf(beanRealTime.getAsk()), String.valueOf(beanRealTime.getBid()));
             }
         }
     }
-    public void setHeader(String symbol,String ask,String bid){
+
+    public void setHeader(String symbol, String ask, String bid) {
         SpannableString askTextBig = MoneyUtil.getRealTimePriceTextBig(context, ask);
         SpannableString bidTextBig = MoneyUtil.getRealTimePriceTextBig(context, bid);
-        if(mPriceRight.getText().toString()!=""){
+        if (mPriceRight.getText().toString() != "") {
             askTextBig.setSpan(new ForegroundColorSpan(getResources().getColor(Double.valueOf(ask) > Double.valueOf(mPriceLeft.getText().toString()) ? R.color.text_color_price_rise : R.color.text_color_price_fall)), 0, bidTextBig.length(),
                     Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
-        if(mPriceRight.getText().toString()!=""){
+        if (mPriceRight.getText().toString() != "") {
             bidTextBig.setSpan(new ForegroundColorSpan(getResources().getColor(Double.valueOf(bid) > Double.valueOf(mPriceRight.getText().toString()) ? R.color.text_color_price_rise : R.color.text_color_price_fall)), 0, bidTextBig.length(),
                     Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
         mTvSymbolName.setText(symbol);
         mPriceLeft.setText(askTextBig);
         mPriceRight.setText(bidTextBig);
+
     }
 
 

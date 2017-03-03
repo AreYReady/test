@@ -6,22 +6,24 @@
     android:orientation="vertical">
 
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:gravity="bottom|center_horizontal"
-        android:paddingTop="10dip">
+    <!--<ScrollView-->
+        <!--android:id="@+id/sv_"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dip"-->
+        <!--android:layout_weight="1"-->
+        <!--android:gravity="bottom|center_horizontal"-->
+        <!--android:paddingTop="10dip">-->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/ll_button_group"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y120"
+                android:layout_height="72.5dip"
                 android:orientation="horizontal">
 
                 <Button
@@ -94,37 +96,42 @@
             <com.xkj.trade.utils.view.CustomASETGroup
                 android:id="@+id/price"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="72.5dip"
                 hsc:desc_text="价格为"
                 hsc:iamge_visibility="false" />
 
             <com.xkj.trade.utils.view.CustomASETGroup
                 android:id="@+id/stop_loss"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="72.5dip"
                 hsc:desc_text="止损" />
 
             <com.xkj.trade.utils.view.CustomASETGroup
                 android:id="@+id/take_profit"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="72.5dip"
                 hsc:desc_text="获利" />
+            <!--<Space-->
+                <!--android:id="@+id/s_space"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"/>-->
 
         </LinearLayout>
 
-    </ScrollView>
+    <!--</ScrollView>-->
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="77dip">
     <TextView
         android:id="@+id/tv_enter_order"
         style="@style/ButtonActionText"
-        android:layout_width="match_parent"
-        android:layout_height="50dip"
-        android:layout_marginBottom="30dip"
-        android:layout_marginLeft="40dip"
-        android:layout_marginRight="40dip"
-        android:layout_marginTop="30dip"
+        android:layout_width="270dip"
+        android:layout_height="37dip"
         android:background="@drawable/branded_action_button_light"
+        android:layout_centerInParent="true"
         android:gravity="center"
         android:text="下单" />
+    </RelativeLayout>
 
 </LinearLayout>

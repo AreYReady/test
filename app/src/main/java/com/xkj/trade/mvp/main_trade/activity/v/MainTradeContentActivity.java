@@ -21,7 +21,6 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +34,7 @@ import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean_.BeanMasterRank;
 import com.xkj.trade.bean_.BeanUserListInfo;
+import com.xkj.trade.bean_notification.NotificationPositionCount;
 import com.xkj.trade.mvp.main_trade.FragmentClosePosition;
 import com.xkj.trade.mvp.main_trade.FragmentMasterCopy;
 import com.xkj.trade.mvp.main_trade.FragmentMasterWatch;
@@ -55,9 +55,12 @@ import com.xkj.trade.utils.view.ZoomOutPageTransformer;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.bingoogolapple.badgeview.BGABadgeImageView;
 
 import static com.xkj.trade.mvp.master.info.FragmentMasterInfo.MASTER_INFO;
 
@@ -86,7 +89,7 @@ public class MainTradeContentActivity extends BaseActivity
     private TextView mMargin;
     private TextView mMarginLevel;
     private TextView mCredit;
-    private ImageView mOpenPositionCount;
+    private BGABadgeImageView mOpenPositionCount;
 
 
 
@@ -238,7 +241,7 @@ public class MainTradeContentActivity extends BaseActivity
         mMarginLevel = (TextView) findViewById(R.id.tv_pull_margin_level);
         mBalance = (TextView) findViewById(R.id.tv_pull_balance);
         mOpenPl = (TextView) findViewById(R.id.tv_pull_open_p_l);
-        mOpenPositionCount=(ImageView)findViewById(R.id.iv_suitcase);
+        mOpenPositionCount=(BGABadgeImageView)findViewById(R.id.iv_suitcase);
     }
 
     @Override
@@ -375,5 +378,9 @@ public class MainTradeContentActivity extends BaseActivity
         Log.i(TAG, "refreshUserInfo: ");
         this.beanUserListInfo = beanUserListInfo;
         handler.sendEmptyMessage(refreshUserInfo);
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getPositio(NotificationPositionCount notificationPositionCount){
+        mOpenPositionCount.showTextBadge(notificationPositionCount.getCount()+"");
     }
 }

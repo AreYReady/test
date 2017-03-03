@@ -52,7 +52,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         this(context, attrs, 0);
     }
 
-    public AddSubEditText(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AddSubEditText(final Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         View inflate = LayoutInflater.from(context).inflate(R.layout.v_add_sub_edittext, null);
         addView(inflate);
@@ -65,6 +65,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         subView.setLongClickable(true);
         subView.setOnTouchListener(this);
         addView.setOnTouchListener(this);
+
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -258,6 +259,9 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
     }
     public String getNumbel(){
         return editText.getText().toString();
+    }
+    public EditText getEditText(){
+        return editText;
     }
     public void setNumberTextInvisible(){
         editText.setVisibility(INVISIBLE);

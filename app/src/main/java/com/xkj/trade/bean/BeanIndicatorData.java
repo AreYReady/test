@@ -16,7 +16,7 @@ public class BeanIndicatorData {
         this.symbol =symbolTag;
         this.ask =askString;
         this.bid =bidString;
-        this.imageResource = DataUtil.getSymbolFlag(symbolTag);
+        this.imageResource = DataUtil.getImageId(symbolTag);
     }
     public BeanIndicatorData(String symbolTag,String askString,String bidString,int askColor,int bidColor){
         this.symbol =symbolTag;
@@ -24,7 +24,15 @@ public class BeanIndicatorData {
         this.bid =bidString;
         this.askColor=askColor;
         this.bidColor =bidColor;
-        this.imageResource = DataUtil.getSymbolFlag(symbolTag);
+        this.imageResource = DataUtil.getImageId(symbolTag);
+    }
+    public BeanIndicatorData(String symbolTag,String askString,String bidString,int imageResource,int askColor,int bidColor){
+        this.symbol =symbolTag;
+        this.ask =askString;
+        this.bid =bidString;
+        this.askColor=askColor;
+        this.bidColor =bidColor;
+        this.imageResource = imageResource;
     }
     public int getImageResource() {
         return imageResource;

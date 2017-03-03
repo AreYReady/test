@@ -125,7 +125,6 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
         holder.bClosePosition.setOnClickListener(this);
         holder.bUnlink.setOnClickListener(this);
         holder.bEditPosition.setOnClickListener(this);
-
         holder.tvCountyName.setText(mData.getSymbol());
         holder.tvMoney.setText(MoneyUtil.deleteZero(MoneyUtil.mulPrice(mData.getVolume(),String.valueOf(VOLUME_MONEY))));
 

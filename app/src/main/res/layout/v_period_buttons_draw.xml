@@ -7,15 +7,16 @@
     <RadioButton
         android:id="@+id/rb_period"
         style="@style/Branded.Button.Small.Radio.white"
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
+        android:layout_width="67.5dp"
+        android:layout_height="24dip"
+        android:textSize="13sp"
         android:text="1分钟>" />
 
     <RadioGroup
         android:visibility="gone"
         android:id="@+id/rg_period_buttons"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="24dip"
         android:orientation="horizontal">
 
         <RadioButton

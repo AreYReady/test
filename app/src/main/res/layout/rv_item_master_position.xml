@@ -4,14 +4,13 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center"
-    android:paddingTop="@dimen/space_big"
+    android:paddingTop="@dimen/space_xxbig"
     >
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:src="@drawable/ic_country_flag_ad"
+        android:id="@+id/civ_image"
+        android:layout_width="30dip"
+        android:layout_height="30dip"
         android:paddingRight="@dimen/space_big"/>
     <TextView
         android:id="@+id/tv_symbol_name"
@@ -20,6 +19,7 @@
         android:layout_weight="2"
         style="@style/TextDesc"
         android:text="EURUSD"
+        android:layout_marginLeft="@dimen/space_xxbig"
         />
 
     <TextView

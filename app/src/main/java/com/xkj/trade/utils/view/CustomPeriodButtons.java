@@ -67,7 +67,7 @@ public class CustomPeriodButtons extends RelativeLayout implements View.OnClickL
     public void onClick(View v) {
         mRbPeriod.setVisibility(VISIBLE);
         mRgPeriodButtons.setVisibility(GONE);
-        mRbPeriod.setText(((RadioButton)v).getText()+" >");
+        mRbPeriod.setText(((RadioButton)v).getText()+"\t>");
         if(listener!=null){
             listener.CheckChange(inflate.findViewById(mRgPeriodButtons.getCheckedRadioButtonId()).getTag().toString());
         }
