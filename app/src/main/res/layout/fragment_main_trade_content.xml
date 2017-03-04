@@ -2,7 +2,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
     >
-
     <RelativeLayout
         android:id="@+id/rll_trade_indicator"
         android:layout_width="match_parent"
@@ -43,59 +42,73 @@
                 android:padding="@dimen/space_big">
 
             </com.xkj.trade.utils.view.CustomPeriodButtons>
+
             <LinearLayout
                 android:id="@+id/ll_k_link_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/ll_draw_trade_context"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dip"
+                //解释下，由于最初设计，k线图为了少更新，将线图和实时价格分开，减少实时渲染，后期因为需求变动，这设计没有用，所以这个layout层次比较多。后期修改
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/rll_trade_indicator"
-                    android:background="@color/background_show_trade"
-                    android:orientation="horizontal">
+                    android:background="@color/background_show_trade">
 
-                    <FrameLayout
-                        android:layout_width="0dip"
-                        android:layout_height="match_parent"
-                        android:layout_weight="6">
+                    <ImageView
+                        android:id="@+id/iv_loading"
+                        android:layout_width="110dip"
+                        android:layout_height="80dip"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/loading"/>
 
-                        <com.xkj.trade.utils.view.MyHorizontalScrollView
-                            android:id="@+id/hsv_trade"
-                            android:layout_width="match_parent"
+                    <LinearLayout
+                        android:id="@+id/ll_draw_trade_context"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dip"
+
+                        android:orientation="horizontal">
+
+
+                        <RelativeLayout
+                            android:layout_width="0dip"
                             android:layout_height="match_parent"
-                            >
+                            android:layout_weight="6">
 
-                            <RelativeLayout
-                                android:id="@+id/rl"
+                            <com.xkj.trade.utils.view.MyHorizontalScrollView
+                                android:id="@+id/hsv_trade"
                                 android:layout_width="match_parent"
-                                android:layout_height="200dip"
+                                android:layout_height="match_parent"
                                 >
 
-                            </RelativeLayout>
-                        </com.xkj.trade.utils.view.MyHorizontalScrollView>
+                                <RelativeLayout
+                                    android:id="@+id/rl"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="200dip"
+                                    >
+                                </RelativeLayout>
+                            </com.xkj.trade.utils.view.MyHorizontalScrollView>
 
-                        <com.xkj.trade.utils.view.CustomDashedLinkView
-                            android:id="@+id/cdlv_"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-                    </FrameLayout>
+                            <com.xkj.trade.utils.view.CustomDashedLinkView
+                                android:id="@+id/cdlv_"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"/>
+                        </RelativeLayout>
 
-                    <com.xkj.trade.utils.view.DrawPriceView
-                        android:id="@+id/dp_draw_price"
-                        android:layout_width="0dip"
-                           android:layout_height="match_parent"
-                        android:layout_weight="1"/>
-                </LinearLayout>
+                        <com.xkj.trade.utils.view.DrawPriceView
+                            android:id="@+id/dp_draw_price"
+                            android:layout_width="0dip"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"/>
+                    </LinearLayout>
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dip"
+                    android:background="@color/background_indicator"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:background="@color/background_indicator"
                     android:paddingLeft="@dimen/space_big"
                     android:paddingRight="@dimen/space_big"
                     >
@@ -130,8 +143,8 @@
                     android:id="@+id/rl_trade"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@color/background_trade_item">
+                    android:background="@color/background_trade_item"
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:id="@+id/trade_title"
@@ -201,6 +214,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
+
         <LinearLayout
             android:id="@+id/ll_show_symbol_info"
             android:layout_width="match_parent"
@@ -209,6 +223,7 @@
             android:orientation="horizontal"
             android:visibility="gone"
             >
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/civ_symbol_flag"
                 android:layout_width="0dip"
@@ -217,33 +232,72 @@
 
             <TextView
                 android:id="@+id/tv_symbol_name"
-                android:layout_width="0dip"
-                android:layout_weight="2.0"
                 style="@style/TextDesc"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
+                android:layout_weight="2.0"
                 />
+
             <TextView
                 android:id="@+id/tv_symbol_ask"
-                android:layout_width="0dip"
-                android:layout_weight="1.5"
                 style="@style/TextDesc"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
+                android:layout_weight="1.5"
                 />
+
             <TextView
                 android:id="@+id/tv_symbol_bid"
-                android:layout_width="0dip"
-                android:layout_weight="1.5"
                 style="@style/TextDesc"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
+                android:layout_weight="1.5"
                 />
         </LinearLayout>
+
         <LinearLayout
+            android:id="@+id/ll_prompt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone">
-            <include
-                android:id="@+id/title_content"
-                layout="@layout/v_positions_opened_header_impl"/>
+            android:visibility="invisible"
+            android:background="@color/background_pull_head"
+            android:padding="@dimen/space_big_half"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+            <com.xkj.trade.utils.RoundImageView
+                android:id="@+id/riv_trade_symbol"
+                android:layout_marginLeft="@dimen/space_xbig"
+                android:layout_width="30dip"
+                android:layout_height="30dip"
+                android:background="@mipmap/ic_instrument_audhuf"/>
+
+            <TextView
+                android:id="@+id/tv_symbol_name_prompt"
+                style="@style/TextDesc"
+                android:layout_width="75dip"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/space_xxxbig_half"
+                android:gravity="center_vertical"
+                />
+
+            <TextView
+                android:id="@+id/tv_price_ask_prompt"
+                style="@style/TextDesc"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/tv_price_bid_prompt"
+                style="@style/TextDesc"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

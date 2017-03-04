@@ -2,6 +2,7 @@ package com.xkj.trade.mvp.main_trade.fragment_content.v;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
@@ -62,6 +64,7 @@ import com.xkj.trade.utils.view.DrawPriceView;
 import com.xkj.trade.utils.view.FixedSpeedScroller;
 import com.xkj.trade.utils.view.HistoryTradeView;
 import com.xkj.trade.utils.view.MyHorizontalScrollView;
+import com.xkj.trade.utils.view.MyScrollView;
 import com.xkj.trade.utils.view.WrapContentLinearLayoutManager;
 import com.xkj.trade.utils.view.ZoomOutPageTransformer;
 
@@ -130,10 +133,15 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     private OpenAdapter mOpenAdapter;
     private int firstItemPosition;
     private int lastItemPosition;
-    public static Map<String,BeanAllSymbols.SymbolPrices> realTimeMap=new ArrayMap<>();
+    public static Map<String, BeanAllSymbols.SymbolPrices> realTimeMap = new ArrayMap<>();
     private TextView mOpenPositionCount;
     private TextView mProfitCount;
     private String mProfitCountMoney;
+    private ImageView mIvLoading;
+    private LinearLayout mllcontent;
+    private MyScrollView mMyScrollView;
+    private LinearLayout mllPrompt;
+    AnimationDrawable animationDrawable;
 
 
     @Nullable
@@ -164,7 +172,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                 Log.i(TAG, "Height=" + h); // 得到正确结果
                 wChild = (TradeDateConstant.count) * (SystemUtil.dp2px(context, TradeDateConstant.juli + TradeDateConstant.jianju));
                 //太过要求精确计算，最后一个item显示半个。所以宽度加10个像素，修正这个算法缺失
-                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(wChild+10, h);
+                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(wChild + 10, h);
                 mHistoryTradeView.setLayoutParams(layoutParams);
                 rl.addView(mHistoryTradeView);
                 mHScrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -217,7 +225,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                 if (!mPeriod.equals(period)) {
                     mPeriod = period;
 //                    mMainTradeContentPre.requestHistoryData(symbol, period, TradeDateConstant.count);
-                    mMainTradeContentPre.requestHistoryData(symbol, period, TradeDateConstant.count);
+                    requestHistoryData(symbol, period, TradeDateConstant.count);
                 }
             }
         });
@@ -310,13 +318,37 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                if(view.getMeasuredHeight()!=0) {
+                if (view.getMeasuredHeight() != 0) {
                     view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     Log.i(TAG, "onlobalLayout: " + view.getMeasuredHeight());
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(view.getWidth(), view.getMeasuredHeight()-view.findViewById(R.id.trade_title).getMeasuredHeight());
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(view.getWidth(), view.getMeasuredHeight() - view.findViewById(R.id.trade_title).getMeasuredHeight());
                     mTradeContent.setLayoutParams(layoutParams);
-                    view.findViewById(R.id.ll_my_favorites).setLayoutParams(new LinearLayout.LayoutParams(view.getWidth(),view.getHeight()));
+                    view.findViewById(R.id.ll_my_favorites).setLayoutParams(new LinearLayout.LayoutParams(view.getWidth(), view.getHeight()));
                 }
+            }
+        });
+        final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mllPrompt.getLayoutParams();
+//        mllPrompt.getViewTreeObserver().
+//        layoutParams.topMargin=0-mllPrompt.getHeight();
+        mMyScrollView.registerListener(new MyScrollView.ScrollListener() {
+            @Override
+            public void onScroll(final int top, int left) {
+                if (top < mllPrompt.getHeight()) {
+
+//                    layoutParams.topMargin = top - mllPrompt.getHeight();
+//                    mllPrompt.setLayoutParams(layoutParams);
+                    if(mllPrompt.getVisibility()==View.VISIBLE){
+                        mllPrompt.setVisibility(View.INVISIBLE);
+                    }
+                }else {
+                    if(mllPrompt.getVisibility()!=View.VISIBLE){
+                        mllPrompt.setVisibility(View.VISIBLE);
+                    }
+//                    layoutParams.topMargin = mllPrompt.getHeight()/2;
+//                    mllPrompt.setLayoutParams(layoutParams);
+                }
+//                    }
+//                });
             }
         });
     }
@@ -330,6 +362,18 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
             }
         }
         return fitData;
+    }
+
+    private void requestHistoryData(String symbol, String period, int count) {
+        mIvLoading.setVisibility(View.VISIBLE);
+//        mHScrollView.setVisibility(View.INVISIBLE);
+//        mDrawPriceView.setVisibility(View.INVISIBLE);
+        mllcontent.setVisibility(View.INVISIBLE);
+        if (animationDrawable == null) {
+            animationDrawable = (AnimationDrawable) mIvLoading.getDrawable();
+        }
+        animationDrawable.start();
+        mMainTradeContentPre.requestHistoryData(symbol, period, count);
     }
 
     public boolean contain(String input, String regex) {
@@ -378,10 +422,13 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         mShowSymbolInfo = (LinearLayout) view.findViewById(R.id.ll_show_symbol_info);
         mShowSymbolAsk = (TextView) view.findViewById(R.id.tv_symbol_ask);
         mShowSymbolBid = (TextView) view.findViewById(R.id.tv_symbol_bid);
-        mOpenPositionCount=(TextView)view.findViewById(R.id.tv_open_position_count);
-        mProfitCount=(TextView)view.findViewById(R.id.tv_profit_count);
-
-
+        mOpenPositionCount = (TextView) view.findViewById(R.id.tv_open_position_count);
+        mProfitCount = (TextView) view.findViewById(R.id.tv_profit_count);
+        mIvLoading = (ImageView) view.findViewById(R.id.iv_loading);
+        animationDrawable = (AnimationDrawable) mIvLoading.getDrawable();
+        mllcontent = (LinearLayout) view.findViewById(R.id.ll_draw_trade_context);
+        mMyScrollView = (MyScrollView) view.findViewById(R.id.msv_my_scroll_view);
+        mllPrompt = (LinearLayout) view.findViewById(R.id.ll_prompt);
     }
 
     @Override
@@ -423,6 +470,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         if (mHeaderCustomViewPager.getCurrentItem() == subSymbols.size() - 1) {
             Log.i(TAG, "responseHistoryData: 我的收藏夹");
         } else if (data.getSymbol().equals(symbol) && data.getPeriod() == DataUtil.selectPeriod(mPeriod)) {
+
             this.data = data;
             Log.i(TAG, "responseHistoryData: data");
             this.isCountDown = isCountDown;
@@ -439,18 +487,18 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     public void refreshIndicator(List<BeanIndicatorData> mBeanIndicatorDataList) {
         for (BeanIndicatorData newData : mBeanIndicatorDataList) {
 //            for (int i = mHeaderCustomViewPager.getCurrentItem() - 1; i < mHeaderCustomViewPager.getCurrentItem() + 1; i++) {
-            for (int i = 0 ; i < mHeaderCustomViewPager.getChildCount()-1; i++) {
+            for (int i = 0; i < mHeaderCustomViewPager.getChildCount() - 1; i++) {
 //                if (i >= 0 && i < mHeaderCustomViewPager.getChildCount() - 1) {
-                    BeanIndicatorData subData = subSymbols.get(i);
-                    if (newData.getSymbol().equals(subData.getSymbol())) {
-                        subData.setAskColor(getResources().getColor(Double.valueOf(newData.getAsk()) > Double.valueOf(subData.getAsk()) ? R.color.text_color_price_rise : R.color.text_color_price_fall));
-                        subData.setBidColor(getResources().getColor(Double.valueOf(newData.getBid()) > Double.valueOf(subData.getBid()) ? R.color.text_color_price_rise : R.color.text_color_price_fall));
-                        subData.setAsk(newData.getAsk());
-                        subData.setBid(newData.getBid());
-                        refreshIndicatorIndex = i;
-                        handler.sendEmptyMessage(REFRESH_INDICATOR);
+                BeanIndicatorData subData = subSymbols.get(i);
+                if (newData.getSymbol().equals(subData.getSymbol())) {
+                    subData.setAskColor(getResources().getColor(Double.valueOf(newData.getAsk()) > Double.valueOf(subData.getAsk()) ? R.color.text_color_price_rise : R.color.text_color_price_fall));
+                    subData.setBidColor(getResources().getColor(Double.valueOf(newData.getBid()) > Double.valueOf(subData.getBid()) ? R.color.text_color_price_rise : R.color.text_color_price_fall));
+                    subData.setAsk(newData.getAsk());
+                    subData.setBid(newData.getBid());
+                    refreshIndicatorIndex = i;
+                    handler.sendEmptyMessage(REFRESH_INDICATOR);
 //                    }
-                    if(i==mHeaderCustomViewPager.getCurrentItem()){
+                    if (i == mHeaderCustomViewPager.getCurrentItem()) {
                         //说明是当前
                         EventBus.getDefault().post(subData);
                     }
@@ -468,19 +516,19 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
 
     @Override
     public void refreshOpenPosition(BeanOpenPosition info) {
-        mBeanOpenList=info.getData().getList();
-        if(mBeanOpenList==null){
-            mBeanOpenList=new ArrayList<>();
+        mBeanOpenList = info.getData().getList();
+        if (mBeanOpenList == null) {
+            mBeanOpenList = new ArrayList<>();
         }
-        mProfitCountMoney="0";
-        for(BeanOpenPosition.DataBean.ListBean bean:mBeanOpenList){
-            if(bean.getCmd().equals("buy")){
+        mProfitCountMoney = "0";
+        for (BeanOpenPosition.DataBean.ListBean bean : mBeanOpenList) {
+            if (bean.getCmd().equals("buy")) {
                 bean.setPrice(MyApplication.beanIndicatorData.getBid());
-            }else{
+            } else {
                 bean.setPrice(MyApplication.beanIndicatorData.getAsk());
             }
         }
-        mProfitCountMoney=cacleProfitCount();
+        mProfitCountMoney = cacleProfitCount();
         handler.sendEmptyMessage(REFRESH_OPEN_POSITION);
     }
 
@@ -492,13 +540,13 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         allSymbolsName.clear();
         String symbol;
         for (int i = 0; i < beanAllSymbols.getData().size(); i++) {
-            symbol=beanAllSymbols.getData().get(i).getSymbol();
+            symbol = beanAllSymbols.getData().get(i).getSymbol();
             //保证这个只订阅跟后缀USD的所有symbols。用来算利润
-            realTimeMap.put(symbol,beanAllSymbols.getData().get(i));
-            if(symbol.substring(symbol.length()-3,symbol.length()).equals("USD"))
-            allSymbolsName.add(beanAllSymbols.getData().get(i).getSymbol());
+            realTimeMap.put(symbol, beanAllSymbols.getData().get(i));
+            if (symbol.substring(symbol.length() - 3, symbol.length()).equals("USD"))
+                allSymbolsName.add(beanAllSymbols.getData().get(i).getSymbol());
         }
-        mMainTradeContentPre.requestSubSymbols(allSymbolsName,true);
+        mMainTradeContentPre.requestSubSymbols(allSymbolsName, true);
     }
 
 
@@ -520,12 +568,12 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         mHeaderCustomViewPager.setAdapter(mViewPagerAdapter);
         mHeaderCustomViewPager.setOffscreenPageLimit(subSymbols.size());
         mHeaderCustomViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
-        mMainTradeContentPre.requestHistoryData(symbol = subSymbols.get(0).getSymbol(), mPeriod, TradeDateConstant.count);
-        MyApplication.getInstance().beanIndicatorData=subSymbols.get(0);
+        requestHistoryData(symbol = subSymbols.get(0).getSymbol(), mPeriod, TradeDateConstant.count);
+        MyApplication.getInstance().beanIndicatorData = subSymbols.get(0);
         MyApplication.getInstance().beanIndicatorData.setSymbol(symbol);
         fillPromptSymbolInfo(0);
         //申请当前所有交易的当前报价单储存
-        mMainTradeContentPre.requestHistoryData(null, null, 0);
+        requestHistoryData(null, null, 0);
         mHeaderCustomViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -551,7 +599,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                     isScroll = false;
                     if (!symbol.equals(subSymbols.get(mPosition).getSymbol())) {
                         symbol = subSymbols.get(mPosition).getSymbol();
-                        MyApplication.getInstance().beanIndicatorData=subSymbols.get(mPosition);
+                        MyApplication.getInstance().beanIndicatorData = subSymbols.get(mPosition);
                         Log.i(TAG, "onPageScrollStateChanged:+SCROLL_STATE_IDLE " + mPosition);
                         if (mPosition == subSymbols.size() - 1) {
                             showMyFavorites();
@@ -561,7 +609,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                                 for (BeanIndicatorData subSymbol : subSymbols) {
                                     allSymbolsName.remove(subSymbol.getSymbol());
                                 }
-                                    mMainTradeContentPre.requestSubSymbols(allSymbolsName, false);
+                                mMainTradeContentPre.requestSubSymbols(allSymbolsName, false);
 
                             }
                             if (mKLinkLayout.getVisibility() != View.VISIBLE) {
@@ -572,7 +620,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                             }
                             mMainTradeContentPre.requestOpenPosition();
                             fillPromptSymbolInfo(mPosition);
-                            mMainTradeContentPre.requestHistoryData(symbol, mPeriod, TradeDateConstant.count);
+                            requestHistoryData(symbol, mPeriod, TradeDateConstant.count);
                         }
                     }
                 } else {
@@ -705,10 +753,10 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                         }
                         ((TextView) childAt.findViewById(R.id.id_index_gallery_item_text_ask)).setText(askTextBig);
                         ((TextView) childAt.findViewById(R.id.id_index_gallery_item_text_bid)).setText(bidTextBig);
-                        if(beanIndicatorData.getAskColor()==0){
-                        }else if(beanIndicatorData.getAskColor()==getResources().getColor(R.color.text_color_price_rise)){
+                        if (beanIndicatorData.getAskColor() == 0) {
+                        } else if (beanIndicatorData.getAskColor() == getResources().getColor(R.color.text_color_price_rise)) {
                             ((BGABadgeImageView) childAt.findViewById(R.id.id_index_gallery_item_image)).showDrawableBadge(BitmapFactory.decodeResource(getResources(), R.mipmap.rise));
-                        }else if(beanIndicatorData.getAskColor()==getResources().getColor(R.color.text_color_price_fall)){
+                        } else if (beanIndicatorData.getAskColor() == getResources().getColor(R.color.text_color_price_fall)) {
                             ((BGABadgeImageView) childAt.findViewById(R.id.id_index_gallery_item_image)).showDrawableBadge(BitmapFactory.decodeResource(getResources(), R.mipmap.fall));
                         }
 //                        mViewPagerAdapter.notifyDataSetChanged();
@@ -743,17 +791,22 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                             Log.i(TAG, "run: 全数据刷新");
                             mHScrollView.scrollTo(wChild, 0);
                             mHistoryTradeView.setHistoryData(data, wChild - w, wChild);
+                            animationDrawable.stop();
+                            mIvLoading.setVisibility(View.GONE);
+//                            mHScrollView.setVisibility(View.VISIBLE);
+//                            mDrawPriceView.setVisibility(View.VISIBLE);
+                            mllcontent.setVisibility(View.VISIBLE);
                         }
                     }
                     break;
                 case REFRESH_OPEN_POSITION:
 
-                    if(mOpenAdapter==null){
-                        mTradeContent.setAdapter(mOpenAdapter=new OpenAdapter(context,mBeanOpenList));
+                    if (mOpenAdapter == null) {
+                        mTradeContent.setAdapter(mOpenAdapter = new OpenAdapter(context, mBeanOpenList));
                     }
-                    mOpenPositionCount.setText(String.format(getString(R.string.num_open_positions),""+mBeanOpenList.size()));
-                    mProfitCount.setText("$"+mProfitCountMoney);
-                    mProfitCount.setTextColor(Double.valueOf(mProfitCountMoney)>0?getResources().getColor(R.color.text_color_price_rise):getResources().getColor(R.color.text_color_price_fall));
+                    mOpenPositionCount.setText(String.format(getString(R.string.num_open_positions), "" + mBeanOpenList.size()));
+                    mProfitCount.setText("$" + mProfitCountMoney);
+                    mProfitCount.setTextColor(Double.valueOf(mProfitCountMoney) > 0 ? getResources().getColor(R.color.text_color_price_rise) : getResources().getColor(R.color.text_color_price_fall));
                     mOpenAdapter.setData(mBeanOpenList);
                     mOpenAdapter.notifyDataSetChanged();
                     break;
@@ -867,10 +920,10 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                     realTimeIndicatorData.add(new BeanIndicatorData(beanRealTime.getSymbol(), String.valueOf(beanRealTime.getAsk()), String.valueOf(beanRealTime.getBid())));
                 }
             }
-            if(beanRealTime.getSymbol().equals(symbol)){
+            if (beanRealTime.getSymbol().equals(symbol)) {
                 //说明是本标题的数据
                 //刷新k线图
-                    realTimeHistoryData(beanRealTime);
+                realTimeHistoryData(beanRealTime);
                 //刷新当前symbol的持有仓数据
                 realTimeOpenPositionData(beanRealTime);
             }
@@ -883,54 +936,59 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     }
 
     private void saveRealTimeDataMap(RealTimeDataList.BeanRealTime beanRealTime) {
-        BeanAllSymbols.SymbolPrices symbolPrices =new BeanAllSymbols.SymbolPrices();
+        BeanAllSymbols.SymbolPrices symbolPrices = new BeanAllSymbols.SymbolPrices();
         symbolPrices.setSymbol(beanRealTime.getSymbol());
         symbolPrices.setAsk(String.valueOf(beanRealTime.getAsk()));
         symbolPrices.setBid(String.valueOf(beanRealTime.getBid()));
-        realTimeMap.put(beanRealTime.getSymbol(),symbolPrices);
+        realTimeMap.put(beanRealTime.getSymbol(), symbolPrices);
     }
 
     /**
      * 刷新当前持有仓的数据
+     *
      * @param beanRealTime
      */
     DiffUtil.DiffResult diffResult;
+
     private void realTimeOpenPositionData(RealTimeDataList.BeanRealTime beanRealTime) {
-        if(mBeanOpenList==null)
+        if (mBeanOpenList == null)
             return;
         //复制数据
-        mBeanDupOpenList=  (new Gson().fromJson(new Gson().toJson(mBeanOpenList),new TypeToken<List<BeanOpenPosition.DataBean.ListBean>>(){}.getType()));
+        mBeanDupOpenList = (new Gson().fromJson(new Gson().toJson(mBeanOpenList), new TypeToken<List<BeanOpenPosition.DataBean.ListBean>>() {
+        }.getType()));
         BeanOpenPosition.DataBean.ListBean bean;
-        for(int i=0;i<mBeanOpenList.size();i++){
-            bean= mBeanOpenList.get(i);
-            bean.setProfit(DataUtil.getProfit(beanRealTime,bean.getCmd(),bean.getOpenprice(),bean.getVolume()));
-            if(bean.getCmd().equals("buy")){
+        for (int i = 0; i < mBeanOpenList.size(); i++) {
+            bean = mBeanOpenList.get(i);
+            bean.setProfit(DataUtil.getProfit(beanRealTime, bean.getCmd(), bean.getOpenprice(), bean.getVolume()));
+            if (bean.getCmd().equals("buy")) {
                 bean.setPrice(String.valueOf(beanRealTime.getBid()));
-            }else{
+            } else {
                 bean.setPrice(String.valueOf(beanRealTime.getAsk()));
             }
         }
         diffResult = DiffUtil.calculateDiff(new OpenPositionDiff(mBeanDupOpenList, mBeanOpenList), true);
         ThreadHelper.instance().runOnUiThread(mRunnable);
     }
-    Runnable mRunnable=new Runnable() {
+
+    Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            mProfitCount.setText("$"+cacleProfitCount());
-            mProfitCount.setTextColor(Double.valueOf(mProfitCountMoney)>0?getResources().getColor(R.color.text_color_price_rise):getResources().getColor(R.color.text_color_price_fall));
+            mProfitCount.setText("$" + cacleProfitCount());
+            mProfitCount.setTextColor(Double.valueOf(mProfitCountMoney) > 0 ? getResources().getColor(R.color.text_color_price_rise) : getResources().getColor(R.color.text_color_price_fall));
             diffResult.dispatchUpdatesTo(mOpenAdapter);
         }
     };
-    private String cacleProfitCount(){
-        mProfitCountMoney="0";
-        for(BeanOpenPosition.DataBean.ListBean listBean:mBeanOpenList){
-           mProfitCountMoney=MoneyUtil.addPrice(mProfitCountMoney,listBean.getProfit());
+
+    private String cacleProfitCount() {
+        mProfitCountMoney = "0";
+        for (BeanOpenPosition.DataBean.ListBean listBean : mBeanOpenList) {
+            mProfitCountMoney = MoneyUtil.addPrice(mProfitCountMoney, listBean.getProfit());
         }
         return mProfitCountMoney;
     }
 
     @Subscribe
-    public void enterOrder(BeanOpenPosition beanOpenPosition){
+    public void enterOrder(BeanOpenPosition beanOpenPosition) {
         Log.i(TAG, "enterOrder: 下单成功，通知更新开仓数据");
         mMainTradeContentPre.requestOpenPosition();
     }
@@ -938,25 +996,25 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
 
     /**
      * 处理实时数据对历史图的影响
-     *
      */
-    private void realTimeHistoryData(RealTimeDataList.BeanRealTime beanRealTime ) {
-        if(data!=null) {
+    private void realTimeHistoryData(RealTimeDataList.BeanRealTime beanRealTime) {
+        if (data != null) {
             int period = data.getPeriod();
-                //k线图数据
-                if (data.getSymbol().equals(symbol) && beanRealTime.getSymbol().equals(symbol) && DataUtil.selectPeriod(mPeriod) == period) {
-                    mHistoryTradeView.refreshRealTimePrice(beanRealTime);
+            //k线图数据
+            if (data.getSymbol().equals(symbol) && beanRealTime.getSymbol().equals(symbol) && DataUtil.selectPeriod(mPeriod) == period) {
+                mHistoryTradeView.refreshRealTimePrice(beanRealTime);
 //                isCountDown=true;
 //                handler.sendEmptyMessage(REFRESH_HISTORY_VIEW);
-                } else {
-                    //2:非当前显示的。则获取最后一个修改缓存
-                    //不考虑流量，我们先做实时更新，后续再去完成缓存
-                }
+            } else {
+                //2:非当前显示的。则获取最后一个修改缓存
+                //不考虑流量，我们先做实时更新，后续再去完成缓存
+            }
         }
     }
 
     /**
      * 判断数据是否有区别
+     *
      * @param historyItem
      * @param beanRealTime
      * @return

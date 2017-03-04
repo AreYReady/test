@@ -2,10 +2,11 @@ package com.xkj.trade.utils.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.xkj.trade.R;
 
@@ -16,8 +17,9 @@ import com.xkj.trade.R;
  */
 
 public class LoadingDialog {
-    LVCircularRing mLoadingView;
+//    LVCircularRing mLoadingView;
     Dialog mLoadingDialog;
+    AnimationDrawable animationDrawable;
 
     public LoadingDialog(Context context, String msg) {
         // 首先得到整个View
@@ -26,11 +28,13 @@ public class LoadingDialog {
         // 获取整个布局
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.dialog_view);
         // 页面中的LoadingView
-        mLoadingView = (LVCircularRing) view.findViewById(R.id.lv_circularring);
+//        mLoadingView = (LVCircularRing) view.findViewById(R.id.lv_circularring);
         // 页面中显示文本
-        TextView loadingText = (TextView) view.findViewById(R.id.loading_text);
+//        TextView loadingText = (TextView) view.findViewById(R.id.loading_text);
+        ImageView imageView = (ImageView) view.findViewById(R.id.iv_animation);
+        animationDrawable = (AnimationDrawable) imageView.getDrawable();
         // 显示文本
-        loadingText.setText(msg);
+//        loadingText.setText(msg);
         // 创建自定义样式的Dialog
         mLoadingDialog = new Dialog(context, R.style.loading_dialog);
         // 设置返回键无效
@@ -42,12 +46,13 @@ public class LoadingDialog {
 
     public void show() {
         mLoadingDialog.show();
-        mLoadingView.startAnim();
+        animationDrawable.start();
     }
 
     public void close() {
         if (mLoadingDialog != null) {
-            mLoadingView.stopAnim();
+//            mLoadingView.stopAnim();
+            animationDrawable.stop();
             mLoadingDialog.dismiss();
             mLoadingDialog = null;
         }
