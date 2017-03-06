@@ -97,7 +97,7 @@ public class CardOrderFrag extends BaseFragment implements View.OnClickListener 
 
     @Override
     protected void initData() {
-
+        title=getString(R.string.open_position);
     }
 
     private void setTabSelected(Button buttonSelect) {
@@ -142,7 +142,7 @@ public class CardOrderFrag extends BaseFragment implements View.OnClickListener 
 
 
     private void requestActionOrder() {
-        if(mCsbVpItemOrderFrag.getMoney()==0){
+        if(mCsbVpItemOrderFrag.getMoney()<=0){
             Toast.makeText(context,"金额不能为空",Toast.LENGTH_SHORT).show();
             return;
         }
@@ -164,6 +164,7 @@ public class CardOrderFrag extends BaseFragment implements View.OnClickListener 
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.i(TAG, "onFailure: "+call.request());
+                showFail();
             }
 
             @Override
@@ -175,6 +176,8 @@ public class CardOrderFrag extends BaseFragment implements View.OnClickListener 
                     EventBus.getDefault().post(new BeanOpenPosition());
                     //发送通知activity关闭
                     EventBus.getDefault().post(beanBaseResponse);
+                }else{
+                    showFail();
                 }
             }
         });

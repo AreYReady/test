@@ -185,6 +185,7 @@ public class EditPositionFragment extends BaseFragment {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.i(TAG, "onFailure: " + call.request());
+                showFail();
             }
 
             @Override
@@ -198,16 +199,20 @@ public class EditPositionFragment extends BaseFragment {
                     EventBus.getDefault().post(new BeanOpenPosition());
                     //发送通知activity关闭
                     EventBus.getDefault().post(beanBaseResponse);
+                }else {
+                    showFail();
                 }
             }
         });
     }
 
 
+
     @Override
     protected void initData() {
         mData = new Gson().fromJson(this.getArguments().getString(OperatePositionActivity.JSON_DATA), new TypeToken<BeanOpenPosition.DataBean.ListBean>() {
         }.getType());
+        title=getString(R.string.edit_order);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -122,6 +122,7 @@ public class DeletePositionFragment extends BaseFragment {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.i(TAG, "onFailure: " + call.request());
+                showFail();
             }
 
             @Override
@@ -135,6 +136,8 @@ public class DeletePositionFragment extends BaseFragment {
                     EventBus.getDefault().post(new BeanOpenPosition());
                     //发送通知activity关闭
                     EventBus.getDefault().post(beanBaseResponse);
+                }else{
+                    showFail();
                 }
             }
         });
@@ -151,6 +154,7 @@ public class DeletePositionFragment extends BaseFragment {
     protected void initData() {
         mData = new Gson().fromJson(this.getArguments().getString(OperatePositionActivity.JSON_DATA), new TypeToken<BeanPendingPosition.DataBean.ListBean>() {
         }.getType());
+        title=getString(R.string.delete);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

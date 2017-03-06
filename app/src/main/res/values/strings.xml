@@ -63,6 +63,7 @@
     <string name="account_is_disabled_contact_your_broker">账户已禁用。请联系您的经纪人。</string>
     <string name="account_summary">账户摘要</string>
     <string name="action">操作</string>
+    <string name="action_fail_please_try_again">操作失败，请重新操作</string>
     <string name="activity">活动</string>
     <string name="all">全部</string>
     <string name="all_time">全部时间</string>
@@ -361,6 +362,7 @@
     <string name="closed_position_is_close_price">关闭仓位在%s</string>
     <string name="open_position_is">已开仓%s</string>
     <string name="open_position_is_open_price">已开仓在%s</string>
+    <string name="open_position">开仓</string>
     <string name="order_is_already_closed">订单已平仓</string>
     <string name="order_type">订单类型</string>
     <string name="order_was_updated">%1$s %2$s订单已更新</string>

@@ -27,7 +27,7 @@ import okhttp3.WebSocketListener;
 
 public class OkhttpUtils {
     private static final OkHttpClient.Builder builder = new OkHttpClient.Builder();
-    private static final OkHttpClient mOkHttpClient =builder.connectTimeout(30, TimeUnit.SECONDS).build();
+    private static final OkHttpClient mOkHttpClient =builder.connectTimeout(10, TimeUnit.SECONDS).build();
     private String TAG= SystemUtil.getTAG(this);
 
     static{

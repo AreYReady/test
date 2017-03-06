@@ -86,6 +86,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.R.attr.x;
 import static android.os.Build.VERSION_CODES.M;
+import static com.xkj.trade.base.MyApplication.beanIndicatorData;
 
 /**
  * Created by hsc on 2016-11-22.
@@ -141,6 +142,9 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     private LinearLayout mllcontent;
     private MyScrollView mMyScrollView;
     private LinearLayout mllPrompt;
+    private TextView mTvPromptSymbol;
+    private TextView mTvPromptAsk;
+    private TextView mTvPromptBid;
     AnimationDrawable animationDrawable;
 
 
@@ -328,27 +332,29 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
             }
         });
         final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mllPrompt.getLayoutParams();
-//        mllPrompt.getViewTreeObserver().
-//        layoutParams.topMargin=0-mllPrompt.getHeight();
+        mllPrompt.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mllPrompt.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                layoutParams.topMargin=-mllPrompt.getHeight();
+                mllPrompt.setLayoutParams(layoutParams);
+            }
+        });
         mMyScrollView.registerListener(new MyScrollView.ScrollListener() {
             @Override
             public void onScroll(final int top, int left) {
-                if (top < mllPrompt.getHeight()) {
-
-//                    layoutParams.topMargin = top - mllPrompt.getHeight();
-//                    mllPrompt.setLayoutParams(layoutParams);
-                    if(mllPrompt.getVisibility()==View.VISIBLE){
-                        mllPrompt.setVisibility(View.INVISIBLE);
+                if (mPosition != subSymbols.size() - 1) {
+                    if (top < mllPrompt.getHeight()) {
+                        layoutParams.topMargin = top - mllPrompt.getHeight();
+                        mllPrompt.setLayoutParams(layoutParams);
+                        if (mllPrompt.getVisibility() != View.VISIBLE) {
+                            mllPrompt.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        layoutParams.topMargin = 0;
+                        mllPrompt.setLayoutParams(layoutParams);
                     }
-                }else {
-                    if(mllPrompt.getVisibility()!=View.VISIBLE){
-                        mllPrompt.setVisibility(View.VISIBLE);
-                    }
-//                    layoutParams.topMargin = mllPrompt.getHeight()/2;
-//                    mllPrompt.setLayoutParams(layoutParams);
                 }
-//                    }
-//                });
             }
         });
     }
@@ -429,6 +435,9 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         mllcontent = (LinearLayout) view.findViewById(R.id.ll_draw_trade_context);
         mMyScrollView = (MyScrollView) view.findViewById(R.id.msv_my_scroll_view);
         mllPrompt = (LinearLayout) view.findViewById(R.id.ll_prompt);
+        mTvPromptAsk=(TextView)view.findViewById(R.id.tv_price_ask_prompt);
+        mTvPromptBid=(TextView)view.findViewById(R.id.tv_price_bid_prompt);
+        mTvPromptSymbol=(TextView)view.findViewById(R.id.tv_symbol_name_prompt);
     }
 
     @Override
@@ -523,9 +532,9 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         mProfitCountMoney = "0";
         for (BeanOpenPosition.DataBean.ListBean bean : mBeanOpenList) {
             if (bean.getCmd().equals("buy")) {
-                bean.setPrice(MyApplication.beanIndicatorData.getBid());
+                bean.setPrice(beanIndicatorData.getBid());
             } else {
-                bean.setPrice(MyApplication.beanIndicatorData.getAsk());
+                bean.setPrice(beanIndicatorData.getAsk());
             }
         }
         mProfitCountMoney = cacleProfitCount();
@@ -571,6 +580,9 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         requestHistoryData(symbol = subSymbols.get(0).getSymbol(), mPeriod, TradeDateConstant.count);
         MyApplication.getInstance().beanIndicatorData = subSymbols.get(0);
         MyApplication.getInstance().beanIndicatorData.setSymbol(symbol);
+        mTvPromptSymbol.setText(MyApplication.getInstance().beanIndicatorData.getSymbol());
+        mTvPromptAsk.setText(MyApplication.getInstance().beanIndicatorData.getAsk());
+        mTvPromptBid.setText(MyApplication.getInstance().beanIndicatorData.getBid());
         fillPromptSymbolInfo(0);
         //申请当前所有交易的当前报价单储存
         requestHistoryData(null, null, 0);
@@ -600,9 +612,15 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                     if (!symbol.equals(subSymbols.get(mPosition).getSymbol())) {
                         symbol = subSymbols.get(mPosition).getSymbol();
                         MyApplication.getInstance().beanIndicatorData = subSymbols.get(mPosition);
+                        mTvPromptSymbol.setText(MyApplication.getInstance().beanIndicatorData.getSymbol());
+                        mTvPromptAsk.setText(MyApplication.getInstance().beanIndicatorData.getAsk());
+                        mTvPromptBid.setText(MyApplication.getInstance().beanIndicatorData.getBid());
                         Log.i(TAG, "onPageScrollStateChanged:+SCROLL_STATE_IDLE " + mPosition);
                         if (mPosition == subSymbols.size() - 1) {
                             showMyFavorites();
+                            if(mllPrompt.getVisibility()==View.VISIBLE){
+                                mllPrompt.setVisibility(View.INVISIBLE);
+                            }
                         } else {
                             Log.i(TAG, "onPageScrollStateChanged: 加载数据");
                             if (allSymbolsName.size() > 0) {
@@ -611,6 +629,9 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                                 }
                                 mMainTradeContentPre.requestSubSymbols(allSymbolsName, false);
 
+                            }
+                            if(mllPrompt.getVisibility()!=View.VISIBLE){
+                                mllPrompt.setVisibility(View.VISIBLE);
                             }
                             if (mKLinkLayout.getVisibility() != View.VISIBLE) {
                                 mKLinkLayout.setVisibility(View.VISIBLE);
@@ -622,6 +643,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                             fillPromptSymbolInfo(mPosition);
                             requestHistoryData(symbol, mPeriod, TradeDateConstant.count);
                         }
+
                     }
                 } else {
                     isScroll = true;
@@ -810,6 +832,21 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                     mOpenAdapter.setData(mBeanOpenList);
                     mOpenAdapter.notifyDataSetChanged();
                     break;
+                case REFRESH_PROMPT: {
+                    SpannableString ask = MoneyUtil.getRealTimePriceTextBig(context, subSymbols.get(mHeaderCustomViewPager.getCurrentItem()).getAsk());
+                    SpannableString bid = MoneyUtil.getRealTimePriceTextBig(context, subSymbols.get(mHeaderCustomViewPager.getCurrentItem()).getBid());
+                    if (beanIndicatorData.getBidColor() != 0) {
+                        bid.setSpan(new ForegroundColorSpan(beanIndicatorData.getBidColor()), 0, bid.length(),
+                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                    }
+                    if (beanIndicatorData.getAskColor() != 0) {
+                        ask.setSpan(new ForegroundColorSpan(beanIndicatorData.getAskColor()), 0, ask.length(),
+                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                    }
+                    mTvPromptAsk.setText(ask);
+                    mTvPromptBid.setText(bid);
+                }
+                    break;
             }
         }
     };
@@ -817,6 +854,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     private final int REFRESH_MY_FAVORITES = 1;
     private final int REFRESH_HISTORY_VIEW = 2;
     private final int REFRESH_OPEN_POSITION = 3;
+    private final int REFRESH_PROMPT=4;
 
 
     class MyPagerAdapter extends PagerAdapter {
@@ -926,13 +964,24 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                 realTimeHistoryData(beanRealTime);
                 //刷新当前symbol的持有仓数据
                 realTimeOpenPositionData(beanRealTime);
+                //刷新当前顶部提示栏数据
+                realTimePromptData(beanRealTime);
             }
         }
+        //刷新tag数据
         refreshIndicator(realTimeIndicatorData);
         if (mMyFavorites.getVisibility() == View.VISIBLE) {
             //刷新我的收藏
             refreshMyFavorites(realTimeDataList.getQuotes());
         }
+    }
+
+    private void realTimePromptData(RealTimeDataList.BeanRealTime beanRealTime) {
+//      MyApplication.getInstance().beanIndicatorData.setAskColor(Double.valueOf(MyApplication.getInstance().beanIndicatorData.getAsk())<beanRealTime.getAsk()?getResources().getColor(R.color.text_color_price_fall):getResources().getColor(R.color.text_color_price_rise));
+//      MyApplication.getInstance().beanIndicatorData.setBidColor(Double.valueOf(MyApplication.getInstance().beanIndicatorData.getBid())<beanRealTime.getBid()?getResources().getColor(R.color.text_color_price_fall):getResources().getColor(R.color.text_color_price_rise));
+//      MyApplication.getInstance().beanIndicatorData.setAsk(String.valueOf(beanRealTime.getAsk()));
+//      MyApplication.getInstance().beanIndicatorData.setBid(String.valueOf(beanRealTime.getBid()));
+        handler.sendEmptyMessage(REFRESH_PROMPT);
     }
 
     private void saveRealTimeDataMap(RealTimeDataList.BeanRealTime beanRealTime) {

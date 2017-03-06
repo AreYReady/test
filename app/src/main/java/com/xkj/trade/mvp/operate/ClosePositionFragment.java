@@ -143,16 +143,20 @@ public class ClosePositionFragment extends BaseFragment {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.i(TAG, "onFailure: " + call.request());
+                showFail(getString(R.string.action_fail_please_try_again));
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.i(TAG, "onResponse: " + call.request());
-                Log.i(TAG, "onResponse: " + response.body().string());
-                //通知刷新
-                EventBus.getDefault().post(new BeanClosePosition());
-                //发送通知activity关闭
-                EventBus.getDefault().post(new BeanBaseResponse());
+               BeanBaseResponse beanBaseResponse=new Gson().fromJson(response.body().string(),new TypeToken<BeanBaseResponse>(){}.getType());
+                if(beanBaseResponse.getStatus()==1) {
+                    //通知刷新
+                    EventBus.getDefault().post(new BeanClosePosition());
+                    //发送通知activity关闭
+                    EventBus.getDefault().post(new BeanBaseResponse());
+                }else{
+                    showFail(getString(R.string.action_fail_please_try_again));
+                }
             }
         });
     }
@@ -161,6 +165,7 @@ public class ClosePositionFragment extends BaseFragment {
     protected void initData() {
         mData = new Gson().fromJson(this.getArguments().getString(OperatePositionActivity.JSON_DATA), new TypeToken<BeanOpenPosition.DataBean.ListBean>() {
         }.getType());
+        title=getString(R.string.close);
     }
 
     @Override
@@ -199,4 +204,6 @@ public class ClosePositionFragment extends BaseFragment {
         mPriceLeft.setText(askTextBig);
         mPriceRight.setText(bidTextBig);
     }
+
+
 }

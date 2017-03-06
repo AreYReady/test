@@ -70,6 +70,7 @@
         android:orientation="horizontal"
         android:paddingBottom="@dimen/space_big"
         android:paddingRight="@dimen/space_big"
+        android:visibility="gone"
         android:paddingTop="@dimen/space_big">
 
         <Space

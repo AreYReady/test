@@ -6,7 +6,10 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.xkj.trade.R;
+import com.xkj.trade.utils.DialogUtils;
 import com.xkj.trade.utils.SystemUtil;
+import com.xkj.trade.utils.ThreadHelper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -21,6 +24,7 @@ public  abstract class BaseFragment extends Fragment {
     protected Context context;
     protected Handler mHandler;
     protected final String TAG= SystemUtil.getTAG(this);
+    protected String title;
 
 
     @Override
@@ -64,4 +68,21 @@ public  abstract class BaseFragment extends Fragment {
             EventBus.getDefault().unregister(this);
         }
     }
+    protected  void showFail(final String msg){
+        ThreadHelper.instance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new DialogUtils(context,title,msg);
+            }
+        });
+    }
+    protected  void showFail(){
+        ThreadHelper.instance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new DialogUtils(context,title,getString(R.string.action_fail_please_try_again));
+            }
+        });
+    }
+
 }

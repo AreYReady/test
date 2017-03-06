@@ -213,6 +213,7 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
     protected void initData() {
         exc = RequestConstant.Exc.SELL_LIMIT;
         price = MyApplication.getInstance().beanIndicatorData.getBid();
+        title=getString(R.string.open_position);
     }
 
     private void setTabSelected(Button buttonSelect) {
@@ -285,6 +286,7 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.i(TAG, "onFailure: " + call.request());
+                showFail();
             }
 
             @Override
@@ -297,6 +299,8 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
                     EventBus.getDefault().post(new BeanPendingPosition());
                     //发送通知activity关闭
                     EventBus.getDefault().post(beanBaseResponse);
+                }else{
+                    showFail();
                 }
             }
         });

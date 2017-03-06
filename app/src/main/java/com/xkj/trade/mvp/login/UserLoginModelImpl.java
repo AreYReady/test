@@ -86,8 +86,9 @@ public class UserLoginModelImpl implements UserLoginModel {
             OkhttpUtils.enqueue(request, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    Log.i(TAG, "onFailure: "+call.request()
-                    );
+                    Log.i(TAG, "onFailure: "+call.request()+e.getMessage());
+                    mResultEnum=ResultEnum.erro;
+                    mUserLoginPresenter.loginResult(mResultEnum);
                 }
 
                 @Override

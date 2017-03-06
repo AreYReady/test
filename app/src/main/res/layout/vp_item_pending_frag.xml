@@ -1,137 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:hsc="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              xmlns:hsc="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-
-    <!--<ScrollView-->
-        <!--android:id="@+id/sv_"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dip"-->
-        <!--android:layout_weight="1"-->
-        <!--android:gravity="bottom|center_horizontal"-->
-        <!--android:paddingTop="10dip">-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/ll_button_group"
             android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="72.5dip"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/ll_button_group"
-                android:layout_width="match_parent"
-                android:layout_height="72.5dip"
-                android:orientation="horizontal">
+            <Button
+                android:id="@+id/b_sell_limit"
+                style="@style/TextDescBigRed"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/order_radio_button_background_dark"
+                android:text="卖出\n限价"/>
 
-                <Button
-                    android:id="@+id/b_sell_limit"
-                    style="@style/TextDescBigRed"
-                    android:layout_width="0dip"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/order_radio_button_background_dark"
-                    android:text="卖出\n限价" />
+            <View
+                android:layout_width="0.1dip"
+                android:layout_height="match_parent"
+                android:background="@color/button_material_dark"/>
 
-                <View
-                    android:layout_width="0.1dip"
-                    android:layout_height="match_parent"
-                    android:background="@color/button_material_dark" />
+            <Button
+                android:id="@+id/b_sell_stop_lost"
+                style="@style/TextDescBigRed"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/order_radio_button_background_dark"
+                android:text="卖出\n止损"/>
 
-                <Button
-                    android:id="@+id/b_sell_stop_lost"
-                    style="@style/TextDescBigRed"
-                    android:layout_width="0dip"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/order_radio_button_background_dark"
-                    android:text="卖出\n止损" />
+            <View
+                android:layout_width="0.1dip"
+                android:layout_height="match_parent"
+                android:background="@color/button_material_dark"/>
 
-                <View
-                    android:layout_width="0.1dip"
-                    android:layout_height="match_parent"
-                    android:background="@color/button_material_dark" />
+            <Button
+                android:id="@+id/b_buy_limit"
+                style="@style/TextDescBig"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/order_radio_button_background_dark"
+                android:text="买进\n限价"/>
 
-                <Button
-                    android:id="@+id/b_buy_limit"
-                    style="@style/TextDescBig"
-                    android:layout_width="0dip"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/order_radio_button_background_dark"
-                    android:text="买进\n限价" />
+            <View
+                android:layout_width="0.1dip"
+                android:layout_height="match_parent"
+                android:background="@color/button_material_dark"/>
 
-                <View
-                    android:layout_width="0.1dip"
-                    android:layout_height="match_parent"
-                    android:background="@color/button_material_dark" />
-
-                <Button
-                    android:id="@+id/b_buy_stop_lost"
-                    style="@style/TextDescBig"
-                    android:layout_width="0dip"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/order_radio_button_background_dark"
-                    android:text="买进\n止损" />
-
-
-            </LinearLayout>
-
-            <TextView
-                style="@style/TextDesc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:paddingTop="20dip"
-                android:text="选择金额" />
-
-            <com.xkj.trade.utils.view.CustomSeekBar
-                android:id="@+id/csb_vo"
-                android:layout_width="match_parent"
-                android:layout_height="100dip" />
-
-            <com.xkj.trade.utils.view.CustomASETGroup
-                android:id="@+id/price"
-                android:layout_width="match_parent"
-                android:layout_height="72.5dip"
-                hsc:desc_text="价格为"
-                hsc:iamge_visibility="false" />
-
-            <com.xkj.trade.utils.view.CustomASETGroup
-                android:id="@+id/stop_loss"
-                android:layout_width="match_parent"
-                android:layout_height="72.5dip"
-                hsc:desc_text="止损" />
-
-            <com.xkj.trade.utils.view.CustomASETGroup
-                android:id="@+id/take_profit"
-                android:layout_width="match_parent"
-                android:layout_height="72.5dip"
-                hsc:desc_text="获利" />
-            <!--<Space-->
-                <!--android:id="@+id/s_space"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"/>-->
+            <Button
+                android:id="@+id/b_buy_stop_lost"
+                style="@style/TextDescBig"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/order_radio_button_background_dark"
+                android:text="买进\n止损"/>
 
         </LinearLayout>
 
-    <!--</ScrollView>-->
+        <TextView
+            style="@style/TextDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="20dip"
+            android:text="选择金额"/>
+
+        <com.xkj.trade.utils.view.CustomSeekBar
+            android:id="@+id/csb_vo"
+            android:layout_width="match_parent"
+            android:layout_height="100dip"/>
+
+        <com.xkj.trade.utils.view.CustomASETGroup
+            android:id="@+id/price"
+            android:layout_width="match_parent"
+            android:layout_height="65dip"
+            hsc:desc_text="价格为"
+            hsc:iamge_visibility="false"/>
+
+        <com.xkj.trade.utils.view.CustomASETGroup
+            android:id="@+id/stop_loss"
+            android:layout_width="match_parent"
+            android:layout_height="65dip"
+            hsc:desc_text="止损"/>
+
+        <com.xkj.trade.utils.view.CustomASETGroup
+            android:id="@+id/take_profit"
+            android:layout_width="match_parent"
+            android:layout_height="65dip"
+            hsc:desc_text="获利"/>
+
+    </LinearLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="77dip">
-    <TextView
-        android:id="@+id/tv_enter_order"
-        style="@style/ButtonActionText"
-        android:layout_width="270dip"
-        android:layout_height="37dip"
-        android:background="@drawable/branded_action_button_light"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:text="下单" />
+
+        <TextView
+            android:id="@+id/tv_enter_order"
+            style="@style/ButtonActionText"
+            android:layout_width="270dip"
+            android:layout_height="37dip"
+            android:layout_centerInParent="true"
+            android:background="@drawable/branded_action_button_light"
+            android:gravity="center"
+            android:text="下单"/>
     </RelativeLayout>
 
 </LinearLayout>

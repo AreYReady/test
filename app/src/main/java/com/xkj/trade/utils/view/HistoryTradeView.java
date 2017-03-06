@@ -30,9 +30,9 @@ import static java.math.BigDecimal.ROUND_DOWN;
 public class HistoryTradeView extends View {
     private String TAG = SystemUtil.getTAG(this);
     private Boolean isReady = false;
-    private Paint mRedPaint;
+    private Paint mfallPaint;
     private Context mContext;
-    private Paint mBluePaint;
+    private Paint mRisePaint;
     private Paint mGarkPaint;
     private Paint mSilverPaint;
     private List<BeanDrawPriceData> mDrawPriceDataList;
@@ -113,14 +113,14 @@ public class HistoryTradeView extends View {
     public HistoryTradeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
-        mRedPaint = new Paint();
-        mRedPaint.setStyle(Paint.Style.FILL);
-        mRedPaint.setColor(getResources().getColor(R.color.risk_slippage_max_red_dark));
-        mRedPaint.setStrokeWidth(3);
-        mBluePaint = new Paint();
-        mBluePaint.setStyle(Paint.Style.FILL);
-        mBluePaint.setColor(getResources().getColor(R.color.risk_slippage_max_green_dark));
-        mBluePaint.setStrokeWidth(3);
+        mfallPaint = new Paint();
+        mfallPaint.setStyle(Paint.Style.FILL);
+        mfallPaint.setColor(getResources().getColor(R.color.text_color_price_fall));
+        mfallPaint.setStrokeWidth(3);
+        mRisePaint = new Paint();
+        mRisePaint.setStyle(Paint.Style.FILL);
+        mRisePaint.setColor(getResources().getColor(R.color.text_color_price_rise));
+        mRisePaint.setStrokeWidth(3);
         mSilverPaint = new Paint();
         mSilverPaint.setStyle(Paint.Style.FILL);
         mSilverPaint.setColor(getResources().getColor(R.color.text_color_primary_disabled_dark));
@@ -228,11 +228,11 @@ public class HistoryTradeView extends View {
                 }
                 //说明打开价和关闭价相等或者太多相近，人工画出值
                 if (historyData.getClose() > historyData.getOpen()) {
-                    canvas.drawRect(startX, yBottom, stopX, yTop, mBluePaint);
-                    canvas.drawLine(startX + (stopX - startX) / 2, yMinBottom, startX + (stopX - startX) / 2, yMaxTop, mBluePaint);
+                    canvas.drawRect(startX, yBottom, stopX, yTop, mRisePaint);
+                    canvas.drawLine(startX + (stopX - startX) / 2, yMinBottom, startX + (stopX - startX) / 2, yMaxTop, mRisePaint);
                 } else if (historyData.getClose() < historyData.getOpen()) {
-                    canvas.drawRect(startX, yTop, stopX, yBottom, mRedPaint);
-                    canvas.drawLine(startX + (stopX - startX) / 2, yMaxTop, startX + (stopX - startX) / 2, yMinBottom, mRedPaint);
+                    canvas.drawRect(startX, yTop, stopX, yBottom, mfallPaint);
+                    canvas.drawLine(startX + (stopX - startX) / 2, yMaxTop, startX + (stopX - startX) / 2, yMinBottom, mfallPaint);
                 } else {
                     if (yMaxTop > yMinBottom) {
                         canvas.drawLine(startX + (stopX - startX) / 2, yMaxTop, startX + (stopX - startX) / 2, yMinBottom, mSilverPaint);
@@ -298,11 +298,11 @@ public class HistoryTradeView extends View {
                         mBeanDrawPriceData.setPriceString(String.valueOf(realTimePrice));
                         mDrawPriceDataList.add(mBeanDrawPriceData);
                         if (realTimePrice < lastItemOpenPrice) {
-                            mDashedPaint.setColor(getResources().getColor(R.color.risk_slippage_max_red_dark));
-                            mBeanDrawPriceData.setColor(getResources().getColor(R.color.risk_slippage_max_red_dark));
+                            mDashedPaint.setColor(getResources().getColor(R.color.text_color_price_fall));
+                            mBeanDrawPriceData.setColor(getResources().getColor(R.color.text_color_price_fall));
                         } else {
-                            mDashedPaint.setColor(getResources().getColor(R.color.risk_slippage_max_green_dark));
-                            mBeanDrawPriceData.setColor(getResources().getColor(R.color.risk_slippage_max_green_dark));
+                            mDashedPaint.setColor(getResources().getColor(R.color.text_color_price_rise));
+                            mBeanDrawPriceData.setColor(getResources().getColor(R.color.text_color_price_rise));
                         }
 
                         canvas.drawLine(showDataLeftX, (float) y, showDataRightX, (float) y, mDashedPaint);
