@@ -20,6 +20,8 @@ import com.xkj.trade.adapter.OpenAdapter;
 import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.bean.RealTimeDataList;
 import com.xkj.trade.bean_.BeanOpenPosition;
+import com.xkj.trade.bean_notification.NotificationClosePosition;
+import com.xkj.trade.bean_notification.NotificationEditPosition;
 import com.xkj.trade.bean_notification.NotificationPositionCount;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
@@ -133,6 +135,9 @@ public class FragmentOpenPosition extends BaseFragment {
     @Override
     protected void initData() {
     }
+    public void removeDataItem(int position){
+
+    }
     BeanOpenPosition.DataBean.ListBean listBean;
     DiffUtil.DiffResult diffResult;
     private List<BeanOpenPosition.DataBean.ListBean> mBeanDupOpenList;
@@ -167,4 +172,28 @@ public class FragmentOpenPosition extends BaseFragment {
         }
     };
 
+@Subscribe
+    public void notificationEditPostion(NotificationEditPosition notificationEditPosition){
+    if(notificationEditPosition.getSl()!=null||notificationEditPosition.getTp()!=null) {
+        for (int i = 0; i < mDataList.size(); i++) {
+            if (notificationEditPosition.getOrder() == mDataList.get(i).getOrder()) {
+                    mDataList.get(i).setTp(notificationEditPosition.getTp());
+                    mDataList.get(i).setSl(notificationEditPosition.getSl());
+                    mOpenAdapter.notifyItemChanged(i);
+            }
+        }
+    }
+}
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void notificationClosePosition(NotificationClosePosition notificationClosePosition){
+        if(notificationClosePosition.getOrder()!=0){
+            for (int i = 0; i < mDataList.size(); i++) {
+                if (notificationClosePosition.getOrder() == mDataList.get(i).getOrder()) {
+                    mDataList.remove(i);
+                    mOpenAdapter.notifyItemRemoved(i);
+//                    mOpenAdapter.notifyItemRangeChanged(i,mDataList.size()-1);
+                }
+            }
+        }
+    }
 }

@@ -21,6 +21,7 @@ import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean.RealTimeDataList;
 import com.xkj.trade.bean_.BeanBaseResponse;
 import com.xkj.trade.bean_.BeanOpenPosition;
+import com.xkj.trade.bean_notification.NotificationEditPendingPosition;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.utils.ACache;
@@ -169,7 +170,7 @@ public class EditPendingPositionFrament extends BaseFragment {
     }
 
     private void enterOrder() {
-        Map<String, String> map = new TreeMap<>();
+        final Map<String, String> map = new TreeMap<>();
         map.put(RequestConstant.LOGIN, AesEncryptionUtil.stringBase64toString(ACache.get(context).getAsString(RequestConstant.ACCOUNT)));
         map.put(RequestConstant.SYMBOL, AesEncryptionUtil.stringBase64toString(MyApplication.getInstance().beanIndicatorData.getSymbol()));
         map.put(RequestConstant.ACTION, RequestConstant.Action.EDIT.toString());
@@ -197,7 +198,14 @@ public class EditPendingPositionFrament extends BaseFragment {
                 BeanBaseResponse beanBaseResponse = new Gson().fromJson(s, new TypeToken<BeanBaseResponse>() {
                 }.getType());
                 if (beanBaseResponse.getStatus() == 1) {
-                    EventBus.getDefault().post(new BeanOpenPosition());
+//                    EventBus.getDefault().post(new BeanOpenPosition());
+                    NotificationEditPendingPosition notificationEditPendingPosition = new NotificationEditPendingPosition();
+                    if(mCStopLost.getDataVisitity()==View.VISIBLE)
+                        notificationEditPendingPosition.setSl(mCStopLost.getMoneyString());
+                    if(mCTakeProfit.getDataVisitity()==View.VISIBLE)
+                        notificationEditPendingPosition.setTp(mCTakeProfit.getMoneyString());
+                    notificationEditPendingPosition.setOrder(mData.getOrder());
+                    EventBus.getDefault().post(notificationEditPendingPosition);
                     //发送通知activity关闭
                     EventBus.getDefault().post(beanBaseResponse);
                 }else{

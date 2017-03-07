@@ -139,7 +139,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         public void run() {
             while (isOnLongClick) {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(50);
                     Log.i(TAG, "run: ");
                     amount=MoneyUtil.subPriceToString(amount,baseNumber);
                     if(Double.valueOf(amount)>=Double.valueOf(maxPrice)){
@@ -159,7 +159,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         public void run() {
             while (isOnLongClick) {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(50);
 //                    editText.setText(String.valueOf(amount));
 //                    myHandler.sendEmptyMessage(2);
                     amount= MoneyUtil.addPrice(amount,baseNumber);

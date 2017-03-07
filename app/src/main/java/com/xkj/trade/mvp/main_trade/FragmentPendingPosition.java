@@ -22,6 +22,8 @@ import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.bean.RealTimeDataList;
 import com.xkj.trade.bean_.BeanClosePosition;
 import com.xkj.trade.bean_.BeanPendingPosition;
+import com.xkj.trade.bean_notification.NotificationDeletePending;
+import com.xkj.trade.bean_notification.NotificationEditPendingPosition;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.diffcallback.PendingPositionDiff;
@@ -170,6 +172,36 @@ public class FragmentPendingPosition extends BaseFragment  {
     @Subscribe
     public void getInform(BeanClosePosition beanClosePosition){
         Log.i(TAG, "getInform: ");
+        requestData();
+    }
+    @Subscribe
+    public void notificationEditPending(NotificationEditPendingPosition notificationEditPendingPosition){
+        if(notificationEditPendingPosition.getSl()!=null||notificationEditPendingPosition.getTp()!=null)
+        for(int i=0;i<mDataList.size();i++){
+            if(notificationEditPendingPosition.getOrder()==mDataList.get(i).getOrder()){
+                mDataList.get(i).setTp(notificationEditPendingPosition.getTp());
+                mDataList.get(i).setSl(notificationEditPendingPosition.getSl());
+                final int finalI = i;
+                ThreadHelper.instance().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPendingAdapter.notifyItemChanged(finalI);
+                    }
+                });
+            }
+        }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void notificationDeletePending(NotificationDeletePending notificationDeletePending){
+        for(int i=0;i<mDataList.size();i++){
+            if(notificationDeletePending.getOrder()==mDataList.get(i).getOrder()){
+                mDataList.remove(i);
+                mPendingAdapter.notifyItemRemoved(i);
+            }
+        }
+    }
+    @Subscribe
+    public void notificationAddPending(BeanPendingPosition beanPendingPosition){
         requestData();
     }
 }

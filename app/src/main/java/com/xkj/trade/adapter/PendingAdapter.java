@@ -3,7 +3,6 @@ package com.xkj.trade.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +21,6 @@ import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.SystemUtil;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.xkj.trade.constant.RequestConstant.CURRENT_PRICE;
 import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY_STRING;
@@ -38,7 +36,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
     private List<BeanPendingPosition.DataBean.ListBean> mDataList;
     private int mPosition;
     private BeanPendingPosition.DataBean.ListBean mData;
-    private Map<Integer,Boolean> isClick=new ArrayMap<Integer,Boolean>();
+//    private Map<Integer,Boolean> isClick=new ArrayMap<Integer,Boolean>();
 
     public PendingAdapter(Context context, List<BeanPendingPosition.DataBean.ListBean> mDataList){
         this.context=context;
@@ -46,7 +44,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
     }
     public void setData(List<BeanPendingPosition.DataBean.ListBean> mDataList){
         this.mDataList=mDataList;
-        isClick.clear();
+//        isClick.clear();
     }
     @Override
     public PendingAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -76,12 +74,14 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
             @Override
             public void onClick(View v) {
                 mPosition=position;
-                if(isClick.containsKey(position)){
-                    isClick.remove(position);
+                if(mData.getStatus()!=0){
+//                    isClick.remove(position);
+                    mData.setStatus(0);
                     holder.llHide.setVisibility(View.GONE);
                     holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.color_primary_2_light_transparent));
                 }else{
-                    isClick.put(position,true);
+//                    isClick.put(position,true);
+                    mData.setStatus(1);
                     holder.llHide.setVisibility(View.VISIBLE);
                     holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.congratulation_joining_background_dark));
                 }
@@ -89,7 +89,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
 
             }
         });
-        if(isClick.containsKey(position)){
+        if(mData.getStatus()!=0){
             holder.llHide.setVisibility(View.VISIBLE);
             holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.congratulation_joining_background_dark));
         }else{

@@ -8,14 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="1dip"
         android:background="@android:color/black"/>
-    <include layout="@layout/v_operate_symbol_info" android:layout_width="match_parent" android:layout_height="60dip"/>
+    <include layout="@layout/v_operate_symbol_info" android:layout_width="match_parent" android:layout_height="@dimen/title_height"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dip"
         android:background="@android:color/black"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="42.5dip"
+        android:layout_height="@dimen/open_pending_select_height"
         android:orientation="horizontal"
         android:id="@+id/ll_button_group"
         >

@@ -14,7 +14,7 @@
         <LinearLayout
             android:id="@+id/ll_button_group"
             android:layout_width="match_parent"
-            android:layout_height="72.5dip"
+            android:layout_height="@dimen/buy_sell_height"
             android:orientation="horizontal">
 
             <Button

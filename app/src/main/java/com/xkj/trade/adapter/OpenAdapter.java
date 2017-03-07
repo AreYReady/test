@@ -19,7 +19,6 @@ import com.xkj.trade.mvp.operate.OperatePositionActivity;
 import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.SystemUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.xkj.trade.constant.RequestConstant.CURRENT_PRICE;
@@ -38,17 +37,17 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
     private String TAG = SystemUtil.getTAG(this);
     private List<BeanOpenPosition.DataBean.ListBean> mDataList;
     private Context context;
-    private List<Boolean> listSelect = new ArrayList<>();
+//    private List<Boolean> listSelect = new ArrayList<>();
     private int mPosition;
 
     public OpenAdapter(Context context, List<BeanOpenPosition.DataBean.ListBean> mDataList) {
         this.mDataList = mDataList;
         this.context = context;
-        if(mDataList!=null){
-            for (int i = 0; i < mDataList.size(); i++) {
-                listSelect.add(false);
-            }
-        }
+//        if(mDataList!=null){
+//            for (int i = 0; i < mDataList.size(); i++) {
+//                listSelect.add(false);
+//            }
+//        }
     }
 
 
@@ -59,11 +58,11 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
     }
     public void setData(List<BeanOpenPosition.DataBean.ListBean> mDataList ){
         this.mDataList=mDataList;
-        if(mDataList!=null){
-            for (int i = 0; i < mDataList.size(); i++) {
-                listSelect.add(false);
-            }
-        }
+//        if(mDataList!=null){
+//            for (int i = 0; i < mDataList.size(); i++) {
+//                listSelect.add(false);
+//            }
+//        }
     }
 
     @Override
@@ -98,26 +97,25 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        BeanOpenPosition.DataBean.ListBean mData = mDataList.get(position);
+        final BeanOpenPosition.DataBean.ListBean mData = mDataList.get(position);
         holder.llOnclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPosition=position;
-                if (listSelect.get(position)) {
+               mPosition=position;
+                if (mData.getStatus()!=0) {
                     holder.llHide.setVisibility(View.GONE);
                     holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.background_trade_item));
-                    listSelect.set(position, false);
+                    mData.setStatus(0);
                 } else {
                     holder.llHide.setVisibility(View.VISIBLE);
                     holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.background_trade_item_open));
-                    listSelect.set(position, true);
+                    mData.setStatus(1);
                 }
             }
         });
-        if (listSelect.get(position)) {
+        if (mData.getStatus()!=0) {
             holder.llHide.setVisibility(View.VISIBLE);
             holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.congratulation_joining_background_dark));
-
         } else {
             holder.llHide.setVisibility(View.GONE);
             holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.color_primary_2_light_transparent));
@@ -127,7 +125,6 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
         holder.bEditPosition.setOnClickListener(this);
         holder.tvCountyName.setText(mData.getSymbol());
         holder.tvMoney.setText(MoneyUtil.deleteZero(MoneyUtil.mulPrice(mData.getVolume(),String.valueOf(VOLUME_MONEY))));
-
         holder.tvCommission.setText("$" + mData.getCommission());
         if (mData.getCmd().equals("sell")) {
             holder.tvOperate.setText("卖");
@@ -175,7 +172,7 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
     }
 
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+   public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public MyViewHolder(final View itemView) {
             super(itemView);

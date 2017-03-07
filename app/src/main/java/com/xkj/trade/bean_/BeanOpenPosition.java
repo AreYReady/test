@@ -69,6 +69,12 @@ public class BeanOpenPosition {
         }
 
         public static class ListBean {
+            public ListBean(String sl, String tp, int order) {
+                this.sl = sl;
+                this.tp = tp;
+                this.order = order;
+            }
+
             /**
              * closeprice : 1.05815
              * cmd : sell
@@ -84,8 +90,10 @@ public class BeanOpenPosition {
              * volume : 0.01
              * login : 10001
              * price:不是网络的数据，后期加入。表示当前价格
+             * status: 不是网络数据，表示状态0或者1,0是正常，1是点击之后
              */
 
+            public ListBean(){}
             private String closeprice;
             private String cmd;
             private String commission;
@@ -101,6 +109,15 @@ public class BeanOpenPosition {
             private String login;
             private String price;
 
+            public int getStatus() {
+                return status;
+            }
+
+            public void setStatus(int status) {
+                this.status = status;
+            }
+
+            private int status;
             public String getPrice() {
                 return price;
             }

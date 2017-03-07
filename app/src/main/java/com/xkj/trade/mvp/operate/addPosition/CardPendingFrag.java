@@ -280,7 +280,9 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
         }
         map.put(RequestConstant.EXC, exc.toString());
         map.put(RequestConstant.PRICE, mCPrice.getMoneyString());
+        if(mCTakeProfit.getDataVisitity()==View.VISIBLE)
         map.put(RequestConstant.SL, mCStopLost.getMoneyString());
+        if(mCStopLost.getDataVisitity()==View.VISIBLE)
         map.put(RequestConstant.TP, mCTakeProfit.getMoneyString());
         OkhttpUtils.enqueue(UrlConstant.URL_TRADE_ORDER_EXE, map, new Callback() {
             @Override

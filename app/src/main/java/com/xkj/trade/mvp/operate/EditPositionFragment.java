@@ -22,6 +22,7 @@ import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean.RealTimeDataList;
 import com.xkj.trade.bean_.BeanBaseResponse;
 import com.xkj.trade.bean_.BeanOpenPosition;
+import com.xkj.trade.bean_notification.NotificationEditPosition;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.utils.ACache;
@@ -150,13 +151,15 @@ public class EditPositionFragment extends BaseFragment {
             //没有止损有效值
             mCStopLost.setData("0", mData.getOpenprice(), mBaseNumble, MoneyUtil.subPriceToString(mData.getOpenprice(), String.valueOf(mBaseNumble)));
         } else {
-            mCStopLost.setData("0", mData.getSl(), mBaseNumble, MoneyUtil.subPriceToString(mData.getSl(), String.valueOf(mBaseNumble)));
+            mCStopLost.setData("0", mData.getSl(), mBaseNumble, mData.getSl());
+            mCStopLost.setVisible();
         }
         if (Double.valueOf(mData.getTp()) == 0) {
             //没有获利有效值
             mCTakeProfit.setData(mData.getOpenprice(), "10000", mBaseNumble, MoneyUtil.addPrice(mData.getOpenprice(), String.valueOf(mBaseNumble)));
         } else {
-            mCTakeProfit.setData(mData.getTp(), "10000", mBaseNumble, MoneyUtil.addPrice(mData.getTp(), String.valueOf(mBaseNumble)));
+            mCTakeProfit.setData(mData.getTp(), "10000", mBaseNumble,mData.getTp());
+            mCTakeProfit.setVisible();
         }
         mRivTradeSymbol.setImageResource(DataUtil.getImageId(mData.getSymbol()));
         requestSubSymbol();
@@ -169,7 +172,7 @@ public class EditPositionFragment extends BaseFragment {
         }
     }
     private void enterOrder() {
-        Map<String, String> map = new TreeMap<>();
+        final Map<String, String> map = new TreeMap<>();
         map.put(RequestConstant.LOGIN, AesEncryptionUtil.stringBase64toString(ACache.get(context).getAsString(RequestConstant.ACCOUNT)));
         map.put(RequestConstant.SYMBOL, AesEncryptionUtil.stringBase64toString(MyApplication.getInstance().beanIndicatorData.getSymbol()));
         map.put(RequestConstant.ACTION, RequestConstant.Action.EDIT.toString());
@@ -196,7 +199,17 @@ public class EditPositionFragment extends BaseFragment {
                 BeanBaseResponse beanBaseResponse = new Gson().fromJson(s, new TypeToken<BeanBaseResponse>() {
                 }.getType());
                 if (beanBaseResponse.getStatus() == 1) {
+                    NotificationEditPosition notificationEditPosition = new NotificationEditPosition();
+//                    BeanOpenPosition.DataBean.ListBean listBean = new BeanOpenPosition.DataBean.ListBean();
+                    if(map.get(RequestConstant.SL)!=null){
+                        notificationEditPosition.setSl(map.get(RequestConstant.SL));
+                    }
+                    if(map.get(RequestConstant.TP)!=null){
+                        notificationEditPosition.setTp(map.get(RequestConstant.TP));
+                    }
+                    notificationEditPosition.setOrder(mData.getOrder());
                     EventBus.getDefault().post(new BeanOpenPosition());
+                    EventBus.getDefault().post(notificationEditPosition);
                     //发送通知activity关闭
                     EventBus.getDefault().post(beanBaseResponse);
                 }else {

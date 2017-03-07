@@ -20,8 +20,8 @@ import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean.RealTimeDataList;
 import com.xkj.trade.bean_.BeanBaseResponse;
-import com.xkj.trade.bean_.BeanOpenPosition;
 import com.xkj.trade.bean_.BeanPendingPosition;
+import com.xkj.trade.bean_notification.NotificationDeletePending;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.utils.ACache;
@@ -133,7 +133,7 @@ public class DeletePositionFragment extends BaseFragment {
                 BeanBaseResponse beanBaseResponse = new Gson().fromJson(s, new TypeToken<BeanBaseResponse>() {
                 }.getType());
                 if (beanBaseResponse.getStatus() == 1) {
-                    EventBus.getDefault().post(new BeanOpenPosition());
+                    EventBus.getDefault().post(new NotificationDeletePending(mData.getOrder()));
                     //发送通知activity关闭
                     EventBus.getDefault().post(beanBaseResponse);
                 }else{

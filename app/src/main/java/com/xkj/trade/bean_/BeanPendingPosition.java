@@ -84,6 +84,7 @@ public class BeanPendingPosition {
              * tp : 0.0
              * volume : 0.10
              * price:不是网络的数据，后期加入。表示当前价格
+             * status:不是网咯数据，后期加入，表示当前状态，0：正常，1点击
              */
 
             private String closeprice;
@@ -100,6 +101,16 @@ public class BeanPendingPosition {
             private String symbol;
             private String tp;
             private String volume;
+
+            public int getStatus() {
+                return status;
+            }
+
+            public void setStatus(int status) {
+                this.status = status;
+            }
+
+            private  int status;
 
             public String getCloseprice() {
                 return closeprice;

@@ -22,8 +22,8 @@ import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean.BeanIndicatorData;
 import com.xkj.trade.bean.RealTimeDataList;
 import com.xkj.trade.bean_.BeanBaseResponse;
-import com.xkj.trade.bean_.BeanClosePosition;
 import com.xkj.trade.bean_.BeanOpenPosition;
+import com.xkj.trade.bean_notification.NotificationClosePosition;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.utils.ACache;
@@ -82,8 +82,8 @@ public class ClosePositionFragment extends BaseFragment {
     TextView mTvCopyTakeProfit;
     @Bind(R.id.ll_copy_from)
     LinearLayout mLlCopyFrom;
-    @Bind(R.id.tv_close_position_prompt)
-    TextView mTvClosePositionPrompt;
+//    @Bind(R.id.tv_close_position_prompt)
+//    TextView mTvClosePositionPrompt;
     @Bind(R.id.tv_enter_button_prompt)
     TextView mTvEnterButtonPrompt;
     @Bind(R.id.tv_enter_button)
@@ -151,7 +151,7 @@ public class ClosePositionFragment extends BaseFragment {
                BeanBaseResponse beanBaseResponse=new Gson().fromJson(response.body().string(),new TypeToken<BeanBaseResponse>(){}.getType());
                 if(beanBaseResponse.getStatus()==1) {
                     //通知刷新
-                    EventBus.getDefault().post(new BeanClosePosition());
+                    EventBus.getDefault().post(new NotificationClosePosition(mData.getOrder()));
                     //发送通知activity关闭
                     EventBus.getDefault().post(new BeanBaseResponse());
                 }else{
@@ -186,6 +186,7 @@ public class ClosePositionFragment extends BaseFragment {
         for(RealTimeDataList.BeanRealTime beanRealTime:realTimeDataList.getQuotes()){
             if(beanRealTime.getSymbol().equals(mData.getSymbol())){
                 setHeader(String.valueOf(beanRealTime.getSymbol()),String.valueOf(beanRealTime.getAsk()),String.valueOf(beanRealTime.getBid()));
+                setTvEstimatedProfitAmount(MyApplication.getInstance().beanIndicatorData);
             }
         }
     }

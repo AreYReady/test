@@ -495,8 +495,15 @@ public class DataUtil {
             case "wheat":
                 id = R.mipmap.ic_instrument_wheat;
                 break;
+            case "usoil":
+                id=R.mipmap.ic_instrument_gas;
             default:
                 break;
+        }
+        if(symbol.contains("XAU")){
+            id=R.mipmap.ic_instrument_gold;
+        }else if(symbol.contains("XAG")){
+            id=R.mipmap.ic_instrument_zinc;
         }
         return id;
     }

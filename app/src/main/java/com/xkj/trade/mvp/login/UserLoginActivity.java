@@ -80,12 +80,7 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.b_login_button:
-//                new DialogUtils(getContext(), "标题", "网络有问题，请检查网咯", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                    }
-//                });
+
                 if(!checkNetStatus()){
                  ToashUtil.show(getContext(),"网咯不可用", Toast.LENGTH_SHORT);
                     return ;

@@ -54,6 +54,7 @@ import com.xkj.trade.mvp.main_trade.fragment_content.p.MainTradeContentPreListen
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.DataUtil;
 import com.xkj.trade.utils.MoneyUtil;
+import com.xkj.trade.utils.RoundImageView;
 import com.xkj.trade.utils.SystemUtil;
 import com.xkj.trade.utils.ThreadHelper;
 import com.xkj.trade.utils.ToashUtil;
@@ -145,6 +146,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     private TextView mTvPromptSymbol;
     private TextView mTvPromptAsk;
     private TextView mTvPromptBid;
+    private ImageView mIvPrompt;
     AnimationDrawable animationDrawable;
 
 
@@ -438,6 +440,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         mTvPromptAsk=(TextView)view.findViewById(R.id.tv_price_ask_prompt);
         mTvPromptBid=(TextView)view.findViewById(R.id.tv_price_bid_prompt);
         mTvPromptSymbol=(TextView)view.findViewById(R.id.tv_symbol_name_prompt);
+        mIvPrompt=(RoundImageView)view.findViewById(R.id.riv_trade_symbol);
     }
 
     @Override
@@ -583,6 +586,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         mTvPromptSymbol.setText(MyApplication.getInstance().beanIndicatorData.getSymbol());
         mTvPromptAsk.setText(MyApplication.getInstance().beanIndicatorData.getAsk());
         mTvPromptBid.setText(MyApplication.getInstance().beanIndicatorData.getBid());
+        mIvPrompt.setImageResource(MyApplication.getInstance().beanIndicatorData.getImageResource());
         fillPromptSymbolInfo(0);
         //申请当前所有交易的当前报价单储存
         requestHistoryData(null, null, 0);
@@ -615,6 +619,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                         mTvPromptSymbol.setText(MyApplication.getInstance().beanIndicatorData.getSymbol());
                         mTvPromptAsk.setText(MyApplication.getInstance().beanIndicatorData.getAsk());
                         mTvPromptBid.setText(MyApplication.getInstance().beanIndicatorData.getBid());
+                        mIvPrompt.setImageResource(MyApplication.getInstance().beanIndicatorData.getImageResource());
                         Log.i(TAG, "onPageScrollStateChanged:+SCROLL_STATE_IDLE " + mPosition);
                         if (mPosition == subSymbols.size() - 1) {
                             showMyFavorites();
