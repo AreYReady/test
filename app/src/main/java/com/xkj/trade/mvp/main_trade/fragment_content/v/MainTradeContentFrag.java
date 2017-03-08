@@ -46,6 +46,8 @@ import com.xkj.trade.bean_.BeanAllSymbols;
 import com.xkj.trade.bean_.BeanHistory;
 import com.xkj.trade.bean_.BeanOpenPosition;
 import com.xkj.trade.bean_.BeanUserListInfo;
+import com.xkj.trade.bean_notification.NotificationClosePosition;
+import com.xkj.trade.bean_notification.NotificationEditPosition;
 import com.xkj.trade.constant.CacheKeyConstant;
 import com.xkj.trade.constant.TradeDateConstant;
 import com.xkj.trade.diffcallback.MyFavoritesDiffCallBack;
@@ -1045,6 +1047,30 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     public void enterOrder(BeanOpenPosition beanOpenPosition) {
         Log.i(TAG, "enterOrder: 下单成功，通知更新开仓数据");
         mMainTradeContentPre.requestOpenPosition();
+    }
+    @Subscribe
+    public void notificationEditPostion(NotificationEditPosition notificationEditPosition){
+        if(notificationEditPosition.getSl()!=null||notificationEditPosition.getTp()!=null) {
+            for (int i = 0; i < mBeanOpenList.size(); i++) {
+                if (notificationEditPosition.getOrder() == mBeanOpenList.get(i).getOrder()) {
+                    mBeanOpenList.get(i).setTp(notificationEditPosition.getTp());
+                    mBeanOpenList.get(i).setSl(notificationEditPosition.getSl());
+                    mOpenAdapter.notifyItemChanged(i);
+                }
+            }
+        }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void notificationClosePosition(NotificationClosePosition notificationClosePosition){
+        if(notificationClosePosition.getOrder()!=0){
+            for (int i = 0; i < mBeanOpenList.size(); i++) {
+                if (notificationClosePosition.getOrder() == mBeanOpenList.get(i).getOrder()) {
+                    mBeanOpenList.remove(i);
+                    mOpenAdapter.notifyItemRemoved(i);
+//                    mOpenAdapter.notifyItemRangeChanged(i,mDataList.size()-1);
+                }
+            }
+        }
     }
 
 

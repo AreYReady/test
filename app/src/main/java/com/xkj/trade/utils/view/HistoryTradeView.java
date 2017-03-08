@@ -79,7 +79,7 @@ public class HistoryTradeView extends View {
     /**
      * 每单位px的秒数
      */
-    private float unitSecond;
+    private float unitSpace;
     /**
      * 展示数据的区域高度
      */
@@ -186,7 +186,7 @@ public class HistoryTradeView extends View {
     private void drawVertical(Canvas canvas) {
         //每13个data的时间单位的px
         int size = (int) (13 / scaleSize);
-        float l = (int) (data.getPeriod() * 60 * size / unitSecond);
+        float l = (int) ( size *unitDataIndex);
         float i = l - ((int) showDataLeftX) % l;
         for (int x = 0; x < 5; x++) {
             if (showDataLeftX + i + l * x <= showDataRightX) {
@@ -196,7 +196,7 @@ public class HistoryTradeView extends View {
                 if (showTimeIndex >= indexCount) {
                     showTimeIndex = data.getBarnum() - 1;
                 }
-                canvas.drawText(DateUtils.getShowTimeNoTimeZone((data.getList().get(showTimeIndex).getQuoteTime()) * indexCount + dataBeginTime * indexCount), showDataLeftX + i + l * x, showDataHeight + TradeDateConstant.showTimeSpace / 2 + SystemUtil.dp2pxFloat(mContext, 10), mGarkPaint);
+                canvas.drawText((data.getList().get(showTimeIndex).getTime()), showDataLeftX + i + l * x, showDataHeight + TradeDateConstant.showTimeSpace / 2 + SystemUtil.dp2pxFloat(mContext, 10), mGarkPaint);
             }
         }
     }
@@ -366,12 +366,12 @@ public class HistoryTradeView extends View {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        unitSecond = (float) (data.getPeriod() * 60 * data.getBarnum() / getWidth());
+//        unitSpace = (float) (getWidth()/data.getBarnum());
         unitDataIndex = ((float) getWidth() / (float) data.getBarnum());
         dataBeginTime = data.getList().get(0).getQuoteTime();
-        dataBeginTime = data.getList().get(0).getQuoteTime() + TradeDateConstant.tz_delta * 60 * 60;
-        dataStopTime = dataBeginTime + data.getList().get(data.getList().size() - 1).getQuoteTime();
-        showBeginTime = dataBeginTime + data.getList().get(startIndex).getQuoteTime();
+//        dataBeginTime = data.getList().get(0).getQuoteTime();
+//        dataStopTime = dataBeginTime + data.getList().get(data.getList().size() - 1).getQuoteTime();
+//        showBeginTime = dataBeginTime + data.getList().get(startIndex).getQuoteTime();
         period = data.getPeriod();
         lastItemOpenPrice=data.getList().get(data.getBarnum()-1).getOpen();
         if (!isReady)

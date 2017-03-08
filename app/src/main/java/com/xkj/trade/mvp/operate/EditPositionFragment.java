@@ -208,7 +208,7 @@ public class EditPositionFragment extends BaseFragment {
                         notificationEditPosition.setTp(map.get(RequestConstant.TP));
                     }
                     notificationEditPosition.setOrder(mData.getOrder());
-                    EventBus.getDefault().post(new BeanOpenPosition());
+//                    EventBus.getDefault().post(new BeanOpenPosition());
                     EventBus.getDefault().post(notificationEditPosition);
                     //发送通知activity关闭
                     EventBus.getDefault().post(beanBaseResponse);

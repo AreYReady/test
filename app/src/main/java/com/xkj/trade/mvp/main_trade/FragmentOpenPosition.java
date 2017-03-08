@@ -172,7 +172,7 @@ public class FragmentOpenPosition extends BaseFragment {
         }
     };
 
-@Subscribe
+    @Subscribe
     public void notificationEditPostion(NotificationEditPosition notificationEditPosition){
     if(notificationEditPosition.getSl()!=null||notificationEditPosition.getTp()!=null) {
         for (int i = 0; i < mDataList.size(); i++) {
@@ -184,6 +184,10 @@ public class FragmentOpenPosition extends BaseFragment {
         }
     }
 }
+    @Subscribe
+    public void notificationAddposition(BeanOpenPosition beanOpenPosition){
+        requestOpenPosition();
+    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void notificationClosePosition(NotificationClosePosition notificationClosePosition){
         if(notificationClosePosition.getOrder()!=0){

@@ -72,6 +72,9 @@ public class DataUtil {
             data[0] = (int) Math.pow(10, len - 1);
 
         } else if (i > 2 * Math.pow(10, len - 1)) {
+            if(len==1){
+                data[0]=1;
+            }else
             data[0] = (int) Math.pow(10, len - 2) * 5;
         } else {
             data[0] = (int) Math.pow(10, len - 2) * 2;

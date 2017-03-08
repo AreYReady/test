@@ -21,6 +21,7 @@ import com.xkj.trade.utils.DataUtil;
 import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.SystemUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
     private List<BeanAllSymbols.SymbolPrices> data;
     private OnItemClickListener listener;
     private String TAG = SystemUtil.getTAG(this);
-
+    private List<String> staIntegers=new ArrayList<>();
     public MyFavoritesAdapter(Context context, List<BeanAllSymbols.SymbolPrices> data) {
         this.context = context;
         this.data = data;
@@ -50,7 +51,7 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
     }
 
     @Override
-    public void onBindViewHolder(final MyFavoritesHolder holder, int position) {
+    public void onBindViewHolder(final MyFavoritesHolder holder, final int position) {
         final BeanAllSymbols.SymbolPrices symbolPrices = data.get(position);
         holder.flag.setImageResource(DataUtil.getImageId(symbolPrices.getSymbol()));
         SpannableString askTextBig = MoneyUtil.getRealTimePriceTextBig(context, symbolPrices.getBid());
@@ -67,9 +68,15 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
         holder.ask.setText(askTextBig);
         holder.instrumentName.setText(symbolPrices.getSymbol());
         if (symbolPrices.getSign()) {
-            holder.itemOverLay.setVisibility(View.GONE);
+            if(!staIntegers.contains(String.valueOf(position))){
+                holder.goTo.setVisibility(View.INVISIBLE);
+            }else{
+                holder.goTo.setVisibility(View.VISIBLE);
+            }
+            holder.itemOverLay.setVisibility(View.INVISIBLE);
             holder.favoritesIcon.setImageResource(R.drawable.collected);
         } else {
+            holder.goTo.setVisibility(View.INVISIBLE);
             holder.itemOverLay.setVisibility(View.VISIBLE);
             holder.favoritesIcon.setImageResource(R.drawable.discollect);
         }
@@ -87,6 +94,7 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
                     //星星亮了
                     if (holder.goTo.getVisibility() != View.VISIBLE) {
                         //还没翻转，就翻转
+                        staIntegers.add(String.valueOf(position));
                         holder.goTo.setVisibility(View.VISIBLE);
                         holder.goTo.startAnimation(AnimationUtils.loadAnimation(context, R.anim.transtale_y_up));
                         holder.bidAskContainer.startAnimation(AnimationUtils.loadAnimation(context, R.anim.transtale_y_up2));
@@ -94,6 +102,7 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
 //                        mCoverView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.transtale_y_up));
                         Log.i(TAG, "onClick:1 ");
                     } else {
+                        staIntegers.remove(String.valueOf(position));
                         //翻转了，就取消订阅
                         holder.goTo.startAnimation(AnimationUtils.loadAnimation(context, R.anim.transtale_y_down));
                         holder.bidAskContainer.startAnimation(AnimationUtils.loadAnimation(context, R.anim.transtale_y_dwon2));
@@ -105,6 +114,7 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
                         listener.onItemClick(symbolPrices);
                     }
                 } else {
+                    staIntegers.add(String.valueOf(position));
                     Log.i(TAG, "onClick:3 ");
                     //星星没亮，就变亮
                     holder.itemOverLay.setVisibility(View.GONE);
