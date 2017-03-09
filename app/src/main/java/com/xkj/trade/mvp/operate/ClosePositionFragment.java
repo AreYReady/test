@@ -18,8 +18,6 @@ import com.xkj.trade.IO.okhttp.ChatWebSocket;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
 import com.xkj.trade.base.BaseFragment;
-import com.xkj.trade.base.MyApplication;
-import com.xkj.trade.bean.BeanIndicatorData;
 import com.xkj.trade.bean.RealTimeDataList;
 import com.xkj.trade.bean_.BeanBaseResponse;
 import com.xkj.trade.bean_.BeanOpenPosition;
@@ -46,7 +44,9 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static com.xkj.trade.base.MyApplication.beanIndicatorData;
 import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY;
+import static com.xkj.trade.mvp.main_trade.fragment_content.v.MainTradeContentFrag.realTimeMap;
 
 /**
  * Created by huangsc on 2016-12-14.
@@ -120,13 +120,23 @@ public class ClosePositionFragment extends BaseFragment {
                 enterOrder();
             }
         });
-        setTvEstimatedProfitAmount(MyApplication.getInstance().beanIndicatorData);
+        if(realTimeMap.containsKey(mData.getSymbol())) {
+            setTvEstimatedProfitAmount(mData.getSymbol(), realTimeMap.get(mData.getSymbol()).getAsk(), realTimeMap.get(mData.getSymbol()).getBid());
+        }
         requestSubSymbol();
 
     }
 
-    public void setTvEstimatedProfitAmount(BeanIndicatorData beanIndicatorData) {
-        mTvEstimatedProfitAmount.setText("$:"+ DataUtil.getProfit(beanIndicatorData.getSymbol(),Double.valueOf(beanIndicatorData.getAsk()),Double.valueOf(beanIndicatorData.getBid()),mData.getCmd(),mData.getOpenprice(),mData.getVolume()));
+    public void setTvEstimatedProfitAmount( String symbol,String ask,String bid) {
+        mTvEstimatedProfitAmount.setText("$:"+ DataUtil.getProfit(symbol,Double.valueOf(ask),Double.valueOf(bid),mData.getCmd(),mData.getOpenprice(),mData.getVolume()));
+        if(Double.valueOf(beanIndicatorData.getAsk())-Double.valueOf(mData.getOpenprice())<0){
+            mTvEstimatedProfitAmount.setTextColor(getResources().getColor(R.color.text_color_price_fall));
+        }else{
+            mTvEstimatedProfitAmount.setTextColor(getResources().getColor(R.color.text_color_price_rise));
+        }
+    }
+    public void setTEstimatedProfitAmount( String symbol, double ask,double bid) {
+        mTvEstimatedProfitAmount.setText("$:"+ DataUtil.getProfit(symbol,ask,bid,mData.getCmd(),mData.getOpenprice(),mData.getVolume()));
         if(Double.valueOf(beanIndicatorData.getAsk())-Double.valueOf(mData.getOpenprice())<0){
             mTvEstimatedProfitAmount.setTextColor(getResources().getColor(R.color.text_color_price_fall));
         }else{
@@ -186,7 +196,7 @@ public class ClosePositionFragment extends BaseFragment {
         for(RealTimeDataList.BeanRealTime beanRealTime:realTimeDataList.getQuotes()){
             if(beanRealTime.getSymbol().equals(mData.getSymbol())){
                 setHeader(String.valueOf(beanRealTime.getSymbol()),String.valueOf(beanRealTime.getAsk()),String.valueOf(beanRealTime.getBid()));
-                setTvEstimatedProfitAmount(MyApplication.getInstance().beanIndicatorData);
+                setTEstimatedProfitAmount(beanRealTime.getSymbol(),beanRealTime.getAsk(),beanRealTime.getBid());
             }
         }
     }
@@ -205,6 +215,4 @@ public class ClosePositionFragment extends BaseFragment {
         mPriceLeft.setText(askTextBig);
         mPriceRight.setText(bidTextBig);
     }
-
-
 }

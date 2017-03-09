@@ -196,10 +196,10 @@ public class DataUtil {
                 currentPrices = ask;
                 diffSpace = MoneyUtil.subPrice(Double.valueOf(openPrices), Double.valueOf(currentPrices));
             }
-            if (symbol.substring(0, 2).equals("USD")) {
+            if (symbol.substring(symbol.length()-3, symbol.length()).equals("USD")) {
                 //直接盘:1手一点的点值为 10美元,
                 return MoneyUtil.moneyFormat(MoneyUtil.mulPrice(diffSpace, VOLUME_MONEY * Double.valueOf(volume)), 2);
-            } else if (symbol.substring(symbol.length() - 3, symbol.length()).equals("USD")) {
+            } else if (symbol.substring(0, 3).equals("USD")) {
                 //间接盘
                 // * 例如,USD/JPY 报价 91.28 的时候点值计算如下（USD/JPY最小变动价格为 0.01）：
 //                * 1手一点点差 = （100,000 X 0.01） / 91.28 = $ 10.96

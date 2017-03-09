@@ -197,6 +197,7 @@ public class FragmentPendingPosition extends BaseFragment  {
             if(notificationDeletePending.getOrder()==mDataList.get(i).getOrder()){
                 mDataList.remove(i);
                 mPendingAdapter.notifyItemRemoved(i);
+                mPendingAdapter.notifyItemRangeChanged(i,mDataList.size());
             }
         }
     }

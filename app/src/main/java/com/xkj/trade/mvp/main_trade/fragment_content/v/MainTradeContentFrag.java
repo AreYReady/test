@@ -580,7 +580,8 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         Log.i(TAG, "initIndicator: ");
         mViewPagerAdapter = new MyPagerAdapter();
         mHeaderCustomViewPager.setAdapter(mViewPagerAdapter);
-        mHeaderCustomViewPager.setOffscreenPageLimit(subSymbols.size());
+//        mHeaderCustomViewPager.setOffscreenPageLimit(subSymbols.size());
+        mHeaderCustomViewPager.setOffscreenPageLimit(2);
         mHeaderCustomViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         requestHistoryData(symbol = subSymbols.get(0).getSymbol(), mPeriod, TradeDateConstant.count);
         MyApplication.getInstance().beanIndicatorData = subSymbols.get(0);
@@ -613,6 +614,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
 
             @Override
             public void onPageScrollStateChanged(int state) {
+
                 if (state == ViewPager.SCROLL_STATE_IDLE) {
                     isScroll = false;
                     if (!symbol.equals(subSymbols.get(mPosition).getSymbol())) {
@@ -629,6 +631,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                                 mllPrompt.setVisibility(View.INVISIBLE);
                             }
                         } else {
+
                             Log.i(TAG, "onPageScrollStateChanged: 加载数据");
                             if (allSymbolsName.size() > 0) {
                                 for (BeanIndicatorData subSymbol : subSymbols) {

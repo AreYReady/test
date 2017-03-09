@@ -195,7 +195,8 @@ public class FragmentOpenPosition extends BaseFragment {
                 if (notificationClosePosition.getOrder() == mDataList.get(i).getOrder()) {
                     mDataList.remove(i);
                     mOpenAdapter.notifyItemRemoved(i);
-//                    mOpenAdapter.notifyItemRangeChanged(i,mDataList.size()-1);
+                    mOpenAdapter.notifyItemRangeChanged(i,mDataList.size()-1);
+                    EventBus.getDefault().post(new NotificationPositionCount(mDataList.size()));
                 }
             }
         }
