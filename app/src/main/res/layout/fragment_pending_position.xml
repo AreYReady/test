@@ -5,6 +5,7 @@
               android:background="@color/background_trade_item"
     android:orientation="vertical">
     <LinearLayout
+        android:id="@+id/ll_positions_pending_header_impl"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"

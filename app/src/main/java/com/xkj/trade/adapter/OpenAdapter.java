@@ -18,6 +18,7 @@ import com.xkj.trade.bean_.BeanOpenPosition;
 import com.xkj.trade.mvp.operate.OperatePositionActivity;
 import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.SystemUtil;
+import com.xkj.trade.utils.ToashUtil;
 
 import java.util.List;
 
@@ -111,6 +112,7 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
                     holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.background_trade_item_open));
                     mData.setStatus(1);
                 }
+                ToashUtil.show(context,position+"",0);
             }
         });
         if (mData.getStatus()!=0) {

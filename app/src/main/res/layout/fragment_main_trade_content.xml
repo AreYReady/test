@@ -2,22 +2,41 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
     >
-    <RelativeLayout
-        android:id="@+id/rll_trade_indicator"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dip"
-        android:background="@color/background_indicator"
-        android:clipChildren="false">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <com.xkj.trade.utils.view.CustomViewPager
-            android:id="@+id/vp_indicator_trade_content"
+        <RelativeLayout
+            android:id="@+id/rll_trade_indicator"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/symbol_tag_space"
-            android:layout_marginRight="@dimen/symbol_tag_space"/>
+            android:layout_height="150dip"
+            android:background="@color/background_indicator"
+            android:clipChildren="false">
 
-    </RelativeLayout>
+            <com.xkj.trade.utils.view.CustomViewPager
+                android:id="@+id/vp_indicator_trade_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="@dimen/symbol_tag_space"
+                android:layout_marginRight="@dimen/symbol_tag_space"/>
+
+        </RelativeLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.xkj.trade.utils.view.CircleIndicator
+                android:id="@+id/ci_circle_indicator"
+                android:layout_width="100dip"
+                android:layout_gravity="center"
+                android:layout_height="20dp"
+               />
+        </HorizontalScrollView>
+    </LinearLayout>
 
     <com.xkj.trade.utils.view.MyScrollView
         android:id="@+id/msv_my_scroll_view"
@@ -49,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 //解释下，由于最初设计，k线图为了少更新，将线图和实时价格分开，减少实时渲染，后期因为需求变动，这设计没有用，所以这个layout层次比较多。后期修改
+
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -66,7 +86,6 @@
                         android:id="@+id/ll_draw_trade_context"
                         android:layout_width="match_parent"
                         android:layout_height="150dip"
-
                         android:orientation="horizontal">
 
 
@@ -156,7 +175,9 @@
                             android:id="@+id/title_content"
                             layout="@layout/v_positions_opened_header_impl"/>
                     </LinearLayout>
-
+                    <!--<RelativeLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"></RelativeLayout>-->
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_trade_content"
                         android:layout_width="match_parent"
@@ -259,16 +280,18 @@
             android:id="@+id/ll_prompt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:background="@color/background_pull_head"
-            android:padding="@dimen/space_big_half"
             android:layout_gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginTop="-100dp"
+            android:background="@color/background_pull_head"
+            android:orientation="horizontal"
+            android:padding="@dimen/space_big_half"
+            android:visibility="invisible">
+
             <com.xkj.trade.utils.RoundImageView
                 android:id="@+id/riv_trade_symbol"
-                android:layout_marginLeft="@dimen/space_xbig"
                 android:layout_width="30dip"
                 android:layout_height="30dip"
+                android:layout_marginLeft="@dimen/space_xbig"
                 android:background="@mipmap/ic_instrument_audhuf"/>
 
             <TextView
@@ -294,8 +317,8 @@
                 style="@style/TextDesc"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:gravity="center"
                 />
         </LinearLayout>

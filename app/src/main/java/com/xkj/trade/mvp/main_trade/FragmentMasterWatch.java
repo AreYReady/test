@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -24,6 +26,7 @@ import com.xkj.trade.bean_.BeanWatchInfo;
 import com.xkj.trade.bean_notification.NotificationMasterStatus;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
+import com.xkj.trade.mvp.main_trade.activity.v.MainTradeContentActivity;
 import com.xkj.trade.mvp.master.info.FragmentMasterInfo;
 import com.xkj.trade.mvp.master.info.MasterInfoActivity;
 import com.xkj.trade.utils.ACache;
@@ -101,14 +104,14 @@ public class FragmentMasterWatch extends BaseFragment {
                 }
             }
         });
-//        mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            @Override
-//            public void onGlobalLayout() {
-//                mRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-//                mRecyclerView.setLayoutParams(new RelativeLayout.LayoutParams(mRecyclerView.getWidth(), (int) MainTradeContentActivity.descHeight
-//                        - (int) MainTradeContentActivity.flIndicatorHeight));
-//            }
-//        });
+        mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                mRecyclerView.setLayoutParams(new RelativeLayout.LayoutParams(mRecyclerView.getWidth(), (int) MainTradeContentActivity.descHeight
+                        - (int) MainTradeContentActivity.flIndicatorHeight));
+            }
+        });
         requestWatch();
         requestMasterRank();
     }

@@ -32,6 +32,7 @@ public class CustomPeriodButtons extends RelativeLayout implements View.OnClickL
     private RadioGroup mRgPeriodButtons;
     private View inflate;
     private CheckChangeListener listener;
+    private RelativeLayout rl_;
 
     public CustomPeriodButtons(Context context) {
        this(context,null);
@@ -45,6 +46,7 @@ public class CustomPeriodButtons extends RelativeLayout implements View.OnClickL
         super(context, attrs, defStyleAttr);
         inflate = LayoutInflater.from(context).inflate(R.layout.v_period_buttons_draw, null);
         addView(inflate);
+        rl_=(RelativeLayout) inflate.findViewById(R.id.rl_);
         mRbPeriod=(RadioButton) inflate.findViewById(R.id.rb_period);
         mRbPeriod.setOnClickListener(new OnClickListener() {
             @Override
@@ -95,4 +97,9 @@ public class CustomPeriodButtons extends RelativeLayout implements View.OnClickL
 //        p.setXfermode(null);
 //        canvas.restoreToCount(sc);
 //    }
+    public void setButtonVisibility(int visibility){
+        if(rl_.getVisibility()!=visibility){
+            rl_.setVisibility(visibility);
+        }
+    }
 }

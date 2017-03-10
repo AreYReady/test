@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean_.BeanMasterRank;
 import com.xkj.trade.bean_.BeanUserListInfo;
+import com.xkj.trade.bean_notification.NotificationFloat;
 import com.xkj.trade.bean_notification.NotificationPositionCount;
 import com.xkj.trade.mvp.main_trade.FragmentClosePosition;
 import com.xkj.trade.mvp.main_trade.FragmentMasterCopy;
@@ -90,6 +92,7 @@ public class MainTradeContentActivity extends BaseActivity
     private TextView mMarginLevel;
     private TextView mCredit;
     private BGABadgeImageView mOpenPositionCount;
+    FloatingActionButton fab;
 
 
 
@@ -151,7 +154,7 @@ public class MainTradeContentActivity extends BaseActivity
             }
         });
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -175,20 +178,21 @@ public class MainTradeContentActivity extends BaseActivity
         fragmentTransaction.commit();
 
         mPullViewDragLayout = (PullBottomViewDragLayout) findViewById(R.id.dragLayout);
-//        mPullViewDragLayout.getChildAt(0).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            @Override
-//            public void onGlobalLayout() {
-//                //将fragment固定在mPullViewDragLayout上面
-//                mPullViewDragLayout.getChildAt(0).getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+        mPullViewDragLayout.getChildAt(0).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+//                将fragment固定在mPullViewDragLayout上面
+                mPullViewDragLayout.getChildAt(0).getViewTreeObserver().removeOnGlobalLayoutListener(this);
 //                int initHight = mPullViewDragLayout.getMeasuredHeight() - mPullViewDragLayout.getChildAt(0).getWidth() / 2;
 //                Log.i(TAG, "onGlobalLayout: "+initHight);
 //                mPullViewDragLayout.setPadding(0,initHight,0,0);
-//                findViewById(R.id.s_temp).setLayoutParams(new LinearLayout.LayoutParams(1, mPullViewDragLayout.getChildAt(0).getHeight() / 2));
-//                descHeight = findViewById(R.id.desc).getHeight();
-//                flIndicatorHeight = findViewById(R.id.fl_indicator_item).getHeight();
-//            }
-//        });
+                findViewById(R.id.s_temp).setLayoutParams(new LinearLayout.LayoutParams(1, mPullViewDragLayout.getChildAt(0).getHeight() / 2));
+                descHeight = findViewById(R.id.desc).getHeight();
+                flIndicatorHeight = findViewById(R.id.fl_indicator_item).getHeight();
 
+            }
+        });
 
         mViewPagerFrag = (ViewPager) findViewById(R.id.vp_indicator_content);
         mViewPagerFrag.setAdapter(new FragmentAdapter(fragmentManager, mFragmentList));
@@ -382,5 +386,14 @@ public class MainTradeContentActivity extends BaseActivity
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getPositio(NotificationPositionCount notificationPositionCount){
         mOpenPositionCount.showTextBadge(notificationPositionCount.getCount()+"");
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getPositio(NotificationFloat notificationFloat){
+//        mOpenPositionCount.showTextBadge(notificationPositionCount.getCount()+"");
+        if(notificationFloat.isStatus()){
+            fab.setVisibility(View.VISIBLE);
+        }else{
+            fab.setVisibility(View.INVISIBLE);
+        }
     }
 }

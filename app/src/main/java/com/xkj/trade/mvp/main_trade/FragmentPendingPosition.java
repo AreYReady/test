@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -27,6 +29,7 @@ import com.xkj.trade.bean_notification.NotificationEditPendingPosition;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.diffcallback.PendingPositionDiff;
+import com.xkj.trade.mvp.main_trade.activity.v.MainTradeContentActivity;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.ThreadHelper;
@@ -81,6 +84,15 @@ public class FragmentPendingPosition extends BaseFragment  {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_pending_content);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.setAdapter(mPendingAdapter=new PendingAdapter(context,mDataList));
+        mSwipeRefreshLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mSwipeRefreshLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                mSwipeRefreshLayout.setLayoutParams(new LinearLayout.LayoutParams(mSwipeRefreshLayout.getWidth(),(int) MainTradeContentActivity.descHeight
+                        -view.findViewById(R.id.ll_positions_pending_header_impl).getHeight()
+                        -(int)MainTradeContentActivity.flIndicatorHeight));
+            }
+        });
         requestData();
     }
 

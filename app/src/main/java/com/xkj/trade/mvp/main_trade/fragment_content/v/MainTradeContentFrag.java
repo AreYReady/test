@@ -48,6 +48,7 @@ import com.xkj.trade.bean_.BeanOpenPosition;
 import com.xkj.trade.bean_.BeanUserListInfo;
 import com.xkj.trade.bean_notification.NotificationClosePosition;
 import com.xkj.trade.bean_notification.NotificationEditPosition;
+import com.xkj.trade.bean_notification.NotificationFloat;
 import com.xkj.trade.constant.CacheKeyConstant;
 import com.xkj.trade.constant.TradeDateConstant;
 import com.xkj.trade.diffcallback.MyFavoritesDiffCallBack;
@@ -60,11 +61,13 @@ import com.xkj.trade.utils.RoundImageView;
 import com.xkj.trade.utils.SystemUtil;
 import com.xkj.trade.utils.ThreadHelper;
 import com.xkj.trade.utils.ToashUtil;
+import com.xkj.trade.utils.view.CircleIndicator;
 import com.xkj.trade.utils.view.CustomDashedLinkView;
 import com.xkj.trade.utils.view.CustomPeriodButtons;
 import com.xkj.trade.utils.view.CustomViewPager;
 import com.xkj.trade.utils.view.DrawPriceView;
 import com.xkj.trade.utils.view.FixedSpeedScroller;
+import com.xkj.trade.utils.view.FullyLinearLayoutManager;
 import com.xkj.trade.utils.view.HistoryTradeView;
 import com.xkj.trade.utils.view.MyHorizontalScrollView;
 import com.xkj.trade.utils.view.MyScrollView;
@@ -150,7 +153,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     private TextView mTvPromptBid;
     private ImageView mIvPrompt;
     AnimationDrawable animationDrawable;
-
+    CircleIndicator mCircleIndicator;
 
     @Nullable
     @Override
@@ -222,7 +225,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         );
         mTradeContent = (RecyclerView) view.findViewById(R.id.rv_trade_content);
         mMainTradeContentPre.requestOpenPosition();
-        mTradeContent.setLayoutManager(new LinearLayoutManager(context));
+        mTradeContent.setLayoutManager(new FullyLinearLayoutManager(context));
 //        mBeanOpenList=new ArrayList<>();
 //        mTradeContent.setAdapter(mOpenAdapter=new OpenAdapter(context, mBeanOpenList));
         mTradeContent.setFocusable(false);
@@ -329,21 +332,22 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                 if (view.getMeasuredHeight() != 0) {
                     view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     Log.i(TAG, "onlobalLayout: " + view.getMeasuredHeight());
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(view.getWidth(), view.getMeasuredHeight() - view.findViewById(R.id.trade_title).getMeasuredHeight());
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(view.getWidth(), view.getMeasuredHeight() - view.findViewById(R.id.trade_title).getMeasuredHeight()-mllPrompt.getHeight());
                     mTradeContent.setLayoutParams(layoutParams);
                     view.findViewById(R.id.ll_my_favorites).setLayoutParams(new LinearLayout.LayoutParams(view.getWidth(), view.getHeight()));
                 }
             }
         });
         final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mllPrompt.getLayoutParams();
-        mllPrompt.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mllPrompt.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                layoutParams.topMargin=-mllPrompt.getHeight();
-                mllPrompt.setLayoutParams(layoutParams);
-            }
-        });
+//        mllPrompt.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                mllPrompt.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//                layoutParams.topMargin=-mllPrompt.getHeight();
+//                Log.i(TAG, "onGlobalLayout: "+mllPrompt.getHeight());
+//                mllPrompt.setLayoutParams(layoutParams);
+//            }
+//        });
         mMyScrollView.registerListener(new MyScrollView.ScrollListener() {
             @Override
             public void onScroll(final int top, int left) {
@@ -443,6 +447,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         mTvPromptBid=(TextView)view.findViewById(R.id.tv_price_bid_prompt);
         mTvPromptSymbol=(TextView)view.findViewById(R.id.tv_symbol_name_prompt);
         mIvPrompt=(RoundImageView)view.findViewById(R.id.riv_trade_symbol);
+        mCircleIndicator=(CircleIndicator)view.findViewById(R.id.ci_circle_indicator);
     }
 
     @Override
@@ -580,8 +585,9 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         Log.i(TAG, "initIndicator: ");
         mViewPagerAdapter = new MyPagerAdapter();
         mHeaderCustomViewPager.setAdapter(mViewPagerAdapter);
+        mCircleIndicator.setViewPager(mHeaderCustomViewPager);
 //        mHeaderCustomViewPager.setOffscreenPageLimit(subSymbols.size());
-        mHeaderCustomViewPager.setOffscreenPageLimit(2);
+        mHeaderCustomViewPager.setOffscreenPageLimit(subSymbols.size());
         mHeaderCustomViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         requestHistoryData(symbol = subSymbols.get(0).getSymbol(), mPeriod, TradeDateConstant.count);
         MyApplication.getInstance().beanIndicatorData = subSymbols.get(0);
@@ -614,7 +620,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
                 if (state == ViewPager.SCROLL_STATE_IDLE) {
                     isScroll = false;
                     if (!symbol.equals(subSymbols.get(mPosition).getSymbol())) {
@@ -627,11 +632,9 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                         Log.i(TAG, "onPageScrollStateChanged:+SCROLL_STATE_IDLE " + mPosition);
                         if (mPosition == subSymbols.size() - 1) {
                             showMyFavorites();
-                            if(mllPrompt.getVisibility()==View.VISIBLE){
-                                mllPrompt.setVisibility(View.INVISIBLE);
-                            }
                         } else {
-
+                            mCustomPeriodButtons.setButtonVisibility(View.VISIBLE);
+                            EventBus.getDefault().post(new NotificationFloat(true));
                             Log.i(TAG, "onPageScrollStateChanged: 加载数据");
                             if (allSymbolsName.size() > 0) {
                                 for (BeanIndicatorData subSymbol : subSymbols) {
@@ -683,7 +686,13 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         for (int i = 0; i < beanAllSymbols.getData().size(); i++) {
             allSymbolsName.add(beanAllSymbols.getData().get(i).getSymbol());
         }
+        EventBus.getDefault().post(new NotificationFloat(false));
         mMainTradeContentPre.requestSubSymbols(allSymbolsName, true);
+        if(mllPrompt.getVisibility()==View.VISIBLE){
+            mllPrompt.setVisibility(View.INVISIBLE);
+        }
+        mCustomPeriodButtons.setButtonVisibility(View.INVISIBLE);
+        EventBus.getDefault().post(new NotificationFloat(false));
         mKLinkLayout.setVisibility(View.GONE);
         mMyFavorites.setVisibility(View.VISIBLE);
         mDatas = beanAllSymbols.getData();
@@ -773,18 +782,18 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                     if (!isScroll) {
                         View childAt = mHeaderCustomViewPager.getChildAt(refreshIndicatorIndex);
                         BeanIndicatorData beanIndicatorData = subSymbols.get(refreshIndicatorIndex);
-                        SpannableString askTextBig = MoneyUtil.getRealTimePriceTextBig(context, beanIndicatorData.getAsk());
-                        SpannableString bidTextBig = MoneyUtil.getRealTimePriceTextBig(context, beanIndicatorData.getBid());
+                        SpannableString askText = MoneyUtil.getRealTimePriceTextBig(context, beanIndicatorData.getAsk());
+                        SpannableString bidText = MoneyUtil.getRealTimePriceTextBig(context, beanIndicatorData.getBid());
                         if (beanIndicatorData.getBidColor() != 0) {
-                            bidTextBig.setSpan(new ForegroundColorSpan(beanIndicatorData.getBidColor()), 0, bidTextBig.length(),
+                            bidText.setSpan(new ForegroundColorSpan(beanIndicatorData.getBidColor()), 0, bidText.length(),
                                     Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
                         }
                         if (beanIndicatorData.getAskColor() != 0) {
-                            askTextBig.setSpan(new ForegroundColorSpan(beanIndicatorData.getAskColor()), 0, askTextBig.length(),
+                            askText.setSpan(new ForegroundColorSpan(beanIndicatorData.getAskColor()), 0, askText.length(),
                                     Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
                         }
-                        ((TextView) childAt.findViewById(R.id.id_index_gallery_item_text_ask)).setText(askTextBig);
-                        ((TextView) childAt.findViewById(R.id.id_index_gallery_item_text_bid)).setText(bidTextBig);
+                        ((TextView) childAt.findViewById(R.id.id_index_gallery_item_text_ask)).setText(askText);
+                        ((TextView) childAt.findViewById(R.id.id_index_gallery_item_text_bid)).setText(bidText);
                         if (beanIndicatorData.getAskColor() == 0) {
                         } else if (beanIndicatorData.getAskColor() == getResources().getColor(R.color.text_color_price_rise)) {
                             ((BGABadgeImageView) childAt.findViewById(R.id.id_index_gallery_item_image)).showDrawableBadge(BitmapFactory.decodeResource(getResources(), R.mipmap.rise));

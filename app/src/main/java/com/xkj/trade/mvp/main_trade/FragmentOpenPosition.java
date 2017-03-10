@@ -4,12 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.util.DiffUtil;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -26,10 +27,12 @@ import com.xkj.trade.bean_notification.NotificationPositionCount;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.diffcallback.OpenPositionDiff;
+import com.xkj.trade.mvp.main_trade.activity.v.MainTradeContentActivity;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.DataUtil;
 import com.xkj.trade.utils.ThreadHelper;
+import com.xkj.trade.utils.view.FullyLinearLayoutManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -79,8 +82,18 @@ public class FragmentOpenPosition extends BaseFragment {
             mDataList=new ArrayList<BeanOpenPosition.DataBean.ListBean>();
         }
         mOpenAdapter=new OpenAdapter(context,mDataList);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        mRecyclerView.setLayoutManager(new FullyLinearLayoutManager(context));
         mRecyclerView.setAdapter(mOpenAdapter);
+        //未知原因，可能是因为ViewDragHelper和recycle多种嵌套导致fragment高度大于父类。暂不探究原理。代码动态计算高度
+        mSwipeRefreshLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mSwipeRefreshLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                mSwipeRefreshLayout.setLayoutParams(new LinearLayout.LayoutParams(mSwipeRefreshLayout.getWidth(),(int) MainTradeContentActivity.descHeight
+                        -view.findViewById(R.id.ll_positions_opened_header_impl).getHeight()
+                        -(int)MainTradeContentActivity.flIndicatorHeight));
+            }
+        });
         requestOpenPosition();
     }
 
