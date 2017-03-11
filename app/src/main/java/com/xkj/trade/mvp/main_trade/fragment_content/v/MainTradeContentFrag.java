@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -154,6 +155,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     private ImageView mIvPrompt;
     AnimationDrawable animationDrawable;
     CircleIndicator mCircleIndicator;
+    HorizontalScrollView mHorizontalScrollView;
 
     @Nullable
     @Override
@@ -448,6 +450,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         mTvPromptSymbol=(TextView)view.findViewById(R.id.tv_symbol_name_prompt);
         mIvPrompt=(RoundImageView)view.findViewById(R.id.riv_trade_symbol);
         mCircleIndicator=(CircleIndicator)view.findViewById(R.id.ci_circle_indicator);
+        mHorizontalScrollView  =(HorizontalScrollView)view.findViewById(R.id.hsv_circleIndicator_scrollView);
     }
 
     @Override
@@ -586,6 +589,14 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         mViewPagerAdapter = new MyPagerAdapter();
         mHeaderCustomViewPager.setAdapter(mViewPagerAdapter);
         mCircleIndicator.setViewPager(mHeaderCustomViewPager);
+        mCircleIndicator.setListener(new CircleIndicator.listen() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if(position>1)
+                    mHorizontalScrollView.smoothScrollTo((int) ((position-2) * SystemUtil.dp2px(context,15) + positionOffset * SystemUtil.dp2px(context,15)), 0);
+//                    }
+            }
+        });
 //        mHeaderCustomViewPager.setOffscreenPageLimit(subSymbols.size());
         mHeaderCustomViewPager.setOffscreenPageLimit(subSymbols.size());
         mHeaderCustomViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
@@ -734,8 +745,8 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                     }
                 }
             });
-
         }
+
     }
 
     private boolean checkIndicatorExist(BeanAllSymbols.SymbolPrices symbolPrices) {

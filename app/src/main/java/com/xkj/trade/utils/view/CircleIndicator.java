@@ -186,9 +186,7 @@ public class CircleIndicator extends LinearLayout {
             if (mViewpager.getAdapter() == null || mViewpager.getAdapter().getCount() <= 0) {
                 return;
             }
-            if(mListen!=null){
-                mListen.onPageSelected(position);
-            }
+
             if (mAnimatorIn.isRunning()) {
                 mAnimatorIn.end();
                 mAnimatorIn.cancel();
@@ -217,9 +215,7 @@ public class CircleIndicator extends LinearLayout {
 
         @Override
         public void onPageScrollStateChanged(int state) {
-            if(mListen!=null){
-                mListen.onPageScrollStateChanged(state);
-            }
+
         }
     };
 
@@ -321,8 +317,6 @@ public class CircleIndicator extends LinearLayout {
 
     public interface listen {
         void onPageScrolled(int position, float positionOffset, int positionOffsetPixels);
-       void onPageSelected(int position);
-      void onPageScrollStateChanged(int state) ;
     }
 
     private listen mListen;
