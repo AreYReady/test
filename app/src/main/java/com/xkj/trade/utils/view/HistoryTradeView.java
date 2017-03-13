@@ -254,15 +254,6 @@ public class HistoryTradeView extends View {
             int wholeNumber = (int) (price[1] * Math.pow(10, digits));
             Log.i(TAG, "drawLine: " + data.getBarnum() + " " + ints[1] + " " + ints[0]);
             double remainder = 0.00000000;
-            int i2 = wholeNumber % ints[0];
-//            double v = 12.0 / 100000.0;
-            double div = 0;
-            try {
-                div = MoneyUtil.div(12.0000, 10000.0, 5);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            Log.i(TAG, "drawLine: " + div + i2);
             remainder = ((wholeNumber % ints[0]) / Math.pow(10, digits));
 
             Log.i(TAG, "drawLine:显示出来的数据最大最小值 " + price[1] + "  " + price[0]);

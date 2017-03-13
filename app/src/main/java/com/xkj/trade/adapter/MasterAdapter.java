@@ -308,7 +308,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
 
     @Override
     public int getItemCount() {
-        return mBeanMasterRank.getResponse().size();
+        return mBeanMasterRank.getResponse()==null?0:mBeanMasterRank.getResponse().size();
     }
 
 

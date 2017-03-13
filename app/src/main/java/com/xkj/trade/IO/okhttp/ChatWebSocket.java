@@ -3,16 +3,6 @@ package com.xkj.trade.IO.okhttp;
 import android.util.Log;
 
 import com.google.gson.Gson;
-
-import org.greenrobot.eventbus.EventBus;
-import org.json.JSONObject;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.WebSocket;
-import okhttp3.WebSocketListener;
-import okio.ByteString;
 import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean.BeanUserLoginDataSocket;
 import com.xkj.trade.bean.RealTimeDataList;
@@ -23,6 +13,16 @@ import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.SystemUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONObject;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
+import okio.ByteString;
 
 /**
  * Created by huangsc on 2017-01-23.
@@ -99,6 +99,8 @@ public class ChatWebSocket  extends WebSocketListener {
      * @return
      */
     public boolean sendMessage(String s){
+        if(mWebSocket==null)
+            return false;
         return mWebSocket.send(s);
     }
 
@@ -117,6 +119,7 @@ public class ChatWebSocket  extends WebSocketListener {
             mChatWebSocket =new ChatWebSocket();
             mChatWebSocket.run();
         }
+
         return mChatWebSocket;
     }
 }
