@@ -226,6 +226,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                                            }
         );
         mTradeContent = (RecyclerView) view.findViewById(R.id.rv_trade_content);
+        if(subSymbols.size()!=1)
         mMainTradeContentPre.requestOpenPosition();
         mTradeContent.setLayoutManager(new FullyLinearLayoutManager(context));
 //        mBeanOpenList=new ArrayList<>();
@@ -600,14 +601,18 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
 //        mHeaderCustomViewPager.setOffscreenPageLimit(subSymbols.size());
         mHeaderCustomViewPager.setOffscreenPageLimit(subSymbols.size());
         mHeaderCustomViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
-        requestHistoryData(symbol = subSymbols.get(0).getSymbol(), mPeriod, TradeDateConstant.count);
-        MyApplication.getInstance().beanIndicatorData = subSymbols.get(0);
-        MyApplication.getInstance().beanIndicatorData.setSymbol(symbol);
-        mTvPromptSymbol.setText(MyApplication.getInstance().beanIndicatorData.getSymbol());
-        mTvPromptAsk.setText(MyApplication.getInstance().beanIndicatorData.getAsk());
-        mTvPromptBid.setText(MyApplication.getInstance().beanIndicatorData.getBid());
-        mIvPrompt.setImageResource(MyApplication.getInstance().beanIndicatorData.getImageResource());
-        fillPromptSymbolInfo(0);
+        if(subSymbols.size()==1){
+            showMyFavorites();
+        }else {
+            requestHistoryData(symbol = subSymbols.get(0).getSymbol(), mPeriod, TradeDateConstant.count);
+            MyApplication.getInstance().beanIndicatorData = subSymbols.get(0);
+            MyApplication.getInstance().beanIndicatorData.setSymbol(symbol);
+            mTvPromptSymbol.setText(MyApplication.getInstance().beanIndicatorData.getSymbol());
+            mTvPromptAsk.setText(MyApplication.getInstance().beanIndicatorData.getAsk());
+            mTvPromptBid.setText(MyApplication.getInstance().beanIndicatorData.getBid());
+            mIvPrompt.setImageResource(MyApplication.getInstance().beanIndicatorData.getImageResource());
+            fillPromptSymbolInfo(0);
+        }
         //申请当前所有交易的当前报价单储存
         requestHistoryData(null, null, 0);
         mHeaderCustomViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -757,6 +762,9 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
             }
         }
         BeanIndicatorData beanIndicatorData = new BeanIndicatorData(symbolPrices.getSymbol(), symbolPrices.getAsk(), symbolPrices.getBid());
+        if(subSymbols.size()<=1) {
+            subSymbols.add(subSymbols.size() - 1, beanIndicatorData);
+        }
         subSymbols.add(subSymbols.size() - 2, beanIndicatorData);
         Sort();
         return false;

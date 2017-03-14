@@ -145,6 +145,8 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
                     if(Double.valueOf(amount)>=Double.valueOf(maxPrice)){
                         amount=maxPrice;
                     }
+                        amount=Double.valueOf(amount)<0?"0":amount;
+
                     handler.sendEmptyMessage(0);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
