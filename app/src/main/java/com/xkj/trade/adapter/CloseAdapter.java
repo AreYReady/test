@@ -12,13 +12,10 @@ import android.widget.TextView;
 
 import com.xkj.trade.R;
 import com.xkj.trade.bean_.BeanClosePosition;
-import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.SystemUtil;
 
 import java.util.List;
 import java.util.Map;
-
-import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY_STRING;
 
 /**
  * Created by huangsc on 2017-02-16.
@@ -78,7 +75,7 @@ public class CloseAdapter extends RecyclerView.Adapter<CloseAdapter.MyViewHolder
             holder.tvOperate.setTextColor(mContext.getResources().getColor(R.color.text_color_price_rise));
             holder.tvOperate.setText("买");
         }
-        holder.tvMoney.setText(MoneyUtil.deleteZero(MoneyUtil.mulPrice(mData.getVolume(),VOLUME_MONEY_STRING)));
+        holder.tvMoney.setText(mData.getVolume());
         holder.tvProfit.setText(mData.getProfit());
         if(Double.valueOf(mData.getProfit())>0)
             holder.tvProfit.setTextColor(mContext.getResources().getColor(R.color.text_color_price_rise));

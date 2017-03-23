@@ -45,7 +45,6 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 import static com.xkj.trade.base.MyApplication.beanIndicatorData;
-import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY;
 import static com.xkj.trade.mvp.main_trade.fragment_content.v.MainTradeContentFrag.realTimeMap;
 
 /**
@@ -109,7 +108,7 @@ public class ClosePositionFragment extends BaseFragment {
             mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
             mTvPlayAction.setText("买进");
         }
-        mAmount.setText(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY));
+        mAmount.setText(mData.getVolume());
         mOpenRate.setText(mData.getOpenprice());
         mOpenTime1.setText(mData.getOpentime());
         mStopLoss.setText(mData.getSl());

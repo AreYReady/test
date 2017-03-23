@@ -26,7 +26,6 @@ import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
-import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.ResourceReader;
 import com.xkj.trade.utils.SystemUtil;
 import com.xkj.trade.utils.view.CustomSeekBar;
@@ -44,8 +43,6 @@ import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-
-import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY;
 
 /**
  * Created by huangsc on 2016-12-10.
@@ -68,7 +65,7 @@ public class CardOrderFrag extends BaseFragment implements View.OnClickListener 
     TextView mTvAction;
     @Bind(R.id.tv_buy_ask)
     TextView mTvBuyAsk;
-
+    BeanBaseResponse beanBaseResponse;
 
     @Nullable
     @Override
@@ -142,7 +139,7 @@ public class CardOrderFrag extends BaseFragment implements View.OnClickListener 
 
 
     private void requestActionOrder() {
-        if(mCsbVpItemOrderFrag.getMoney()<=0){
+        if(Double.valueOf(mCsbVpItemOrderFrag.getMoney())<=0){
             Toast.makeText(context,"金额不能为空",Toast.LENGTH_SHORT).show();
             return;
         }
@@ -155,11 +152,7 @@ public class CardOrderFrag extends BaseFragment implements View.OnClickListener 
         } else {
             map.put(RequestConstant.EXC,"SELL");
         }
-        try {
-            map.put(RequestConstant.VOLUME,String.valueOf(MoneyUtil.div((double) (mCsbVpItemOrderFrag.getMoney()),VOLUME_MONEY,3)));
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        map.put(RequestConstant.VOLUME,mCsbVpItemOrderFrag.getMoney());
         OkhttpUtils.enqueue(UrlConstant.URL_TRADE_ORDER_EXE, map, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -170,17 +163,25 @@ public class CardOrderFrag extends BaseFragment implements View.OnClickListener 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Log.i(TAG, "onResponse: "+call.request());
-                BeanBaseResponse beanBaseResponse=new Gson().fromJson(response.body().string(),new TypeToken<BeanBaseResponse>(){}.getType());
+                beanBaseResponse=new Gson().fromJson(response.body().string(),new TypeToken<BeanBaseResponse>(){}.getType());
                 Log.i(TAG, "onResponse: "+beanBaseResponse.toString());
                 if(beanBaseResponse.getStatus()==1){
                     EventBus.getDefault().post(new BeanOpenPosition());
                     //发送通知activity关闭
-                    EventBus.getDefault().post(beanBaseResponse);
+//                    EventBus.getDefault().post(beanBaseResponse);
+                    showSucc();
                 }else{
                     showFail();
                 }
             }
         });
+    }
+
+    @Override
+    protected void eventSucc() {
+        super.eventSucc();
+        //发送通知activity关闭
+        EventBus.getDefault().post(beanBaseResponse);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

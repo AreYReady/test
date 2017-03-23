@@ -44,8 +44,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY;
-
 /**
  * Created by huangsc on 2016-12-14.
  * TODO:
@@ -103,7 +101,7 @@ public class DeletePositionFragment extends BaseFragment {
             mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
             mTvPlayAction.setText("买进");
         }
-        mAmount.setText(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY));
+        mAmount.setText(mData.getVolume());
         mStopLoss.setText(mData.getSl());
         mTakeProfit.setText(mData.getTp());
         mTvPrice.setText(mData.getOpenprice());

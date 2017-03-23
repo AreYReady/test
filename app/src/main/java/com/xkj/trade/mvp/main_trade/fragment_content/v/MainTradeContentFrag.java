@@ -277,6 +277,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                             //显示全部
                             mSearchView.setVisibility(View.GONE);
                             clearAndAddAll(mFilterDatas, mDatas);
+//                            mFilterDatas=mDatas;
                             mMyFavoritesAdapter.notifyDataSetChanged();
                             break;
                         case 2:
@@ -598,6 +599,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
 //                    }
             }
         });
+        mViewPagerAdapter.registerDataSetObserver(mCircleIndicator.getDataSetObserver());
 //        mHeaderCustomViewPager.setOffscreenPageLimit(subSymbols.size());
         mHeaderCustomViewPager.setOffscreenPageLimit(subSymbols.size());
         mHeaderCustomViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
@@ -708,7 +710,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
             mllPrompt.setVisibility(View.INVISIBLE);
         }
         mCustomPeriodButtons.setButtonVisibility(View.INVISIBLE);
-        EventBus.getDefault().post(new NotificationFloat(false));
         mKLinkLayout.setVisibility(View.GONE);
         mMyFavorites.setVisibility(View.VISIBLE);
         mDatas = beanAllSymbols.getData();
@@ -727,15 +728,17 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
             mMyFavoritesContent.setAdapter(mMyFavoritesAdapter = new MyFavoritesAdapter(context, mFilterDatas));
             mMyFavoritesAdapter.addOnItemClickListener(new MyFavoritesAdapter.OnItemClickListener() {
                 @Override
-                public void onItemClick(BeanAllSymbols.SymbolPrices symbolPrices) {
+                public void onItemClick(BeanAllSymbols.SymbolPrices symbolPrices,int position) {
                     if (checkIndicatorExist(symbolPrices)) {
                         //已经存在就取消
                     } else {
                         //没有存在就加入
                     }
+                    mDatas.get(position).setSign(symbolPrices.getSign());
                     aCache.put(CacheKeyConstant.SUB_SYMBOLS, new Gson().toJson(subSymbols, new TypeToken<LinkedList<BeanIndicatorData>>() {
                     }.getType()));
                     mViewPagerAdapter.notifyDataSetChanged();
+//                    mHorizontalScrollView.postInvalidate();
                     mHeaderCustomViewPager.setCurrentItem(subSymbols.size());
                 }
 
@@ -896,17 +899,10 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
 
 
     class MyPagerAdapter extends PagerAdapter {
-        private int mChildCount = 0;
 
-        @Override
-        public void notifyDataSetChanged() {
-            mChildCount = getCount();
-            super.notifyDataSetChanged();
-        }
 
         @Override
         public int getItemPosition(Object object) {
-
             return POSITION_NONE;
         }
 

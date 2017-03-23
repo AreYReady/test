@@ -50,6 +50,7 @@ import okhttp3.Response;
 public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> {
     private Context context;
     int[] ints = new int[]{1, 10, 100, 500, 1000};
+    String[] strings = new String[]{"1", "10", "100", "500", "1000"};
     private BeanMasterRank mBeanMasterRank;
     private BeanMasterRank.MasterRank masterRank;
     private String TAG = SystemUtil.getTAG(this);
@@ -88,7 +89,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
         //判断是否存在，是否需要重置
         if (mapStatus.get(position) != null && mapStatus.get(position).getEnter()) {
         } else {
-            holder.mCustomSeekBar.setData(ints, 1);
+            holder.mCustomSeekBar.setData(strings, "1");
         }
         if (masterRank.getStatus() == 1) {
             holder.bCopyButton.setText(R.string.uncopy);

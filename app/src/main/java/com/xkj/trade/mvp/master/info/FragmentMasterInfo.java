@@ -82,6 +82,7 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
     public static final String MASTER_INFO = "masterInfo";
     BeanMasterRank.MasterRank rank;
     int[] ints = new int[]{1, 10, 100, 500, 1000};
+    String[] strings = new String[]{"1", "10", "100", "500", "1000"};
 
     @Nullable
     @Override
@@ -223,7 +224,7 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
         }
         mProgressBar.setProgress(i);
         mCustomSeekBar = (CustomSeekBar) view.findViewById(R.id.csb_select_voloum);
-        mCustomSeekBar.setData(ints, 1);
+        mCustomSeekBar.setData(strings, "1");
         mIvCopyDown = (ImageView) view.findViewById(R.id.iv_copy_take_rebound);
         mIvCopyDown.setOnClickListener(this);
         mIvUncopyDown = (ImageView) view.findViewById(R.id.iv_uncopy_take_rebound);
@@ -275,7 +276,7 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
                 break;
             case R.id.b_complete://点击完成
                 if(rank.getStatus()==0) {
-                    if (mCustomSeekBar.getMoney() >= 0) {
+                    if (Double.valueOf(mCustomSeekBar.getMoney()) >= 0) {
                         mPresenterListener.requestCopyFollow(rank.getLogin(), String.valueOf(mCustomSeekBar.getMoney()), ACache.get(context).getAsString(RequestConstant.ACCOUNT));
                     } else {
                         ToashUtil.show(context, "无效手数", Toast.LENGTH_SHORT);

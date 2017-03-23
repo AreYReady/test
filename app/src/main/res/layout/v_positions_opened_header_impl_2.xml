@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="@integer/open_position_column_3"
         android:gravity="right"
-        android:text="@string/amount"
+        android:text="@string/volume"
         android:textAppearance="@style/TextHeader" />
 
     <TextView

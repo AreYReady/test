@@ -273,11 +273,7 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
         map.put(RequestConstant.LOGIN, AesEncryptionUtil.stringBase64toString(ACache.get(context).getAsString(RequestConstant.ACCOUNT)));
         map.put(RequestConstant.SYMBOL, AesEncryptionUtil.stringBase64toString(MyApplication.getInstance().beanIndicatorData.getSymbol()));
         map.put(RequestConstant.ACTION, RequestConstant.Action.PENDING.toString());
-        try {
-            map.put(RequestConstant.VOLUME, String.valueOf(MoneyUtil.div((double) (mCsbVo.getMoney()), VOLUME_MONEY, 3)));
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+            map.put(RequestConstant.VOLUME,mCsbVo.getMoney());
         map.put(RequestConstant.EXC, exc.toString());
         map.put(RequestConstant.PRICE, mCPrice.getMoneyString());
         if(mCTakeProfit.getDataVisitity()==View.VISIBLE)

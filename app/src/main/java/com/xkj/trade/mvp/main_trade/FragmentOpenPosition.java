@@ -158,7 +158,7 @@ public class FragmentOpenPosition extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void getRealTimeData(RealTimeDataList beanRealTimeList){
         Log.i(TAG, "getRealTimeData: ");
-        if(beanRealTimeList==null||beanRealTimeList.getQuotes()==null){
+        if(beanRealTimeList==null||beanRealTimeList.getQuotes()==null||mDataList==null){
             return;
         }
         mBeanDupOpenList=  (new Gson().fromJson(new Gson().toJson(mDataList),new TypeToken<List<BeanOpenPosition.DataBean.ListBean>>(){}.getType()));

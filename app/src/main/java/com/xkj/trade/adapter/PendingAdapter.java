@@ -17,13 +17,11 @@ import com.google.gson.Gson;
 import com.xkj.trade.R;
 import com.xkj.trade.bean_.BeanPendingPosition;
 import com.xkj.trade.mvp.operate.OperatePositionActivity;
-import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.SystemUtil;
 
 import java.util.List;
 
 import static com.xkj.trade.constant.RequestConstant.CURRENT_PRICE;
-import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY_STRING;
 
 /**
  * Created by huangsc on 2017-02-16.
@@ -100,7 +98,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
         holder.bEditPendingPosition.setOnClickListener(this);
         holder.tvCountyName.setText(mData.getSymbol());
 //        holder.tvMoney.setText(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY));
-        holder.tvMoney.setText(MoneyUtil.deleteZero(MoneyUtil.mulPrice(mData.getVolume(),VOLUME_MONEY_STRING)));
+        holder.tvMoney.setText(mData.getVolume());
         if (mData.getCmd().contains("sell")) {
             holder.tvOperate.setText("卖");
             holder.tvOperate.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));

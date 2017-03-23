@@ -83,7 +83,7 @@
 
     <style name="AlertDialog" parent="Base.V7.Theme.AppCompat.Dialog">
         <!-- 这里设置背景为透明，为了隐藏边框 -->
-        <item name="android:background">@android:color/black</item>
+        <item name="android:background">@drawable/dialog_login_bg</item>
         <!-- 这里是修改顶部标题背景颜色，具体颜色自己定，可以是图片 -->
         <!--<item name="android:topDark">@color/white</item>-->
         <!-- 这里是修改内容区域背景颜色 -->

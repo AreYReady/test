@@ -1,9 +1,11 @@
 package com.xkj.trade.base;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import com.xkj.trade.R;
@@ -25,7 +27,7 @@ public  abstract class BaseFragment extends Fragment {
     protected Handler mHandler;
     protected final String TAG= SystemUtil.getTAG(this);
     protected String title;
-
+    public AlertDialog.Builder alertDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,9 +82,26 @@ public  abstract class BaseFragment extends Fragment {
         ThreadHelper.instance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                new DialogUtils(context,title,getString(R.string.action_fail_please_try_again));
+                alertDialog = new AlertDialog.Builder(context,R.style.AlertDialog).setTitle(title).setMessage(getString(R.string.action_fail_please_try_again));
+                alertDialog.show();
             }
         });
     }
-
+    protected  void showSucc(){
+        ThreadHelper.instance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                alertDialog = new AlertDialog.Builder(context,R.style.AlertDialog).setTitle(title).setMessage(getString(R.string.action_succ));
+                alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        eventSucc();
+                    }
+                });
+                alertDialog.show();
+            }
+        });
+    }
+    //复写改方法
+    protected  void eventSucc(){};
 }

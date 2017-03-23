@@ -34,7 +34,7 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
     private List<BeanAllSymbols.SymbolPrices> data;
     private OnItemClickListener listener;
     private String TAG = SystemUtil.getTAG(this);
-    private List<String> staIntegers=new ArrayList<>();
+    private List<String> statusSymbols =new ArrayList<>();
     public MyFavoritesAdapter(Context context, List<BeanAllSymbols.SymbolPrices> data) {
         this.context = context;
         this.data = data;
@@ -68,7 +68,7 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
         holder.ask.setText(askTextBig);
         holder.instrumentName.setText(symbolPrices.getSymbol());
         if (symbolPrices.getSign()) {
-            if(!staIntegers.contains(String.valueOf(position))){
+            if(!statusSymbols.contains(data.get(position).getSymbol())){
                 holder.goTo.setVisibility(View.INVISIBLE);
             }else{
                 holder.goTo.setVisibility(View.VISIBLE);
@@ -94,7 +94,7 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
                     //星星亮了
                     if (holder.goTo.getVisibility() != View.VISIBLE) {
                         //还没翻转，就翻转
-                        staIntegers.add(String.valueOf(position));
+                        statusSymbols.add(data.get(position).getSymbol());
                         holder.goTo.setVisibility(View.VISIBLE);
                         holder.goTo.startAnimation(AnimationUtils.loadAnimation(context, R.anim.transtale_y_up));
                         holder.bidAskContainer.startAnimation(AnimationUtils.loadAnimation(context, R.anim.transtale_y_up2));
@@ -102,7 +102,7 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
 //                        mCoverView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.transtale_y_up));
                         Log.i(TAG, "onClick:1 ");
                     } else {
-                        staIntegers.remove(String.valueOf(position));
+                        statusSymbols.remove(data.get(position).getSymbol());
                         //翻转了，就取消订阅
                         holder.goTo.startAnimation(AnimationUtils.loadAnimation(context, R.anim.transtale_y_down));
                         holder.bidAskContainer.startAnimation(AnimationUtils.loadAnimation(context, R.anim.transtale_y_dwon2));
@@ -111,10 +111,10 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
                         holder.itemOverLay.setVisibility(View.VISIBLE);
                         Log.i(TAG, "onClick:2 ");
                         symbolPrices.setSign(false);
-                        listener.onItemClick(symbolPrices);
+                        listener.onItemClick(symbolPrices,position);
                     }
                 } else {
-                    staIntegers.add(String.valueOf(position));
+                    statusSymbols.add(data.get(position).getSymbol());
                     Log.i(TAG, "onClick:3 ");
                     //星星没亮，就变亮
                     holder.itemOverLay.setVisibility(View.GONE);
@@ -124,7 +124,7 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
                     holder.goTo.startAnimation(AnimationUtils.loadAnimation(context, R.anim.transtale_y_up));
                     holder.bidAskContainer.startAnimation(AnimationUtils.loadAnimation(context, R.anim.transtale_y_up2));
                     if (listener != null)
-                        listener.onItemClick(symbolPrices);
+                        listener.onItemClick(symbolPrices,position);
                 }
 
             }
@@ -171,8 +171,7 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
     }
 
     public interface OnItemClickListener {
-        void onItemClick(BeanAllSymbols.SymbolPrices symbolPrices);
-
+        void onItemClick(BeanAllSymbols.SymbolPrices symbolPrices,int position);
         void onItemClickGoto(String symbol);
     }
 

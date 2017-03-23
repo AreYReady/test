@@ -37,10 +37,10 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
     private EditText editText;
     private String amount="0";
     private int mDitigs=0;
-    private String minPrice = "1000";
+    private String minPrice = "0.01";
     //加减的基数
-    private String baseNumber = "1000";
-    private String maxPrice="10000000";
+    private String baseNumber = "0.01";
+    private String maxPrice="100";
     //判断是否是跟随SeekBar改变操作
     private boolean isFollow=false;
 
@@ -229,6 +229,12 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         this.maxPrice=String.valueOf(maxPrice);
         this.minPrice=String.valueOf(minPrice);
         this.baseNumber =String.valueOf(baseNumber);
+        editText.setText(String.valueOf(minPrice));
+        }
+    public void setData(String minPrice, String maxPrice, String baseNumber){
+        this.maxPrice=maxPrice;
+        this.minPrice=minPrice;
+        this.baseNumber =baseNumber;
         editText.setText(String.valueOf(minPrice));
         }
     public void setData(double minPrice, double maxPrice, double baseNumber,double amount){

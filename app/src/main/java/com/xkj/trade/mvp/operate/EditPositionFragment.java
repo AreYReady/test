@@ -112,7 +112,7 @@ public class EditPositionFragment extends BaseFragment {
             mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
             mTvPlayAction.setText("买进");
         }
-        mAmount.setText(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY));
+        mAmount.setText(mData.getVolume());
         mOpenRate.setText(mData.getOpenprice());
         mOpenTime1.setText(mData.getOpentime());
         mTvEnterButton.setOnClickListener(new View.OnClickListener() {

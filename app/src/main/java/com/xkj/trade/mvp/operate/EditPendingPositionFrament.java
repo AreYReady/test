@@ -105,7 +105,7 @@ public class EditPendingPositionFrament extends BaseFragment {
         }
         mDigits = MoneyUtil.getDigits(mData.getOpenprice());
         mBaseNumble = MoneyUtil.getBaseNumble(mDigits);
-        mCommission.setText(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY));
+        mCommission.setText(mData.getVolume());
         mCStopLost.setMoneyChangeListener(new AddSubEditText.AmountChangeListener() {
             @Override
             public void amountChange(String amount) {

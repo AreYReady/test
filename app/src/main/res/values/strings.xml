@@ -64,6 +64,7 @@
     <string name="account_summary">账户摘要</string>
     <string name="action">操作</string>
     <string name="action_fail_please_try_again">操作失败，请重新操作</string>
+    <string name="action_succ">操作成功</string>
     <string name="activity">活动</string>
     <string name="all">全部</string>
     <string name="all_time">全部时间</string>
@@ -419,6 +420,8 @@
     <string name="search_instrument">搜索工具</string>
     <string name="select_amount">选择金额</string>
     <string name="select_volume">选择手数%</string>
+    <string name="select_volume_percent">选择百分比</string>
+    <string name="volume">手数</string>
     <string name="sell">卖出</string>
     <string name="sell_action">卖出%s</string>
     <string name="sell_capitalize">卖出</string>

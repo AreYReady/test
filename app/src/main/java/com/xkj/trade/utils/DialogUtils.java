@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
+import com.xkj.trade.R;
+
 /**
  * Created by huangsc on 2017-03-06.
  * TODO:
@@ -37,7 +39,7 @@ public  class DialogUtils {
         alertDialog.show();
     }
     public  DialogUtils(Context context,String title,String msg) {
-        alertDialog = new AlertDialog.Builder(context).setTitle(title).setMessage(msg);
+        alertDialog = new AlertDialog.Builder(context,R.style.AlertDialog).setTitle(title).setMessage(msg);
         alertDialog.show();
     }
 }

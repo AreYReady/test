@@ -118,7 +118,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:text="@string/select_amount"/>
+                            android:text="@string/select_volume_percent"/>
 
                         <ImageView
                             android:id="@+id/iv_copy_take_rebound"
@@ -146,7 +146,7 @@
                         android:gravity="center"
                         android:paddingBottom="@dimen/space_big"
                         android:paddingTop="@dimen/space_big"
-                        android:text="通过ohorzin$306.00,按比例复制策略"
+                        android:text="按手数比例复制策略"
                         />
 
                     <include

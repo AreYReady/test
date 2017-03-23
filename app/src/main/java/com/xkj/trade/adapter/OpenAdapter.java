@@ -16,9 +16,7 @@ import com.google.gson.Gson;
 import com.xkj.trade.R;
 import com.xkj.trade.bean_.BeanOpenPosition;
 import com.xkj.trade.mvp.operate.OperatePositionActivity;
-import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.SystemUtil;
-import com.xkj.trade.utils.ToashUtil;
 
 import java.util.List;
 
@@ -26,7 +24,6 @@ import static com.xkj.trade.constant.RequestConstant.CURRENT_PRICE;
 import static com.xkj.trade.constant.RequestConstant.PROFIT;
 import static com.xkj.trade.constant.RequestConstant.STOP_LOSS;
 import static com.xkj.trade.constant.RequestConstant.TAKE_PROFIT;
-import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY;
 
 
 /**
@@ -112,7 +109,7 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
                     holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.background_trade_item_open));
                     mData.setStatus(1);
                 }
-                ToashUtil.show(context,position+"",0);
+//                ToashUtil.show(context,position+"",0);
             }
         });
         if (mData.getStatus()!=0) {
@@ -126,7 +123,7 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
         holder.bUnlink.setOnClickListener(this);
         holder.bEditPosition.setOnClickListener(this);
         holder.tvCountyName.setText(mData.getSymbol());
-        holder.tvMoney.setText(MoneyUtil.deleteZero(MoneyUtil.mulPrice(mData.getVolume(),String.valueOf(VOLUME_MONEY))));
+        holder.tvMoney.setText(mData.getVolume());
         holder.tvCommission.setText("$" + mData.getCommission());
         if (mData.getCmd().equals("sell")) {
             holder.tvOperate.setText("卖");
