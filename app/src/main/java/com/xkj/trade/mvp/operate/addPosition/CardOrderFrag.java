@@ -98,7 +98,12 @@ public class CardOrderFrag extends BaseFragment implements View.OnClickListener 
     }
 
     private void setTabSelected(Button buttonSelect) {
-        Drawable selectedDrawable = ResourceReader.readDrawable(context, R.drawable.shape_nav_indicator_green);
+        Drawable selectedDrawable;
+        if(buttonSelect.getId()==R.id.b_sell){
+            selectedDrawable = ResourceReader.readDrawable(context, R.drawable.shape_nav_indicator);
+        }else {
+             selectedDrawable = ResourceReader.readDrawable(context, R.drawable.shape_nav_indicator_green);
+        }
 //        int screenWidth = DensityUtils.getScreenSize(MainActivity.this)[0];
         int right = buttonSelect.getWidth();
         Log.i(TAG, "setTabSelected: right" + right);

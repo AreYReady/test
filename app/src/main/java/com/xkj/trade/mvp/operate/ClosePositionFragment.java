@@ -44,7 +44,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static com.xkj.trade.base.MyApplication.beanIndicatorData;
 import static com.xkj.trade.mvp.main_trade.fragment_content.v.MainTradeContentFrag.realTimeMap;
 
 /**
@@ -103,9 +102,9 @@ public class ClosePositionFragment extends BaseFragment {
     protected void initView() {
         if (mData.getCmd().contains("sell")) {
             mTvPlayAction.setText("卖出");
-            mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
-        } else {
             mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
+        } else {
+            mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
             mTvPlayAction.setText("买进");
         }
         mAmount.setText(mData.getVolume());
@@ -128,7 +127,7 @@ public class ClosePositionFragment extends BaseFragment {
 
     public void setTvEstimatedProfitAmount( String symbol,String ask,String bid) {
         mTvEstimatedProfitAmount.setText("$:"+ DataUtil.getProfit(symbol,Double.valueOf(ask),Double.valueOf(bid),mData.getCmd(),mData.getOpenprice(),mData.getVolume()));
-        if(Double.valueOf(beanIndicatorData.getAsk())-Double.valueOf(mData.getOpenprice())<0){
+        if(Double.valueOf(DataUtil.getProfit(symbol,Double.valueOf(ask),Double.valueOf(bid),mData.getCmd(),mData.getOpenprice(),mData.getVolume()))<0){
             mTvEstimatedProfitAmount.setTextColor(getResources().getColor(R.color.text_color_price_fall));
         }else{
             mTvEstimatedProfitAmount.setTextColor(getResources().getColor(R.color.text_color_price_rise));
@@ -136,7 +135,7 @@ public class ClosePositionFragment extends BaseFragment {
     }
     public void setTEstimatedProfitAmount( String symbol, double ask,double bid) {
         mTvEstimatedProfitAmount.setText("$:"+ DataUtil.getProfit(symbol,ask,bid,mData.getCmd(),mData.getOpenprice(),mData.getVolume()));
-        if(Double.valueOf(beanIndicatorData.getAsk())-Double.valueOf(mData.getOpenprice())<0){
+        if(Double.valueOf(DataUtil.getProfit(symbol,ask,bid,mData.getCmd(),mData.getOpenprice(),mData.getVolume()))<0){
             mTvEstimatedProfitAmount.setTextColor(getResources().getColor(R.color.text_color_price_fall));
         }else{
             mTvEstimatedProfitAmount.setTextColor(getResources().getColor(R.color.text_color_price_rise));
@@ -157,17 +156,25 @@ public class ClosePositionFragment extends BaseFragment {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-               BeanBaseResponse beanBaseResponse=new Gson().fromJson(response.body().string(),new TypeToken<BeanBaseResponse>(){}.getType());
+               beanBaseResponse=new Gson().fromJson(response.body().string(),new TypeToken<BeanBaseResponse>(){}.getType());
                 if(beanBaseResponse.getStatus()==1) {
                     //通知刷新
                     EventBus.getDefault().post(new NotificationClosePosition(mData.getOrder()));
                     //发送通知activity关闭
-                    EventBus.getDefault().post(new BeanBaseResponse());
+//                    EventBus.getDefault().post(new BeanBaseResponse());
+                    showSucc();
                 }else{
                     showFail(getString(R.string.action_fail_please_try_again));
                 }
             }
         });
+    }
+    BeanBaseResponse beanBaseResponse;
+    @Override
+    protected void eventSucc() {
+        super.eventSucc();
+        //发送通知activity关闭
+        EventBus.getDefault().post(beanBaseResponse);
     }
 
     @Override

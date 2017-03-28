@@ -196,6 +196,7 @@
                 >
 
                 <FrameLayout
+                    android:id="@+id/fl_my_favorites_indicator_parent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@color/background_indicator"

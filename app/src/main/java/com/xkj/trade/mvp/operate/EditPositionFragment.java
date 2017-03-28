@@ -54,7 +54,7 @@ import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY;
  * TODO:
  */
 
-public class EditPositionFragment extends BaseFragment {
+public class EditPositionFragment extends BaseFragment implements AddSubEditText.AmountChangeListener{
     @Bind(R.id.riv_trade_symbol)
     RoundImageView mRivTradeSymbol;
     @Bind(R.id.tv_symbol_name)
@@ -125,28 +125,8 @@ public class EditPositionFragment extends BaseFragment {
         mDigits = MoneyUtil.getDigits(mData.getOpenprice());
         mBaseNumble = MoneyUtil.getBaseNumble(mDigits);
         mCTakeProfit = (CustomASETGroup) view.findViewById(R.id.c_take_profit);
-        mCStopLost.setMoneyChangeListener(new AddSubEditText.AmountChangeListener() {
-            @Override
-            public void amountChange(String amount) {
-                if(Double.valueOf(amount)>Double.valueOf(mData.getOpenprice())){
-                    mCStopLost.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower),mData.getOpenprice()));
-                }else {
-                    mCStopLost.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY), (MoneyUtil.subPriceToString(amount, mData.getOpenprice())))));
-                }
-            }
-        });
-        mCTakeProfit.setMoneyChangeListener(new AddSubEditText.AmountChangeListener() {
-            @Override
-            public void amountChange(String amount) {
-                if(Double.valueOf(amount)<Double.valueOf(mData.getOpenprice())){
-                    mCTakeProfit.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher),mData.getOpenprice()));
-                } else if (amount.equals(mData.getOpenprice())) {
-                    mCTakeProfit.setmTVDescPrompt("$0.0");
-                }else {
-                    mCTakeProfit.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(MoneyUtil.mulPrice(mData.getVolume(), String.valueOf(VOLUME_MONEY)), (MoneyUtil.subPriceToString(amount, mData.getOpenprice())))));
-                }
-            }
-        });
+        mCStopLost.setMoneyChangeListener(this);
+        mCTakeProfit.setMoneyChangeListener(this);
         if (Double.valueOf(mData.getSl()) == 0) {
             //没有止损有效值
             mCStopLost.setData("0", mData.getOpenprice(), mBaseNumble, MoneyUtil.subPriceToString(mData.getOpenprice(), String.valueOf(mBaseNumble)));
@@ -163,6 +143,40 @@ public class EditPositionFragment extends BaseFragment {
         }
         mRivTradeSymbol.setImageResource(DataUtil.getImageId(mData.getSymbol()));
         requestSubSymbol();
+    }
+    @Override
+    public void amountChange(String amount) {
+        switch (mData.getCmd()){
+            case "buy":
+                if(Double.valueOf(mCStopLost.getMoneyString())>Double.valueOf(mData.getOpenprice())){
+                    mCStopLost.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower),mData.getOpenprice()));
+                }else {
+                    mCStopLost.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY), (MoneyUtil.subPriceToString(mCStopLost.getMoneyString(), mData.getOpenprice())))));
+                }
+                if(Double.valueOf(mCTakeProfit.getMoneyString())<Double.valueOf(mData.getOpenprice())){
+                    mCTakeProfit.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher),mData.getOpenprice()));
+                } else if (mCTakeProfit.getMoneyString().equals(mData.getOpenprice())) {
+                    mCTakeProfit.setmTVDescPrompt("$0.0");
+                }else {
+                    mCTakeProfit.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(MoneyUtil.mulPrice(mData.getVolume(), String.valueOf(VOLUME_MONEY)), (MoneyUtil.subPriceToString(mCTakeProfit.getMoneyString(), mData.getOpenprice())))));
+                }
+                break;
+            case "sell":
+                if(Double.valueOf(mCStopLost.getMoneyString())<Double.valueOf(mData.getOpenprice())){
+                    mCStopLost.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher),mData.getOpenprice()));
+                }else {
+                    mCStopLost.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY), (MoneyUtil.subPriceToString(mData.getOpenprice(),mCStopLost.getMoneyString())))));
+                }
+                if(Double.valueOf(mCTakeProfit.getMoneyString())>Double.valueOf(mData.getOpenprice())){
+                    mCTakeProfit.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower),mData.getOpenprice()));
+                } else if (mCTakeProfit.getMoneyString().equals(mData.getOpenprice())) {
+                    mCTakeProfit.setmTVDescPrompt("$0.0");
+                }else {
+                    mCTakeProfit.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(MoneyUtil.mulPrice(mData.getVolume(), String.valueOf(VOLUME_MONEY)), (MoneyUtil.subPriceToString( mData.getOpenprice(),mCTakeProfit.getMoneyString())))));
+                }
+                break;
+
+        }
     }
 
     private void requestSubSymbol() {
@@ -196,10 +210,10 @@ public class EditPositionFragment extends BaseFragment {
                 String s = null;
                 Log.i(TAG, "onResponse: " + call.request());
                 Log.i(TAG, "onResponse: " + (s = response.body().string()));
-                BeanBaseResponse beanBaseResponse = new Gson().fromJson(s, new TypeToken<BeanBaseResponse>() {
+              beanBaseResponse = new Gson().fromJson(s, new TypeToken<BeanBaseResponse>() {
                 }.getType());
                 if (beanBaseResponse.getStatus() == 1) {
-                    NotificationEditPosition notificationEditPosition = new NotificationEditPosition();
+                    notificationEditPosition = new NotificationEditPosition();
 //                    BeanOpenPosition.DataBean.ListBean listBean = new BeanOpenPosition.DataBean.ListBean();
                     if(map.get(RequestConstant.SL)!=null){
                         notificationEditPosition.setSl(map.get(RequestConstant.SL));
@@ -209,16 +223,25 @@ public class EditPositionFragment extends BaseFragment {
                     }
                     notificationEditPosition.setOrder(mData.getOrder());
 //                    EventBus.getDefault().post(new BeanOpenPosition());
-                    EventBus.getDefault().post(notificationEditPosition);
-                    //发送通知activity关闭
-                    EventBus.getDefault().post(beanBaseResponse);
+//                    EventBus.getDefault().post(notificationEditPosition);
+//                    //发送通知activity关闭
+//                    EventBus.getDefault().post(beanBaseResponse);
+                    showSucc();
                 }else {
                     showFail();
                 }
             }
         });
     }
-
+    NotificationEditPosition notificationEditPosition;
+    BeanBaseResponse beanBaseResponse;
+    @Override
+    protected void eventSucc() {
+        super.eventSucc();
+        //发送通知activity关闭
+        EventBus.getDefault().post(notificationEditPosition);
+        EventBus.getDefault().post(beanBaseResponse);
+    }
 
 
     @Override
@@ -258,4 +281,6 @@ public class EditPositionFragment extends BaseFragment {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
+
 }

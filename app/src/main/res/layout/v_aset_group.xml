@@ -50,7 +50,6 @@
             android:layout_weight="4"
             android:visibility="invisible"
             android:textColor="@color/red"
-            android:text="1.06190或者更高"
             android:textSize="12sp"
             style="@style/TextAverage"/>
     </LinearLayout>

@@ -76,6 +76,7 @@ public class HistoryTradeView extends View {
     private int indexCount = TradeDateConstant.count;
     private int period;
     private Paint mDashedPaint;
+    private int realPriceColor=R.color.text_color_price_fall;
     /**
      * 每单位px的秒数
      */
@@ -254,6 +255,12 @@ public class HistoryTradeView extends View {
             int wholeNumber = (int) (price[1] * Math.pow(10, digits));
             Log.i(TAG, "drawLine: " + data.getBarnum() + " " + ints[1] + " " + ints[0]);
             double remainder = 0.00000000;
+            if(ints[0]==0){
+                Log.i(TAG, "drawLine: ");
+            }
+            if(Math.pow(10,digits)==0){
+                Log.i(TAG, "drawLine: ");
+            }
             remainder = ((wholeNumber % ints[0]) / Math.pow(10, digits));
 
             Log.i(TAG, "drawLine:显示出来的数据最大最小值 " + price[1] + "  " + price[0]);
@@ -288,13 +295,9 @@ public class HistoryTradeView extends View {
                         String temp;
                         mBeanDrawPriceData.setPriceString(String.valueOf(realTimePrice));
                         mDrawPriceDataList.add(mBeanDrawPriceData);
-                        if (realTimePrice < lastItemOpenPrice) {
-                            mDashedPaint.setColor(getResources().getColor(R.color.text_color_price_fall));
-                            mBeanDrawPriceData.setColor(getResources().getColor(R.color.text_color_price_fall));
-                        } else {
-                            mDashedPaint.setColor(getResources().getColor(R.color.text_color_price_rise));
-                            mBeanDrawPriceData.setColor(getResources().getColor(R.color.text_color_price_rise));
-                        }
+
+                        mDashedPaint.setColor(getResources().getColor(realPriceColor));
+                        mBeanDrawPriceData.setColor(getResources().getColor(realPriceColor));
 
                         canvas.drawLine(showDataLeftX, (float) y, showDataRightX, (float) y, mDashedPaint);
                     }
@@ -339,30 +342,31 @@ public class HistoryTradeView extends View {
         digits = data.getDigits();
         dataViewSpace = (SystemUtil.dp2pxFloat(mContext, TradeDateConstant.jianju) * scaleSize);
         simpleDataSpace =(SystemUtil.dp2pxFloat(mContext, TradeDateConstant.juli) * scaleSize);
-//        startIndex = (int) Math.abs(showDataLeftX / (simpleDataSpace + dataViewSpace));
-        //下标是从零开始
-//        endIndex = (int) Math.abs(showDataRightX / (simpleDataSpace + dataViewSpace));
         try {
             endIndex=(int)Math.abs(MoneyUtil.div((double) showDataRightX,(double) (simpleDataSpace + dataViewSpace)));
+            if(endIndex>=data.getBarnum()){
+                endIndex=data.getBarnum();
+            }
             startIndex=(int)Math.abs(MoneyUtil.div((double) showDataLeftX,(double) (simpleDataSpace + dataViewSpace)));
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         price = DataUtil.calcMaxMinPrice(data, digits, startIndex, endIndex);
+        if(price[0]==0){
+            Log.i(TAG, "decodeHistoryData: ");
+        }
         blance = MoneyUtil.subPrice(price[1], price[0]);
         showDataHeight = (getMeasuredHeight() - SystemUtil.dp2pxFloat(mContext, TradeDateConstant.showTimeSpace));
-//        unit = blance / showDataHeight;
         try {
             unit = MoneyUtil.div(blance, (double) this.showDataHeight);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-//        unitSpace = (float) (getWidth()/data.getBarnum());
+        if(unit==0){
+            Log.i(TAG, "decodeHistoryData: ");
+        }
         unitDataIndex = ((float) getWidth() / (float) data.getBarnum());
         dataBeginTime = data.getList().get(0).getQuoteTime();
-//        dataBeginTime = data.getList().get(0).getQuoteTime();
-//        dataStopTime = dataBeginTime + data.getList().get(data.getList().size() - 1).getQuoteTime();
-//        showBeginTime = dataBeginTime + data.getList().get(startIndex).getQuoteTime();
         period = data.getPeriod();
         lastItemOpenPrice=data.getList().get(data.getBarnum()-1).getOpen();
         if (!isReady)
@@ -372,6 +376,7 @@ public class HistoryTradeView extends View {
     BeanDrawRealTimePriceData beanDrawRealTimePriceData;
     BeanHistory.BeanHistoryData.HistoryItem lastHistoryData;
     double realTimePrice = -1;
+
     public BeanDrawRealTimePriceData refreshRealTimePrice(RealTimeDataList.BeanRealTime beanRealTime) {
         //两种保存方式。1：当前显示的。如果实时值对最后一个值有所更改，则实时更改。
         if(data==null){
@@ -398,6 +403,11 @@ public class HistoryTradeView extends View {
             lastItem.setTime(beanRealTime.getTime());
             lastItem.setQuoteTime((int) DateUtils.getOrderStartTime(beanRealTime.getTime()));
             data.getList().add(lastItem);
+        }
+        if(beanRealTime.getBid()>=realTimePrice){
+            realPriceColor=R.color.text_color_price_rise;
+        }else{
+            realPriceColor=R.color.text_color_price_fall;
         }
         this.realTimePrice = beanRealTime.getBid();
         postInvalidate((int) showDataLeftX, 0, (int) showDataRightX, getHeight(), scaleSize);

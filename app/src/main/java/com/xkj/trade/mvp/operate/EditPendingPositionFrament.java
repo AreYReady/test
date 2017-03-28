@@ -19,10 +19,13 @@ import com.xkj.trade.R;
 import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean.RealTimeDataList;
+import com.xkj.trade.bean_.BeanAllSymbols;
 import com.xkj.trade.bean_.BeanBaseResponse;
 import com.xkj.trade.bean_.BeanOpenPosition;
 import com.xkj.trade.bean_notification.NotificationEditPendingPosition;
+import com.xkj.trade.constant.CacheKeyConstant;
 import com.xkj.trade.constant.RequestConstant;
+import com.xkj.trade.constant.TradeDateConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
@@ -53,15 +56,15 @@ import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY;
  * TODO:
  */
 
-public class EditPendingPositionFrament extends BaseFragment {
+public class EditPendingPositionFrament extends BaseFragment implements AddSubEditText.AmountChangeListener{
     @Bind(R.id.riv_trade_symbol)
     RoundImageView mRivTradeSymbol;
     @Bind(R.id.tv_symbol_name)
     TextView mTvSymbolName;
     @Bind(R.id.price_left)
-    TextView mPriceLeft;
+    TextView mPriceAsk;
     @Bind(R.id.price_right)
-    TextView mPriceRight;
+    TextView mPriceBid;
     //    @Bind(R.id.commission)
 //    TextView mAmount;
     @Bind(R.id.amount)
@@ -96,47 +99,37 @@ public class EditPendingPositionFrament extends BaseFragment {
         tvAction = (TextView) view.findViewById(R.id.tv_enter_button);
         tvAction.setText(this.getString(R.string.update_position));
 //        getCurrentSymbol(MyApplication.getInstance().beanIndicatorData);
-        if (mData.getCmd().equals("sell")) {
-            mTvPlayAction.setText("卖出");
-            mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
-        } else {
+        if (mData.getCmd().contains("sell")) {
+            if(mData.getCmd().contains(TradeDateConstant.sell_stop)){
+                mTvPlayAction.setText("卖出 止损");
+            }else{
+                mTvPlayAction.setText("卖出 限价");
+            }
             mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
-            mTvPlayAction.setText("买进");
+        } else {
+            if(mData.getCmd().contains(TradeDateConstant.buy_stop)){
+                mTvPlayAction.setText("买进 止损");
+            }else{
+                mTvPlayAction.setText("买进 限价");
+            }
+            mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
+        }
+        for(BeanAllSymbols.SymbolPrices symbolPrices:beanAllSymbols.getData()){
+            if(symbolPrices.getSymbol().equals(mData.getSymbol())){
+                mTvSymbolName.setText(mData.getSymbol());
+                mPriceAsk.setText(symbolPrices.getAsk());
+                mPriceBid.setText(symbolPrices.getBid());
+                break;
+            }
         }
         mDigits = MoneyUtil.getDigits(mData.getOpenprice());
         mBaseNumble = MoneyUtil.getBaseNumble(mDigits);
         mCommission.setText(mData.getVolume());
-        mCStopLost.setMoneyChangeListener(new AddSubEditText.AmountChangeListener() {
-            @Override
-            public void amountChange(String amount) {
-                if(Double.valueOf(amount)>Double.valueOf(mData.getOpenprice())){
-                    mCStopLost.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower),mData.getOpenprice()));
-                }else {
-                    mCStopLost.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY), (MoneyUtil.subPriceToString(amount, mData.getOpenprice())))));
-                }
-            }
-        });
-        mCTakeProfit.setMoneyChangeListener(new AddSubEditText.AmountChangeListener() {
-            @Override
-            public void amountChange(String amount) {
-                Log.i(TAG, "amountChange: " + amount);
-                if(Double.valueOf(amount)<Double.valueOf(mData.getOpenprice())){
-                    mCStopLost.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher),mData.getOpenprice()));
-                } else {
-                    mCTakeProfit.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(MoneyUtil.mulPrice(mData.getVolume(), String.valueOf(VOLUME_MONEY)), (MoneyUtil.subPriceToString(amount, mData.getOpenprice())))));
-                }
-            }
-        });
-        mCMoney.setMoneyChangeListener(new AddSubEditText.AmountChangeListener() {
-            @Override
-            public void amountChange(String amount) {
-                if (amount.equals(mData.getOpenprice())) {
-                    mCMoney.setmTVDescPrompt("$0.0");
-                } else {
-                    mCMoney.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(MoneyUtil.mulPrice(mData.getVolume(), String.valueOf(VOLUME_MONEY)),(MoneyUtil.subPriceToString(amount, mData.getOpenprice())))));
-                }
-            }
-        });
+        mCMoney.setData("0", "10000", mBaseNumble,mData.getOpenprice());
+        mCMoney.setVisible();
+        mCStopLost.setMoneyChangeListener(this);
+        mCTakeProfit.setMoneyChangeListener(this);
+        mCMoney.setMoneyChangeListener(this);
         if (Double.valueOf(mData.getSl()) == 0) {
             //没有止损有效值
             mCStopLost.setData("0", mData.getOpenprice(), mBaseNumble, MoneyUtil.subPriceToString(mData.getOpenprice(), String.valueOf(mBaseNumble)));
@@ -151,8 +144,8 @@ public class EditPendingPositionFrament extends BaseFragment {
             mCTakeProfit.setData(mData.getTp(), "10000", mBaseNumble, MoneyUtil.addPrice(mData.getTp(), String.valueOf(mBaseNumble)));
             mCTakeProfit.setVisible();
         }
-        mCMoney.setData("0", "10000", mBaseNumble,mData.getOpenprice());
-        mCMoney.setVisible();
+
+
         mTvEnterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -195,33 +188,43 @@ public class EditPendingPositionFrament extends BaseFragment {
                 String s = null;
                 Log.i(TAG, "onResponse: " + call.request());
                 Log.i(TAG, "onResponse: " + (s = response.body().string()));
-                BeanBaseResponse beanBaseResponse = new Gson().fromJson(s, new TypeToken<BeanBaseResponse>() {
+                beanBaseResponse = new Gson().fromJson(s, new TypeToken<BeanBaseResponse>() {
                 }.getType());
                 if (beanBaseResponse.getStatus() == 1) {
-//                    EventBus.getDefault().post(new BeanOpenPosition());
-                    NotificationEditPendingPosition notificationEditPendingPosition = new NotificationEditPendingPosition();
+                    notificationEditPendingPosition = new NotificationEditPendingPosition();
                     if(mCStopLost.getDataVisitity()==View.VISIBLE)
                         notificationEditPendingPosition.setSl(mCStopLost.getMoneyString());
                     if(mCTakeProfit.getDataVisitity()==View.VISIBLE)
                         notificationEditPendingPosition.setTp(mCTakeProfit.getMoneyString());
                     notificationEditPendingPosition.setOrder(mData.getOrder());
-                    EventBus.getDefault().post(notificationEditPendingPosition);
-                    //发送通知activity关闭
-                    EventBus.getDefault().post(beanBaseResponse);
+//                    EventBus.getDefault().post(notificationEditPendingPosition);
+//                    发送通知activity关闭
+//                    EventBus.getDefault().post(beanBaseResponse);
+                    showSucc();
                 }else{
                     showFail();
                 }
             }
         });
     }
-
+    NotificationEditPendingPosition notificationEditPendingPosition;
+    BeanBaseResponse beanBaseResponse;
+    @Override
+    protected void eventSucc() {
+        super.eventSucc();
+        //发送通知activity关闭
+        EventBus.getDefault().post(notificationEditPendingPosition);
+        EventBus.getDefault().post(beanBaseResponse);
+    }
     @Override
     protected void initData() {
         mData = new Gson().fromJson(this.getArguments().getString(OperatePositionActivity.JSON_DATA), new TypeToken<BeanOpenPosition.DataBean.ListBean>() {
         }.getType());
         title=getString(R.string.edit_pending_order);
+        beanAllSymbols = new Gson().fromJson(ACache.get(context).getAsString(CacheKeyConstant.ALL_SYMBOLS_PRICES), new TypeToken<BeanAllSymbols>() {
+        }.getType());
     }
-
+    BeanAllSymbols beanAllSymbols;
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -241,16 +244,92 @@ public class EditPendingPositionFrament extends BaseFragment {
     public void setHeader(String symbol,String ask,String bid){
         SpannableString askTextBig = MoneyUtil.getRealTimePriceTextBig(context, ask);
         SpannableString bidTextBig = MoneyUtil.getRealTimePriceTextBig(context, bid);
-        if(mPriceRight.getText().toString()!=""){
-            askTextBig.setSpan(new ForegroundColorSpan(getResources().getColor(Double.valueOf(ask) > Double.valueOf(mPriceLeft.getText().toString()) ? R.color.text_color_price_rise : R.color.text_color_price_fall)), 0, bidTextBig.length(),
+        if(mPriceAsk.getText().toString()!=""){
+            askTextBig.setSpan(new ForegroundColorSpan(getResources().getColor(Double.valueOf(ask) > Double.valueOf(mPriceAsk.getText().toString()) ? R.color.text_color_price_rise : R.color.text_color_price_fall)), 0, bidTextBig.length(),
                     Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
-        if(mPriceRight.getText().toString()!=""){
-            bidTextBig.setSpan(new ForegroundColorSpan(getResources().getColor(Double.valueOf(bid) > Double.valueOf(mPriceRight.getText().toString()) ? R.color.text_color_price_rise : R.color.text_color_price_fall)), 0, bidTextBig.length(),
+        if(mPriceBid.getText().toString()!=""){
+            bidTextBig.setSpan(new ForegroundColorSpan(getResources().getColor(Double.valueOf(bid) > Double.valueOf(mPriceBid.getText().toString()) ? R.color.text_color_price_rise : R.color.text_color_price_fall)), 0, bidTextBig.length(),
                     Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
         mTvSymbolName.setText(symbol);
-        mPriceLeft.setText(askTextBig);
-        mPriceRight.setText(bidTextBig);
+        mPriceAsk.setText(askTextBig);
+        mPriceBid.setText(bidTextBig);
+    }
+
+    @Override
+    public void amountChange(String amount) {
+//        if(Double.valueOf(mCStopLost.getMoneyString())>Double.valueOf(mCMoney.getMoneyString())){
+//            mCStopLost.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower),mCMoney.getMoneyString()));
+//        }else {
+//            mCStopLost.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY), (MoneyUtil.subPriceToString(mCStopLost.getMoneyString(), mCMoney.getMoneyString())))));
+//        }
+//        if(Double.valueOf(mCTakeProfit.getMoneyString())<Double.valueOf(mCMoney.getMoneyString())){
+//            mCTakeProfit.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher),mCMoney.getMoneyString()));
+//        } else {
+//            mCTakeProfit.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(MoneyUtil.mulPrice(mData.getVolume(), String.valueOf(VOLUME_MONEY)), (MoneyUtil.subPriceToString(mCTakeProfit.getMoneyString(), mCMoney.getMoneyString())))));
+//        }
+        promptChange();
+    }
+    private void promptChange() {
+        switch (mData.getCmd()) {
+            case "buy limit":
+            case "buy stop":
+                if (Double.valueOf(mCStopLost.getMoneyString()) > Double.valueOf(mCMoney.getMoneyString())) {
+                    mCStopLost.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower), mCMoney.getMoneyString()));
+                } else {
+                    mCStopLost.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY),  (MoneyUtil.subPriceToString(mCStopLost.getMoneyString(), mCMoney.getMoneyString())))));
+                }
+                if(Double.valueOf(mCTakeProfit.getMoneyString())<Double.valueOf(mCMoney.getMoneyString())){
+                    mCTakeProfit.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher),mCMoney.getMoneyString()));
+                } else {
+                    mCTakeProfit.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(MoneyUtil.mulPrice(mData.getVolume(), String.valueOf(VOLUME_MONEY)), (MoneyUtil.subPriceToString(mCTakeProfit.getMoneyString(), mCMoney.getMoneyString())))));
+                }
+                break;
+            case "sell stop":
+            case "sell limit":
+                if (Double.valueOf(mCStopLost.getMoneyString()) < Double.valueOf(mCMoney.getMoneyString())) {
+                        mCStopLost.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher), mCMoney.getMoneyString()));
+                } else {
+                        mCStopLost.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY),  (MoneyUtil.subPriceToString( mCMoney.getMoneyString(),mCStopLost.getMoneyString())))));
+                }
+                if(Double.valueOf(mCTakeProfit.getMoneyString())>Double.valueOf(mCMoney.getMoneyString())){
+                        mCTakeProfit.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower),mCMoney.getMoneyString()));
+                } else {
+                        mCTakeProfit.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(MoneyUtil.mulPrice(mData.getVolume(), String.valueOf(VOLUME_MONEY)), (MoneyUtil.subPriceToString( mCMoney.getMoneyString(),mCTakeProfit.getMoneyString())))));
+                }
+                break;
+        }
+        switch (mData.getCmd()) {
+            case "buy limit":
+                if (Double.valueOf(mCMoney.getMoneyString()) >Double.valueOf(mPriceAsk.getText().toString())) {
+                    mCMoney.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower),mPriceAsk.getText().toString()));
+                }else{
+                    mCMoney.setmTVDescPrompt("");
+                }
+                break;
+            case "buy stop":
+                if (Double.valueOf(mCMoney.getMoneyString()) <Double.valueOf(mPriceAsk.getText().toString())) {
+                    mCMoney.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher),mPriceAsk.getText().toString()));
+                }else{
+                    mCMoney.setmTVDescPrompt("");
+                }
+                break;
+            case "sell stop":
+                if (Double.valueOf(mCMoney.getMoneyString()) >Double.valueOf(mPriceAsk.getText().toString())) {
+                    mCMoney.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower),mPriceAsk.getText().toString()));
+                }else{
+                    mCMoney.setmTVDescPrompt("");
+                }
+                break;
+
+            case "sell limit":
+                if (Double.valueOf(mCMoney.getMoneyString()) <Double.valueOf(mPriceBid.getText().toString())) {
+                    mCMoney.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher),mPriceBid.getText().toString()));
+                }else{
+                    mCMoney.setmTVDescPrompt("");
+                }
+                break;
+        }
     }
 }

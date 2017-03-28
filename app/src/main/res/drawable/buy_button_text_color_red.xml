@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_selected="true" android:color="@color/order_radio_button_sell_text_color" />
+    <item android:state_selected="true" android:color="@color/text_color_price_rise" />
     <item android:color="@color/color_tertiary_dark_inverse" />
 </selector>

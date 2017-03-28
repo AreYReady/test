@@ -39,7 +39,7 @@ public  class DialogUtils {
         alertDialog.show();
     }
     public  DialogUtils(Context context,String title,String msg) {
-        alertDialog = new AlertDialog.Builder(context,R.style.AlertDialog).setTitle(title).setMessage(msg);
+        alertDialog = new AlertDialog.Builder(context,R.style.AlertDialog_Fail).setTitle(title).setMessage(msg);
         alertDialog.show();
     }
 }

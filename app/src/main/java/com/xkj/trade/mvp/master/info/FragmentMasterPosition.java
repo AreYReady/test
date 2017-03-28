@@ -29,7 +29,6 @@ import com.xkj.trade.bean_.BeanPendingPosition;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.TradeDateConstant;
 import com.xkj.trade.constant.UrlConstant;
-import com.xkj.trade.diffcallback.MasterPositionDiff;
 import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.DataUtil;
 import com.xkj.trade.utils.DateUtils;
@@ -90,7 +89,7 @@ public class FragmentMasterPosition extends BaseFragment {
     protected void initView() {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_master_position);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-
+        mRecyclerView.setAdapter(mMyAdapter = new MyAdapter(mOpenDataList));
         mRecyclerView.setFocusable(false);
         mRadioGroup = (RadioGroup) view.findViewById(R.id.rg_type);
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -100,17 +99,14 @@ public class FragmentMasterPosition extends BaseFragment {
                     case R.id.rb_1:
                         url = UrlConstant.URL_TRADE_MAKET_LIST;
                         mMyAdapter.setData(mOpenDataList);
-//                        responseData(mOpenDataList, url = UrlConstant.URL_TRADE_MAKET_LIST);
                         break;
                     case R.id.rb_2:
                         url = UrlConstant.URL_TRADE_PENDING_LIST;
                         mMyAdapter.setData(mPendingDataList);
-//                        responseData(mPendingDataList, url = UrlConstant.URL_TRADE_PENDING_LIST);
                         break;
                     case R.id.rb_3:
                         url = UrlConstant.URL_TRADE_HISTORY_LIST;
                         mMyAdapter.setData(mCloseDataList);
-//                        responseData(mCloseDataList, url = UrlConstant.URL_TRADE_HISTORY_LIST);
                         break;
                 }
                 mMyAdapter.notifyDataSetChanged();
@@ -300,30 +296,22 @@ public class FragmentMasterPosition extends BaseFragment {
         switch (mRadioGroup.getCheckedRadioButtonId()) {
             case R.id.rb_1:
                 if (url.equals(UrlConstant.URL_TRADE_MAKET_LIST)) {
-                    if (mMyAdapter == null) {
-                        ThreadHelper.instance().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mRecyclerView.setAdapter(mMyAdapter = new MyAdapter(dataList));
-                            }
-                        });
-                    } else {
-                        diffResult = DiffUtil.calculateDiff(new MasterPositionDiff(mOpenDataList, dataList), true);
+//                        diffResult = DiffUtil.calculateDiff(new MasterPositionDiff(mOpenDataList, dataList), true);
                         mMyAdapter.setData(dataList);
                         diffresult();
-                    }
+
                 }
                 break;
             case R.id.rb_2:
                 if (url.equals(URL_TRADE_PENDING_LIST)) {
-                    diffResult = DiffUtil.calculateDiff(new MasterPositionDiff(mPendingDataList, dataList), true);
+//                    diffResult = DiffUtil.calculateDiff(new MasterPositionDiff(mPendingDataList, dataList), true);
                     mMyAdapter.setData(dataList);
                     diffresult();
                 }
                 break;
             case R.id.rb_3:
                 if (url.equals(URL_TRADE_HISTORY_LIST)) {
-                    diffResult = DiffUtil.calculateDiff(new MasterPositionDiff(mCloseDataList, dataList), true);
+//                    diffResult = DiffUtil.calculateDiff(new MasterPositionDiff(mCloseDataList, dataList), true);
                     mMyAdapter.setData(dataList);
                     diffresult();
                 }
@@ -335,7 +323,8 @@ public class FragmentMasterPosition extends BaseFragment {
         ThreadHelper.instance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                diffResult.dispatchUpdatesTo(mMyAdapter);
+//                diffResult.dispatchUpdatesTo(mMyAdapter);
+                mMyAdapter.notifyDataSetChanged();
             }
         });
     }

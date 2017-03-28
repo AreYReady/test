@@ -28,7 +28,7 @@ import static com.xkj.trade.constant.RequestConstant.CURRENT_PRICE;
  * TODO:挂单
  */
 
-public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHolder>implements View.OnClickListener {
+public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHolder> {
     private String TAG= SystemUtil.getTAG(this);
     private Context context;
     private List<BeanPendingPosition.DataBean.ListBean> mDataList;
@@ -94,16 +94,26 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
             holder.llHide.setVisibility(View.GONE);
             holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.color_primary_2_light_transparent));
         }
-        holder.bDeletePendingPosition.setOnClickListener(this);
-        holder.bEditPendingPosition.setOnClickListener(this);
+        holder.bDeletePendingPosition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myOnClick(v,position);
+            }
+        });
+        holder.bEditPendingPosition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myOnClick(v,position);
+            }
+        });
         holder.tvCountyName.setText(mData.getSymbol());
 //        holder.tvMoney.setText(String.valueOf(Double.valueOf(mData.getVolume()) * VOLUME_MONEY));
         holder.tvMoney.setText(mData.getVolume());
         if (mData.getCmd().contains("sell")) {
             holder.tvOperate.setText("卖");
-            holder.tvOperate.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
-        } else {
             holder.tvOperate.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
+        } else {
+            holder.tvOperate.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
             holder.tvOperate.setText("买");
         }
         holder.tvProfit.setText(mData.getOpenprice());
@@ -119,17 +129,16 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
         return mDataList.size();
     }
 
-    @Override
-    public void onClick(View v) {
+    private void myOnClick(View v ,int positon) {
         Log.i(TAG, "onClick: ");
         switch (v.getId()) {
             case R.id.b_delete_pending_position:
                 context.startActivity(new Intent(context, OperatePositionActivity.class).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.DELETE_PENDING_POSITION)
-                        .putExtra(OperatePositionActivity.JSON_DATA,new Gson().toJson(mDataList.get(mPosition), BeanPendingPosition.DataBean.ListBean.class)));
+                        .putExtra(OperatePositionActivity.JSON_DATA,new Gson().toJson(mDataList.get(positon), BeanPendingPosition.DataBean.ListBean.class)));
                 break;
             case R.id.b_edit:
                 context.startActivity(new Intent(context, OperatePositionActivity.class).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.EDIT_PENDING_POSITION)
-                        .putExtra(OperatePositionActivity.JSON_DATA,new Gson().toJson(mDataList.get(mPosition), BeanPendingPosition.DataBean.ListBean.class)));
+                        .putExtra(OperatePositionActivity.JSON_DATA,new Gson().toJson(mDataList.get(positon), BeanPendingPosition.DataBean.ListBean.class)));
                 break;
         }
     }

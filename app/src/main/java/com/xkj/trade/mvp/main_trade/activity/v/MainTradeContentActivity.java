@@ -19,9 +19,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -91,6 +93,7 @@ public class MainTradeContentActivity extends BaseActivity
     private TextView mMargin;
     private TextView mMarginLevel;
     private TextView mCredit;
+    private ImageButton mPay;
     private BGABadgeImageView mOpenPositionCount;
     FloatingActionButton fab;
 
@@ -153,6 +156,13 @@ public class MainTradeContentActivity extends BaseActivity
                 }
             }
         });
+        mPay=(ImageButton)findViewById(R.id.ib_pay);
+        mPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context,OperatePositionActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION).putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.PAY));
+            }
+        });
         setSupportActionBar(toolbar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -197,6 +207,7 @@ public class MainTradeContentActivity extends BaseActivity
         mViewPagerFrag = (ViewPager) findViewById(R.id.vp_indicator_content);
         mViewPagerFrag.setAdapter(new FragmentAdapter(fragmentManager, mFragmentList));
         mViewPagerFrag.setOffscreenPageLimit(mFragmentList.size());
+        mViewPagerFrag.setCurrentItem(2);
         mViewPagerFrag.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -207,6 +218,7 @@ public class MainTradeContentActivity extends BaseActivity
         mHeadViewPager = (CustomViewPager) findViewById(R.id.cvp_indicator_item);
         mHeadViewPager.setAdapter(new MyViewPagerAdapterItem(context, mDataItem));
         mHeadViewPager.setOffscreenPageLimit(mDataItem.size());
+        mHeadViewPager.setCurrentItem(2);
         mHeadViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         mHeadViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             int mPosition = 0;
@@ -246,6 +258,12 @@ public class MainTradeContentActivity extends BaseActivity
         mBalance = (TextView) findViewById(R.id.tv_pull_balance);
         mOpenPl = (TextView) findViewById(R.id.tv_pull_open_p_l);
         mOpenPositionCount=(BGABadgeImageView)findViewById(R.id.iv_suitcase);
+        findViewById(R.id.fl_indicator_item).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return mHeadViewPager.dispatchTouchEvent(event);
+            }
+        });
     }
 
     @Override

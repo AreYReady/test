@@ -23,6 +23,7 @@ import com.xkj.trade.bean_.BeanBaseResponse;
 import com.xkj.trade.bean_.BeanPendingPosition;
 import com.xkj.trade.bean_notification.NotificationDeletePending;
 import com.xkj.trade.constant.RequestConstant;
+import com.xkj.trade.constant.TradeDateConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
@@ -95,11 +96,20 @@ public class DeletePositionFragment extends BaseFragment {
             }
         });
         if (mData.getCmd().contains("sell")) {
-            mTvPlayAction.setText("卖出");
-            mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
-        } else {
+            if(mData.getCmd().contains(TradeDateConstant.sell_stop)){
+                mTvPlayAction.setText("卖出 止损");
+            }else{
+                mTvPlayAction.setText("卖出 限价");
+            }
             mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
-            mTvPlayAction.setText("买进");
+        } else {
+            if(mData.getCmd().contains(TradeDateConstant.buy_stop)){
+                mTvPlayAction.setText("买进 止损");
+            }else{
+                mTvPlayAction.setText("买进 限价");
+            }
+            mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
+
         }
         mAmount.setText(mData.getVolume());
         mStopLoss.setText(mData.getSl());
@@ -128,19 +138,26 @@ public class DeletePositionFragment extends BaseFragment {
                 String s = null;
                 Log.i(TAG, "onResponse: " + call.request());
                 Log.i(TAG, "onResponse: " + (s = response.body().string()));
-                BeanBaseResponse beanBaseResponse = new Gson().fromJson(s, new TypeToken<BeanBaseResponse>() {
+                beanBaseResponse  = new Gson().fromJson(s, new TypeToken<BeanBaseResponse>() {
                 }.getType());
                 if (beanBaseResponse.getStatus() == 1) {
                     EventBus.getDefault().post(new NotificationDeletePending(mData.getOrder()));
                     //发送通知activity关闭
-                    EventBus.getDefault().post(beanBaseResponse);
+//                    EventBus.getDefault().post(beanBaseResponse);
+                    showSucc();
                 }else{
                     showFail();
                 }
             }
         });
     }
-
+    BeanBaseResponse beanBaseResponse;
+    @Override
+    protected void eventSucc() {
+        super.eventSucc();
+        //发送通知activity关闭
+        EventBus.getDefault().post(beanBaseResponse);
+    }
     private void requestSubSymbol() {
         ChatWebSocket chartWebSocket = ChatWebSocket.getChartWebSocket();
         if (chartWebSocket != null) {

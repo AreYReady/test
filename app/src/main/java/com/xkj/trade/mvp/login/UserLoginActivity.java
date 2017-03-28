@@ -59,7 +59,7 @@ public class UserLoginActivity extends BaseActivity implements UserLoginActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.fragment_login);
         super.onCreate(savedInstanceState);
 
     }

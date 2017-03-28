@@ -81,7 +81,6 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
         holder.mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToashUtil.showShort(context, position + "");
                 EventBus.getDefault().post(mBeanMasterRank.getResponse().get(position));
             }
         });
@@ -139,7 +138,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                 requestFocus(mBeanMasterRank.getResponse().get(position), holder);
             }
         });
-        holder.mCustomMasterLink.postInvalidate(masterRank, position);
+        holder.mCustomMasterLink.postInvalidate(masterRank);
         holder.mIvCopyDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

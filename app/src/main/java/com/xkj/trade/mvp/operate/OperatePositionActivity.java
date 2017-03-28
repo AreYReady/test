@@ -110,6 +110,9 @@ public class OperatePositionActivity extends OperateBaseActivity {
                 mBaseFragment.setArguments(mBundle);
 //                fragmentTransaction.add(R.id.fl_operate_content, new EditPendingPositionFrament());
                 break;
+            case PAY:
+                mBaseFragment=new PayFragment();
+                break;
             default:
                 mBaseFragment = new AddPositionFragment();
 //                fragmentTransaction.add(R.id.fl_operate_content, new AddPositionFragment());
@@ -131,6 +134,7 @@ public class OperatePositionActivity extends OperateBaseActivity {
         EDIT_PENDING_POSITION,
         EDIT_POSITION,
         UNLINK,
+        PAY,
         ClOSE_POSITION
     }
 

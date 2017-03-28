@@ -56,6 +56,10 @@
     <string name="common_google_play_services_update_title">更新Google Play服务</string>
     <string name="common_open_on_phone">在手机上打开</string>
     <string name="common_signin_button_text">登录</string>
+    <string name="signup_text">昵称</string>
+    <string name="signup">注册</string>
+    <string name="signup_telephone">手机号</string>
+    <string name="signup_email">邮箱</string>
     <string name="common_signin_button_text_long">使用Google帐户登录</string>
     <string name="commono_google_play_services_api_unavailable_text">运行此应用所需的一项或多项 Google Play 服务目前无法使用。请与开发者联系以寻求帮助。</string>
     <string name="about">关于</string>
@@ -371,6 +375,9 @@
     <string name="partial_closure_will_unlink_copied_positions_from_the_master_position">"部分关闭将取消关联已复制的仓位
 从操盘大师仓位"</string>
     <string name="password">请输入密码：</string>
+    <string name="please_enter_sign_up_name">请输入昵称</string>
+    <string name="please_enter_sign_up_telephone">请输入手机号码</string>
+    <string name="please_enter_sign_up_email">请输入邮箱</string>
     <string name="password_mismatch">密码不匹配。请重试</string>
     <string name="pending">挂单</string>
     <string name="pending_order_was_deleted">挂单已删除</string>
@@ -419,8 +426,8 @@
     <string name="search">搜索</string>
     <string name="search_instrument">搜索工具</string>
     <string name="select_amount">选择金额</string>
-    <string name="select_volume">选择手数%</string>
-    <string name="select_volume_percent">选择百分比</string>
+    <string name="select_volume">选择手数</string>
+    <string name="select_volume_percent">选择手数百分比</string>
     <string name="volume">手数</string>
     <string name="sell">卖出</string>
     <string name="sell_action">卖出%s</string>
@@ -432,6 +439,12 @@
     <string name="session_id">会话ID</string>
     <string name="settings">设置</string>
     <string name="seven_days">7天</string>
+    <string name="lever50">50</string>
+    <string name="lever100">100</string>
+    <string name="lever200">200</string>
+    <string name="lever300">300</string>
+    <string name="lever400">400</string>
+    <string name="lever">杠杆</string>
     <string name="short_position_prohibited">禁止空头</string>
     <string name="six_monthly_pl">六个月盈亏</string>
     <string name="skip">跳过</string>
@@ -540,6 +553,7 @@
     <string name="welcome">欢迎！</string>
     <string name="welcome_aboard">欢迎加入！</string>
     <string name="welcome_back">欢迎回来</string>
+    <string name="back">返回</string>
     <string name="welcome_to_name">欢迎使用%s！</string>
     <string name="welcome_to_the_community">欢迎来到社区</string>
     <string name="welcome_to_the_social_trading_mode">欢迎使用社交交易模式！</string>
@@ -570,6 +584,9 @@
     <string name="you_now_have_account_your_account_number_is">"您现在拥有了 %1$s 账户。
 账号为：%2$s"</string>
     <string name="your_account_number_is">你的账号是%s</string>
+    <string name ="pay_account_number">充值账号：</string>
+    <string name ="pay_money">充值金额：</string>
+
     <string name="your_demo_account_number_is">您的模拟账号是%s</string>
 
     <!-- TODO: Remove or change this placeholder text -->

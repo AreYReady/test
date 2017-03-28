@@ -1,5 +1,7 @@
 package com.xkj.trade.utils;
 
+import android.util.Log;
+
 import com.xkj.trade.R;
 import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean.BeanCurrentServerTime;
@@ -78,6 +80,9 @@ public class DataUtil {
             data[0] = (int) Math.pow(10, len - 2) * 5;
         } else {
             data[0] = (int) Math.pow(10, len - 2) * 2;
+        }
+        if(data[0]==0){
+            Log.i("hsc", "drawLineCount: ");
         }
         return data;
     }
@@ -214,6 +219,8 @@ public class DataUtil {
                         * (Double.valueOf((MainTradeContentFrag.realTimeMap.get(symbol.substring(0, 3).concat("USD"))).getBid())), Double.valueOf(currentPrices), 2));
             }
         } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }catch (Exception e){
             e.printStackTrace();
         }
         return "";

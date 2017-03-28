@@ -10,7 +10,7 @@
     <dimen name="px734">244dip</dimen>
     <dimen name="px120">40dip</dimen>
     <dimen name="px150">50dip</dimen>
-    <dimen name="title_height">60dip</dimen>
-    <dimen name="open_pending_select_height">42.5dip</dimen>
-    <dimen name="buy_sell_height">72.5dip</dimen>
+    <dimen name="title_height">50dip</dimen>
+    <dimen name="open_pending_select_height">40dip</dimen>
+    <dimen name="buy_sell_height">60dip</dimen>
 </resources>

@@ -20,7 +20,6 @@ public class MainTradeFragListener {
      */
     public interface MainTradeContentLFragListener {
         void refreshView(BeanHistory.BeanHistoryData data, boolean isCountDown);
-        void refreshIndicator(List<BeanIndicatorData> mBeanIndicatorDataList);
         void refreshUserInfo(BeanUserListInfo info);
         void refreshOpenPosition(BeanOpenPosition info);
         void responseAllSymbolsData(String response);

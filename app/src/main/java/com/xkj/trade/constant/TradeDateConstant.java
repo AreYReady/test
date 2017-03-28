@@ -12,25 +12,11 @@ public class TradeDateConstant {
     public static String VOLUME_MONEY_STRING="100000";
     public static long diffTimeServiceAndNative=0;
     /**
-     * 服务器时间偏移量
-     */
-    public static int tz_delta=0;
-    /**
-     * 中间最大色块和上线的空白
-     */
-    public static int topMaxSpace =20;
-    /**
-     * 中间最小值色块和下线的空白
-     */
-    public static int bottomMinSpace =20;
-    /**
      * 下面时间的显示空间
      */
     public static int showTimeSpace=20;
-    /**
-     * 左边显示价格的空间大小dip
-     */
-    public static int showPriceSpace=60;
-
-
+    public static String buy_limit="buy limit";
+    public static String buy_stop="buy stop";
+    public static String sell_stop="sell stop";
+    public static String sell_limit="sell limit";
 }

@@ -131,7 +131,7 @@ public class CustomMasterLink extends View {
         this.width=width;
         postInvalidate();
     }
-    public void postInvalidate(BeanMasterRank.MasterRank rank,int index) {
+    public void postInvalidate(BeanMasterRank.MasterRank rank) {
         this.rank = rank;
         postInvalidate();
     }

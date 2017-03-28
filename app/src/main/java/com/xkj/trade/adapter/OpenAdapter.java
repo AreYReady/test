@@ -20,6 +20,7 @@ import com.xkj.trade.utils.SystemUtil;
 
 import java.util.List;
 
+import static android.R.attr.onClick;
 import static com.xkj.trade.constant.RequestConstant.CURRENT_PRICE;
 import static com.xkj.trade.constant.RequestConstant.PROFIT;
 import static com.xkj.trade.constant.RequestConstant.STOP_LOSS;
@@ -31,7 +32,7 @@ import static com.xkj.trade.constant.RequestConstant.TAKE_PROFIT;
  * TODO:
  */
 
-public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> implements View.OnClickListener {
+public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> {
     private String TAG = SystemUtil.getTAG(this);
     private List<BeanOpenPosition.DataBean.ListBean> mDataList;
     private Context context;
@@ -119,17 +120,26 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
             holder.llHide.setVisibility(View.GONE);
             holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.color_primary_2_light_transparent));
         }
-        holder.bClosePosition.setOnClickListener(this);
-        holder.bUnlink.setOnClickListener(this);
-        holder.bEditPosition.setOnClickListener(this);
+        holder.bClosePosition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myOnClick(v,position);
+            }
+        });
+        holder.bEditPosition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myOnClick(v,position);
+            }
+        });
         holder.tvCountyName.setText(mData.getSymbol());
         holder.tvMoney.setText(mData.getVolume());
         holder.tvCommission.setText("$" + mData.getCommission());
         if (mData.getCmd().equals("sell")) {
             holder.tvOperate.setText("卖");
-            holder.tvOperate.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
-        } else {
             holder.tvOperate.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
+        } else {
+            holder.tvOperate.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
             holder.tvOperate.setText("买");
         }
         holder.bClosePosition.setText(mData.getPrice()!=null?"平仓"+mData.getPrice():"平仓");
@@ -149,23 +159,22 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
         return mDataList.size();
     }
 
-    @Override
-    public void onClick(View v) {
+    private void myOnClick(View v,int position) {
         switch (v.getId()) {
             case R.id.b_edit:
                 context.startActivity(new Intent(context, OperatePositionActivity.class)
                         .putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.EDIT_POSITION)
-                        .putExtra(OperatePositionActivity.JSON_DATA,new Gson().toJson(mDataList.get(mPosition), BeanOpenPosition.DataBean.ListBean.class)));
+                        .putExtra(OperatePositionActivity.JSON_DATA,new Gson().toJson(mDataList.get(position), BeanOpenPosition.DataBean.ListBean.class)));
                 break;
             case R.id.b_close_position:
                 context.startActivity(new Intent(context, OperatePositionActivity.class)
                         .putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.ClOSE_POSITION)
-                        .putExtra(OperatePositionActivity.JSON_DATA,new Gson().toJson(mDataList.get(mPosition), BeanOpenPosition.DataBean.ListBean.class)));
+                        .putExtra(OperatePositionActivity.JSON_DATA,new Gson().toJson(mDataList.get(position), BeanOpenPosition.DataBean.ListBean.class)));
                 break;
             case R.id.b_unlink:
                 context.startActivity(new Intent(context, OperatePositionActivity.class)
                         .putExtra(OperatePositionActivity.OPERATEACTION, OperatePositionActivity.OperateAction.UNLINK)
-                        .putExtra(OperatePositionActivity.JSON_DATA,new Gson().toJson(mDataList.get(mPosition), BeanOpenPosition.DataBean.ListBean.class)));
+                        .putExtra(OperatePositionActivity.JSON_DATA,new Gson().toJson(mDataList.get(position), BeanOpenPosition.DataBean.ListBean.class)));
                 break;
         }
     }

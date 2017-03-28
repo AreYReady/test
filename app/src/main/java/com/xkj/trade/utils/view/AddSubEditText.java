@@ -84,7 +84,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
                     if(editText.getText().toString().equals("")||editText.getText().toString().endsWith(".")){
                         amount="0";
                     }
-                    listener.amountChange(amount);
+                    handler.sendEmptyMessage(2);
                 }
 
             }
@@ -188,18 +188,26 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
                         if(editText.getText().equals("")||editText.getText().equals(".")){
                             amount="0";
                         }
-                            listener.amountChange(amount);
+                        editText.setText(amount);
+                        if(editText.getVisibility()!=VISIBLE){
+                            editText.setVisibility(VISIBLE);
+                        }
+//                            listener.amountChange(amount);
                     }
                     break;
                 //follow
                 case 1:
                     isFollow=false;
+                    editText.setText(amount);
+                    if(editText.getVisibility()!=VISIBLE){
+                        editText.setVisibility(VISIBLE);
+                    }
+                    break;
+                case 2:
+                    listener.amountChange(amount);
                     break;
             }
-            editText.setText(amount);
-            if(editText.getVisibility()!=VISIBLE){
-                editText.setVisibility(VISIBLE);
-            }
+
         }
     };
 
@@ -210,9 +218,6 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
         isFollow=true;
         amount=MoneyUtil.mulPrice(baseNumber,String.valueOf(count));
         handler.sendEmptyMessage(1);
-        if(editText.getVisibility()!=VISIBLE){
-            editText.setVisibility(VISIBLE);
-        }
     }
     public interface AmountChangeListener{
 //        void amountChange(int count);

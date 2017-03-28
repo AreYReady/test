@@ -22,6 +22,7 @@ import com.xkj.trade.bean_.BeanBaseResponse;
 import com.xkj.trade.bean_.BeanPendingPosition;
 import com.xkj.trade.bean_notification.NotificationKeyBoard;
 import com.xkj.trade.constant.RequestConstant;
+import com.xkj.trade.constant.TradeDateConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
@@ -46,14 +47,12 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY;
-
 /**
  * Created by huangsc on 2016-12-10.
  * TODO:
  */
 
-public class CardPendingFrag extends BaseFragment implements View.OnClickListener {
+public class CardPendingFrag extends BaseFragment implements View.OnClickListener,AddSubEditText.AmountChangeListener{
     LinearLayout layoutTab;
     Button bBuyLimit;
     Button bBuyStopLost;
@@ -71,7 +70,7 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
     TextView mTvEnterOrder;
     private RequestConstant.Exc exc;
     private String price;
-
+    BeanBaseResponse beanBaseResponse;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -99,115 +98,82 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
             }
         });
         mTvEnterOrder.setOnClickListener(this);
-        mCPrice.setMoneyChangeListener(new AddSubEditText.AmountChangeListener() {
-            @Override
-            public void amountChange(String amount) {
-                promptChange(mCPrice,amount);
-            }
-        });
-        mCStopLost.setMoneyChangeListener(new AddSubEditText.AmountChangeListener() {
-            @Override
-            public void amountChange(String amount) {
-                promptChange(mCStopLost,amount);
-            }
-        });
-
-        mCTakeProfit.setMoneyChangeListener(new AddSubEditText.AmountChangeListener() {
-            @Override
-            public void amountChange(String amount) {
-             promptChange(mCTakeProfit,amount);
-            }
-        });
         initC();
     }
 
     private void initC() {
         int mDigits = MoneyUtil.getDigits(price);
         String mBaseNumble = MoneyUtil.getBaseNumble(mDigits);
+        mCPrice.setMoneyChangeListener(this);
+        mCPrice.setData("0", String.valueOf(Integer.MAX_VALUE), mBaseNumble, price);
+        mCStopLost.setMoneyChangeListener(this);
+        mCTakeProfit.setMoneyChangeListener(this);
         mCStopLost.setData("0", String.valueOf(Integer.MAX_VALUE), mBaseNumble, MoneyUtil.subPriceToString(price, String.valueOf(mBaseNumble)));
         mCTakeProfit.setData("0", String.valueOf(Integer.MAX_VALUE), mBaseNumble, MoneyUtil.addPrice(price, String.valueOf(mBaseNumble)));
-        mCPrice.setData("0", String.valueOf(Integer.MAX_VALUE), mBaseNumble, price);
         mCPrice.setVisible();
     }
 
-    private void promptChange(View v,String amount) {
-        switch (v.getId()) {
-            case R.id.stop_loss:
+    private void promptChange() {
                 switch (exc) {
-                    case SELL_STOP:
                     case SELL_LIMIT:
-                        if (Double.valueOf(amount) < Double.valueOf(mCPrice.getMoneyString())) {
+                    case SELL_STOP:
+                        if (Double.valueOf(mCStopLost.getMoneyString()) < Double.valueOf(mCPrice.getMoneyString())) {
                             mCStopLost.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher), mCPrice.getMoneyString()));
                         } else {
-                            mCStopLost.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(String.valueOf(mCsbVo.getMoney()), (MoneyUtil.subPriceToString(amount, mCPrice.getMoneyString())))));
+                            mCStopLost.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(MoneyUtil.mulPrice(mCsbVo.getMoney(), TradeDateConstant.VOLUME_MONEY_STRING), (MoneyUtil.subPriceToString(mCPrice.getMoneyString(), mCStopLost.getMoneyString())))));
                         }
-                        break;
-                    case BUY_STOP:
-                    case BUY_LIMIT:
-                        if (Double.valueOf(amount) > Double.valueOf(mCPrice.getMoneyString())) {
-                            mCStopLost.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower), mCPrice.getMoneyString()));
-                        } else {
-                            mCStopLost.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(String.valueOf(mCsbVo.getMoney()), (MoneyUtil.subPriceToString(amount, mCPrice.getMoneyString())))));
-                        }
-                        break;
-                }
-                break;
-            case R.id.take_profit:
-                switch (exc) {
-                    case SELL_LIMIT:
-                    case SELL_STOP:
-                        if (Double.valueOf(amount) > Double.valueOf(mCPrice.getMoneyString())) {
+                        if (Double.valueOf(mCTakeProfit.getMoneyString()) > Double.valueOf(mCPrice.getMoneyString())) {
                             mCTakeProfit.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower), mCPrice.getMoneyString()));
                         } else {
-                                mCTakeProfit.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(String.valueOf(mCsbVo.getMoney()), (MoneyUtil.subPriceToString(amount, mCPrice.getMoneyString())))));
+                            mCTakeProfit.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(MoneyUtil.mulPrice(mCsbVo.getMoney(), TradeDateConstant.VOLUME_MONEY_STRING), (MoneyUtil.subPriceToString(mCPrice.getMoneyString(), mCTakeProfit.getMoneyString())))));
                         }
                         break;
                     case BUY_LIMIT:
                     case BUY_STOP:
-                        if (Double.valueOf(amount) <Double.valueOf(mCPrice.getMoneyString())) {
+                        if (Double.valueOf(mCStopLost.getMoneyString()) > Double.valueOf(mCPrice.getMoneyString())) {
+                            mCStopLost.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower), mCPrice.getMoneyString()));
+                        } else {
+                            mCStopLost.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(MoneyUtil.mulPrice(mCsbVo.getMoney(), TradeDateConstant.VOLUME_MONEY_STRING), (MoneyUtil.subPriceToString(mCStopLost.getMoneyString(), mCPrice.getMoneyString())))));
+                        }
+                        if (Double.valueOf(mCTakeProfit.getMoneyString()) < Double.valueOf(mCPrice.getMoneyString())) {
                             mCTakeProfit.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher), mCPrice.getMoneyString()));
                         } else {
-                            mCTakeProfit.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(String.valueOf(mCsbVo.getMoney()), (MoneyUtil.subPriceToString(amount, mCPrice.getMoneyString())))));
+                            mCTakeProfit.setmTVDescPrompt("$" + MoneyUtil.deleteZero(MoneyUtil.mulPrice(MoneyUtil.mulPrice(mCsbVo.getMoney(), TradeDateConstant.VOLUME_MONEY_STRING), (MoneyUtil.subPriceToString(mCTakeProfit.getMoneyString(), mCPrice.getMoneyString())))));
                         }
                         break;
                 }
-                break;
-            case R.id.price:
                 switch (exc) {
                     case BUY_LIMIT:
-                        if (Double.valueOf(amount) >Double.valueOf(MyApplication.getInstance().beanIndicatorData.getAsk())) {
+                        if (Double.valueOf(mCPrice.getMoneyString()) >Double.valueOf(MyApplication.getInstance().beanIndicatorData.getAsk())) {
                             mCPrice.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower),MyApplication.getInstance().beanIndicatorData.getAsk()));
                         }else{
                             mCPrice.setmTVDescPrompt("");
                         }
                         break;
                     case SELL_LIMIT:
-                        if (Double.valueOf(amount) <Double.valueOf(MyApplication.getInstance().beanIndicatorData.getBid())) {
+                        if (Double.valueOf(mCPrice.getMoneyString()) <Double.valueOf(MyApplication.getInstance().beanIndicatorData.getBid())) {
                             mCPrice.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher),MyApplication.getInstance().beanIndicatorData.getBid()));
                         }else{
                             mCPrice.setmTVDescPrompt("");
                         }
                         break;
                     case BUY_STOP:
-                        if (Double.valueOf(amount) <Double.valueOf(MyApplication.getInstance().beanIndicatorData.getAsk())) {
+                        if (Double.valueOf(mCPrice.getMoneyString()) <Double.valueOf(MyApplication.getInstance().beanIndicatorData.getAsk())) {
                             mCPrice.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_higher),MyApplication.getInstance().beanIndicatorData.getAsk()));
                         }else{
                             mCPrice.setmTVDescPrompt("");
                         }
                         break;
                     case SELL_STOP:
-                        if (Double.valueOf(amount) >Double.valueOf(MyApplication.getInstance().beanIndicatorData.getBid())) {
+                        if (Double.valueOf(mCPrice.getMoneyString()) >Double.valueOf(MyApplication.getInstance().beanIndicatorData.getBid())) {
                             mCPrice.setmTVDescPrompt(String.format(getResources().getString(R.string.rate_or_lower), MyApplication.getInstance().beanIndicatorData.getBid()));
                         }else{
                             mCPrice.setmTVDescPrompt("");
                         }
                         break;
                 }
-                break;
-
         }
 
-    }
 
     @Override
     protected void initData() {
@@ -247,18 +213,22 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
             case R.id.b_sell_stop_lost:
                 exc = RequestConstant.Exc.SELL_STOP;
                 setTabSelected(bSellStopLost);
+                promptChange();
                 break;
             case R.id.b_sell_limit:
                 exc = RequestConstant.Exc.SELL_LIMIT;
                 setTabSelected(bSellLimit);
+                promptChange();
                 break;
             case R.id.b_buy_stop_lost:
                 exc = RequestConstant.Exc.BUY_STOP;
                 setTabSelected(bBuyStopLost);
+                promptChange();
                 break;
             case R.id.b_buy_limit:
                 exc = RequestConstant.Exc.BUY_LIMIT;
                 setTabSelected(bBuyLimit);
+                promptChange();
                 break;
             case R.id.tv_enter_order:
                 enterOrder();
@@ -292,16 +262,23 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
                 String s="";
                 Log.i(TAG, "onResponse: " + call.request());
                 Log.i(TAG, "onResponse: " + (s=response.body().string()));
-                BeanBaseResponse beanBaseResponse=new Gson().fromJson(s,new TypeToken<BeanBaseResponse>(){}.getType());
+                 beanBaseResponse=new Gson().fromJson(s,new TypeToken<BeanBaseResponse>(){}.getType());
                 if (beanBaseResponse.getStatus() == 1) {
                     EventBus.getDefault().post(new BeanPendingPosition());
+                    showSucc();
                     //发送通知activity关闭
-                    EventBus.getDefault().post(beanBaseResponse);
+//                    EventBus.getDefault().post(beanBaseResponse);
                 }else{
                     showFail();
                 }
             }
         });
+    }
+    @Override
+    protected void eventSucc() {
+        super.eventSucc();
+        //发送通知activity关闭
+        EventBus.getDefault().post(beanBaseResponse);
     }
 
     @Override
@@ -318,5 +295,10 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
 //            view.findViewById(R.id.s_space).setVisibility(View.VISIBLE);
 //        }
 ////        view.findViewById(R.id.sv_).setFocusable(true);
+    }
+
+    @Override
+    public void amountChange(String amount) {
+        promptChange();
     }
 }

@@ -3,7 +3,6 @@ package com.xkj.trade.mvp.master.info;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
-import android.support.v7.util.BatchingListUpdateCallback;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,7 +27,6 @@ import com.xkj.trade.bean_.BeanMasterRank;
 import com.xkj.trade.bean_.BeanMasterRelationCopy;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
-import com.xkj.trade.diffcallback.MasterComnunityDiff;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.ThreadHelper;
 
@@ -98,9 +96,10 @@ public class FragmentMasterComnunity extends BaseFragment {
             }
         });
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_master_community);
-
+        mRecyclerView.setAdapter(mMyAdapter=new MyAdapter(focusRelationList));
         mRecyclerView.setFocusable(false);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        countTimeDown();
         requestFocusInfo();
         requestMyCopy();
         requestFocusRelation();
@@ -140,38 +139,30 @@ public class FragmentMasterComnunity extends BaseFragment {
         switch (mRadioGroup.getCheckedRadioButtonId()){
                 case R.id.rb_1:
                     if(url.equals(UrlConstant.URL_MASTER_FOLLOW_master_Relation)&&"1".equals(s)){
-                        if(mMyAdapter==null){
-                            ThreadHelper.instance().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    focusRelationList=list;
-                                    mRecyclerView.setAdapter(mMyAdapter=new MyAdapter(focusRelationList));
-                                    countTimeDown();
-                                }
-                            });
-                        }else {
-                            diffResult = DiffUtil.calculateDiff(new MasterComnunityDiff(focusRelationList, list));
+//                            diffResult = DiffUtil.calculateDiff(new MasterComnunityDiff(focusRelationList, list));
                             mMyAdapter.setData(list);
                             diffresult();
-                        }
                     }
                     break;
                 case R.id.rb_2:
                     if(url.equals(UrlConstant.URL_MASTER_focusinfo)){
-                        diffResult=DiffUtil.calculateDiff(new MasterComnunityDiff(focusList,list));
+//                        diffResult=DiffUtil.calculateDiff(new MasterComnunityDiff(focusList,list));
                         mMyAdapter.setData(list);
+                        diffresult();
                     }
                     break;
                 case R.id.rb_3:
                     if(url.equals(UrlConstant.URL_MASTER_FOLLOW_master_Relation)&&"2".equals(s)){
-                        diffResult=DiffUtil.calculateDiff(new MasterComnunityDiff(copyRelationList,list));
+//                        diffResult=DiffUtil.calculateDiff(new MasterComnunityDiff(copyRelationList,list));
                         mMyAdapter.setData(list);
+                        diffresult();
                     }
                     break;
                 case R.id.rb_4:
                     if(url.equals(UrlConstant.URL_MASTER_MY_COPY)){
-                        diffResult=DiffUtil.calculateDiff(new MasterComnunityDiff(copyList,list));
+//                        diffResult=DiffUtil.calculateDiff(new MasterComnunityDiff(copyList,list));
                         mMyAdapter.setData(list);
+                        diffresult();
                     }
                     break;
         }
@@ -183,9 +174,7 @@ public class FragmentMasterComnunity extends BaseFragment {
     Runnable mRunnable=new Runnable() {
         @Override
         public void run() {
-            if(diffResult!=null){
-                diffResult.dispatchUpdatesTo(mMyAdapter);
-            }
+            mMyAdapter.notifyDataSetChanged();
         }
     };
 

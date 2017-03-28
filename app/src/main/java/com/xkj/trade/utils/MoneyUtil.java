@@ -224,14 +224,14 @@ public class MoneyUtil {
         //如果精确范围小于0，抛出异常信息
         BigDecimal b1 = new BigDecimal(value1);
         BigDecimal b2 = new BigDecimal(value2);
-        return b1.divide(b2,ROUND_HALF_EVEN).toString();
+        return b1.divide(b2, BigDecimal.ROUND_HALF_UP).toString();
     }
 
     public static double div(double value1, double value2) throws IllegalAccessException {
         //如果精确范围小于0，抛出异常信息
         BigDecimal b1 = new BigDecimal(Double.toString(value1));
         BigDecimal b2 = new BigDecimal(Double.toString(value2));
-        return b1.divide(b2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return b1.divide(b2,10, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
 

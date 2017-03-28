@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -88,12 +89,6 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_master_info, null);
-        //又来判断关联的activity是否是实现接口的activity
-//        if (!(getActivity() instanceof BackInterface)) {
-//            throw new ClassCastException("Hosting Activity must implement BackHandledInterface");
-//        } else {
-//            this.mBackInterface = (BackInterface) getActivity();
-//        }
         rank = new Gson().fromJson(this.getArguments().getString(MASTER_INFO), new TypeToken<BeanMasterRank.MasterRank>() {
         }.getType());
         return view;
@@ -131,7 +126,7 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
     @Override
     protected void initView() {
         mCustomMasterLink = (CustomMasterLink) view.findViewById(R.id.c_master_link);
-        mCustomMasterLink.postInvalidate(rank, 0);
+        mCustomMasterLink.postInvalidate(rank);
         mCustomViewPager = (CustomViewPager) view.findViewById(R.id.cvp_master_info_indicator);
         mCustomViewPager.setAdapter(new MyViewPagerAdapterItem(context, mDataItem));
         mCustomViewPager.setOffscreenPageLimit(4);
@@ -164,6 +159,12 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
 
             @Override
             public void onPageScrollStateChanged(int state) {
+            }
+        });
+        view.findViewById(R.id.fl_master_info_indicator_parent).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return mCustomViewPager.dispatchTouchEvent(event);
             }
         });
         //将scrollview撑下来的空白布局

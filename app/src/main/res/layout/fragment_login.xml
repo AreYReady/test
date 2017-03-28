@@ -82,16 +82,40 @@
             android:textColorHint="@color/text_color_pull_head_text_content"/>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/b_login_button"
-        style="@style/Button.Action"
-        android:layout_width="135dip"
-        android:layout_height="36dip"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/space_xxxxbig"
-        android:text="@string/login"
-        android:background="@drawable/button_login"
-        android:textColor="@android:color/white"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/px51"
+        android:orientation="horizontal">
+        <FrameLayout
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/b_sign_up"
+                style="@style/Button.Action"
+                android:layout_width="135dip"
+                android:layout_height="36dip"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/signup"
+                android:background="@drawable/button_login"
+                android:textColor="@android:color/white"/>
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/b_login_button"
+                style="@style/Button.Action"
+                android:layout_width="135dip"
+                android:layout_height="36dip"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/login"
+                android:background="@drawable/button_login"
+                android:textColor="@android:color/white"/>
+        </FrameLayout>
+    </LinearLayout>
 
 </LinearLayout>

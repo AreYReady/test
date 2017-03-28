@@ -26,13 +26,13 @@
                >
                 <com.xkj.trade.utils.view.CustomSwitch
                     android:id="@+id/cs_switch_tag"
-                    android:layout_toLeftOf="@+id/ib_"
+                    android:layout_toLeftOf="@+id/ib_pay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true">
                 </com.xkj.trade.utils.view.CustomSwitch>
                 <ImageButton
-                    android:id="@+id/ib_"
+                    android:id="@+id/ib_pay"
                     android:layout_alignParentRight="true"
                     android:layout_width="40dip"
                     android:layout_height="40dip"

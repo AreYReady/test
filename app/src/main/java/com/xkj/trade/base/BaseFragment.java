@@ -82,7 +82,7 @@ public  abstract class BaseFragment extends Fragment {
         ThreadHelper.instance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                alertDialog = new AlertDialog.Builder(context,R.style.AlertDialog).setTitle(title).setMessage(getString(R.string.action_fail_please_try_again));
+                alertDialog = new AlertDialog.Builder(context,R.style.AlertDialog_Fail).setTitle(title).setMessage(getString(R.string.action_fail_please_try_again));
                 alertDialog.show();
             }
         });
@@ -91,7 +91,7 @@ public  abstract class BaseFragment extends Fragment {
         ThreadHelper.instance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                alertDialog = new AlertDialog.Builder(context,R.style.AlertDialog).setTitle(title).setMessage(getString(R.string.action_succ));
+                alertDialog = new AlertDialog.Builder(context,R.style.AlertDialog_Succ).setTitle(title).setMessage(getString(R.string.action_succ));
                 alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {

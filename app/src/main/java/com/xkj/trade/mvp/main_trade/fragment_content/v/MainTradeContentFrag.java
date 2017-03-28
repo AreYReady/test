@@ -19,6 +19,7 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -85,6 +86,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -175,7 +177,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         }.getType());
         clearAndAddAll(dupSubSymbols, subSymbols);
         initIndicator();
-
         mHistoryTradeView = new HistoryTradeView(context);
         ViewTreeObserver vto = mHScrollView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -183,9 +184,9 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                 h = mHScrollView.getHeight();
                 w = mHScrollView.getWidth();
                 Log.i(TAG, "Height=" + h); // 得到正确结果
-                wChild = (TradeDateConstant.count) * (SystemUtil.dp2px(context, TradeDateConstant.juli + TradeDateConstant.jianju));
+                wChild = (TradeDateConstant.count) * (SystemUtil.dp2px(context, TradeDateConstant.juli + TradeDateConstant.jianju))+15;
                 //太过要求精确计算，最后一个item显示半个。所以宽度加10个像素，修正这个算法缺失
-                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(wChild + 10, h);
+                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(wChild, h);
                 mHistoryTradeView.setLayoutParams(layoutParams);
                 rl.addView(mHistoryTradeView);
                 mHScrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -277,7 +278,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                             //显示全部
                             mSearchView.setVisibility(View.GONE);
                             clearAndAddAll(mFilterDatas, mDatas);
-//                            mFilterDatas=mDatas;
                             mMyFavoritesAdapter.notifyDataSetChanged();
                             break;
                         case 2:
@@ -367,6 +367,18 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                         mllPrompt.setLayoutParams(layoutParams);
                     }
                 }
+            }
+        });
+        view.findViewById(R.id.rll_trade_indicator).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return mHeaderCustomViewPager.dispatchTouchEvent(event);
+            }
+        });
+        view.findViewById(R.id.fl_my_favorites_indicator_parent).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return mMyFavoritesIndicator.dispatchTouchEvent(event);
             }
         });
     }
@@ -507,16 +519,34 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
 
     private int refreshIndicatorIndex;
 
-    @Override
-    public void refreshIndicator(List<BeanIndicatorData> mBeanIndicatorDataList) {
-        for (BeanIndicatorData newData : mBeanIndicatorDataList) {
-//            for (int i = mHeaderCustomViewPager.getCurrentItem() - 1; i < mHeaderCustomViewPager.getCurrentItem() + 1; i++) {
-            for (int i = 0; i < mHeaderCustomViewPager.getChildCount() - 1; i++) {
-//                if (i >= 0 && i < mHeaderCustomViewPager.getChildCount() - 1) {
-                BeanIndicatorData subData = subSymbols.get(i);
-                if (newData.getSymbol().equals(subData.getSymbol())) {
-                    subData.setAskColor(getResources().getColor(Double.valueOf(newData.getAsk()) > Double.valueOf(subData.getAsk()) ? R.color.text_color_price_rise : R.color.text_color_price_fall));
-                    subData.setBidColor(getResources().getColor(Double.valueOf(newData.getBid()) > Double.valueOf(subData.getBid()) ? R.color.text_color_price_rise : R.color.text_color_price_fall));
+    public void refreshIndicator(Map<String,BeanIndicatorData> mBeanIndicatorDataList) {
+//        for (BeanIndicatorData newData : mBeanIndicatorDataList) {
+////            for (int i = mHeaderCustomViewPager.getCurrentItem() - 1; i < mHeaderCustomViewPager.getCurrentItem() + 1; i++) {
+//            for (int i = 0; i < mHeaderCustomViewPager.getChildCount() - 1; i++) {
+////                if (i >= 0 && i < mHeaderCustomViewPager.getChildCount() - 1) {
+//                BeanIndicatorData subData = subSymbols.get(i);
+//                if (newData.getSymbol().equals(subData.getSymbol())) {
+//                    subData.setAskColor(getResources().getColor(Double.valueOf(newData.getAsk()) > Double.valueOf(subData.getAsk()) ? R.color.text_color_price_rise : R.color.text_color_price_fall));
+//                    subData.setBidColor(getResources().getColor(Double.valueOf(newData.getBid()) > Double.valueOf(subData.getBid()) ? R.color.text_color_price_rise : R.color.text_color_price_fall));
+//                    subData.setAsk(newData.getAsk());
+//                    subData.setBid(newData.getBid());
+//                    refreshIndicatorIndex = i;
+//                    handler.sendEmptyMessage(REFRESH_INDICATOR);
+////                    }
+//                    if (i == mHeaderCustomViewPager.getCurrentItem()) {
+//                        //说明是当前
+//                        EventBus.getDefault().post(subData);
+//                    }
+//                }
+//            }
+//        }
+        for(String symbol:mBeanIndicatorDataList.keySet()){
+            BeanIndicatorData newData=mBeanIndicatorDataList.get(symbol);
+            for(int i=0;i<mHeaderCustomViewPager.getChildCount()-1;i++){
+                        BeanIndicatorData subData=subSymbols.get(i);
+                if (newData.getSymbol().equals(subData.getSymbol())&&!(subData.getAsk().equals(newData.getAsk())&&subData.getBid().equals(newData.getBid()))) {
+                    subData.setAskColor(getResources().getColor(Double.valueOf(newData.getAsk()) >= Double.valueOf(subData.getAsk()) ? R.color.text_color_price_rise : R.color.text_color_price_fall));
+                    subData.setBidColor(getResources().getColor(Double.valueOf(newData.getBid()) >= Double.valueOf(subData.getBid()) ? R.color.text_color_price_rise : R.color.text_color_price_fall));
                     subData.setAsk(newData.getAsk());
                     subData.setBid(newData.getBid());
                     refreshIndicatorIndex = i;
@@ -529,7 +559,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                 }
             }
         }
-
     }
 
     @Override
@@ -977,19 +1006,18 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
 
     BeanDrawRealTimePriceData beanDrawRealTimePriceData;
 
-    private ArrayList<BeanIndicatorData> realTimeIndicatorData = new ArrayList<>();
+    private Map<String,BeanIndicatorData> realTimeIndicatorDataMap=new TreeMap<>();
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void getRealTimeData(RealTimeDataList realTimeDataList) {
         Log.i(TAG, "getRealTimeData: ");
-        realTimeIndicatorData.clear();
         for (RealTimeDataList.BeanRealTime beanRealTime : realTimeDataList.getQuotes()) {
             //维护最新的实时数据列表
             saveRealTimeDataMap(beanRealTime);
             //indicator数据收集
             for (BeanIndicatorData subSymbol : subSymbols) {
                 if (beanRealTime.getSymbol().equals(subSymbol.getSymbol())) {
-                    realTimeIndicatorData.add(new BeanIndicatorData(beanRealTime.getSymbol(), String.valueOf(beanRealTime.getAsk()), String.valueOf(beanRealTime.getBid())));
+                    realTimeIndicatorDataMap.put(beanRealTime.getSymbol(),new BeanIndicatorData(beanRealTime.getSymbol(), String.valueOf(beanRealTime.getAsk()), String.valueOf(beanRealTime.getBid())));
                 }
             }
             if (beanRealTime.getSymbol().equals(symbol)) {
@@ -1003,7 +1031,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
             }
         }
         //刷新tag数据
-        refreshIndicator(realTimeIndicatorData);
+        refreshIndicator(realTimeIndicatorDataMap);
         if (mMyFavorites.getVisibility() == View.VISIBLE) {
             //刷新我的收藏
             refreshMyFavorites(realTimeDataList.getQuotes());
@@ -1094,7 +1122,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                 if (notificationClosePosition.getOrder() == mBeanOpenList.get(i).getOrder()) {
                     mBeanOpenList.remove(i);
                     mOpenAdapter.notifyItemRemoved(i);
-//                    mOpenAdapter.notifyItemRangeChanged(i,mDataList.size()-1);
+                    mOpenAdapter.notifyItemRangeChanged(0,mBeanOpenList.size());
                 }
             }
         }
@@ -1104,12 +1132,13 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     /**
      * 处理实时数据对历史图的影响
      */
-    private void realTimeHistoryData(RealTimeDataList.BeanRealTime beanRealTime) {
+    private void realTimeHistoryData(final RealTimeDataList.BeanRealTime beanRealTime) {
         if (data != null) {
             int period = data.getPeriod();
             //k线图数据
             if (data.getSymbol().equals(symbol) && beanRealTime.getSymbol().equals(symbol) && DataUtil.selectPeriod(mPeriod) == period) {
-                mHistoryTradeView.refreshRealTimePrice(beanRealTime);
+                        mHistoryTradeView.refreshRealTimePrice(beanRealTime);
+                Log.i(TAG, "刷新K线图: ");
 //                isCountDown=true;
 //                handler.sendEmptyMessage(REFRESH_HISTORY_VIEW);
             } else {

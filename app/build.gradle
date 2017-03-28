@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 android {
-
     signingConfigs {
         release {
             keyAlias 'trade'
@@ -21,8 +20,6 @@ android {
     }
     buildTypes {
         release {
-            // 不显示Log
-            buildConfigField "boolean", "LOG_DEBUG", "true"
             //混淆
             minifyEnabled true
             //Zipalign优化
@@ -30,8 +27,11 @@ android {
             // 移除无用的resource文件
             shrinkResources true
 
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+        }
+        debug{
+            minifyEnabled false
         }
     }
 }

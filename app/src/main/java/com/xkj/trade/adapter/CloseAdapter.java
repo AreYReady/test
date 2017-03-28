@@ -70,9 +70,9 @@ public class CloseAdapter extends RecyclerView.Adapter<CloseAdapter.MyViewHolder
         holder.tvCountyName.setText(mData.getSymbol());
         if (mData.getCmd().contains("sell")) {
             holder.tvOperate.setText("卖");
-            holder.tvOperate.setTextColor(mContext.getResources().getColor(R.color.text_color_price_fall));
-        } else {
             holder.tvOperate.setTextColor(mContext.getResources().getColor(R.color.text_color_price_rise));
+        } else {
+            holder.tvOperate.setTextColor(mContext.getResources().getColor(R.color.text_color_price_fall));
             holder.tvOperate.setText("买");
         }
         holder.tvMoney.setText(mData.getVolume());

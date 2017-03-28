@@ -118,6 +118,9 @@ public class CustomASETGroup extends FrameLayout{
     public void setmTVDescPrompt(String prompt) {
         this.mTVDescPrompt.setText(prompt);
     }
+    public void setmTvDescPromptColor(int textColor){
+        this.mTVDescPrompt.setTextColor(textColor);
+    }
     public EditText getEditText(){
         return mASET.getEditText();
     }
