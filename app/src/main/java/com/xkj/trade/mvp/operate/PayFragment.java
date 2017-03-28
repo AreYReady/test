@@ -45,12 +45,12 @@ public class PayFragment extends BaseFragment implements View.OnClickListener{
 
     @Override
     protected void initData() {
-        payAmount.add("50");
-        payAmount.add("100");
-        payAmount.add("200");
-        payAmount.add("300");
-        payAmount.add("400");
-        payAmount.add("500");
+        payAmount.add("$50");
+        payAmount.add("$100");
+        payAmount.add("$200");
+        payAmount.add("$300");
+        payAmount.add("$400");
+        payAmount.add("$500");
     }
 
     @Override

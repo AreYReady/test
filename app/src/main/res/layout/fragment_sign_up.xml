@@ -57,6 +57,7 @@
             android:layout_height="match_parent"
             android:gravity="center|right"
             android:paddingRight="@dimen/px100"
+            android:visibility="invisible"
             android:textColor="@color/red"/>
     </LinearLayout>
 
@@ -89,6 +90,7 @@
                 android:layout_weight="6"
                 android:singleLine="true"
                 android:gravity="center"
+                android:inputType="phone"
                 android:hint="@string/please_enter_sign_up_telephone"
                 android:background="@drawable/login_info_bg"
                 android:textColor="@android:color/white"
@@ -100,6 +102,7 @@
             android:id="@+id/tv_sign_up_telephone_prompt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
             android:gravity="center|right"
             android:paddingRight="@dimen/px100"
             android:textColor="@color/red"/>
@@ -146,6 +149,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center|right"
+            android:visibility="invisible"
             android:paddingRight="@dimen/px100"
             android:textColor="@color/red"/>
     </LinearLayout>

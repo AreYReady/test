@@ -61,6 +61,10 @@ public interface RequestConstant {
      * 被关注人账号
      */
     String FOCUS_ID = "focusid";
+    String NAME="name";
+    String PHONE="phone";
+    String EMAIL="email";
+    String LEVERAGE="leverage";
 
 
 

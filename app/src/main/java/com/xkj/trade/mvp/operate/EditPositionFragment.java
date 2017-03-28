@@ -107,9 +107,9 @@ public class EditPositionFragment extends BaseFragment implements AddSubEditText
         tvAction.setText(this.getString(R.string.edit_position));
         if (mData.getCmd().equals("sell")) {
             mTvPlayAction.setText("卖出");
-            mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
-        } else {
             mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
+        } else {
+            mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
             mTvPlayAction.setText("买进");
         }
         mAmount.setText(mData.getVolume());

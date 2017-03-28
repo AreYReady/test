@@ -112,7 +112,6 @@
     <style name="TextDescBigWhile">
         <item name="android:textSize">20.0sp</item>
         <item name="android:textColor">@android:color/white</item>
-
     </style>
     <style name="TextDescBigRed">
         <item name="android:textSize">20.0sp</item>
