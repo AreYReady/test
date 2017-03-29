@@ -13,6 +13,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:listDivider">@drawable/divider_bg</item>
     </style>
 
     <style name="TranslucentTheme" parent="AppTheme">
@@ -102,6 +103,9 @@
     <style name="TextDesc">
         <item name="android:textSize">15.0sp</item>
         <item name="android:textColor">@color/common_signin_btn_light_text_disabled</item>
+    </style> <style name="TextDescWhile">
+        <item name="android:textSize">15.0sp</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="TextDescBig">
@@ -110,7 +114,7 @@
 
     </style>
     <style name="TextDescBigWhile">
-        <item name="android:textSize">20.0sp</item>
+        <item name="android:textSize">16.0sp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
     <style name="TextDescBigRed">
@@ -145,7 +149,7 @@
     </style>
 
     <style name="Branded.Button.Small.Radio" parent="@style/Branded.Button.Small">
-        <item name="android:textColor">@color/abc_primary_text_material_light</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:button">@drawable/brand_oval_orange</item>
     </style>
     <style name="Branded.Button.Small" parent="@style/Branded.Button">
@@ -176,5 +180,11 @@
         <item name="android:textSize">20.0sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="link_">
+        <item name="android:layout_marginLeft">@dimen/space_xxxbig</item>
+        <item name="android:layout_marginRight">@dimen/space_xxxbig</item>
+        <item name="android:background">@color/text_color_pull_head_text_desc</item>
     </style>
 </resources>

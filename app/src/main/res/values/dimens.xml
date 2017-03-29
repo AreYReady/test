@@ -52,6 +52,7 @@
     <dimen name="anchor_height">0.0dip</dimen>
     <dimen name="image_common">40.0dip</dimen>
     <dimen name="image_title_left">31.6dip</dimen>
+    <dimen name="pay_amount_height">70.0dip</dimen>
     <dimen name="floating_action_button_margin_mini">26.0dip</dimen>
     <dimen name="floating_action_button_margin_mini_minus">-26.0dip</dimen>
     <dimen name="floating_action_button_margin_normal">34.0dip</dimen>

@@ -20,7 +20,6 @@ import com.xkj.trade.utils.SystemUtil;
 
 import java.util.List;
 
-import static android.R.attr.onClick;
 import static com.xkj.trade.constant.RequestConstant.CURRENT_PRICE;
 import static com.xkj.trade.constant.RequestConstant.PROFIT;
 import static com.xkj.trade.constant.RequestConstant.STOP_LOSS;
@@ -144,10 +143,12 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
         }
         holder.bClosePosition.setText(mData.getPrice()!=null?"平仓"+mData.getPrice():"平仓");
         holder.tvProfit.setText(mData.getProfit());
-        if(Double.valueOf(mData.getProfit())>0)
-            holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
-        else
-            holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
+        if(!"".equals(mData.getProfit())) {
+            if (Double.valueOf(mData.getProfit()) > 0)
+                holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
+            else
+                holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
+        }
         holder.tvStopLoss.setText(mData.getSl());
         holder.tvTakeProfit.setText(mData.getTp());
         holder.tvOpenTime1.setText(mData.getOpentime());

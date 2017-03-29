@@ -11,14 +11,30 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.xkj.trade.IO.okhttp.MyCallBack;
+import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
 import com.xkj.trade.base.BaseFragment;
+import com.xkj.trade.bean.BeanCurrentServerTime;
+import com.xkj.trade.bean_.BeanServerTimeForHttp;
 import com.xkj.trade.constant.RequestConstant;
+import com.xkj.trade.utils.AesEncryptionUtil;
+import com.xkj.trade.utils.DateUtils;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.Response;
+
+import static com.xkj.trade.constant.UrlConstant.URL_MT4_REG;
+import static com.xkj.trade.constant.UrlConstant.URL_SERVICE_TIME;
 
 /**
  * Created by huangsc on 2017-03-28.
@@ -37,6 +53,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
     TextView mLoginNamePrompt;
     TextView mPhonePrompt;
     RadioGroup mLever;
+    String mLeverNumble="50";
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,6 +72,29 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
         mBack.setOnClickListener(this);
         mSignUp.setOnClickListener(this);
         mEmail=(EditText)view.findViewById(R.id.et_sign_up_email);
+        mLever=(RadioGroup)view.findViewById(R.id.rg_lever);
+        mLever.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.rb_lever50:
+                        mLeverNumble="50";
+                        break;
+                    case R.id.rb_lever100:
+                        mLeverNumble="100";
+                        break;
+                    case R.id.rb_lever200:
+                        mLeverNumble="200";
+                        break;
+                    case R.id.rb_lever300:
+                        mLeverNumble="300";
+                        break;
+                    case R.id.rb_lever400:
+                        mLeverNumble="400";
+                        break;
+                }
+            }
+        });
         mTelephone=(EditText)view.findViewById(R.id.et_sign_up_telephone);
         mEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -118,13 +158,38 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
                 getActivity().getSupportFragmentManager().beginTransaction().remove(this).commitNow();
                 break;
             case R.id.b_sign_up_enter:
+//                requestSignUp();
                 break;
         }
     }
     private void requestSignUp(){
-        Map<String,String> map=new TreeMap<>();
-        map.put(RequestConstant.NAME,mLoginName.getText().toString());
-        map.put(RequestConstant.PHONE,mTelephone.getText().toString());
-        map.put(RequestConstant.EMAIL,mEmail.getText().toString());
+        //获取时间后，登入
+        okhttp3.Request request=new okhttp3.Request.Builder().url(URL_SERVICE_TIME).post(new FormBody.Builder().build()).build();
+        OkhttpUtils.enqueue(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i(TAG, "onFailure: " + call.request() + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                String s;
+                BeanServerTimeForHttp beanServerTimeForHttp = new Gson().fromJson(s = response.body().string(), BeanServerTimeForHttp.class);
+                Log.i(TAG, "onResponse: " + s);
+                BeanCurrentServerTime.getInstance(DateUtils.getOrderStartTime(beanServerTimeForHttp.getData(), "yyyyMMddHHmmss"));
+                Log.i(TAG, "onResponse: " + DateUtils.getShowTime(DateUtils.getOrderStartTime(beanServerTimeForHttp.getData(), "yyyyMMddHHmmss")));
+                Map<String, String> map = new TreeMap<>();
+                map.put(RequestConstant.NAME, AesEncryptionUtil.stringBase64toString(mLoginName.getText().toString()));
+                map.put(RequestConstant.PHONE, AesEncryptionUtil.stringBase64toString(mTelephone.getText().toString()));
+                map.put(RequestConstant.EMAIL, AesEncryptionUtil.stringBase64toString(mEmail.getText().toString()));
+                map.put(RequestConstant.LEVERAGE, AesEncryptionUtil.stringBase64toString(mLeverNumble));
+                OkhttpUtils.enqueue(URL_MT4_REG, map, new MyCallBack() {
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.i(TAG, "onResponse: " + response.body().string());
+                    }
+                });
+            }
+        });
     }
 }

@@ -1,201 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/background_show_trade"
-              android:orientation="vertical">
-
+              android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_xxbig"
-        android:layout_marginLeft="@dimen/space_xxxbig"
+        android:layout_height="@dimen/open_pending_select_height"
         android:orientation="horizontal"
+        android:id="@+id/ll_button_group"
         >
-
-        <TextView
-            style="@style/TextDescBigWhile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="@string/pay_account_number"
-
-            />
-
-        <TextView
-            android:id="@+id/tv_login_"
+        <Button
+            android:id="@+id/b_deposit"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/toolbars_title_dark"
             style="@style/TextDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:text=""/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_big"
-        android:layout_marginLeft="@dimen/space_xxxbig"
-        android:orientation="horizontal"
-        >
-
-        <TextView
-            style="@style/TextDescBigWhile"
-            android:layout_width="wrap_content"
-            android:textSize="18sp"
-            android:layout_height="wrap_content"
-            android:text="@string/pay_money"
-            />
-
-        <TextView
-            android:id="@+id/tv_amount"
+            android:text="入金"/>
+        <Button
+            android:id="@+id/b_withdraw"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/toolbars_title_dark"
+            android:text="出金"
             style="@style/TextDesc"
-            android:layout_width="wrap_content"
-            android:textColor="@android:color/white"
-            android:layout_height="wrap_content"
-            android:text="$50"/>
-    </LinearLayout>
-
-    <TextView
-        style="@style/TextDescBigWhile"
-        android:layout_width="wrap_content"
-        android:paddingLeft="@dimen/space_xbig"
-        android:paddingTop="@dimen/space_xxbig"
-        android:layout_height="wrap_content"
-        android:text="选择金额"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_pay_amount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-    </android.support.v7.widget.RecyclerView>
-
-    <TextView
-        style="@style/TextDescBigWhile"
-        android:layout_width="wrap_content"
-        android:paddingLeft="@dimen/space_xbig"
-        android:paddingTop="@dimen/space_xxbig"
-        android:layout_height="wrap_content"
-        android:text="选择支付方式"/>
-    <LinearLayout
-        android:id="@+id/ll_wx"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/space_xxxbig"
-        android:paddingRight="@dimen/space_big"
-        android:paddingTop="@dimen/space_big">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="30dip"
-            android:layout_height="30dip"
-            android:src="@mipmap/wxpay"
             />
-
-        <TextView
-            style="@style/TextDescBigWhile"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="6"
-            android:gravity="left|center_vertical"
-            android:textSize="18sp"
-            android:paddingLeft="@dimen/space_xxxbig"
-            android:text="微信支付"/>
-
-        <RadioButton
-            android:id="@+id/rb_wx"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:clickable="false"/>
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_zfb"
+    <com.xkj.trade.utils.view.NoScrollViewPager
+        android:id="@+id/vp_pay_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/space_xxxbig"
-        android:paddingRight="@dimen/space_big"
-        android:paddingTop="@dimen/space_big">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="30dip"
-            android:layout_height="30dip"
-            android:src="@mipmap/zhifubao"
-            />
-
-        <TextView
-            style="@style/TextDescBigWhile"
-            android:textSize="18sp"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="6"
-            android:gravity="left|center_vertical"
-            android:paddingLeft="@dimen/space_xxxbig"
-            android:text="支付宝支付"/>
-
-        <RadioButton
-            android:id="@+id/rb_zfb"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:clickable="false"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_yl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/space_xxxbig"
-        android:paddingRight="@dimen/space_big"
-        android:paddingTop="@dimen/space_big">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="30dip"
-            android:layout_height="30dip"
-            android:src="@mipmap/cup"
-            />
-
-        <TextView
-            style="@style/TextDescBigWhile"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="6"
-            android:gravity="left|center_vertical"
-            android:paddingLeft="@dimen/space_xxxbig"
-            android:textSize="18sp"
-            android:text="银联支付"/>
-
-        <RadioButton
-            android:id="@+id/rb_yl"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:clickable="false"/>
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/tv_enter_pay"
-            style="@style/ButtonActionText"
-            android:layout_width="270dip"
-            android:layout_height="37dip"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/branded_action_button_light"
-            android:layout_marginBottom="@dimen/space_big"
-            android:gravity="center"
-            android:text="充值"/>
-    </RelativeLayout>
-
+        android:layout_height="match_parent"
+        android:background="@color/bright_foreground_disabled_material_light"/>
 </LinearLayout>

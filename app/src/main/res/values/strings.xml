@@ -584,8 +584,10 @@
     <string name="you_now_have_account_your_account_number_is">"您现在拥有了 %1$s 账户。
 账号为：%2$s"</string>
     <string name="your_account_number_is">你的账号是%s</string>
-    <string name ="pay_account_number">充值账号：</string>
-    <string name ="pay_money">充值金额：</string>
+    <string name ="pay_account_number">入金账户\naccount</string>
+    <string name ="pay_money">入金金额\n  amount</string>
+ <string name ="pay_deposit_account_number">出金账户\naccount</string>
+    <string name ="pay_deposit_money">出金金额\n  amount</string>
 
     <string name="your_demo_account_number_is">您的模拟账号是%s</string>
 

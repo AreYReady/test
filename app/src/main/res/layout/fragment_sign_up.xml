@@ -29,11 +29,12 @@
             >
 
             <TextView
-                style="@style/TextDesc"
+
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1.2"
                 android:gravity="center"
+                style="@style/TextDescWhile"
                 android:text="@string/signup_text"/>
 
             <EditText
@@ -45,6 +46,7 @@
                 android:background="@drawable/login_info_bg"
                 android:gravity="center"
                 android:hint="@string/please_enter_sign_up_name"
+                style="@style/TextDescWhile"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
                 android:textColorHint="@color/text_color_pull_head_text_content"/>
@@ -57,6 +59,7 @@
             android:layout_height="match_parent"
             android:gravity="center|right"
             android:paddingRight="@dimen/px100"
+            android:textSize="12sp"
             android:visibility="invisible"
             android:textColor="@color/red"/>
     </LinearLayout>
@@ -75,7 +78,7 @@
             >
 
             <TextView
-                style="@style/TextDesc"
+                style="@style/TextDescWhile"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1.2"
@@ -93,7 +96,7 @@
                 android:inputType="phone"
                 android:hint="@string/please_enter_sign_up_telephone"
                 android:background="@drawable/login_info_bg"
-                android:textColor="@android:color/white"
+                style="@style/TextDescWhile"
                 android:textColorHint="@color/text_color_pull_head_text_content"/>
 
         </LinearLayout>
@@ -105,6 +108,7 @@
             android:visibility="invisible"
             android:gravity="center|right"
             android:paddingRight="@dimen/px100"
+            android:textSize="10sp"
             android:textColor="@color/red"/>
     </LinearLayout>
 
@@ -122,7 +126,7 @@
             >
 
             <TextView
-                style="@style/TextDesc"
+                style="@style/TextDescWhile"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1.2"
@@ -139,7 +143,7 @@
                 android:hint="@string/please_enter_sign_up_email"
                 android:singleLine="true"
                 android:background="@drawable/login_info_bg"
-                android:textColor="@android:color/white"
+                style="@style/TextDescWhile"
                 android:textColorHint="@color/text_color_pull_head_text_content"/>
 
         </LinearLayout>
@@ -151,6 +155,7 @@
             android:gravity="center|right"
             android:visibility="invisible"
             android:paddingRight="@dimen/px100"
+            android:textSize="10sp"
             android:textColor="@color/red"/>
     </LinearLayout>
 
@@ -160,15 +165,15 @@
         android:orientation="horizontal">
 
         <TextView
-            style="@style/TextDesc"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1.2"
             android:gravity="center"
+            style="@style/TextDescWhile"
             android:text="@string/lever"/>
 
         <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/period_group"
+                    android:id="@+id/rg_lever"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
@@ -239,7 +244,8 @@
             android:layout_height="36dip"
             android:layout_gravity="center_horizontal"
             android:text="@string/back"
-            android:background="@drawable/button_login"
+            android:textSize="16sp"
+            android:background="@drawable/b_bg"
             android:textColor="@android:color/white"/>
         </FrameLayout>
         <FrameLayout
@@ -252,8 +258,9 @@
                 android:layout_width="135dip"
                 android:layout_height="36dip"
                 android:layout_gravity="center_horizontal"
+                android:textSize="16sp"
                 android:text="@string/signup"
-                android:background="@drawable/button_login"
+                android:background="@drawable/b_bg"
                 android:textColor="@android:color/white"/>
         </FrameLayout>
     </LinearLayout>

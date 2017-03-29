@@ -1,139 +1,129 @@
 package com.xkj.trade.mvp.operate;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.TextView;
 
 import com.xkj.trade.R;
 import com.xkj.trade.base.BaseFragment;
-import com.xkj.trade.constant.RequestConstant;
-import com.xkj.trade.utils.ACache;
+import com.xkj.trade.utils.ResourceReader;
+import com.xkj.trade.utils.SystemUtil;
+import com.xkj.trade.utils.view.NoScrollViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
- * Created by huangsc on 2017-03-28.
- * TODO:
+ * Created by huangsc on 2017-03-29.
+ * TODO:出入金
  */
 
-public class PayFragment extends BaseFragment implements View.OnClickListener{
-    RecyclerView mRecyclerView;
-    private List<String> payAmount=new ArrayList<>();
-    private PayAdapter.PayHolder mHolder;
-    private LinearLayout mwx;
-    private LinearLayout mzhb;
-    private LinearLayout myl;
-    private TextView mAmount;
-    private TextView mLogin;
-    RadioButton mrbWx;
-    RadioButton mrbzfb;
-    RadioButton mrbyl;
+public class PayFragment extends BaseFragment implements View.OnClickListener {
+
+
+    @Bind(R.id.b_deposit)
+    Button mBDeposit;
+    @Bind(R.id.b_withdraw)
+    Button mBWithdraw;
+    @Bind(R.id.ll_button_group)
+    LinearLayout mLlButtonGroup;
+    @Bind(R.id.vp_pay_content)
+    NoScrollViewPager mVpPayContent;
+
+    private List<Fragment> mListFragment;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return view=inflater.inflate(R.layout.fragment_pay,container,false);
+        view = inflater.inflate(R.layout.fragment_pay, container, false);
+        ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
     protected void initData() {
-        payAmount.add("$50");
-        payAmount.add("$100");
-        payAmount.add("$200");
-        payAmount.add("$300");
-        payAmount.add("$400");
-        payAmount.add("$500");
+        mListFragment = new ArrayList<>();
+        mListFragment.add(new DepositFragment());
+        mListFragment.add(new WithdrawFragment());
     }
 
     @Override
     protected void initView() {
-        mLogin=(TextView)view.findViewById(R.id.tv_login_);
-        mAmount=(TextView)view.findViewById(R.id.tv_amount);
-        mwx=(LinearLayout)view.findViewById(R.id.ll_wx);
-        mzhb=(LinearLayout)view.findViewById(R.id.ll_zfb);
-        myl=(LinearLayout)view.findViewById(R.id.ll_yl);
-        mrbWx=(RadioButton)view.findViewById(R.id.rb_wx);
-        mrbzfb=(RadioButton)view.findViewById(R.id.rb_zfb);
-        mrbyl=(RadioButton)view.findViewById(R.id.rb_yl);
-        mwx.setOnClickListener(this);
-        mzhb.setOnClickListener(this);
-        myl.setOnClickListener(this);
-        mrbWx.setChecked(true);
-        mLogin.setText(ACache.get(context).getAsString(RequestConstant.ACCOUNT));
-        mRecyclerView=(RecyclerView) view.findViewById(R.id.rv_pay_amount);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(context,3));
-        mRecyclerView.setAdapter(new PayAdapter());
+        ViewTreeObserver viewTreeObserver = mBDeposit.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                setTabSelected(mBDeposit);
+                mBDeposit.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+        mBDeposit.setOnClickListener(this);
+        mBWithdraw.setOnClickListener(this);
+        mVpPayContent.setAdapter(new MyAdapter(getFragmentManager()));
+        mVpPayContent.setNoScroll(true);
+    }
+    class MyAdapter extends FragmentPagerAdapter {
+
+        public MyAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mListFragment.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mListFragment.size();
+        }
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+    private void setTabSelected(Button btnSelected) {
+        Drawable selectedDrawable = ResourceReader.readDrawable(context, R.drawable.shape_nav_indicator);
+        int right = btnSelected.getWidth();
+        Log.i(TAG, "setTabSelected: right" + right);
+        selectedDrawable.setBounds(0, 0, right, SystemUtil.dp2px(context, 3));
+        btnSelected.setSelected(true);
+        btnSelected.setCompoundDrawables(null, null, null, selectedDrawable);
+        int size = mLlButtonGroup.getChildCount();
+        for (int i = 0; i < size; i++) {
+            if (btnSelected.getId() != mLlButtonGroup.getChildAt(i).getId()) {
+                mLlButtonGroup.getChildAt(i).setSelected(false);
+                ((Button) mLlButtonGroup.getChildAt(i)).setCompoundDrawables(null, null, null, null);
+            }
+        }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.ll_wx:
-                mrbWx.setChecked(true);
-                mrbzfb.setChecked(false);
-                mrbyl.setChecked(false);
+        switch (v.getId()) {
+            case R.id.b_deposit:
+                setTabSelected((Button) v);
+                mVpPayContent.setCurrentItem(0);
                 break;
-            case R.id.ll_zfb:
-                mrbWx.setChecked(false);
-                mrbzfb.setChecked(true);
-                mrbyl.setChecked(false);
+            case R.id.b_withdraw:
+                setTabSelected((Button) v);
+                mVpPayContent.setCurrentItem(1);
                 break;
-            case R.id.ll_yl:
-                mrbWx.setChecked(false);
-                mrbzfb.setChecked(false);
-                mrbyl.setChecked(true);
-                break;
-        }
-    }
-
-    class PayAdapter extends RecyclerView.Adapter<PayAdapter.PayHolder>{
-        @Override
-        public PayHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            PayAdapter.PayHolder viewHolder=new PayAdapter.PayHolder(LayoutInflater.from(context).inflate(R.layout.rv_item_pay_amount,parent,false));
-            return viewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(final PayHolder holder, final int position) {
-            holder.mButton.setText(payAmount.get(position));
-            if(mHolder==null){
-                mHolder=holder;
-                mHolder.mButton.setSelected(true);
-                mAmount.setText(payAmount.get(position));
-            }
-            holder.mButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(mHolder.mButton.isSelected()) {
-                        mHolder.mButton.setSelected(false);
-                    }
-                    mHolder=holder;
-                    holder.mButton.setSelected(true);
-                    mAmount.setText(payAmount.get(position));
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return payAmount==null?0:payAmount.size();
-        }
-
-        class PayHolder extends RecyclerView.ViewHolder{
-
-            private Button mButton;
-            public PayHolder(View itemView) {
-                super(itemView);
-              mButton=(Button)itemView.findViewById(R.id.b_pay_amount);
-            }
         }
     }
 }
