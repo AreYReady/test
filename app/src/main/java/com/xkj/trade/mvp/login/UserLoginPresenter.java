@@ -22,6 +22,7 @@ public class UserLoginPresenter {
     private UserLoginActivityInterface mLoginActivityInterface;
     private int result;
     private Handler mHandler;
+    private UserLoginModelImpl.ResultEnum mResultEnum;
     public UserLoginPresenter(UserLoginActivityInterface mLoginActivityInterface, Handler handler, Context context){
         mUserLoginModel=new UserLoginModelImpl(this,context);
         this.mLoginActivityInterface=mLoginActivityInterface;
@@ -45,6 +46,5 @@ public class UserLoginPresenter {
                 }
             }
         });
-
     }
 }

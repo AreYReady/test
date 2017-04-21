@@ -123,8 +123,6 @@ public class LoginFragment extends BaseFragment implements UserLoginActivityInte
         bSignup=(Button)view.findViewById(R.id.b_sign_up);
         bEnter.setOnClickListener(this);
         bSignup.setOnClickListener(this);
-        etUserName.setText("10001");
-        etUserPassWord.setText("123456a");
         mLoadingDialog=new LoadingDialog(context,"请稍等");
 
     }

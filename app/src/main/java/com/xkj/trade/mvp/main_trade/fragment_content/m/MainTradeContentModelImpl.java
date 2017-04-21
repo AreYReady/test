@@ -60,6 +60,7 @@ public class MainTradeContentModelImpl implements MainTradeFragListener.MainTrad
 
 
     public void requestHistoryData(String symbol, String period, int count) {
+
         Map<String, String> map = new TreeMap<>();
         map.put(RequestConstant.SYMBOL, AesEncryptionUtil.stringBase64toString(symbol));
         map.put(RequestConstant.PERIOD, period);
@@ -74,12 +75,10 @@ public class MainTradeContentModelImpl implements MainTradeFragListener.MainTrad
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String body = response.body().string();
-                Log.i(TAG, "onResponse: " + body);
+                Log.i(TAG, "onResponse: 请求历史数据" + body);
                 BeanHistory beanHistory = new Gson().fromJson(body, new TypeToken<BeanHistory>() {
                 }.getType());
                 if (beanHistory.getStatus() == 1) {
-                    Log.i(TAG, "onResponse: 请求历史数据 " + new Gson().toJson(beanHistory, new TypeToken<BeanHistory>() {
-                    }.getType()));
                     mMainTradeContentPreListener.responseHistoryData(beanHistory);
 //                    ChatWebSocket.getChartWebSocket().sendMessage("{\"msg_type\":1010,\"symbol\":\"" +beanHistory.getData().getSymbol() + "\"}");
                 }
@@ -92,7 +91,7 @@ public class MainTradeContentModelImpl implements MainTradeFragListener.MainTrad
 //        Map<String, String> map = DataUtil.postMap();
 //        map.put(RequestConstant.API_SIGN, AesEncryptionUtil.getApiSign(URL_MT4_PRICE, map));
         Map<String,String> map=new ArrayMap<>();
-        map.put(RequestConstant.IS_FILTER,"notbo");
+//        map.put(RequestConstant.IS_FILTER,"notbo");
         sendRequest(URL_MT4_PRICE, map, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -102,7 +101,7 @@ public class MainTradeContentModelImpl implements MainTradeFragListener.MainTrad
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String body = response.body().string();
-                Log.i(TAG, "onResponse: " + body);
+                Log.i(TAG, "onResponse: 所有商品报价" + body);
                 BeanBaseResponse beanBaseResponse = new Gson().fromJson(body, new TypeToken<BeanBaseResponse>() {
                 }.getType());
                 if (beanBaseResponse.getStatus() == 1) {

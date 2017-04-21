@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.xkj.trade.BuildConfig;
 import com.xkj.trade.R;
 import com.xkj.trade.adapter.FragmentAdapter;
 import com.xkj.trade.adapter.MyViewPagerAdapterItem;
@@ -118,14 +119,18 @@ public class MainTradeContentActivity extends BaseActivity
         context = this;
         activity = this;
         mDataItem = new ArrayList<>();
-        mDataItem.add("我关注的操盘手");
-        mDataItem.add("我复制的操盘手");
+        if(BuildConfig.MASTER_OPEN) {
+            mDataItem.add("我关注的操盘手");
+            mDataItem.add("我复制的操盘手");
+        }
         mDataItem.add("持仓仓位");
         mDataItem.add("挂单");
         mDataItem.add("平仓仓位");
         mFragmentList = new ArrayList<>();
-        mFragmentList.add(new FragmentMasterWatch());
-        mFragmentList.add(new FragmentMasterCopy());
+        if(BuildConfig.MASTER_OPEN) {
+            mFragmentList.add(new FragmentMasterWatch());
+            mFragmentList.add(new FragmentMasterCopy());
+        }
         mFragmentList.add(new FragmentOpenPosition());
         mFragmentList.add(new FragmentPendingPosition());
         mFragmentList.add(new FragmentClosePosition());
@@ -143,6 +148,9 @@ public class MainTradeContentActivity extends BaseActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mCSSwitch = (CustomSwitch) findViewById(R.id.cs_switch_tag);
         mFrameLayout = (FrameLayout) findViewById(R.id.fl_main_trade_content);
+        if(!BuildConfig.MASTER_OPEN){
+            mCSSwitch.setVisibility(View.INVISIBLE);
+        }
         mCSSwitch.setSelectedChangeListener(new CustomSwitch.SelectedChangedListener() {
             @Override
             public void SelectChange(Boolean select) {
@@ -207,7 +215,13 @@ public class MainTradeContentActivity extends BaseActivity
         mViewPagerFrag = (ViewPager) findViewById(R.id.vp_indicator_content);
         mViewPagerFrag.setAdapter(new FragmentAdapter(fragmentManager, mFragmentList));
         mViewPagerFrag.setOffscreenPageLimit(mFragmentList.size());
-        mViewPagerFrag.setCurrentItem(2);
+        int i=0;
+        for(;i<mDataItem.size();i++){
+            if(mDataItem.get(i).contains("持仓")){
+                break;
+            }
+        }
+        mViewPagerFrag.setCurrentItem(i);
         mViewPagerFrag.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -218,7 +232,7 @@ public class MainTradeContentActivity extends BaseActivity
         mHeadViewPager = (CustomViewPager) findViewById(R.id.cvp_indicator_item);
         mHeadViewPager.setAdapter(new MyViewPagerAdapterItem(context, mDataItem));
         mHeadViewPager.setOffscreenPageLimit(mDataItem.size());
-        mHeadViewPager.setCurrentItem(2);
+        mHeadViewPager.setCurrentItem(i);
         mHeadViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         mHeadViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             int mPosition = 0;
@@ -371,6 +385,9 @@ public class MainTradeContentActivity extends BaseActivity
             super.handleMessage(msg);
             switch (msg.what) {
                 case refreshUserInfo:
+                    if(beanUserListInfo.getData().getList().isEmpty()){
+                        return;
+                    }
                     BeanUserListInfo.BeanUserList.BeanUserInfo beanUserInfo = beanUserListInfo.getData().getList().get(0);
                     mEquity.setText(MoneyUtil.moneyFormat(beanUserInfo.getEquity()));
                     mBalance.setText(MoneyUtil.moneyFormat(beanUserInfo.getBalance()));

@@ -73,7 +73,7 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.MyViewHolder> 
                 switch (key){
                     case PROFIT:
                     holder.tvProfit.setText(mDataList.get(position).getProfit());
-                        if(Double.valueOf(mDataList.get(position).getProfit())>0)
+                        if(Double.valueOf(mDataList.get(position).getProfit()==""?"0":mDataList.get(position).getProfit())>0)
                             holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
                         else
                             holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));

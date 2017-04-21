@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.xkj.trade.IO.okhttp.MyCallBack;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.IO.sslsocket.SSLSocketChannel;
 import com.xkj.trade.bean.BeanCurrentServerTime;
@@ -15,8 +16,10 @@ import com.xkj.trade.bean.BeanUserLoginData;
 import com.xkj.trade.bean.EventBusAllSymbol;
 import com.xkj.trade.bean_.BeanResponse;
 import com.xkj.trade.bean_.BeanServerTimeForHttp;
+import com.xkj.trade.constant.CacheKeyConstant;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.handler.HandlerWrite;
+import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.DateUtils;
 import com.xkj.trade.utils.SystemUtil;
@@ -33,6 +36,7 @@ import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.Response;
 
+import static com.xkj.trade.constant.UrlConstant.APP_CONFIG;
 import static com.xkj.trade.constant.UrlConstant.URL_LOGIN;
 import static com.xkj.trade.constant.UrlConstant.URL_SERVICE_TIME;
 
@@ -75,12 +79,13 @@ public class UserLoginModelImpl implements UserLoginModel {
 
 
 
-
+    int i=0;
     /**
      * 发送数据
      * @param beanLoginData
      */
     private void sendData(final BeanUserLoginData beanLoginData)  {
+        i=2;
             //获取时间后，登入
             okhttp3.Request request=new okhttp3.Request.Builder().url(URL_SERVICE_TIME).post(new FormBody.Builder().build()).build();
             OkhttpUtils.enqueue(request, new Callback() {
@@ -93,6 +98,18 @@ public class UserLoginModelImpl implements UserLoginModel {
 
                 @Override
                 public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                    //请求appconfig;
+                    OkhttpUtils.enqueue(APP_CONFIG, new MyCallBack() {
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            i--;
+                            ACache.get(mContext).put(CacheKeyConstant.CACLE_APP_CONFIG,response.body().string());
+                            if(i==0){
+                                mUserLoginPresenter.loginResult(mResultEnum);
+                            }
+                        }
+                    });
+
                     String s;
                     BeanServerTimeForHttp beanServerTimeForHttp = new Gson().fromJson(s=response.body().string(), BeanServerTimeForHttp.class);
                     Log.i(TAG, "onResponse: "+s);
@@ -125,7 +142,10 @@ public class UserLoginModelImpl implements UserLoginModel {
                                 Log.i(TAG, "onResponse: 登入失败"+result);
                                 mResultEnum=ResultEnum.erro;
                             }
-                            mUserLoginPresenter.loginResult(mResultEnum);
+                            i--;
+                            if(i==0) {
+                                mUserLoginPresenter.loginResult(mResultEnum);
+                            }
                         }
                     });
                 }

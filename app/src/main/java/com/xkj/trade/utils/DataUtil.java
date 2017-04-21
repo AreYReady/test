@@ -172,6 +172,7 @@ public class DataUtil {
      * 2间接盘：USD/JPY, USD/CHF, USD/CAD, USD/XMN, USD/TRY
      * 3交叉盘：EUR/GBP, EUR/JPY, GBP/JPY, EUR/CHF, CHF/JPY
      * 1.直接盘货币对点值:1手一点的点值为 10美元,
+     *
      * 2.间接盘货币对点值
      * 公式： （标准手价值 X 货币最小变动价格）/ 货币价
      * 例如,USD/JPY 报价 91.28 的时候点值计算如下（USD/JPY最小变动价格为 0.01）：
@@ -203,7 +204,10 @@ public class DataUtil {
             }
             if (symbol.substring(symbol.length()-3, symbol.length()).equals("USD")) {
                 //直接盘:1手一点的点值为 10美元,
-                return MoneyUtil.moneyFormat(MoneyUtil.mulPrice(diffSpace, VOLUME_MONEY * Double.valueOf(volume)), 2);
+//                String a=MainTradeContentFrag.realTimeMap.get("XAUUSD").getDigits();
+//                Log.i("getProfit", "getProfit: "+a);
+                int digits=openPrices.length()-openPrices.indexOf(".");
+                return MoneyUtil.moneyFormat(diffSpace*Double.valueOf(Math.pow(10,Double.valueOf(MainTradeContentFrag.mDigitsList.get(symbol)))*Double.valueOf(volume)), 2);
             } else if (symbol.substring(0, 3).equals("USD")) {
                 //间接盘
                 // * 例如,USD/JPY 报价 91.28 的时候点值计算如下（USD/JPY最小变动价格为 0.01）：

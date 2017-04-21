@@ -215,6 +215,12 @@ public class FragmentPendingPosition extends BaseFragment  {
     }
     @Subscribe
     public void notificationAddPending(BeanPendingPosition beanPendingPosition){
+        //暂时休息一秒，以后在说
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         requestData();
     }
 }

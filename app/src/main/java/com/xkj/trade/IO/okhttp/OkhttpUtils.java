@@ -29,7 +29,6 @@ public class OkhttpUtils {
     private static final OkHttpClient.Builder builder = new OkHttpClient.Builder();
     private static final OkHttpClient mOkHttpClient =builder.connectTimeout(10, TimeUnit.SECONDS).build();
     private String TAG= SystemUtil.getTAG(this);
-
     static{
 //        mOkHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
     }
@@ -54,6 +53,7 @@ public class OkhttpUtils {
     public static void enqueue(Request request, WebSocketListener responseListener) {
         mOkHttpClient.newWebSocket(request,responseListener);
     }
+
     public static void enqueue(final String url, final Map map, final Callback responseCallback) {
         ThreadHelper.instance().runOnWorkThread(new Runnable() {
             @Override
@@ -64,8 +64,8 @@ public class OkhttpUtils {
                 mOkHttpClient.newCall(new Request.Builder().url(url).post(getRequestPost(treeMap)).build()).enqueue(responseCallback);
             }
         });
-
-
+    }  public static void enqueue(final String url, final Callback responseCallback) {
+                mOkHttpClient.newCall(new Request.Builder().url(url).build()).enqueue(responseCallback);
     }
     /**
      * 开启异步线程访问网络, 且不在意返回结果（实现空callback）

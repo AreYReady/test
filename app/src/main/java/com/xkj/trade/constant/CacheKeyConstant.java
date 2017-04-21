@@ -11,4 +11,7 @@ public interface    CacheKeyConstant {
     //保存当前所有交易的单个报价
     String ALL_SYMBOLS_PRICES="allSymbolsPrices";
 
+    //appconfig的配置
+    String CACLE_APP_CONFIG="cacle_app_config";
+
 }

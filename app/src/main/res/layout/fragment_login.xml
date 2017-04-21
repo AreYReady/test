@@ -20,7 +20,7 @@
         android:layout_height="40dip"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/px198"
-        android:src="@mipmap/star"/>
+        android:src="@mipmap/icon"/>
 
     <ImageView
         android:layout_width="100dip"

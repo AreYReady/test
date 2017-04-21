@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+
 android {
     signingConfigs {
         release {
@@ -26,12 +27,28 @@ android {
             zipAlignEnabled true
             // 移除无用的resource文件
             shrinkResources true
-
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
         debug{
             minifyEnabled false
+        }
+    }
+    productFlavors{
+        星科技_{
+            applicationIdSuffix ".xingkeji"
+            buildConfigField 'String', 'API_URL', '"crmv2.bbryt.cn"'
+            buildConfigField 'String', 'web_URL', '"115.29.50.147"'
+            buildConfigField 'boolean', 'MASTER_OPEN', 'true'
+            resValue "string", "app_name", "星科技"
+        }
+        temousa_{
+            applicationIdSuffix ".temousa"
+            buildConfigField 'String', 'API_URL', '"office.temousa.com"'
+            buildConfigField 'String', 'web_URL', '"office.temousa.com"'
+            buildConfigField 'boolean', 'MASTER_OPEN', 'false'
+            resValue "string", "app_name", "temo"
+
         }
     }
 }
