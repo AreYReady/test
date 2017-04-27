@@ -40,6 +40,7 @@ import com.xkj.trade.bean_.BeanMasterRank;
 import com.xkj.trade.bean_.BeanUserListInfo;
 import com.xkj.trade.bean_notification.NotificationFloat;
 import com.xkj.trade.bean_notification.NotificationPositionCount;
+import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.mvp.main_trade.FragmentClosePosition;
 import com.xkj.trade.mvp.main_trade.FragmentMasterCopy;
 import com.xkj.trade.mvp.main_trade.FragmentMasterWatch;
@@ -51,6 +52,7 @@ import com.xkj.trade.mvp.master.info.FragmentMasterInfo;
 import com.xkj.trade.mvp.master.info.MasterInfoActivity;
 import com.xkj.trade.mvp.master.rank.FragmentMaster;
 import com.xkj.trade.mvp.operate.OperatePositionActivity;
+import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.ToashUtil;
 import com.xkj.trade.utils.view.CustomSwitch;
@@ -165,6 +167,10 @@ public class MainTradeContentActivity extends BaseActivity
             }
         });
         mPay=(ImageButton)findViewById(R.id.ib_pay);
+        //先暂时这样
+        if(!BuildConfig.MASTER_OPEN){
+            mPay.setVisibility(View.INVISIBLE);
+        }
         mPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,7 +195,9 @@ public class MainTradeContentActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        View childAt = navigationView.getHeaderView(0);
+        TextView viewById = (TextView) childAt.findViewById(R.id.tv_login_name);
+        viewById.setText(ACache.get(this).getAsString(RequestConstant.ACCOUNT));
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fl_main_trade_content, new MainTradeContentFrag(), "1");
@@ -278,6 +286,7 @@ public class MainTradeContentActivity extends BaseActivity
                 return mHeadViewPager.dispatchTouchEvent(event);
             }
         });
+
     }
 
     @Override

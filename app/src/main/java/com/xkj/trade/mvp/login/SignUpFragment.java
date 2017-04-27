@@ -1,5 +1,6 @@
 package com.xkj.trade.mvp.login;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.xkj.trade.R;
 import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.bean.BeanCurrentServerTime;
 import com.xkj.trade.bean_.BeanServerTimeForHttp;
+import com.xkj.trade.bean_.BeanSignUpInfo;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.DateUtils;
@@ -38,7 +40,7 @@ import static com.xkj.trade.constant.UrlConstant.URL_SERVICE_TIME;
 
 /**
  * Created by huangsc on 2017-03-28.
- * TODO:
+ * TODO:注册
  */
 
 public class SignUpFragment extends BaseFragment implements View.OnClickListener {
@@ -53,7 +55,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
     TextView mLoginNamePrompt;
     TextView mPhonePrompt;
     RadioGroup mLever;
-    String mLeverNumble="50";
+    String mLeverNumble="200";
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -158,7 +160,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
                 getActivity().getSupportFragmentManager().beginTransaction().remove(this).commitNow();
                 break;
             case R.id.b_sign_up_enter:
-//                requestSignUp();
+                requestSignUp();
                 break;
         }
     }
@@ -175,9 +177,8 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
             public void onResponse(Call call, okhttp3.Response response) throws IOException {
                 String s;
                 BeanServerTimeForHttp beanServerTimeForHttp = new Gson().fromJson(s = response.body().string(), BeanServerTimeForHttp.class);
-                Log.i(TAG, "onResponse: " + s);
+                Log.i(TAG, "onResponse:时间 " + s);
                 BeanCurrentServerTime.getInstance(DateUtils.getOrderStartTime(beanServerTimeForHttp.getData(), "yyyyMMddHHmmss"));
-                Log.i(TAG, "onResponse: " + DateUtils.getShowTime(DateUtils.getOrderStartTime(beanServerTimeForHttp.getData(), "yyyyMMddHHmmss")));
                 Map<String, String> map = new TreeMap<>();
                 map.put(RequestConstant.NAME, AesEncryptionUtil.stringBase64toString(mLoginName.getText().toString()));
                 map.put(RequestConstant.PHONE, AesEncryptionUtil.stringBase64toString(mTelephone.getText().toString()));
@@ -186,10 +187,29 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
                 OkhttpUtils.enqueue(URL_MT4_REG, map, new MyCallBack() {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        Log.i(TAG, "onResponse: " + response.body().string());
+                        final BeanSignUpInfo beanSignUpInfo=new Gson().fromJson(response.body().string(), BeanSignUpInfo.class);
+                        Log.i(TAG, "onResponse: 注册" +new Gson().toJson(beanSignUpInfo));
+                        if(beanSignUpInfo.getStatus()==1){
+                            BeanSignUpInfo.DataBean.Mt4Bean mt4 = beanSignUpInfo.getData().getMt4();
+                            title="注册成功";
+                            showSucc("你的用户名：" + mt4.getName() +
+                                    "\n" + "你的账号：" + mt4.getLogin()
+                                    + "\n" + "你的密码：" + mt4.getPassword(), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    removeThis();
+                                }
+                            });
+                        }else{
+                            title="注册失败";
+                            showFail();
+                        }
                     }
                 });
             }
         });
+    }
+    private void removeThis(){
+        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 }

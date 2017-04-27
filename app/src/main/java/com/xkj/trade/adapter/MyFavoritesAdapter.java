@@ -51,6 +51,28 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
     }
 
     @Override
+    public void onBindViewHolder(MyFavoritesHolder holder, int position, List<Object> payloads) {
+        super.onBindViewHolder(holder, position, payloads);
+        if(payloads==null){
+            onBindViewHolder(holder,position);
+        }else{
+            BeanAllSymbols.SymbolPrices symbolPrices = data.get(position);
+                    SpannableString askTextBig = MoneyUtil.getRealTimePriceTextBig(context, symbolPrices.getBid());
+                    SpannableString bidTextBig = MoneyUtil.getRealTimePriceTextBig(context, symbolPrices.getAsk());
+                    if (symbolPrices.getBidColor() != 0) {
+                        bidTextBig.setSpan(new ForegroundColorSpan(symbolPrices.getBidColor()), 0, bidTextBig.length(),
+                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                    }
+                    if (symbolPrices.getAskColor() != 0) {
+                        askTextBig.setSpan(new ForegroundColorSpan(symbolPrices.getAskColor()), 0, askTextBig.length(),
+                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                    }
+                    holder.ask.setText(askTextBig);
+                    holder.bid.setText(bidTextBig);
+        }
+    }
+
+    @Override
     public void onBindViewHolder(final MyFavoritesHolder holder, final int position) {
         final BeanAllSymbols.SymbolPrices symbolPrices = data.get(position);
         holder.flag.setImageResource(DataUtil.getImageId(symbolPrices.getSymbol()));

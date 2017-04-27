@@ -124,7 +124,10 @@ public class LoginFragment extends BaseFragment implements UserLoginActivityInte
         bEnter.setOnClickListener(this);
         bSignup.setOnClickListener(this);
         mLoadingDialog=new LoadingDialog(context,"请稍等");
-
+        if(ACache.get(context).getAsString(RequestConstant.ACCOUNT)!=null){
+            etUserName.setText(ACache.get(context).getAsString(RequestConstant.ACCOUNT));
+            etUserPassWord.setText(ACache.get(context).getAsString(RequestConstant.LOGIN_PASSWORD));
+        }
     }
 
 

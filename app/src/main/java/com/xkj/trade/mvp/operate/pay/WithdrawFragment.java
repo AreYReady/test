@@ -1,4 +1,4 @@
-package com.xkj.trade.mvp.operate;
+package com.xkj.trade.mvp.operate.pay;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,21 +25,21 @@ import butterknife.ButterKnife;
 
 /**
  * Created by huangsc on 2017-03-28.
- * TODO:入金
+ * TODO:出金
  */
 
-public class DepositFragment extends BaseFragment implements View.OnClickListener {
+public class WithdrawFragment extends BaseFragment implements View.OnClickListener {
     RecyclerView mRecyclerView;
-    @Bind(R.id.ib_wx)
-    ImageButton mIbWx;
-    @Bind(R.id.fl_wx)
-    FrameLayout mFlWx;
     @Bind(R.id.tv_login_)
     TextView mTvLogin;
     @Bind(R.id.tv_amount)
     TextView mTvAmount;
     @Bind(R.id.rv_pay_amount)
     RecyclerView mRvPayAmount;
+    @Bind(R.id.ib_wx)
+    ImageButton mIbWx;
+    @Bind(R.id.fl_wx)
+    FrameLayout mFlWx;
     @Bind(R.id.ib_zhifubao)
     ImageButton mIbZhifubao;
     @Bind(R.id.fl_zhifubao)
@@ -51,15 +51,14 @@ public class DepositFragment extends BaseFragment implements View.OnClickListene
     @Bind(R.id.tv_enter_pay)
     TextView mTvEnterPay;
     private List<String> payAmount = new ArrayList<>();
-    private DespositAdapter.PayHolder mHolder;
-
+    private PayAdapter.PayHolder mHolder;
     private TextView mAmount;
     private TextView mLogin;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_deposit, container, false);
+        view = inflater.inflate(R.layout.fragment_withdraw, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -81,8 +80,7 @@ public class DepositFragment extends BaseFragment implements View.OnClickListene
         mLogin.setText(ACache.get(context).getAsString(RequestConstant.ACCOUNT));
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_pay_amount);
         mRecyclerView.setLayoutManager(new GridLayoutManager(context, 3));
-//        mRecyclerView.addItemDecoration(new DividerGridItemDecoration(context));
-        mRecyclerView.setAdapter(new DespositAdapter());
+        mRecyclerView.setAdapter(new PayAdapter());
         mIbWx.setOnClickListener(this);
         mFlWx.setSelected(true);
         mIbCup.setOnClickListener(this);
@@ -116,7 +114,7 @@ public class DepositFragment extends BaseFragment implements View.OnClickListene
         ButterKnife.unbind(this);
     }
 
-    class DespositAdapter extends RecyclerView.Adapter<DespositAdapter.PayHolder> {
+    class PayAdapter extends RecyclerView.Adapter<PayAdapter.PayHolder> {
         @Override
         public PayHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             PayHolder viewHolder = new PayHolder(LayoutInflater.from(context).inflate(R.layout.rv_item_pay_amount, parent, false));

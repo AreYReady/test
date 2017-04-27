@@ -178,6 +178,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     android:orientation="horizontal"
+
                     android:padding="@dimen/space_big">
 
             <RadioButton
@@ -187,7 +188,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/space_xxbig"
                 android:layout_weight="1.0"
-                android:checked="true"
+
                 android:text="@string/lever50"/>
 
             <RadioButton
@@ -206,6 +207,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/space_xxbig"
                 android:layout_weight="1.0"
+                android:checked="true"
                 android:text="@string/lever200"/>
 
             <RadioButton

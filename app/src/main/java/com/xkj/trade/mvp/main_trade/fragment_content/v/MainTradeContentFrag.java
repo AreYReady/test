@@ -247,10 +247,11 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                 }
             }
         });
-
         mMyFavoritesIndicator.setAdapter(new MyViewPagerAdapterItem(context, mMyFavoritesTitle));
         mMyFavoritesIndicator.setOffscreenPageLimit(mMyFavoritesTitle.size());
         mMyFavoritesIndicator.setPageTransformer(true, new ZoomOutPageTransformer());
+        mSearchView.setVisibility(View.GONE);
+        mMyFavoritesIndicator.setCurrentItem(1);
         mMyFavoritesIndicator.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             int mPosition = 0;
 
@@ -261,7 +262,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
 
             @Override
             public void onPageSelected(int position) {
-
             }
 
             @Override
@@ -297,7 +297,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                             break;
                     }
                     mMyFavoritesAdapter.setData(mFilterDatas);
-
                 }
             }
         });
@@ -482,10 +481,11 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         beanAppConfig = new Gson().fromJson(aCache.getAsString(CacheKeyConstant.CACLE_APP_CONFIG), BeanAppConfig.class);
         if (aCache.getAsString(CacheKeyConstant.SUB_SYMBOLS) == null) {
             LinkedList<BeanIndicatorData> symbols = new LinkedList<BeanIndicatorData>();
-            if(beanAppConfig.getMsg().getSymbol().size()>3){
+            if(beanAppConfig.getMsg().getSymbol().size()>4){
                     symbols.add(new BeanIndicatorData(beanAppConfig.getMsg().getSymbol().get(0).getSymbol(),"0.00","0.00"));
                     symbols.add(new BeanIndicatorData(beanAppConfig.getMsg().getSymbol().get(1).getSymbol(),"0.00","0.00"));
                     symbols.add(new BeanIndicatorData(beanAppConfig.getMsg().getSymbol().get(2).getSymbol(),"0.00","0.00"));
+                    symbols.add(new BeanIndicatorData(beanAppConfig.getMsg().getSymbol().get(3).getSymbol(),"0.00","0.00"));
             }else{
                 for(BeanAppConfig.MsgBean.SymbolBean symbolBean:beanAppConfig.getMsg().getSymbol()){
                     symbols.add(new BeanIndicatorData(symbolBean.getSymbol(),"0.00","0.00"));
@@ -527,26 +527,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     private int refreshIndicatorIndex;
 
     public void realTimeIndicator(Map<String,BeanIndicatorData> mBeanIndicatorDataList) {
-//        for (BeanIndicatorData newData : mBeanIndicatorDataList) {
-////            for (int i = mHeaderCustomViewPager.getCurrentItem() - 1; i < mHeaderCustomViewPager.getCurrentItem() + 1; i++) {
-//            for (int i = 0; i < mHeaderCustomViewPager.getChildCount() - 1; i++) {
-////                if (i >= 0 && i < mHeaderCustomViewPager.getChildCount() - 1) {
-//                BeanIndicatorData subData = subSymbols.get(i);
-//                if (newData.getSymbol().equals(subData.getSymbol())) {
-//                    subData.setAskColor(getResources().getColor(Double.valueOf(newData.getAsk()) > Double.valueOf(subData.getAsk()) ? R.color.text_color_price_rise : R.color.text_color_price_fall));
-//                    subData.setBidColor(getResources().getColor(Double.valueOf(newData.getBid()) > Double.valueOf(subData.getBid()) ? R.color.text_color_price_rise : R.color.text_color_price_fall));
-//                    subData.setAsk(newData.getAsk());
-//                    subData.setBid(newData.getBid());
-//                    refreshIndicatorIndex = i;
-//                    handler.sendEmptyMessage(REFRESH_INDICATOR);
-////                    }
-//                    if (i == mHeaderCustomViewPager.getCurrentItem()) {
-//                        //说明是当前
-//                        EventBus.getDefault().post(subData);
-//                    }
-//                }
-//            }
-//        }
+//
         Bundle bundle;
         for(String symbol:mBeanIndicatorDataList.keySet()){
             BeanIndicatorData newData=mBeanIndicatorDataList.get(symbol);
@@ -779,7 +760,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
             }
         }
         if (mMyFavoritesAdapter == null) {
-            mMyFavoritesContent.setAdapter(mMyFavoritesAdapter = new MyFavoritesAdapter(context, mFilterDatas));
+            mMyFavoritesContent.setAdapter(mMyFavoritesAdapter = new MyFavoritesAdapter(context, mDatas));
             mMyFavoritesAdapter.addOnItemClickListener(new MyFavoritesAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(BeanAllSymbols.SymbolPrices symbolPrices,int position) {
@@ -869,9 +850,11 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                             }
                         }
                         for(int i=0;i<mViewPagerAdapter.getCount();i++){
-                            if(((TextView) mHeaderCustomViewPager.getChildAt(i).findViewById(R.id.id_index_gallery_symbol_name)).getText().toString().equals(msg.getData().getString("symbol"))){
-                                childAt=mHeaderCustomViewPager.getChildAt(i);
-                                break;
+                            if(mHeaderCustomViewPager.getChildAt(i)!=null) {
+                                if (((TextView) mHeaderCustomViewPager.getChildAt(i).findViewById(R.id.id_index_gallery_symbol_name)).getText().toString().equals(msg.getData().getString("symbol"))) {
+                                    childAt = mHeaderCustomViewPager.getChildAt(i);
+                                    break;
+                                }
                             }
                         }
                         if(childAt==null||beanIndicatorData==null){
@@ -900,19 +883,20 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                     }
                     break;
                 case REFRESH_MY_FAVORITES:
-                    BeanAllSymbols.SymbolPrices symbolPrices = mFilterDatas.get(refreshPosition);
-                    SpannableString askTextBig = MoneyUtil.getRealTimePriceTextBig(context, symbolPrices.getBid());
-                    SpannableString bidTextBig = MoneyUtil.getRealTimePriceTextBig(context, symbolPrices.getAsk());
-                    if (symbolPrices.getBidColor() != 0) {
-                        bidTextBig.setSpan(new ForegroundColorSpan(symbolPrices.getBidColor()), 0, bidTextBig.length(),
-                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-                    }
-                    if (symbolPrices.getAskColor() != 0) {
-                        askTextBig.setSpan(new ForegroundColorSpan(symbolPrices.getAskColor()), 0, askTextBig.length(),
-                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-                    }
-                    askTextView.setText(askTextBig);
-                    bidTextView.setText(bidTextBig);
+//                    BeanAllSymbols.SymbolPrices symbolPrices = mFilterDatas.get(refreshPosition);
+//                    SpannableString askTextBig = MoneyUtil.getRealTimePriceTextBig(context, symbolPrices.getBid());
+//                    SpannableString bidTextBig = MoneyUtil.getRealTimePriceTextBig(context, symbolPrices.getAsk());
+//                    if (symbolPrices.getBidColor() != 0) {
+//                        bidTextBig.setSpan(new ForegroundColorSpan(symbolPrices.getBidColor()), 0, bidTextBig.length(),
+//                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+//                    }
+//                    if (symbolPrices.getAskColor() != 0) {
+//                        askTextBig.setSpan(new ForegroundColorSpan(symbolPrices.getAskColor()), 0, askTextBig.length(),
+//                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+//                    }
+//                    askTextView.setText(askTextBig);
+//                    bidTextView.setText(bidTextBig);
+                    mMyFavoritesAdapter.notifyItemChanged(msg.arg1,"");
                     break;
                 case REFRESH_HISTORY_VIEW://
                     if (TradeDateConstant.count != data.getBarnum()) {
@@ -1232,11 +1216,18 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                     symbolPrices.setAsk(String.valueOf(quote.getAsk()));
                     symbolPrices.setBid(String.valueOf(quote.getBid()));
 //                    View childAt = (MyFavoritesAdapter.MyFavoritesHolder)(mMyFavoritesContent.getLayoutManager().getChildAt(i));
-                    bidTextView = (TextView) (mMyFavoritesContent.getLayoutManager().getChildAt(i).findViewById(R.id.bid));
-                    askTextView = (TextView) (mMyFavoritesContent.getLayoutManager().getChildAt(i).findViewById(R.id.ask));
+
+//                    if(mMyFavoritesContent.getLayoutManager().getChildAt(i)!=null) {
+//                        bidTextView = (TextView) (mMyFavoritesContent.getLayoutManager().getChildAt(i).findViewById(R.id.bid));
+//                    }
+//                    if(mMyFavoritesContent.getLayoutManager().getChildAt(i).findViewById(R.id.ask)!=null)
+//                        askTextView = (TextView) (mMyFavoritesContent.getLayoutManager().getChildAt(i).findViewById(R.id.ask));
                     refreshPosition = i;
                     Log.i(TAG, "REFRESH_MY_FAVORITES: " + i);
-                    handler.sendEmptyMessage(REFRESH_MY_FAVORITES);
+                    Message message=new Message();
+                    message.what=REFRESH_MY_FAVORITES;
+                    message.arg1=i;
+                    handler.sendMessage(message);
                     break;
                 }
             }

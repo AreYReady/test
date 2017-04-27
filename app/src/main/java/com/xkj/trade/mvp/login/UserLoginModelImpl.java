@@ -127,6 +127,8 @@ public class UserLoginModelImpl implements UserLoginModel {
                         @Override
                         public void onFailure(Call call, IOException e) {
                             Log.i(TAG, "onFailure: 登入失败");
+                            mResultEnum=ResultEnum.erro;
+                            mUserLoginPresenter.loginResult(mResultEnum);
                         }
 
                         @Override

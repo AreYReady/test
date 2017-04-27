@@ -28,7 +28,7 @@ public  abstract class BaseFragment extends Fragment {
     protected Handler mHandler;
     protected final String TAG= SystemUtil.getTAG(this);
     protected String title;
-    public AlertDialog.Builder alertDialog;
+    protected AlertDialog.Builder alertDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,6 +111,32 @@ public  abstract class BaseFragment extends Fragment {
             }
         });
     }
+    protected  void showSucc(final String message){
+        ThreadHelper.instance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                alertDialog = new AlertDialog.Builder(context,R.style.AlertDialog_Succ).setTitle(title).setMessage(message);
+                alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        eventSucc();
+                    }
+                });
+                alertDialog.show();
+            }
+        });
+    }
+    protected  void showSucc(final String message, final DialogInterface.OnClickListener onClickListener){
+        ThreadHelper.instance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                alertDialog = new AlertDialog.Builder(context,R.style.AlertDialog_Succ).setTitle(title).setMessage(message).setPositiveButton("确定", onClickListener);
+                alertDialog.setCancelable(false);
+                alertDialog.show();
+            }
+        });
+    }
+
     //复写改方法
     protected  void eventSucc(){};
 }

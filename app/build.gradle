@@ -38,7 +38,7 @@ android {
         星科技_{
             applicationIdSuffix ".xingkeji"
             buildConfigField 'String', 'API_URL', '"crmv2.bbryt.cn"'
-            buildConfigField 'String', 'web_URL', '"115.29.50.147"'
+            buildConfigField 'String', 'web_URL', '"crmv2.bbryt.cn"'
             buildConfigField 'boolean', 'MASTER_OPEN', 'true'
             resValue "string", "app_name", "星科技"
         }
@@ -48,7 +48,6 @@ android {
             buildConfigField 'String', 'web_URL', '"office.temousa.com"'
             buildConfigField 'boolean', 'MASTER_OPEN', 'false'
             resValue "string", "app_name", "temo"
-
         }
     }
 }

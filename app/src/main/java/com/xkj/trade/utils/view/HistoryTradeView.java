@@ -35,6 +35,7 @@ public class HistoryTradeView extends View {
     private Paint mRisePaint;
     private Paint mGarkPaint;
     private Paint mSilverPaint;
+
     private List<BeanDrawPriceData> mDrawPriceDataList;
     /**
      * @param data
@@ -126,6 +127,7 @@ public class HistoryTradeView extends View {
         mSilverPaint.setStyle(Paint.Style.FILL);
         mSilverPaint.setColor(getResources().getColor(R.color.text_color_primary_disabled_dark));
         mSilverPaint.setStrokeWidth(3);
+
         mGarkPaint = new Paint();
         mGarkPaint.setColor(getResources().getColor(R.color.text_color_primary_dark_with_opacity));
         mGarkPaint.setStrokeWidth(3);

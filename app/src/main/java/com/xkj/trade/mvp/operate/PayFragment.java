@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 
 import com.xkj.trade.R;
 import com.xkj.trade.base.BaseFragment;
+import com.xkj.trade.mvp.operate.pay.DepositFragment;
+import com.xkj.trade.mvp.operate.pay.WithdrawFragment;
 import com.xkj.trade.utils.ResourceReader;
 import com.xkj.trade.utils.SystemUtil;
 import com.xkj.trade.utils.view.NoScrollViewPager;
