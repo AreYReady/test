@@ -73,8 +73,6 @@ public class DrawPriceView extends View {
                 canvas.drawRoundRect(oval3, 200, 200, mRealTimePaint);//第二个参数是x半径，第三个参数是y半径
                 mRealTimePaint.setColor(Color.WHITE);
                 mRealTimePaint.setTextAlign(Paint.Align.CENTER);
-
-
                 canvas.drawText(beanDrawPriceData.getPriceString(), getWidth()/2, beanDrawPriceData.getPriceY()+Math.abs(top/2+bottom/2), mRealTimePaint);
                 mRealTimePaint.setStyle(Paint.Style.FILL);//充满
                 mRealTimePaint.setColor(beanDrawPriceData.getColor());
