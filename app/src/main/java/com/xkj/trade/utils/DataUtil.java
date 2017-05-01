@@ -522,4 +522,13 @@ public class DataUtil {
         return id;
     }
 
+    /**
+     * UASABD_60
+     * * @param symbol
+     * @param period
+     * @return
+     */
+    public static  String symbolConnectPeriod(String symbol, String period){
+        return symbol.concat("_").concat(period);
+    }
 }

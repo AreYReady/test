@@ -59,6 +59,7 @@ import com.xkj.trade.diffcallback.OpenPositionDiff;
 import com.xkj.trade.mvp.main_trade.fragment_content.p.MainTradeContentPreListenerImpl;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.DataUtil;
+import com.xkj.trade.utils.DateUtils;
 import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.RoundImageView;
 import com.xkj.trade.utils.SystemUtil;
@@ -94,7 +95,6 @@ import java.util.regex.Pattern;
 import cn.bingoogolapple.badgeview.BGABadgeImageView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static android.R.attr.x;
 import static android.os.Build.VERSION_CODES.M;
 import static com.xkj.trade.base.MyApplication.beanIndicatorData;
 
@@ -161,6 +161,10 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     CircleIndicator mCircleIndicator;
     HorizontalScrollView mHorizontalScrollView;
     BeanAppConfig beanAppConfig;
+    /**
+     * 储存所有历史数据
+     */
+    private Map<String ,BeanHistory.BeanHistoryData> mHistoryDataMap=new ArrayMap<>();
 
     @Nullable
     @Override
@@ -396,16 +400,22 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         return fitData;
     }
 
+
     private void requestHistoryData(String symbol, String period, int count) {
-        mIvLoading.setVisibility(View.VISIBLE);
+
+        if(symbol!=null&&mHistoryDataMap.containsKey(DataUtil.symbolConnectPeriod(symbol,""+DataUtil.selectPeriod(period)))){
+         refreshView(mHistoryDataMap.get(DataUtil.symbolConnectPeriod(symbol,""+DataUtil.selectPeriod(period)))) ;
+        }else {
+            mIvLoading.setVisibility(View.VISIBLE);
 //        mHScrollView.setVisibility(View.INVISIBLE);
 //        mDrawPriceView.setVisibility(View.INVISIBLE);
-        mllcontent.setVisibility(View.INVISIBLE);
-        if (animationDrawable == null) {
-            animationDrawable = (AnimationDrawable) mIvLoading.getDrawable();
+            mllcontent.setVisibility(View.INVISIBLE);
+            if (animationDrawable == null) {
+                animationDrawable = (AnimationDrawable) mIvLoading.getDrawable();
+            }
+            animationDrawable.start();
+            mMainTradeContentPre.requestHistoryData(symbol, period, count);
         }
-        animationDrawable.start();
-        mMainTradeContentPre.requestHistoryData(symbol, period, count);
     }
 
     public boolean contain(String input, String regex) {
@@ -505,25 +515,23 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     BeanHistory.BeanHistoryData data;
 
     @Override
-    public void refreshView(final BeanHistory.BeanHistoryData data, boolean isCountDown) {
+    public void refreshView(final BeanHistory.BeanHistoryData data) {
 
         if(data==null){
             return;
         }
+
+        mHistoryDataMap.put(DataUtil.symbolConnectPeriod(data.getSymbol(),data.getPeriod()+""),data);
         Log.i(TAG, "responseHistoryData: ");
         if (mHeaderCustomViewPager.getCurrentItem() == subSymbols.size() - 1) {
             Log.i(TAG, "responseHistoryData: 我的收藏夹");
         } else if (data.getSymbol().equals(symbol) && data.getPeriod() == DataUtil.selectPeriod(mPeriod)) {
             this.data = data;
             Log.i(TAG, "responseHistoryData: data");
-            this.isCountDown = isCountDown;
             handler.sendEmptyMessage(REFRESH_HISTORY_VIEW);
             saveCache();
         }
     }
-
-    private boolean isCountDown = false;
-
     private int refreshIndicatorIndex;
 
     public void realTimeIndicator(Map<String,BeanIndicatorData> mBeanIndicatorDataList) {
@@ -905,10 +913,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                         mHistoryTradeView.setLayoutParams(layoutParams);
                     }
                     if (data.getSymbol().equals(symbol) && data.getPeriod() == DataUtil.selectPeriod(mPeriod)) {
-                        if (isCountDown) {
-                            mHistoryTradeView.setHistoryData(data, x, x + w);
-                            Log.i(TAG, "run: 时间到，定时刷新");
-                        } else {
                             Log.i(TAG, "run: 全数据刷新");
                             mHScrollView.scrollTo(wChild, 0);
                             mHistoryTradeView.setHistoryData(data, wChild - w, wChild);
@@ -917,7 +921,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
 //                            mHScrollView.setVisibility(View.VISIBLE);
 //                            mDrawPriceView.setVisibility(View.VISIBLE);
                             mllcontent.setVisibility(View.VISIBLE);
-                        }
                     }
                     break;
                 case REFRESH_OPEN_POSITION:
@@ -1167,18 +1170,45 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     /**
      * 处理实时数据对历史图的影响
      */
+    String[] mPeriodStrings=new String[]{"1","5","15","30","60","240","1440"};
     private void realTimeHistoryData(final RealTimeDataList.BeanRealTime beanRealTime) {
         if (data != null) {
             int period = data.getPeriod();
             //k线图数据
+            //由于java的复制只是赋予指针，所以，当View里面的data改变，map里面存的值也会改变
             if (data.getSymbol().equals(symbol) && beanRealTime.getSymbol().equals(symbol) && DataUtil.selectPeriod(mPeriod) == period) {
                         mHistoryTradeView.refreshRealTimePrice(beanRealTime);
                 Log.i(TAG, "刷新K线图: ");
-//                isCountDown=true;
-//                handler.sendEmptyMessage(REFRESH_HISTORY_VIEW);
-            } else {
-                //2:非当前显示的。则获取最后一个修改缓存
-                //不考虑流量，我们先做实时更新，后续再去完成缓存
+            }else{
+                //遍历数据列表。根据事实值改变
+                for(String mPeriod:mPeriodStrings){
+                    if(mHistoryDataMap.containsKey(DataUtil.symbolConnectPeriod(beanRealTime.getSymbol(),mPeriod))){
+                        BeanHistory.BeanHistoryData beanHistoryData = mHistoryDataMap.get(DataUtil.symbolConnectPeriod(beanRealTime.getSymbol(), mPeriod));
+                        BeanHistory.BeanHistoryData.HistoryItem historyItem = beanHistoryData.getList().get(beanHistoryData.getBarnum()-1);
+                        if (DateUtils.getOrderStartTime(beanRealTime.getTime()) < DateUtils.getOrderStartTime(historyItem.getTime()) + beanHistoryData.getPeriod() * 60 * 1000) {
+                            //还属于最后一个item的时间范围
+                            if (historyItem.getHigh() < beanRealTime.getBid()) {
+                                historyItem.setHigh(beanRealTime.getBid());
+                            }
+                            if (beanRealTime.getBid() < historyItem.getLow()) {
+                                historyItem.setLow(beanRealTime.getBid());
+                            }
+                            historyItem.setClose(beanRealTime.getBid());
+                        } else {
+                            //不属于最有一个item的时间范围。数据删除第一个时间点，在最后增加一个
+                            beanHistoryData.getList().remove(0);
+                            BeanHistory.BeanHistoryData.HistoryItem lastItem = new BeanHistory().new BeanHistoryData().new HistoryItem();
+                            lastItem.setOpen(beanRealTime.getBid());
+                            lastItem.setClose(beanRealTime.getBid());
+                            lastItem.setHigh(beanRealTime.getBid());
+                            lastItem.setLow(beanRealTime.getBid());
+                            lastItem.setTime(beanRealTime.getTime());
+                            lastItem.setQuoteTime((int) DateUtils.getOrderStartTime(beanRealTime.getTime()));
+                            beanHistoryData.getList().add(lastItem);
+                        }
+                    }
+                }
+                //不是当前显示，则存起来
             }
         }
     }

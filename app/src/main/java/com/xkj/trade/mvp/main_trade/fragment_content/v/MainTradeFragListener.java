@@ -1,12 +1,10 @@
 package com.xkj.trade.mvp.main_trade.fragment_content.v;
 
-import com.xkj.trade.bean.BeanIndicatorData;
 import com.xkj.trade.bean_.BeanHistory;
 import com.xkj.trade.bean_.BeanOpenPosition;
 import com.xkj.trade.bean_.BeanUserListInfo;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by huangsc on 2017-01-10.
@@ -19,7 +17,7 @@ public class MainTradeFragListener {
      * view的接口类
      */
     public interface MainTradeContentLFragListener {
-        void refreshView(BeanHistory.BeanHistoryData data, boolean isCountDown);
+        void refreshView(BeanHistory.BeanHistoryData data);
         void refreshUserInfo(BeanUserListInfo info);
         void refreshOpenPosition(BeanOpenPosition info);
         void responseAllSymbolsData(String response);

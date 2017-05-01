@@ -29,7 +29,7 @@ public class MainTradeContentPreListenerImpl implements MainTradeFragListener.Ma
     private Context mContext;
     @Override
     public void responseHistoryData(BeanHistory data) {
-        mMainTradeContentLFragListener.refreshView(data.getData(),false);
+        mMainTradeContentLFragListener.refreshView(data.getData());
     }
 
     public MainTradeContentPreListenerImpl(MainTradeFragListener.MainTradeContentLFragListener mListener, Handler mHandler, Context context) {
