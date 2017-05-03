@@ -15,7 +15,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.MyCallBack;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
@@ -81,8 +80,7 @@ public class FragmentMasterPosition extends BaseFragment {
 
     @Override
     protected void initData() {
-        rank = new Gson().fromJson(this.getArguments().getString(MASTER_INFO), new TypeToken<BeanMasterRank.MasterRank>() {
-        }.getType());
+        rank = new Gson().fromJson(this.getArguments().getString(MASTER_INFO), BeanMasterRank.MasterRank.class);
     }
 
     @Override
@@ -207,8 +205,7 @@ public class FragmentMasterPosition extends BaseFragment {
                 Log.i(TAG, "onResponse: " + s);
                 if (call.request().url().toString().equals(UrlConstant.URL_TRADE_MAKET_LIST)) {
                     //持仓
-                    beanOpenPosition = new Gson().fromJson(s, new TypeToken<BeanOpenPosition>() {
-                    }.getType());
+                    beanOpenPosition = new Gson().fromJson(s, BeanOpenPosition.class);
                     if (beanOpenPosition.getStatus() == 1) {
                         List<BeanMasterPosition> list = new LinkedList<BeanMasterPosition>();
                         for (BeanOpenPosition.DataBean.ListBean bean : beanOpenPosition.getData().getList()) {
@@ -222,8 +219,7 @@ public class FragmentMasterPosition extends BaseFragment {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         //挂单
-                        beanPendingPosition = new Gson().fromJson(response.body().string(), new TypeToken<BeanPendingPosition>() {
-                        }.getType());
+                        beanPendingPosition = new Gson().fromJson(response.body().string(), BeanPendingPosition.class);
                         if (beanPendingPosition.getStatus() == 1) {
                             List<BeanMasterPosition> list = new LinkedList<BeanMasterPosition>();
                             for (BeanPendingPosition.DataBean.ListBean bean : beanPendingPosition.getData().getList()) {
@@ -235,8 +231,7 @@ public class FragmentMasterPosition extends BaseFragment {
                                 @Override
                                 public void onResponse(Call call, Response response) throws IOException {
                                     //历史
-                                    beanClosePosition = new Gson().fromJson(response.body().string(), new TypeToken<BeanClosePosition>() {
-                                    }.getType());
+                                    beanClosePosition = new Gson().fromJson(response.body().string(), BeanClosePosition.class);
                                     if (beanClosePosition.getStatus() == 1) {
                                         List<BeanMasterPosition> list = new LinkedList<BeanMasterPosition>();
                                         for (BeanClosePosition.DataBean.ListBean bean : beanClosePosition.getData().getList()) {

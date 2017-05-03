@@ -13,7 +13,6 @@ import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.MyCallBack;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
@@ -122,8 +121,7 @@ public class FragmentMasterWatch extends BaseFragment {
         OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW_FOCUS_INFO, map, new MyCallBack() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                BeanWatchInfo beanWatchInfo = new Gson().fromJson(response.body().string(), new TypeToken<BeanWatchInfo>() {
-                }.getType());
+                BeanWatchInfo beanWatchInfo = new Gson().fromJson(response.body().string(), BeanWatchInfo.class);
                 if (beanWatchInfo.getStatus() == 1) {
                     responseWatch(beanWatchInfo);
                 }
@@ -225,8 +223,7 @@ public class FragmentMasterWatch extends BaseFragment {
                 public void onResponse(Call call, Response response) throws IOException {
                     String resp = "";
                     Log.i(TAG, "onResponse: " + (resp = response.body().string()));
-                    BeanMasterRank info = new Gson().fromJson(resp, new TypeToken<BeanMasterRank>() {
-                    }.getType());
+                    BeanMasterRank info = new Gson().fromJson(resp, BeanMasterRank.class);
                     if (info.getStatus() == 1) {
                         rank = info;
                     }

@@ -33,4 +33,13 @@ public class NotificationEditPendingPosition {
     }
 
     String tp;
+    String price;
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
 }

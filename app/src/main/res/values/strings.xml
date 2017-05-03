@@ -434,6 +434,7 @@
     <string name="sell_capitalize">卖出</string>
     <string name="sell_limit">限价卖出</string>
     <string name="sell_stop">止损卖出</string>
+
     <string name="send_feedback">发送反馈</string>
     <string name="server_side_error_have_occurred_contact_support">服务器端发生错误。请联系支持人员。</string>
     <string name="session_id">会话ID</string>
@@ -462,6 +463,7 @@
     <string name="start_tutorial">开始学习教程</string>
     <string name="stop">止损</string>
     <string name="stop_loss">止损</string>
+    <string name="stop_profit">止盈</string>
     <string name="stop_out_level_reached_your_positions_will_be_closed_automatically">"已达到止损离场水平。
 您的仓位将被自动平仓。"</string>
     <string name="str_b">%sB</string>

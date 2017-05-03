@@ -11,9 +11,9 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
 import com.xkj.trade.base.BaseFragment;
@@ -29,6 +29,7 @@ import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.MoneyUtil;
 import com.xkj.trade.utils.ResourceReader;
 import com.xkj.trade.utils.SystemUtil;
+import com.xkj.trade.utils.ToashUtil;
 import com.xkj.trade.utils.view.AddSubEditText;
 import com.xkj.trade.utils.view.CustomASETGroup;
 import com.xkj.trade.utils.view.CustomSeekBar;
@@ -231,6 +232,7 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
                 promptChange();
                 break;
             case R.id.tv_enter_order:
+                showLoading(context);
                 enterOrder();
                 break;
         }
@@ -240,6 +242,10 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
     private void enterOrder() {
         //②	action=pending	exc , login, symbol, volume, price, sl, tp 为必传参数
         Map<String, String> map = new TreeMap<>();
+        if(mCsbVo.getVisible()!=View.VISIBLE&&mCsbVo.getMoney().equals("0")){
+            ToashUtil.show(context,"手数不能用空", Toast.LENGTH_SHORT);
+            hideLoading();
+        }
         map.put(RequestConstant.LOGIN, AesEncryptionUtil.stringBase64toString(ACache.get(context).getAsString(RequestConstant.ACCOUNT)));
         map.put(RequestConstant.SYMBOL, AesEncryptionUtil.stringBase64toString(MyApplication.getInstance().beanIndicatorData.getSymbol()));
         map.put(RequestConstant.ACTION, RequestConstant.Action.PENDING.toString());
@@ -262,7 +268,7 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
                 String s="";
                 Log.i(TAG, "onResponse: " + call.request());
                 Log.i(TAG, "onResponse: " + (s=response.body().string()));
-                 beanBaseResponse=new Gson().fromJson(s,new TypeToken<BeanBaseResponse>(){}.getType());
+                 beanBaseResponse=new Gson().fromJson(s,BeanBaseResponse.class);
                 if (beanBaseResponse.getStatus() == 1) {
                     EventBus.getDefault().post(new BeanPendingPosition());
                     showSucc();

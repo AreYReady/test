@@ -111,7 +111,7 @@
             android:id="@+id/c_take_profit"
             android:layout_width="match_parent"
             android:layout_height="@dimen/y150"
-            hsc:desc_text="止盈"/>
+            hsc:desc_text="@string/stop_profit"/>
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dip"

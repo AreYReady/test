@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.MyCallBack;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
@@ -248,7 +247,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
         OkhttpUtils.enqueue(UrlConstant.URL_MASTER_NOFOLLOW, map, new MyCallBack() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-               BeanBaseResponse info =new Gson().fromJson(response.body().string(),new TypeToken<BeanBaseResponse>(){}.getType());
+               BeanBaseResponse info =new Gson().fromJson(response.body().string(),BeanBaseResponse.class);
                 if(info.getStatus()==1){
                     Log.i(TAG, "onResponse: "+info.toString());
                     rank.setStatus(0);
@@ -276,8 +275,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
             public void onResponse(Call call, Response response) throws IOException {
                 String s = response.body().string();
                 Log.i(TAG, "onResponse: " + s);
-                BeanMasterInfo info = new Gson().fromJson(s, new TypeToken<BeanMasterInfo>() {
-                }.getType());
+                BeanMasterInfo info = new Gson().fromJson(s, BeanMasterInfo.class);
                 map.put(RequestConstant.FOLLOW_ID, ACache.get(context).getAsString(RequestConstant.ACCOUNT));
                 map.put(RequestConstant.COPY_MONEY, info.getResponse().getFollowfunds());
                 map.put(RequestConstant.COPY_WAY, "3");
@@ -286,7 +284,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
 //                        Log.i(TAG, "onResponse: " + response.body().string());
-                        BeanBaseResponse info =new Gson().fromJson(response.body().string(),new TypeToken<BeanBaseResponse>(){}.getType());
+                        BeanBaseResponse info =new Gson().fromJson(response.body().string(),BeanBaseResponse.class);
                         if(info.getStatus()==1){
                             Log.i(TAG, "onResponse: "+info.toString());
                             rank.setStatus(1);

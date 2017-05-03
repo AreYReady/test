@@ -591,8 +591,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     @Override
     public void responseAllSymbolsData(String response) {
         ACache.get(context).put(CacheKeyConstant.ALL_SYMBOLS_PRICES, response);
-        BeanAllSymbols beanAllSymbols = new Gson().fromJson(response, new TypeToken<BeanAllSymbols>() {
-        }.getType());
+        BeanAllSymbols beanAllSymbols = new Gson().fromJson(response, BeanAllSymbols.class);
         allSymbolsName.clear();
         for (int i = 0; i < beanAllSymbols.getData().size(); i++) {
             realTimeMap.put(beanAllSymbols.getData().get(i).getSymbol(), beanAllSymbols.getData().get(i));
@@ -610,21 +609,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
                 }
             }
         }
-
-
-        //取出这个和appcofig的数值进行筛选
-//        List<Integer> mRemoveIndex=new ArrayList<>();
-
-//        BeanAppConfig.MsgBean.SymbolBean symbolBean;
-//        for(int i=0;i<beanAppConfig.getMsg().getSymbol().size();i++){
-//            symbolBean=beanAppConfig.getMsg().getSymbol().get(i);
-//            for(BeanAllSymbols.SymbolPrices symbolPrices:beanAllSymbols.getData()){
-//                if(!symbolBean.getSymbol().equals(symbolPrices.getSymbol())){
-//
-//                }
-//            }
-//        }
-
     }
 
 
@@ -1046,9 +1030,11 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
             //维护最新的实时数据列表
             saveRealTimeDataMap(beanRealTime);
             //indicator数据收集
-            for (BeanIndicatorData subSymbol : subSymbols) {
-                if (beanRealTime.getSymbol().equals(subSymbol.getSymbol())) {
-                    realTimeIndicatorDataMap.put(beanRealTime.getSymbol(),new BeanIndicatorData(beanRealTime.getSymbol(), String.valueOf(beanRealTime.getAsk()), String.valueOf(beanRealTime.getBid())));
+            if(subSymbols!=null) {
+                for (BeanIndicatorData subSymbol : subSymbols) {
+                    if (beanRealTime.getSymbol().equals(subSymbol.getSymbol())) {
+                        realTimeIndicatorDataMap.put(beanRealTime.getSymbol(), new BeanIndicatorData(beanRealTime.getSymbol(), String.valueOf(beanRealTime.getAsk()), String.valueOf(beanRealTime.getBid())));
+                    }
                 }
             }
             if (beanRealTime.getSymbol().equals(symbol)) {
@@ -1141,15 +1127,15 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
     }
     @Subscribe
     public void notificationEditPostion(NotificationEditPosition notificationEditPosition){
-        if(notificationEditPosition.getSl()!=null||notificationEditPosition.getTp()!=null) {
             for (int i = 0; i < mBeanOpenList.size(); i++) {
                 if (notificationEditPosition.getOrder() == mBeanOpenList.get(i).getOrder()) {
-                    mBeanOpenList.get(i).setTp(notificationEditPosition.getTp());
+                    if(notificationEditPosition.getSl()!=null)
                     mBeanOpenList.get(i).setSl(notificationEditPosition.getSl());
+                    if(notificationEditPosition.getTp()!=null)
+                        mBeanOpenList.get(i).setTp(notificationEditPosition.getTp());
                     mOpenAdapter.notifyItemChanged(i);
                 }
             }
-        }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void notificationClosePosition(NotificationClosePosition notificationClosePosition){

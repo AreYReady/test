@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.MyCallBack;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.bean_.BeanBaseResponse;
@@ -52,7 +51,7 @@ public class MasterInfoModelImpl implements MasterInfoContract.Model {
         OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW_INFO, map, new MyCallBack() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                BeanMasterInfo info=   new Gson().fromJson(response.body().string(),new TypeToken<BeanMasterInfo>(){}.getType());
+                BeanMasterInfo info=   new Gson().fromJson(response.body().string(),BeanMasterInfo.class);
                 map.put(RequestConstant.FOLLOW_ID, followid);
                 map.put(RequestConstant.COPY_MONEY, info.getResponse().getFollowfunds());
                 map.put(RequestConstant.COPY_WAY, "3");
@@ -60,8 +59,7 @@ public class MasterInfoModelImpl implements MasterInfoContract.Model {
                 OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW, map, new MyCallBack() {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        BeanBaseResponse info = new Gson().fromJson(response.body().string(), new TypeToken<BeanBaseResponse>() {
-                        }.getType());
+                        BeanBaseResponse info = new Gson().fromJson(response.body().string(), BeanBaseResponse.class);
                         if (info.getStatus() == 1) {
                             Log.i(TAG, "onResponse: " + info.toString());
                             mPresenterListener.responseCopyFollow(info);
@@ -80,8 +78,7 @@ public class MasterInfoModelImpl implements MasterInfoContract.Model {
         OkhttpUtils.enqueue(UrlConstant.URL_MASTER_NOFOLLOW, map, new MyCallBack() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                BeanBaseResponse info = new Gson().fromJson(response.body().string(), new TypeToken<BeanBaseResponse>() {
-                }.getType());
+                BeanBaseResponse info = new Gson().fromJson(response.body().string(), BeanBaseResponse.class);
                 if (info.getStatus() == 1) {
                     Log.i(TAG, "onResponse: " + info.toString());
                     mPresenterListener.responseUnCopyFollow(info);
@@ -99,8 +96,7 @@ public class MasterInfoModelImpl implements MasterInfoContract.Model {
         OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW_FOCUS, map, new MyCallBack() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                BeanBaseResponse beanBaseResponse = new Gson().fromJson(response.body().string(), new TypeToken<BeanBaseResponse>() {
-                }.getType());
+                BeanBaseResponse beanBaseResponse = new Gson().fromJson(response.body().string(), BeanBaseResponse.class);
                 Log.i(TAG, "onResponse: " + beanBaseResponse.toString());
                 if (beanBaseResponse.getStatus() == 1) {
                     mPresenterListener.responseFocus(beanBaseResponse);
@@ -117,8 +113,7 @@ public class MasterInfoModelImpl implements MasterInfoContract.Model {
         OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW_NOFOCUS, map, new MyCallBack() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                BeanBaseResponse beanBaseResponse = new Gson().fromJson(response.body().string(), new TypeToken<BeanBaseResponse>() {
-                }.getType());
+                BeanBaseResponse beanBaseResponse = new Gson().fromJson(response.body().string(), BeanBaseResponse.class);
                 Log.i(TAG, "onResponse: " + beanBaseResponse.toString());
                 if (beanBaseResponse.getStatus() == 1) {
                     mPresenterListener.responseNoFocus(beanBaseResponse);

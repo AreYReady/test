@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -32,6 +33,7 @@ import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.DataUtil;
 import com.xkj.trade.utils.ThreadHelper;
+import com.xkj.trade.utils.ToashUtil;
 import com.xkj.trade.utils.view.FullyLinearLayoutManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -106,13 +108,15 @@ public class FragmentOpenPosition extends BaseFragment {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.i(TAG, "onFailure: "+call.request());
+                mSwipeRefreshLayout.setRefreshing(false);
+                ToashUtil.show(context,"获取数据失败，请重试", Toast.LENGTH_SHORT);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String re=response.body().string();
-                Log.i(TAG, "onResponse: "+call.request());
-                mBeanOpenPosition=new Gson().fromJson(re,new TypeToken<BeanOpenPosition>(){}.getType());
+                Log.i(TAG, "onResponse:持仓数据 "+re);
+                mBeanOpenPosition=new Gson().fromJson(re,BeanOpenPosition.class);
                 requestSubSymbol();
                 responseData();
             }
@@ -189,15 +193,15 @@ public class FragmentOpenPosition extends BaseFragment {
 
     @Subscribe
     public void notificationEditPostion(NotificationEditPosition notificationEditPosition){
-    if(notificationEditPosition.getSl()!=null||notificationEditPosition.getTp()!=null) {
         for (int i = 0; i < mDataList.size(); i++) {
             if (notificationEditPosition.getOrder() == mDataList.get(i).getOrder()) {
-                    mDataList.get(i).setTp(notificationEditPosition.getTp());
+                if(notificationEditPosition.getSl()!=null)
                     mDataList.get(i).setSl(notificationEditPosition.getSl());
-                    mOpenAdapter.notifyItemChanged(i);
+                if(notificationEditPosition.getTp()!=null)
+                    mDataList.get(i).setTp(notificationEditPosition.getTp());
+                mOpenAdapter.notifyItemChanged(i);
             }
         }
-    }
 }
     @Subscribe
     public void notificationAddposition(BeanOpenPosition beanOpenPosition){
@@ -212,6 +216,7 @@ public class FragmentOpenPosition extends BaseFragment {
                     mOpenAdapter.notifyItemRemoved(i);
                     mOpenAdapter.notifyItemRangeChanged(i,mDataList.size()-1);
                     EventBus.getDefault().post(new NotificationPositionCount(mDataList.size()));
+                    break;
                 }
             }
         }

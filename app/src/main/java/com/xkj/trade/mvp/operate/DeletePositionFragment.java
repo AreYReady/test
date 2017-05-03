@@ -12,13 +12,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.ChatWebSocket;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
 import com.xkj.trade.base.BaseFragment;
-import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean.RealTimeDataList;
+import com.xkj.trade.bean_.BeanAllSymbols;
 import com.xkj.trade.bean_.BeanBaseResponse;
 import com.xkj.trade.bean_.BeanPendingPosition;
 import com.xkj.trade.bean_notification.NotificationDeletePending;
@@ -44,6 +43,8 @@ import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+
+import static com.xkj.trade.mvp.main_trade.fragment_content.v.MainTradeContentFrag.realTimeMap;
 
 /**
  * Created by huangsc on 2016-12-14.
@@ -92,6 +93,7 @@ public class DeletePositionFragment extends BaseFragment {
         tvAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showLoading(context);
                 enterOrder();
             }
         });
@@ -116,30 +118,31 @@ public class DeletePositionFragment extends BaseFragment {
         mTakeProfit.setText(mData.getTp());
         mTvPrice.setText(mData.getOpenprice());
         mRivTradeSymbol.setImageResource(DataUtil.getImageId(mData.getSymbol()));
-
+        if(realTimeMap.containsKey(mData.getSymbol())) {
+            BeanAllSymbols.SymbolPrices symbolPrices = realTimeMap.get(mData.getSymbol());
+            setHeader(symbolPrices.getSymbol(),symbolPrices.getAsk(),symbolPrices.getBid());
+        }
         requestSubSymbol();
     }
 
     private void enterOrder() {
         Map<String, String> map = new TreeMap<>();
         map.put(RequestConstant.LOGIN, AesEncryptionUtil.stringBase64toString(ACache.get(context).getAsString(RequestConstant.ACCOUNT)));
-        map.put(RequestConstant.SYMBOL, AesEncryptionUtil.stringBase64toString(MyApplication.getInstance().beanIndicatorData.getSymbol()));
+        map.put(RequestConstant.SYMBOL, AesEncryptionUtil.stringBase64toString(mData.getSymbol()));
         map.put(RequestConstant.ACTION, RequestConstant.Action.DELETE.toString());
         map.put(RequestConstant.ORDERNO, String.valueOf(mData.getOrder()));
         OkhttpUtils.enqueue(UrlConstant.URL_TRADE_ORDER_EXE, map, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.i(TAG, "onFailure: " + call.request());
+                Log.i(TAG, "onFailure: 删除挂单" + call.request());
                 showFail();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String s = null;
-                Log.i(TAG, "onResponse: " + call.request());
-                Log.i(TAG, "onResponse: " + (s = response.body().string()));
-                beanBaseResponse  = new Gson().fromJson(s, new TypeToken<BeanBaseResponse>() {
-                }.getType());
+                Log.i(TAG, "onResponse: 删除挂单" + (s = response.body().string()));
+                beanBaseResponse  = new Gson().fromJson(s, BeanBaseResponse.class);
                 if (beanBaseResponse.getStatus() == 1) {
                     EventBus.getDefault().post(new NotificationDeletePending(mData.getOrder()));
                     //发送通知activity关闭
@@ -167,8 +170,7 @@ public class DeletePositionFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        mData = new Gson().fromJson(this.getArguments().getString(OperatePositionActivity.JSON_DATA), new TypeToken<BeanPendingPosition.DataBean.ListBean>() {
-        }.getType());
+        mData = new Gson().fromJson(this.getArguments().getString(OperatePositionActivity.JSON_DATA), BeanPendingPosition.DataBean.ListBean.class);
         title=getString(R.string.delete);
     }
 

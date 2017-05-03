@@ -58,4 +58,11 @@ public class LoadingDialog {
             mLoadingDialog.dismiss();
         }
     }
+    public boolean isShow(){
+        if(mLoadingDialog==null){
+            return false;
+        }else{
+            return mLoadingDialog.isShowing();
+        }
+    }
 }

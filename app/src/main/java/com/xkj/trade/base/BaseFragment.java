@@ -13,6 +13,7 @@ import com.xkj.trade.R;
 import com.xkj.trade.utils.DialogUtils;
 import com.xkj.trade.utils.SystemUtil;
 import com.xkj.trade.utils.ThreadHelper;
+import com.xkj.trade.utils.view.LoadingDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -26,14 +27,15 @@ public  abstract class BaseFragment extends Fragment {
     protected View view;
     protected Context context;
     protected Handler mHandler;
-    protected final String TAG= SystemUtil.getTAG(this);
+    protected final String TAG = SystemUtil.getTAG(this);
     protected String title;
     protected AlertDialog.Builder alertDialog;
+    private LoadingDialog mLoadingDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context=getActivity();
+        context = getActivity();
         EventBus.getDefault().register(this);
 
     }
@@ -52,19 +54,21 @@ public  abstract class BaseFragment extends Fragment {
     }
 
 
-
     protected abstract void initData();
+
     protected abstract void initView();
 
-    public Boolean onBackPressed(){
+    public Boolean onBackPressed() {
         return false;
     }
+
     @Subscribe(sticky = true)
-    public void getHander(Handler handler){
-        mHandler=handler;
+    public void getHander(Handler handler) {
+        mHandler = handler;
     }
+
     public interface BackInterface {
-          void setSelectedFragment(BaseFragment selectedFragment);
+        void setSelectedFragment(BaseFragment selectedFragment);
     }
 
     @Override
@@ -75,32 +79,38 @@ public  abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(EventBus.getDefault().isRegistered(this)){
+        if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
     }
-    protected  void showFail(final String msg){
+
+    protected void showFail(final String msg) {
         ThreadHelper.instance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                new DialogUtils(context,title,msg);
+                hideLoading();
+                new DialogUtils(context, title, msg);
             }
         });
     }
-    protected  void showFail(){
+
+    protected void showFail() {
         ThreadHelper.instance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                alertDialog = new AlertDialog.Builder(context,R.style.AlertDialog_Fail).setTitle(title).setMessage(getString(R.string.action_fail_please_try_again));
+                hideLoading();
+                alertDialog = new AlertDialog.Builder(context, R.style.AlertDialog_Fail).setTitle(title).setMessage(getString(R.string.action_fail_please_try_again));
                 alertDialog.show();
             }
         });
     }
-    protected  void showSucc(){
+
+    protected void showSucc() {
         ThreadHelper.instance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                alertDialog = new AlertDialog.Builder(context,R.style.AlertDialog_Succ).setTitle(title).setMessage(getString(R.string.action_succ));
+                hideLoading();
+                alertDialog = new AlertDialog.Builder(context, R.style.AlertDialog_Succ).setTitle(title).setMessage(getString(R.string.action_succ));
                 alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
@@ -111,11 +121,13 @@ public  abstract class BaseFragment extends Fragment {
             }
         });
     }
-    protected  void showSucc(final String message){
+
+    protected void showSucc(final String message) {
         ThreadHelper.instance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                alertDialog = new AlertDialog.Builder(context,R.style.AlertDialog_Succ).setTitle(title).setMessage(message);
+                hideLoading();
+                alertDialog = new AlertDialog.Builder(context, R.style.AlertDialog_Succ).setTitle(title).setMessage(message);
                 alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
@@ -126,11 +138,13 @@ public  abstract class BaseFragment extends Fragment {
             }
         });
     }
-    protected  void showSucc(final String message, final DialogInterface.OnClickListener onClickListener){
+
+    protected void showSucc(final String message, final DialogInterface.OnClickListener onClickListener) {
         ThreadHelper.instance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                alertDialog = new AlertDialog.Builder(context,R.style.AlertDialog_Succ).setTitle(title).setMessage(message).setPositiveButton("确定", onClickListener);
+                hideLoading();
+                alertDialog = new AlertDialog.Builder(context, R.style.AlertDialog_Succ).setTitle(title).setMessage(message).setPositiveButton("确定", onClickListener);
                 alertDialog.setCancelable(false);
                 alertDialog.show();
             }
@@ -138,5 +152,21 @@ public  abstract class BaseFragment extends Fragment {
     }
 
     //复写改方法
-    protected  void eventSucc(){};
+    protected void eventSucc() {
+    }
+
+
+    protected void showLoading(Context context) {
+        if (mLoadingDialog == null) {
+            mLoadingDialog = new LoadingDialog(context,"请稍后");
+        }
+        if(!mLoadingDialog.isShow())
+            mLoadingDialog.show();
+    }
+    protected  void hideLoading(){
+        if(mLoadingDialog!=null){
+            mLoadingDialog.close();
+            mLoadingDialog=null;
+        }
+    }
 }

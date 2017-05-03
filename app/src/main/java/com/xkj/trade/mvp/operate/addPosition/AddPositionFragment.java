@@ -173,4 +173,19 @@ public class AddPositionFragment extends BaseFragment implements View.OnClickLis
         mPriceRight.setText(bidTextBig);
         mRivTradeSymbol.setImageResource(beanIndicatorData.getImageResource());
     }
+    public void setHeader(String symbol,String ask,String bid){
+        SpannableString askTextBig = MoneyUtil.getRealTimePriceTextBig(context, ask);
+        SpannableString bidTextBig = MoneyUtil.getRealTimePriceTextBig(context, bid);
+        if(mPriceRight.getText().toString()!=""){
+            askTextBig.setSpan(new ForegroundColorSpan(getResources().getColor(Double.valueOf(ask) > Double.valueOf(mPriceLeft.getText().toString()) ? R.color.text_color_price_rise : R.color.text_color_price_fall)), 0, bidTextBig.length(),
+                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        }
+        if(mPriceRight.getText().toString()!=""){
+            bidTextBig.setSpan(new ForegroundColorSpan(getResources().getColor(Double.valueOf(bid) > Double.valueOf(mPriceRight.getText().toString()) ? R.color.text_color_price_rise : R.color.text_color_price_fall)), 0, bidTextBig.length(),
+                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        }
+        mTvSymbolName.setText(symbol);
+        mPriceLeft.setText(askTextBig);
+        mPriceRight.setText(bidTextBig);
+    }
 }

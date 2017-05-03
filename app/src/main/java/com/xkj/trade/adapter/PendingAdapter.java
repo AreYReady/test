@@ -117,10 +117,6 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
             holder.tvOperate.setText("买");
         }
         holder.tvProfit.setText(mData.getOpenprice());
-//        if(Double.valueOf(mData.getProfit())>0)
-//            holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_rise));
-//        else
-//            holder.tvProfit.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
         holder.tvStopLoss.setText(mData.getSl());
         holder.tvTakeProfit.setText(mData.getTp());
     }

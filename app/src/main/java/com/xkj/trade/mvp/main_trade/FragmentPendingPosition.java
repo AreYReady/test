@@ -108,8 +108,8 @@ public class FragmentPendingPosition extends BaseFragment  {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String re=response.body().string();
-                Log.i(TAG, "onResponse: "+call.request());
-                info=new Gson().fromJson(re,new TypeToken<BeanPendingPosition>(){}.getType());
+                Log.i(TAG, "onResponse:挂单 "+call.request());
+                info=new Gson().fromJson(re,BeanPendingPosition.class);
                 mDataList=info.getData().getList();
 //                SystemUtil.show(re,FragmentPendingPosition.class);
                 responseData();
@@ -158,7 +158,6 @@ public class FragmentPendingPosition extends BaseFragment  {
         if(beanRealTimeList.getQuotes()==null||mDataList==null){
             return;
         }
-        mBeanDupOpenList=  (new Gson().fromJson(new Gson().toJson(mDataList),new TypeToken<List<BeanPendingPosition.DataBean.ListBean>>(){}.getType()));
         for(RealTimeDataList.BeanRealTime beanRealTime:beanRealTimeList.getQuotes()){
             for(int i=0;i<mDataList.size();i++) {
                 listBean = mDataList.get(i);
@@ -172,8 +171,8 @@ public class FragmentPendingPosition extends BaseFragment  {
                 }
             }
         }
-        diffResult = DiffUtil.calculateDiff(new PendingPositionDiff(mBeanDupOpenList,mDataList), true);
-        ThreadHelper.instance().runOnUiThread(mRunnable);
+            diffResult = DiffUtil.calculateDiff(new PendingPositionDiff(mBeanDupOpenList, mDataList), true);
+            ThreadHelper.instance().runOnUiThread(mRunnable);
     }
     Runnable mRunnable=new Runnable() {
         @Override
@@ -186,20 +185,18 @@ public class FragmentPendingPosition extends BaseFragment  {
         Log.i(TAG, "getInform: ");
         requestData();
     }
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void notificationEditPending(NotificationEditPendingPosition notificationEditPendingPosition){
-        if(notificationEditPendingPosition.getSl()!=null||notificationEditPendingPosition.getTp()!=null)
         for(int i=0;i<mDataList.size();i++){
             if(notificationEditPendingPosition.getOrder()==mDataList.get(i).getOrder()){
+                if(notificationEditPendingPosition.getTp()!=null)
                 mDataList.get(i).setTp(notificationEditPendingPosition.getTp());
-                mDataList.get(i).setSl(notificationEditPendingPosition.getSl());
-                final int finalI = i;
-                ThreadHelper.instance().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mPendingAdapter.notifyItemChanged(finalI);
-                    }
-                });
+                if(notificationEditPendingPosition.getSl()!=null)
+                    mDataList.get(i).setSl(notificationEditPendingPosition.getSl());
+                if(notificationEditPendingPosition.getPrice()!=null)
+                    mDataList.get(i).setProfit(notificationEditPendingPosition.getPrice());
+                mPendingAdapter.notifyItemChanged(i);
+                break;
             }
         }
     }
@@ -210,6 +207,7 @@ public class FragmentPendingPosition extends BaseFragment  {
                 mDataList.remove(i);
                 mPendingAdapter.notifyItemRemoved(i);
                 mPendingAdapter.notifyItemRangeChanged(i,mDataList.size());
+                break;
             }
         }
     }

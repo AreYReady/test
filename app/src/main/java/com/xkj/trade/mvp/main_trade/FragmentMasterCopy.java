@@ -12,7 +12,6 @@ import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.MyCallBack;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
@@ -83,8 +82,8 @@ public class FragmentMasterCopy extends BaseFragment {
            @Override
            public void onResponse(Call call, Response response) throws IOException {
                String  s=response.body().string();
-               Log.i(TAG, "onResponse: "+s);
-               BeanMasterMyCopy beanMasterMyCopy=new Gson().fromJson(s,new TypeToken<BeanMasterMyCopy>(){}.getType());
+               Log.i(TAG, "onResponse:高手复制 "+s);
+               BeanMasterMyCopy beanMasterMyCopy=new Gson().fromJson(s,BeanMasterMyCopy.class);
                if(beanMasterMyCopy.getStatus()==1){
                    mDataList=beanMasterMyCopy.getResponse();
                    responseMasterCopy(beanMasterMyCopy);

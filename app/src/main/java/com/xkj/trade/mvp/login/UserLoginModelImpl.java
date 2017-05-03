@@ -5,7 +5,6 @@ import android.os.HandlerThread;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.MyCallBack;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.IO.sslsocket.SSLSocketChannel;
@@ -135,8 +134,7 @@ public class UserLoginModelImpl implements UserLoginModel {
                         public void onResponse(Call call, Response response) throws IOException {
 
                             String result;
-                            BeanResponse beanResponse = new Gson().fromJson(result = response.body().string(), new TypeToken<BeanResponse>() {
-                            }.getType());
+                            BeanResponse beanResponse = new Gson().fromJson(result = response.body().string(), BeanResponse.class);
                             if(beanResponse.getStatus()==1){
                                 Log.i(TAG, "onResponse: 登入成功"+result);
                                 mResultEnum=ResultEnum.succ;

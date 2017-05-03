@@ -15,7 +15,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.MyCallBack;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
@@ -68,8 +67,7 @@ public class FragmentMasterComnunity extends BaseFragment {
 
     @Override
     protected void initData() {
-        rank = new Gson().fromJson(this.getArguments().getString(MASTER_INFO), new TypeToken<BeanMasterRank.MasterRank>() {
-        }.getType());
+        rank = new Gson().fromJson(this.getArguments().getString(MASTER_INFO), BeanMasterRank.MasterRank.class);
     }
 
     @Override
@@ -119,7 +117,7 @@ public class FragmentMasterComnunity extends BaseFragment {
             public void onResponse(Call call, Response response) throws IOException {
                 String s=response.body().string();
                 Log.i(TAG, "onResponse11:  "+s);
-                BeanMasterMyCopy beanMasterMyCopy=new Gson().fromJson(s,new TypeToken<BeanMasterMyCopy>(){}.getType());
+                BeanMasterMyCopy beanMasterMyCopy=new Gson().fromJson(s,BeanMasterMyCopy.class);
                 if(beanMasterMyCopy.getStatus()==1){
                     List<BeanAdapterComnunity> list=new ArrayList<BeanAdapterComnunity>();
                     for(BeanMasterMyCopy.ResponseBean responseBean:beanMasterMyCopy.getResponse()){
@@ -191,7 +189,7 @@ public class FragmentMasterComnunity extends BaseFragment {
             public void onResponse(Call call, Response response) throws IOException {
                 String s=response.body().string();
                 Log.i(TAG, "onResponse13:  "+s);
-                BeanMasterRelationCopy beanMasterRelationCopy=new Gson().fromJson(s,new TypeToken<BeanMasterRelationCopy>(){}.getType());
+                BeanMasterRelationCopy beanMasterRelationCopy=new Gson().fromJson(s,BeanMasterRelationCopy.class);
                 if(beanMasterRelationCopy.getStatus()==1){
                     List<BeanAdapterComnunity> list=new ArrayList<BeanAdapterComnunity>();
                     for(BeanMasterRelationCopy.ResponseBean responseBean:beanMasterRelationCopy.getResponse()){
@@ -215,7 +213,7 @@ public class FragmentMasterComnunity extends BaseFragment {
             public void onResponse(Call call, Response response) throws IOException {
                 String s=response.body().string();
                 Log.i(TAG, "onResponse14:  "+s);
-                BeanMasterMyCopy beanMasterMyCopy=new Gson().fromJson(s,new TypeToken<BeanMasterMyCopy>(){}.getType());
+                BeanMasterMyCopy beanMasterMyCopy=new Gson().fromJson(s,BeanMasterMyCopy.class);
                 if(beanMasterMyCopy.getStatus()==1){
                         List<BeanAdapterComnunity> list=new ArrayList<>();
                         for(BeanMasterMyCopy.ResponseBean responseBean:beanMasterMyCopy.getResponse()){
@@ -240,7 +238,7 @@ public class FragmentMasterComnunity extends BaseFragment {
             public void onResponse(Call call, Response response) throws IOException {
                 String s=response.body().string();
                 Log.i(TAG, "onResponse12:  "+s);
-                BeanMasterFocusInfo beanMasterFocusInfo=new Gson().fromJson(s,new TypeToken<BeanMasterFocusInfo>(){}.getType());
+                BeanMasterFocusInfo beanMasterFocusInfo=new Gson().fromJson(s,BeanMasterFocusInfo.class);
                 if(beanMasterFocusInfo.getStatus()==1){
                     List<BeanAdapterComnunity> list=new ArrayList<>();
                     for(BeanMasterFocusInfo.ResponseBean responseBean:beanMasterFocusInfo.getResponse()){

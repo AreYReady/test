@@ -2,7 +2,6 @@ package com.xkj.trade.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.MyCallBack;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
@@ -98,7 +96,7 @@ public class CopyAdapter extends RecyclerView.Adapter<CopyAdapter.MyViewHolder>{
         OkhttpUtils.enqueue(UrlConstant.URL_MASTER_NOFOLLOW, map, new MyCallBack() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                BeanBaseResponse beanBaseResponse=new Gson().fromJson(response.body().string(),new TypeToken<BeanBaseResponse>(){}.getType());
+                BeanBaseResponse beanBaseResponse=new Gson().fromJson(response.body().string(),BeanBaseResponse.class);
                 if(beanBaseResponse.getStatus()==1&&beanBaseResponse.getResponse().contains("cancel success")){
                     for(BeanMasterRank.MasterRank masterRank:rank.getResponse()){
                         if(masterRank.getLogin().equals(masterid)){

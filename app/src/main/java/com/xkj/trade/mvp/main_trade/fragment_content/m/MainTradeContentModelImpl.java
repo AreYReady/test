@@ -6,7 +6,6 @@ import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.ChatWebSocket;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.base.MyApplication;
@@ -76,8 +75,7 @@ public class MainTradeContentModelImpl implements MainTradeFragListener.MainTrad
             public void onResponse(Call call, Response response) throws IOException {
                 String body = response.body().string();
                 Log.i(TAG, "onResponse: 请求历史数据" + body);
-                BeanHistory beanHistory = new Gson().fromJson(body, new TypeToken<BeanHistory>() {
-                }.getType());
+                BeanHistory beanHistory = new Gson().fromJson(body, BeanHistory.class);
                 if (beanHistory.getStatus() == 1) {
                     mMainTradeContentPreListener.responseHistoryData(beanHistory);
 //                    ChatWebSocket.getChartWebSocket().sendMessage("{\"msg_type\":1010,\"symbol\":\"" +beanHistory.getData().getSymbol() + "\"}");
@@ -102,8 +100,7 @@ public class MainTradeContentModelImpl implements MainTradeFragListener.MainTrad
             public void onResponse(Call call, Response response) throws IOException {
                 String body = response.body().string();
                 Log.i(TAG, "onResponse: 所有商品报价" + body);
-                BeanBaseResponse beanBaseResponse = new Gson().fromJson(body, new TypeToken<BeanBaseResponse>() {
-                }.getType());
+                BeanBaseResponse beanBaseResponse = new Gson().fromJson(body, BeanBaseResponse.class);
                 if (beanBaseResponse.getStatus() == 1) {
 //                    ACache.get(mContext).put(CacheKeyConstant.ALL_SYMBOLS_PRICES, body);
                     mMainTradeContentPreListener.responseAllSymbolsData(body);
@@ -151,9 +148,9 @@ public class MainTradeContentModelImpl implements MainTradeFragListener.MainTrad
             public void onResponse(Call call, Response response) throws IOException {
                 String temp;
                 Log.i(TAG, "onResponse: "+(temp=response.body().string()));
-                BeanBaseResponse info=new Gson().fromJson(temp,new TypeToken<BeanBaseResponse>(){}.getType());
+                BeanBaseResponse info=new Gson().fromJson(temp,BeanBaseResponse.class);
                 if(info.getStatus()==1){
-                    BeanOpenPosition beanOpenPosition= new Gson().fromJson(temp,new TypeToken<BeanOpenPosition>(){}.getType());
+                    BeanOpenPosition beanOpenPosition= new Gson().fromJson(temp,BeanOpenPosition.class);
                     mMainTradeContentPreListener.responseOpenPosition(beanOpenPosition);
                 }
             }

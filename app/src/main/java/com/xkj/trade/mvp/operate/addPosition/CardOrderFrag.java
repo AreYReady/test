@@ -14,12 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
 import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.base.MyApplication;
-import com.xkj.trade.bean.BeanIndicatorData;
 import com.xkj.trade.bean_.BeanBaseResponse;
 import com.xkj.trade.bean_.BeanOpenPosition;
 import com.xkj.trade.constant.RequestConstant;
@@ -31,8 +29,6 @@ import com.xkj.trade.utils.SystemUtil;
 import com.xkj.trade.utils.view.CustomSeekBar;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.Map;
@@ -137,6 +133,7 @@ public class CardOrderFrag extends BaseFragment implements View.OnClickListener 
                 }
                 break;
             case R.id.ll_play_action:
+                showLoading(context);
                 requestActionOrder();
                 break;
         }
@@ -145,7 +142,8 @@ public class CardOrderFrag extends BaseFragment implements View.OnClickListener 
 
     private void requestActionOrder() {
         if(Double.valueOf(mCsbVpItemOrderFrag.getMoney())<=0){
-            Toast.makeText(context,"金额不能为空",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"手数不能为空",Toast.LENGTH_SHORT).show();
+            hideLoading();
             return;
         }
         Map<String,String> map=new TreeMap<>();
@@ -168,7 +166,7 @@ public class CardOrderFrag extends BaseFragment implements View.OnClickListener 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Log.i(TAG, "onResponse: "+call.request());
-                beanBaseResponse=new Gson().fromJson(response.body().string(),new TypeToken<BeanBaseResponse>(){}.getType());
+                beanBaseResponse=new Gson().fromJson(response.body().string(),BeanBaseResponse.class);
                 Log.i(TAG, "onResponse: "+beanBaseResponse.toString());
                 if(beanBaseResponse.getStatus()==1){
                     EventBus.getDefault().post(new BeanOpenPosition());
@@ -189,17 +187,17 @@ public class CardOrderFrag extends BaseFragment implements View.OnClickListener 
         EventBus.getDefault().post(beanBaseResponse);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getCurrentSymbol(BeanIndicatorData beanIndicatorData) {
-        Log.i(TAG, "getCurrentSymbol: " + beanIndicatorData.getSymbol());
-        mASk = beanIndicatorData.getAsk();
-        mBid = beanIndicatorData.getBid();
-        if (mTvAction.getText().equals(bBuy.getText())) {
-            mTvBuyAsk.setText(beanIndicatorData.getAsk());
-        } else {
-            mTvBuyAsk.setText(beanIndicatorData.getBid());
-        }
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void getCurrentSymbol(BeanIndicatorData beanIndicatorData) {
+//        Log.i(TAG, "getCurrentSymbol: " + beanIndicatorData.getSymbol());
+//        mASk = beanIndicatorData.getAsk();
+//        mBid = beanIndicatorData.getBid();
+//        if (mTvAction.getText().equals(bBuy.getText())) {
+//            mTvBuyAsk.setText(beanIndicatorData.getAsk());
+//        } else {
+//            mTvBuyAsk.setText(beanIndicatorData.getBid());
+//        }
+//    }
 
     @Override
     public void onDestroyView() {

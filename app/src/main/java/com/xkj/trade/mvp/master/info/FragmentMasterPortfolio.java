@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.MyCallBack;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
@@ -54,8 +53,7 @@ public class FragmentMasterPortfolio extends BaseFragment {
 
     @Override
     protected void initData() {
-        rank = new Gson().fromJson(this.getArguments().getString(MASTER_INFO), new TypeToken<BeanMasterRank.MasterRank>() {
-        }.getType());
+        rank = new Gson().fromJson(this.getArguments().getString(MASTER_INFO), BeanMasterRank.MasterRank.class);
         list=new ArrayList<>();
     }
 
@@ -81,7 +79,7 @@ public class FragmentMasterPortfolio extends BaseFragment {
             public void onResponse(Call call, Response response) throws IOException {
                 String s;
                 Log.i(TAG, "call"+ call.request()+  " onResponse: "+(s=response.body().string()));
-                BeanMasterProtfolio beanMasterProtfolio=new Gson().fromJson(s,new TypeToken<BeanMasterProtfolio>(){}.getType());
+                BeanMasterProtfolio beanMasterProtfolio=new Gson().fromJson(s,BeanMasterProtfolio.class);
                 if(beanMasterProtfolio.getStatus()==1){
                     responsePortfolio(beanMasterProtfolio);
                 }

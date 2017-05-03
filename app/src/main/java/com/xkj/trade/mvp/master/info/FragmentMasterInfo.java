@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.R;
 import com.xkj.trade.adapter.FragmentAdapter;
 import com.xkj.trade.adapter.MyViewPagerAdapterItem;
@@ -89,8 +88,7 @@ public class FragmentMasterInfo extends BaseFragment implements View.OnClickList
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_master_info, null);
-        rank = new Gson().fromJson(this.getArguments().getString(MASTER_INFO), new TypeToken<BeanMasterRank.MasterRank>() {
-        }.getType());
+        rank = new Gson().fromJson(this.getArguments().getString(MASTER_INFO), BeanMasterRank.MasterRank.class);
         return view;
     }
 

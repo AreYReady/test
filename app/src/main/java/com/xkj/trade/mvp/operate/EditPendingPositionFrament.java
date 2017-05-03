@@ -12,12 +12,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.ChatWebSocket;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
 import com.xkj.trade.base.BaseFragment;
-import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean.RealTimeDataList;
 import com.xkj.trade.bean_.BeanAllSymbols;
 import com.xkj.trade.bean_.BeanBaseResponse;
@@ -50,6 +48,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 import static com.xkj.trade.constant.TradeDateConstant.VOLUME_MONEY;
+import static com.xkj.trade.mvp.main_trade.fragment_content.v.MainTradeContentFrag.realTimeMap;
 
 /**
  * Created by huangsc on 2016-12-14.
@@ -114,13 +113,9 @@ public class EditPendingPositionFrament extends BaseFragment implements AddSubEd
             }
             mTvPlayAction.setTextColor(context.getResources().getColor(R.color.text_color_price_fall));
         }
-        for(BeanAllSymbols.SymbolPrices symbolPrices:beanAllSymbols.getData()){
-            if(symbolPrices.getSymbol().equals(mData.getSymbol())){
-                mTvSymbolName.setText(mData.getSymbol());
-                mPriceAsk.setText(symbolPrices.getAsk());
-                mPriceBid.setText(symbolPrices.getBid());
-                break;
-            }
+        if(realTimeMap.containsKey(mData.getSymbol())) {
+            BeanAllSymbols.SymbolPrices symbolPrices = realTimeMap.get(mData.getSymbol());
+            setHeader(symbolPrices.getSymbol(),symbolPrices.getAsk(),symbolPrices.getBid());
         }
         mDigits = MoneyUtil.getDigits(mData.getOpenprice());
         mBaseNumble = MoneyUtil.getBaseNumble(mDigits);
@@ -149,6 +144,7 @@ public class EditPendingPositionFrament extends BaseFragment implements AddSubEd
         mTvEnterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showLoading(context);
                 enterOrder();
             }
         });
@@ -165,7 +161,7 @@ public class EditPendingPositionFrament extends BaseFragment implements AddSubEd
     private void enterOrder() {
         final Map<String, String> map = new TreeMap<>();
         map.put(RequestConstant.LOGIN, AesEncryptionUtil.stringBase64toString(ACache.get(context).getAsString(RequestConstant.ACCOUNT)));
-        map.put(RequestConstant.SYMBOL, AesEncryptionUtil.stringBase64toString(MyApplication.getInstance().beanIndicatorData.getSymbol()));
+        map.put(RequestConstant.SYMBOL, AesEncryptionUtil.stringBase64toString(mData.getSymbol()));
         map.put(RequestConstant.ACTION, RequestConstant.Action.EDIT.toString());
         map.put(RequestConstant.ORDERNO, String.valueOf(mData.getOrder()));
         if(mCMoney.getDataVisitity()==View.VISIBLE)
@@ -179,17 +175,15 @@ public class EditPendingPositionFrament extends BaseFragment implements AddSubEd
         OkhttpUtils.enqueue(UrlConstant.URL_TRADE_ORDER_EXE, map, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.i(TAG, "onFailure: " + call.request());
+                Log.i(TAG, "onFailure: 挂单修改" + call.request());
                 showFail();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String s = null;
-                Log.i(TAG, "onResponse: " + call.request());
-                Log.i(TAG, "onResponse: " + (s = response.body().string()));
-                beanBaseResponse = new Gson().fromJson(s, new TypeToken<BeanBaseResponse>() {
-                }.getType());
+                Log.i(TAG, "onResponse: 挂单修改" + (s = response.body().string()));
+                beanBaseResponse = new Gson().fromJson(s, BeanBaseResponse.class);
                 if (beanBaseResponse.getStatus() == 1) {
                     notificationEditPendingPosition = new NotificationEditPendingPosition();
                     if(mCStopLost.getDataVisitity()==View.VISIBLE)
@@ -197,9 +191,7 @@ public class EditPendingPositionFrament extends BaseFragment implements AddSubEd
                     if(mCTakeProfit.getDataVisitity()==View.VISIBLE)
                         notificationEditPendingPosition.setTp(mCTakeProfit.getMoneyString());
                     notificationEditPendingPosition.setOrder(mData.getOrder());
-//                    EventBus.getDefault().post(notificationEditPendingPosition);
-//                    发送通知activity关闭
-//                    EventBus.getDefault().post(beanBaseResponse);
+                    notificationEditPendingPosition.setPrice(mCMoney.getMoneyString());
                     showSucc();
                 }else{
                     showFail();
@@ -218,11 +210,9 @@ public class EditPendingPositionFrament extends BaseFragment implements AddSubEd
     }
     @Override
     protected void initData() {
-        mData = new Gson().fromJson(this.getArguments().getString(OperatePositionActivity.JSON_DATA), new TypeToken<BeanOpenPosition.DataBean.ListBean>() {
-        }.getType());
+        mData = new Gson().fromJson(this.getArguments().getString(OperatePositionActivity.JSON_DATA), BeanOpenPosition.DataBean.ListBean.class);
         title=getString(R.string.edit_pending_order);
-        beanAllSymbols = new Gson().fromJson(ACache.get(context).getAsString(CacheKeyConstant.ALL_SYMBOLS_PRICES), new TypeToken<BeanAllSymbols>() {
-        }.getType());
+        beanAllSymbols = new Gson().fromJson(ACache.get(context).getAsString(CacheKeyConstant.ALL_SYMBOLS_PRICES), BeanAllSymbols.class);
     }
     BeanAllSymbols beanAllSymbols;
     @Override

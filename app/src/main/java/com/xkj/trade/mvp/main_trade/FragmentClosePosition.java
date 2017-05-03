@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.MyCallBack;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
@@ -130,8 +129,7 @@ public class FragmentClosePosition extends BaseFragment {
         OkhttpUtils.enqueue(UrlConstant.URL_TRADE_HISTORY_LIST, map, new MyCallBack() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                sevenDay = new Gson().fromJson(response.body().string(), new TypeToken<BeanClosePosition>() {
-                }.getType());
+                sevenDay = new Gson().fromJson(response.body().string(), BeanClosePosition.class);
                 if(mRadioGroup.getCheckedRadioButtonId()==R.id.days_7){
                     responseData(sevenDay);
                 }
@@ -147,8 +145,7 @@ public class FragmentClosePosition extends BaseFragment {
         OkhttpUtils.enqueue(UrlConstant.URL_TRADE_HISTORY_LIST, map, new MyCallBack() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                fourteenDay = new Gson().fromJson(response.body().string(), new TypeToken<BeanClosePosition>() {
-                }.getType());
+                fourteenDay = new Gson().fromJson(response.body().string(), BeanClosePosition.class);
                 if(mRadioGroup.getCheckedRadioButtonId()==R.id.days_14){
                     responseData(fourteenDay);
                 }
@@ -165,8 +162,7 @@ public class FragmentClosePosition extends BaseFragment {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String s=response.body().string();
-                oneMonth = new Gson().fromJson(s, new TypeToken<BeanClosePosition>() {
-                }.getType());
+                oneMonth = new Gson().fromJson(s, BeanClosePosition.class);
                 if(mRadioGroup.getCheckedRadioButtonId()==R.id.month_1){
                     responseData(oneMonth);
                 }
@@ -180,8 +176,7 @@ public class FragmentClosePosition extends BaseFragment {
         OkhttpUtils.enqueue(UrlConstant.URL_TRADE_HISTORY_LIST, map, new MyCallBack() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                allTime = new Gson().fromJson(response.body().string(), new TypeToken<BeanClosePosition>() {
-                }.getType());
+                allTime = new Gson().fromJson(response.body().string(), BeanClosePosition.class);
                 if(mRadioGroup.getCheckedRadioButtonId()==R.id.all){
                     responseData(allTime);
                 }

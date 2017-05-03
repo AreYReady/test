@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.bean_.BeanUserListInfo;
 import com.xkj.trade.constant.RequestConstant;
@@ -58,7 +57,7 @@ public class MainActModelImpl implements MainTradeActListener.ModelListener {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                BeanUserListInfo info= new Gson().fromJson(response.body().string(),new TypeToken<BeanUserListInfo>(){}.getType());
+                BeanUserListInfo info= new Gson().fromJson(response.body().string(),BeanUserListInfo.class);
                 if(info.getStatus()==1){
                     mPreListener.refreshUserInfo(info);
                 }

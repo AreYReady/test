@@ -13,12 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.ChatWebSocket;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
 import com.xkj.trade.base.BaseFragment;
 import com.xkj.trade.bean.RealTimeDataList;
+import com.xkj.trade.bean_.BeanAllSymbols;
 import com.xkj.trade.bean_.BeanBaseResponse;
 import com.xkj.trade.bean_.BeanOpenPosition;
 import com.xkj.trade.bean_notification.NotificationClosePosition;
@@ -115,11 +115,14 @@ public class ClosePositionFragment extends BaseFragment {
         mTvEnterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showLoading(context);
                 enterOrder();
             }
         });
         if(realTimeMap.containsKey(mData.getSymbol())) {
-            setTvEstimatedProfitAmount(mData.getSymbol(), realTimeMap.get(mData.getSymbol()).getAsk(), realTimeMap.get(mData.getSymbol()).getBid());
+            BeanAllSymbols.SymbolPrices symbolPrices = realTimeMap.get(mData.getSymbol());
+            setHeader(symbolPrices.getSymbol(),symbolPrices.getAsk(),symbolPrices.getBid());
+            setTvEstimatedProfitAmount(mData.getSymbol(),symbolPrices.getAsk(), symbolPrices.getBid());
         }
         requestSubSymbol();
 
@@ -150,13 +153,15 @@ public class ClosePositionFragment extends BaseFragment {
         OkhttpUtils.enqueue(UrlConstant.URL_TRADE_ORDER_EXE, map, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.i(TAG, "onFailure: " + call.request());
+                Log.i(TAG, "onFailure: 平仓 " + call.request());
                 showFail(getString(R.string.action_fail_please_try_again));
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-               beanBaseResponse=new Gson().fromJson(response.body().string(),new TypeToken<BeanBaseResponse>(){}.getType());
+                String s;
+               beanBaseResponse=new Gson().fromJson(s=response.body().string(),BeanBaseResponse.class);
+                Log.i(TAG, "onResponse: 平仓"+s);
                 if(beanBaseResponse.getStatus()==1) {
                     //通知刷新
                     EventBus.getDefault().post(new NotificationClosePosition(mData.getOrder()));
@@ -179,8 +184,7 @@ public class ClosePositionFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        mData = new Gson().fromJson(this.getArguments().getString(OperatePositionActivity.JSON_DATA), new TypeToken<BeanOpenPosition.DataBean.ListBean>() {
-        }.getType());
+        mData = new Gson().fromJson(this.getArguments().getString(OperatePositionActivity.JSON_DATA), BeanOpenPosition.DataBean.ListBean.class);
         title=getString(R.string.close);
     }
 
