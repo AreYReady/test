@@ -599,7 +599,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
             allSymbolsName.add(beanAllSymbols.getData().get(i).getSymbol());
         }
         mMainTradeContentPre.requestSubSymbols(allSymbolsName, true);
-
         BeanAllSymbols.SymbolPrices symbolPrices;
         mDatas.clear();
         for(BeanAppConfig.MsgBean.SymbolBean symbolBean:beanAppConfig.getMsg().getSymbol()){
@@ -631,7 +630,6 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
 
     private boolean isScroll = false;
     private ACache aCache;
-
     private void saveCache() {
 //        if (aCache == null) {
 //            aCache = ACache.get(context);

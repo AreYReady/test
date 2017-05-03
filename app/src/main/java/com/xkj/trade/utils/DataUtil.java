@@ -214,13 +214,24 @@ public class DataUtil {
 //                * 1手一点点差 = （100,000 X 0.01） / 91.28 = $ 10.96
                 return String.valueOf(MoneyUtil.div(MoneyUtil.mulPrice(VOLUME_MONEY * Double.valueOf(volume), diffSpace), Double.valueOf(currentPrices), 2));
             } else {
-                BeanAllSymbols.SymbolPrices symbolPrices = MainTradeContentFrag.realTimeMap.get(symbol.substring(0, 3).concat("USD"));
+//
+                String bidString="0";
+                BeanAllSymbols.SymbolPrices symbolPrices;
+                if(MainTradeContentFrag.realTimeMap.containsKey(symbol.substring(0,3).concat("USD"))){
+                    bidString=MainTradeContentFrag.realTimeMap.get(symbol.substring(0,3).concat("USD")).getBid();
+                }else if(MainTradeContentFrag.realTimeMap.containsKey(("USD").concat(symbol.substring(0,3)))){
+                    symbolPrices=MainTradeContentFrag.realTimeMap.get(("USD").concat(symbol.substring(0,3)));
+                    bidString=BigdecimalUtils.div("1",
+                            symbolPrices.getBid(),
+                            6);
+                }
                 //交叉盘
                 //例如： EUR/GBP报价为 0.9036, 于此同时 EUR/USD报价为 1.5021,点值计算如下（EUR/GBP最小变动价格为 0.0001）：
 //                标准手一点点差 = （100,000 X 0.0001 X 1.5021）/ 0.9036 = $16.62
+
                 return String.valueOf(MoneyUtil.div(VOLUME_MONEY * Double.valueOf(volume)
                         * diffSpace
-                        * (Double.valueOf((MainTradeContentFrag.realTimeMap.get(symbol.substring(0, 3).concat("USD"))).getBid())), Double.valueOf(currentPrices), 2));
+                        * (Double.valueOf(bidString)), Double.valueOf(currentPrices), 2));
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();

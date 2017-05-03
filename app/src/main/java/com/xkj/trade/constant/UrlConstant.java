@@ -16,7 +16,7 @@ public class UrlConstant {
     public static String APP_CONFIG = "http://"+API_URL+"/WebAPI/Public/appconfig";//获取app配置
     public static String URL_MT4_PRICE = "http://"+API_URL+"/WebAPI/Public/mt4price";
     public static String URL_MT4_REG = "http://"+API_URL+"/WebAPI/Public/Reg";//真实注册
-    public static String URL_MT4_USERLIST = "http://"+API_URL+"/WebAPI/Account/mt4userlist";
+    public static String URL_MT4_USERLIST = "http://"+API_URL+"/WebAPI/Account/mt4userlist";//用户数据
     public static String URL_MT4_CRMUSERLIST = "http://"+API_URL+"/WebAPI/Account/CRMuserlist";
     public static String URL_MT4_RANKING = "http://"+API_URL+"/WebAPI/Master/ranking";
     public static String WS_URL="ws://"+BuildConfig.web_URL+":9984";

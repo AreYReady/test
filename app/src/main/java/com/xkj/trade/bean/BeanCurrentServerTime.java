@@ -37,7 +37,7 @@ public class BeanCurrentServerTime {
      */
     public long getCurrentServerTime() {
         currentNativeTime = System.currentTimeMillis();
-        Log.i(SystemUtil.getTAG(this), "currentNativeTime: " + currentNativeTime);
+        Log.i(SystemUtil.getTAG(this), "currentNativeTime: " + currentNativeTime+"服务时间"+serverTime +" 服务传过来的本地时间"+nativeTime);
         return serverTime + (currentNativeTime - nativeTime);
     }
 

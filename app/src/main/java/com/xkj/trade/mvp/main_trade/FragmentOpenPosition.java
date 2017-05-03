@@ -48,6 +48,8 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static com.xkj.trade.mvp.main_trade.fragment_content.v.MainTradeContentFrag.realTimeMap;
+
 /**
  * Created by huangsc on 2016-12-07.
  * TODO:持仓
@@ -158,7 +160,7 @@ public class FragmentOpenPosition extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void getRealTimeData(RealTimeDataList beanRealTimeList){
         Log.i(TAG, "getRealTimeData: ");
-        if(beanRealTimeList==null||beanRealTimeList.getQuotes()==null||mDataList==null){
+        if(beanRealTimeList==null||beanRealTimeList.getQuotes()==null||mDataList==null||realTimeMap==null||realTimeMap.size()==0){
             return;
         }
         mBeanDupOpenList=  (new Gson().fromJson(new Gson().toJson(mDataList),new TypeToken<List<BeanOpenPosition.DataBean.ListBean>>(){}.getType()));

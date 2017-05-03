@@ -150,10 +150,8 @@ public class MainTradeContentModelImpl implements MainTradeFragListener.MainTrad
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String temp;
-                Log.i(TAG, "onResponse: "+call.request());
                 Log.i(TAG, "onResponse: "+(temp=response.body().string()));
                 BeanBaseResponse info=new Gson().fromJson(temp,new TypeToken<BeanBaseResponse>(){}.getType());
-//                BeanOpenPosition info=new Gson().fromJson(temp,new TypeToken<BeanOpenPosition>(){}.getType());
                 if(info.getStatus()==1){
                     BeanOpenPosition beanOpenPosition= new Gson().fromJson(temp,new TypeToken<BeanOpenPosition>(){}.getType());
                     mMainTradeContentPreListener.responseOpenPosition(beanOpenPosition);

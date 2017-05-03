@@ -62,6 +62,15 @@ public class BigdecimalUtils {
     public static double div(int value1,int value2,int scale) throws IllegalAccessException{
        return div(Double.valueOf(value1),Double.valueOf(value2),scale);
     }
+    public static String div(String value1,String value2,int scale) throws IllegalAccessException{
+//如果精确范围小于0，抛出异常信息
+        if(scale<0){
+            throw new IllegalAccessException("精确度不能小于0");
+        }
+        BigDecimal b1 = new BigDecimal(value1);
+        BigDecimal b2 = new BigDecimal(value2);
+        return b1.divide(b2, scale, RoundingMode.HALF_UP).toString();
+    }
 
     /**
      * 小数点前移
