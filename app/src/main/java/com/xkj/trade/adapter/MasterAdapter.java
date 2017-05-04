@@ -209,7 +209,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
             OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW_NOFOCUS, map, new MyCallBack() {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    Log.i(TAG, "onResponse: " + response.body().string());
+                    Log.i(TAG, "onResponse: 取消关注" + response.body().string());
                     ThreadHelper.instance().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -226,7 +226,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
             OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW_FOCUS, map, new MyCallBack() {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    Log.i(TAG, "onResponse: " + response.body().string());
+                    Log.i(TAG, "onResponse: 关注" + response.body().string());
                     ThreadHelper.instance().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -249,7 +249,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
             public void onResponse(Call call, Response response) throws IOException {
                BeanBaseResponse info =new Gson().fromJson(response.body().string(),BeanBaseResponse.class);
                 if(info.getStatus()==1){
-                    Log.i(TAG, "onResponse: "+info.toString());
+                    Log.i(TAG, "onResponse:取消复制高手 "+info.toString());
                     rank.setStatus(0);
                         EventBus.getDefault().post(new NotificationMasterStatus(rank.getLogin(),rank.getFstatus(),rank.getStatus()));
 
@@ -274,7 +274,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String s = response.body().string();
-                Log.i(TAG, "onResponse: " + s);
+                Log.i(TAG, "onResponse: 复制" + s);
                 BeanMasterInfo info = new Gson().fromJson(s, BeanMasterInfo.class);
                 map.put(RequestConstant.FOLLOW_ID, ACache.get(context).getAsString(RequestConstant.ACCOUNT));
                 map.put(RequestConstant.COPY_MONEY, info.getResponse().getFollowfunds());

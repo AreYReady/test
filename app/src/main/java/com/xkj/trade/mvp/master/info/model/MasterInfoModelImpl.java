@@ -11,6 +11,7 @@ import com.xkj.trade.bean_.BeanMasterInfo;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.mvp.master.info.contract.MasterInfoContract;
+import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.SystemUtil;
 
 import java.io.IOException;
@@ -51,6 +52,7 @@ public class MasterInfoModelImpl implements MasterInfoContract.Model {
         OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW_INFO, map, new MyCallBack() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+
                 BeanMasterInfo info=   new Gson().fromJson(response.body().string(),BeanMasterInfo.class);
                 map.put(RequestConstant.FOLLOW_ID, followid);
                 map.put(RequestConstant.COPY_MONEY, info.getResponse().getFollowfunds());
@@ -59,7 +61,8 @@ public class MasterInfoModelImpl implements MasterInfoContract.Model {
                 OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW, map, new MyCallBack() {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        BeanBaseResponse info = new Gson().fromJson(response.body().string(), BeanBaseResponse.class);
+                        String s = AesEncryptionUtil.decodeUnicode(response.body().string());
+                        BeanBaseResponse info = new Gson().fromJson(s, BeanBaseResponse.class);
                         if (info.getStatus() == 1) {
                             Log.i(TAG, "onResponse: " + info.toString());
                             mPresenterListener.responseCopyFollow(info);
@@ -78,9 +81,10 @@ public class MasterInfoModelImpl implements MasterInfoContract.Model {
         OkhttpUtils.enqueue(UrlConstant.URL_MASTER_NOFOLLOW, map, new MyCallBack() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                BeanBaseResponse info = new Gson().fromJson(response.body().string(), BeanBaseResponse.class);
+                String s = AesEncryptionUtil.decodeUnicode(response.body().string());
+                BeanBaseResponse info = new Gson().fromJson(s, BeanBaseResponse.class);
                 if (info.getStatus() == 1) {
-                    Log.i(TAG, "onResponse: " + info.toString());
+                    Log.i(TAG, "onResponse:关注不复制 " + info.toString());
                     mPresenterListener.responseUnCopyFollow(info);
                 }
 
@@ -96,7 +100,8 @@ public class MasterInfoModelImpl implements MasterInfoContract.Model {
         OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW_FOCUS, map, new MyCallBack() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                BeanBaseResponse beanBaseResponse = new Gson().fromJson(response.body().string(), BeanBaseResponse.class);
+                String s = AesEncryptionUtil.decodeUnicode(response.body().string());
+                BeanBaseResponse beanBaseResponse = new Gson().fromJson(s, BeanBaseResponse.class);
                 Log.i(TAG, "onResponse: " + beanBaseResponse.toString());
                 if (beanBaseResponse.getStatus() == 1) {
                     mPresenterListener.responseFocus(beanBaseResponse);
@@ -113,7 +118,8 @@ public class MasterInfoModelImpl implements MasterInfoContract.Model {
         OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW_NOFOCUS, map, new MyCallBack() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                BeanBaseResponse beanBaseResponse = new Gson().fromJson(response.body().string(), BeanBaseResponse.class);
+                String s = AesEncryptionUtil.decodeUnicode(response.body().string());
+                BeanBaseResponse beanBaseResponse = new Gson().fromJson(s, BeanBaseResponse.class);
                 Log.i(TAG, "onResponse: " + beanBaseResponse.toString());
                 if (beanBaseResponse.getStatus() == 1) {
                     mPresenterListener.responseNoFocus(beanBaseResponse);

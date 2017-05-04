@@ -165,8 +165,8 @@ public class CardOrderFrag extends BaseFragment implements View.OnClickListener 
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.i(TAG, "onResponse: "+call.request());
-                beanBaseResponse=new Gson().fromJson(response.body().string(),BeanBaseResponse.class);
+                String s = AesEncryptionUtil.decodeUnicode(response.body().string());
+                beanBaseResponse=new Gson().fromJson(s,BeanBaseResponse.class);
                 Log.i(TAG, "onResponse: "+beanBaseResponse.toString());
                 if(beanBaseResponse.getStatus()==1){
                     EventBus.getDefault().post(new BeanOpenPosition());

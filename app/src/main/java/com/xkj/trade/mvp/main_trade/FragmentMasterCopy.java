@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.MyCallBack;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
@@ -26,6 +27,7 @@ import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.mvp.main_trade.activity.v.MainTradeContentActivity;
 import com.xkj.trade.utils.ACache;
+import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.ThreadHelper;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -81,9 +83,9 @@ public class FragmentMasterCopy extends BaseFragment {
        OkhttpUtils.enqueue(UrlConstant.URL_MASTER_MY_COPY, map, new MyCallBack() {
            @Override
            public void onResponse(Call call, Response response) throws IOException {
-               String  s=response.body().string();
+               String s = AesEncryptionUtil.decodeUnicode(response.body().string());
                Log.i(TAG, "onResponse:高手复制 "+s);
-               BeanMasterMyCopy beanMasterMyCopy=new Gson().fromJson(s,BeanMasterMyCopy.class);
+               BeanMasterMyCopy beanMasterMyCopy=new Gson().fromJson(s,new TypeToken<BeanMasterMyCopy>(){}.getType());
                if(beanMasterMyCopy.getStatus()==1){
                    mDataList=beanMasterMyCopy.getResponse();
                    responseMasterCopy(beanMasterMyCopy);

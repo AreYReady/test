@@ -13,6 +13,7 @@ import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.MyCallBack;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
@@ -29,6 +30,7 @@ import com.xkj.trade.mvp.main_trade.activity.v.MainTradeContentActivity;
 import com.xkj.trade.mvp.master.info.FragmentMasterInfo;
 import com.xkj.trade.mvp.master.info.MasterInfoActivity;
 import com.xkj.trade.utils.ACache;
+import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.ThreadHelper;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -121,7 +123,9 @@ public class FragmentMasterWatch extends BaseFragment {
         OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW_FOCUS_INFO, map, new MyCallBack() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                BeanWatchInfo beanWatchInfo = new Gson().fromJson(response.body().string(), BeanWatchInfo.class);
+                String s = AesEncryptionUtil.decodeUnicode(response.body().string());
+                BeanWatchInfo beanWatchInfo = new Gson().fromJson(s, new TypeToken<BeanWatchInfo>(){}.getType());
+                Log.i(TAG, "onResponse: 高手关注"+s);
                 if (beanWatchInfo.getStatus() == 1) {
                     responseWatch(beanWatchInfo);
                 }
@@ -221,9 +225,9 @@ public class FragmentMasterWatch extends BaseFragment {
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    String resp = "";
-                    Log.i(TAG, "onResponse: " + (resp = response.body().string()));
-                    BeanMasterRank info = new Gson().fromJson(resp, BeanMasterRank.class);
+                    String s = response.body().string();
+                    Log.i(TAG, "onResponse:高手排行版" + (s));
+                    BeanMasterRank info = new Gson().fromJson(s, BeanMasterRank.class);
                     if (info.getStatus() == 1) {
                         rank = info;
                     }

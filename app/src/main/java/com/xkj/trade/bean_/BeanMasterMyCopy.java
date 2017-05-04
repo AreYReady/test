@@ -9,22 +9,15 @@ import java.util.List;
 
 public class BeanMasterMyCopy {
 
+
     /**
+     * response : [{"copymoney":1200,"copynumber":12,"face_url":"","fstatus":1,"huiceper":0,"masterid":"88047196","name":"孙老师","profitper":0},{"copymoney":200,"copynumber":101,"face_url":"","fstatus":1,"huiceper":-1.33,"masterid":"88091551","name":"赵老师","profitper":0.76},{"copymoney":200,"copynumber":101,"face_url":"","fstatus":1,"huiceper":-0.54,"masterid":"88041947","name":"钱老师","profitper":-1.06},{"copymoney":300,"copynumber":102,"face_url":"","fstatus":1,"huiceper":-0.05,"masterid":"88071238","name":"王老师","profitper":-0.1},{"copymoney":2147493647,"copynumber":5002,"face_url":"/Uploads/faces/face1_20170304092932_655_HJ5WYRNV.jpg","fstatus":1,"huiceper":-0.57,"masterid":"88018011","name":"cp3","profitper":69.69}]
      * status : 1
-     * response : [{"fstatus":0,"face_url":"","copynumber":11,"copymoney":5238,"name":"123123","masterid":"88079553","profitper":4.87,"huiceper":-18.49}]
      */
 
     private int status;
     private List<ResponseBean> response;
-    private String error;
 
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
     public int getStatus() {
         return status;
     }
@@ -57,13 +50,13 @@ public class BeanMasterMyCopy {
         private int fstatus;
         private String face_url;
         private int copynumber;
-        private int copymoney;
+        private long copymoney;
         private String name;
         private String masterid;
         private double profitper;
         private double huiceper;
-
-        public ResponseBean(int fstatus, String face_url, int copynumber, int copymoney, String name, String masterid, double profitper, double huiceper) {
+        private Boolean uiStatus;
+        public ResponseBean(int fstatus, String face_url, int copynumber, long copymoney, String name, String masterid, double profitper, double huiceper) {
             this.fstatus = fstatus;
             this.face_url = face_url;
             this.copynumber = copynumber;
@@ -76,7 +69,7 @@ public class BeanMasterMyCopy {
         }
 
         public ResponseBean() {
-init();
+            init();
         }
 
         public Boolean getUiStatus() {
@@ -92,7 +85,7 @@ init();
 
         }
 
-        private Boolean uiStatus;
+
 
         public int getFstatus() {
             return fstatus;
@@ -118,7 +111,7 @@ init();
             this.copynumber = copynumber;
         }
 
-        public int getCopymoney() {
+        public long getCopymoney() {
             return copymoney;
         }
 

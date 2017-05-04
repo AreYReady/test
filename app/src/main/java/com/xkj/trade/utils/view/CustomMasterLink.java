@@ -71,6 +71,9 @@ public class CustomMasterLink extends View {
         Point firstPoint = null;
         Point lastPoint=null;
 
+        if(unit==0){
+            canvas.drawLine(0,getHeight()/2,width,getHeight()/2,mPaint);
+        }
 //        for(Point mPoint:mPointList){
         for(int i=0;i<mPointList.size();i++){
             Point mPoint=mPointList.get(i);
@@ -107,6 +110,7 @@ public class CustomMasterLink extends View {
                 }
             }
         }
+
         distance = getWidth()/ profitList.size();
         Log.i(TAG, "decodeData: "+getWidth()+"  "+getMeasuredWidth()+"  "+getHeight()+"  "+getMeasuredHeight()+"  "+rank.getName());
         try {
@@ -114,11 +118,14 @@ public class CustomMasterLink extends View {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+        if(unit==0){
+            return;
+        }
         String profit;
         for (int i = 0; i < profitList.size(); i++) {
             profit=profitList.get(i);
             try {
-                mPointList.add(new Point(i*distance,(int) MoneyUtil.div(MoneyUtil.subPrice(max, profit), unit)));
+                    mPointList.add(new Point(i*distance,(int) MoneyUtil.div(MoneyUtil.subPrice(max, profit), unit)));
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
