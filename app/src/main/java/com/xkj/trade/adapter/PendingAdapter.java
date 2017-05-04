@@ -72,7 +72,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
             @Override
             public void onClick(View v) {
                 mPosition=position;
-                if(mData.getStatus()!=0){
+                if(mDataList.get(position).getStatus()!=0){
 //                    isClick.remove(position);
                     mDataList.get(position).setStatus(0);
                     holder.llHide.setVisibility(View.GONE);
