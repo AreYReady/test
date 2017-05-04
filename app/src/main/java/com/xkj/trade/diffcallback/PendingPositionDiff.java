@@ -45,6 +45,10 @@ public class PendingPositionDiff extends DiffUtil.Callback {
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
         BeanPendingPosition.DataBean.ListBean beanOld = mOldDatas.get(oldItemPosition);
         BeanPendingPosition.DataBean.ListBean beanNew = mNewDatas.get(newItemPosition);
+
+        if(beanNew.getPrice()==null||beanOld.getPrice()==null){
+            return true;
+        }
         if(!beanOld.getPrice().equals(beanNew.getPrice())){
             return false;
         }

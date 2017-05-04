@@ -1049,7 +1049,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         }
         //刷新tag数据
         realTimeIndicator(realTimeIndicatorDataMap);
-        if (mMyFavorites.getVisibility() == View.VISIBLE) {
+        if (mMyFavorites!=null&&mMyFavorites.getVisibility() == View.VISIBLE) {
             //刷新我的收藏
             refreshMyFavorites(realTimeDataList.getQuotes());
         }

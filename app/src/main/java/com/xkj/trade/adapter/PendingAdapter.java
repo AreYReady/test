@@ -74,12 +74,12 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.MyViewHo
                 mPosition=position;
                 if(mData.getStatus()!=0){
 //                    isClick.remove(position);
-                    mData.setStatus(0);
+                    mDataList.get(position).setStatus(0);
                     holder.llHide.setVisibility(View.GONE);
                     holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.color_primary_2_light_transparent));
                 }else{
 //                    isClick.put(position,true);
-                    mData.setStatus(1);
+                    mDataList.get(position).setStatus(1);
                     holder.llHide.setVisibility(View.VISIBLE);
                     holder.llOnclick.setBackgroundColor(context.getResources().getColor(R.color.congratulation_joining_background_dark));
                 }

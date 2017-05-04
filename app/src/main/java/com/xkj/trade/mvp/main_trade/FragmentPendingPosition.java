@@ -158,6 +158,7 @@ public class FragmentPendingPosition extends BaseFragment  {
         if(beanRealTimeList.getQuotes()==null||mDataList==null){
             return;
         }
+        mBeanDupOpenList=  (new Gson().fromJson(new Gson().toJson(mDataList),new TypeToken<List<BeanPendingPosition.DataBean.ListBean>>(){}.getType()));
         for(RealTimeDataList.BeanRealTime beanRealTime:beanRealTimeList.getQuotes()){
             for(int i=0;i<mDataList.size();i++) {
                 listBean = mDataList.get(i);
