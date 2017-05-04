@@ -46,7 +46,7 @@ android {
             applicationIdSuffix ".temousa"
             buildConfigField 'String', 'API_URL', '"office.temousa.com"'
             buildConfigField 'String', 'web_URL', '"office.temousa.com"'
-            buildConfigField 'boolean', 'MASTER_OPEN', 'false'
+            buildConfigField 'boolean', 'MASTER_OPEN', 'true'
             resValue "string", "app_name", "temo"
         }
     }

@@ -181,6 +181,7 @@ public class FragmentMasterWatch extends BaseFragment {
             }
         }
     }
+
     private void notifyDataSetChange(){
         ThreadHelper.instance().runOnUiThread(mRunnable);
     }
