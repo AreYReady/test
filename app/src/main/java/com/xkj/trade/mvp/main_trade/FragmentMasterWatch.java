@@ -145,6 +145,16 @@ public class FragmentMasterWatch extends BaseFragment {
                 Log.i(TAG, "onResponse: 高手关注"+s);
                 if (beanWatchInfo.getStatus() == 1) {
                     responseWatch(beanWatchInfo);
+                }else{
+                    if(s.contains("no data")){
+                        mDataList.clear();
+                        ThreadHelper.instance().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mWatchAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -158,6 +168,7 @@ public class FragmentMasterWatch extends BaseFragment {
         });
     }
     private void responseWatch(BeanWatchInfo beanWatchInfo) {
+        mDataList=new ArrayList<>();
         for (BeanWatchInfo.ResponseBean bean : beanWatchInfo.getResponse()) {
             if (bean.getStatus() == 0)
                 mDataList.add(bean);

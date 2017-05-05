@@ -326,6 +326,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
             public boolean onQueryTextChange(String newText) {
                 mFilterDatas = checkFitData(mFilterDatas, mDatas, newText);
                 clearAndAddAll(mDupFilterDatas, mFilterDatas);
+                if(mMyFavoritesAdapter!=null)
                 mMyFavoritesAdapter.notifyDataSetChanged();
                 return true;
             }

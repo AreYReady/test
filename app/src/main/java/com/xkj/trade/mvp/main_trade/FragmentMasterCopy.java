@@ -33,6 +33,7 @@ import com.xkj.trade.utils.ThreadHelper;
 import com.xkj.trade.utils.ToashUtil;
 
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -101,19 +102,17 @@ public class FragmentMasterCopy extends BaseFragment {
 
            @Override
            public void onResponse(Call call, Response response) throws IOException {
-               ThreadHelper.instance().runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-
-                   }
-               });
-              hideSwipeRefresh();
+                 hideSwipeRefresh();
                String s = AesEncryptionUtil.decodeUnicode(response.body().string());
-               Log.i(TAG, "onResponse:高手复制 "+s);
+               Log.i(TAG, "onResponse:                    mDataList.clear();\n "+s);
                BeanMasterMyCopy beanMasterMyCopy=new Gson().fromJson(s, BeanMasterMyCopy.class);
                if(beanMasterMyCopy.getStatus()==1){
-                   mDataList=beanMasterMyCopy.getResponse();
                    responseMasterCopy(beanMasterMyCopy);
+               }else{
+                   if(s.contains("no data")){
+                       mDataList.clear();
+                       refresh();
+                   }
                }
            }
        });
@@ -141,21 +140,22 @@ public class FragmentMasterCopy extends BaseFragment {
             if(mCopyAdapter==null){
                 mRecyclerView.setAdapter(mCopyAdapter=new CopyAdapter(context,mDataList));
             }else{
-                mCopyAdapter.notifyDataSetChanged();
+                    mCopyAdapter.setDataList(mDataList);
+                    mCopyAdapter.notifyDataSetChanged();
             }
         }
     };
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void getNotifaticationChange(NotificationMasterStatus notificationMasterStatus){
         int i=isItemExist(mDataList,notificationMasterStatus);
         if(notificationMasterStatus.getFstatus()==1){
             if(notificationMasterStatus.getStatus()==0){
                 //检测复制状态，存在则删除，不存在不做处理
                     if(i>=0) {
+                        mCopyAdapter.notifyItemRemoved(i);
+                        mCopyAdapter.notifyItemRangeChanged(0,mDataList.size());
                         mDataList.remove(i);
-//                        mCopyAdapter.notifyItemRemoved(i);
-//                        mCopyAdapter.notifyItemRangeChanged(0,mDataList.size());
-                        refresh();
+//                        refresh();
 
                     }
             }else {
@@ -168,7 +168,7 @@ public class FragmentMasterCopy extends BaseFragment {
                                     1,masterRank.getFace_url(),masterRank.getCopynumber()
                                     ,masterRank.getCopymoney(),masterRank.getName(),masterRank.getLogin()
                                     ,masterRank.getProfitper(),masterRank.getHuiceper()));
-                            refresh();
+//                            refresh();
                         }
                     }
                 }
@@ -177,7 +177,9 @@ public class FragmentMasterCopy extends BaseFragment {
             //存在则删除，不存在不做处理
             if(i>=0){
                 mDataList.remove(i);
-                refresh();
+                mCopyAdapter.notifyItemRemoved(i);
+                mCopyAdapter.notifyItemRangeChanged(0,mDataList.size());
+                mDataList.remove(i);
             }
         }
     }

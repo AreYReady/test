@@ -50,6 +50,9 @@ public class CopyAdapter extends RecyclerView.Adapter<CopyAdapter.MyViewHolder>{
         this.context=context;
         this.mDataList=mDataList;
     }
+    public void setDataList( List<BeanMasterMyCopy.ResponseBean> mDataList){
+        this.mDataList=mDataList;
+    }
     @Override
     public CopyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         MyViewHolder viewHolder=new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.rv_item_social_card_master_brief,parent,false));
@@ -62,6 +65,13 @@ public class CopyAdapter extends RecyclerView.Adapter<CopyAdapter.MyViewHolder>{
         holder.tvName.setText(mDataList.get(position).getName());
         holder.watchButton.setVisibility(View.INVISIBLE);
         holder.actionButton.setText(R.string.uncopy);
+        if(responseBean.getUiStatus()){
+            holder.mRlContent.setVisibility(View.GONE);
+            holder.mllCover.setVisibility(View.VISIBLE);
+        }else {
+            holder.mRlContent.setVisibility(View.VISIBLE);
+            holder.mllCover.setVisibility(View.GONE);
+        }
         holder.actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
