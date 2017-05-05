@@ -131,7 +131,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                 }
             }
         });
-        holder.mTvRankNumber.setText("前"+mBeanMasterRank.getResponse().size());
+        holder.mTvRankNumber.setText(String.valueOf(position+1));
         holder.bWatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
