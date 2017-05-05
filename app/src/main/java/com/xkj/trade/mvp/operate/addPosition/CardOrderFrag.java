@@ -167,14 +167,14 @@ public class CardOrderFrag extends BaseFragment implements View.OnClickListener 
             public void onResponse(Call call, Response response) throws IOException {
                 String s = AesEncryptionUtil.decodeUnicode(response.body().string());
                 beanBaseResponse=new Gson().fromJson(s,BeanBaseResponse.class);
-                Log.i(TAG, "onResponse: "+beanBaseResponse.toString());
+                Log.i(TAG, "onResponse: 开仓"+beanBaseResponse.toString());
                 if(beanBaseResponse.getStatus()==1){
                     EventBus.getDefault().post(new BeanOpenPosition());
                     //发送通知activity关闭
 //                    EventBus.getDefault().post(beanBaseResponse);
                     showSucc();
                 }else{
-                    showFail();
+                    showFail("操作未成功：\n"+beanBaseResponse.getMsg());
                 }
             }
         });

@@ -149,7 +149,7 @@ public class DeletePositionFragment extends BaseFragment {
 //                    EventBus.getDefault().post(beanBaseResponse);
                     showSucc();
                 }else{
-                    showFail();
+                    showFail("操作未成功：\n"+beanBaseResponse.getMsg());
                 }
             }
         });

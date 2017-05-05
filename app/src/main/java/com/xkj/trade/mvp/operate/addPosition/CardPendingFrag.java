@@ -267,14 +267,14 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
             public void onResponse(Call call, Response response) throws IOException {
                 String s = AesEncryptionUtil.decodeUnicode(response.body().string());
                  beanBaseResponse=new Gson().fromJson(s,BeanBaseResponse.class);
+                Log.i(TAG, "onResponse: 开挂单"+s);
                 if (beanBaseResponse.getStatus() == 1) {
-                    Log.i(TAG, "onResponse: 开挂单");
                     EventBus.getDefault().post(new BeanPendingPosition());
                     showSucc();
                     //发送通知activity关闭
 //                    EventBus.getDefault().post(beanBaseResponse);
                 }else{
-                    showFail();
+                    showFail("操作未成功：\n"+beanBaseResponse.getMsg());
                 }
             }
         });

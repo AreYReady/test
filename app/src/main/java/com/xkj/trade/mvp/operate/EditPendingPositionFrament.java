@@ -194,7 +194,7 @@ public class EditPendingPositionFrament extends BaseFragment implements AddSubEd
                     notificationEditPendingPosition.setPrice(mCMoney.getMoneyString());
                     showSucc();
                 }else{
-                    showFail();
+                    showFail("操作未成功：\n"+beanBaseResponse.getMsg());
                 }
             }
         });

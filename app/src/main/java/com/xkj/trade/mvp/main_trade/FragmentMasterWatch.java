@@ -3,6 +3,7 @@ package com.xkj.trade.mvp.main_trade;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -59,6 +60,7 @@ public class FragmentMasterWatch extends BaseFragment {
     private List<BeanWatchInfo.ResponseBean> mDataList;
     private BeanAttentionTraderData mData;
     private WatchAdapter mWatchAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Nullable
     @Override
@@ -72,6 +74,13 @@ public class FragmentMasterWatch extends BaseFragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_item_content);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.setAdapter(mWatchAdapter = new WatchAdapter(context, mDataList));
+        mSwipeRefreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh_widget);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestWatch();
+            }
+        });
         mWatchAdapter.setWacthListener(new WatchAdapter.WatchListener() {
             @Override
             public void unWatch(final int position) {
@@ -105,12 +114,13 @@ public class FragmentMasterWatch extends BaseFragment {
                 }
             }
         });
-        mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        //未知原因，可能是因为ViewDragHelper和recycle多种嵌套导致fragment高度大于父类。暂不探究原理。代码动态计算高度
+        mSwipeRefreshLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                mRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                mRecyclerView.setLayoutParams(new RelativeLayout.LayoutParams(mRecyclerView.getWidth(), (int) MainTradeContentActivity.descHeight
-                        - (int) MainTradeContentActivity.flIndicatorHeight));
+                mSwipeRefreshLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                mSwipeRefreshLayout.setLayoutParams(new RelativeLayout.LayoutParams(mSwipeRefreshLayout.getWidth(),(int) MainTradeContentActivity.descHeight
+                        -(int)MainTradeContentActivity.flIndicatorHeight));
             }
         });
         requestWatch();
@@ -122,7 +132,14 @@ public class FragmentMasterWatch extends BaseFragment {
         map.put(RequestConstant.ACCOUNT, ACache.get(context).getAsString(RequestConstant.ACCOUNT));
         OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW_FOCUS_INFO, map, new MyCallBack() {
             @Override
+            public void onFailure(Call call, IOException e) {
+                super.onFailure(call, e);
+                hideSwipeRefresh();
+            }
+
+            @Override
             public void onResponse(Call call, Response response) throws IOException {
+                hideSwipeRefresh();
                 String s = AesEncryptionUtil.decodeUnicode(response.body().string());
                 BeanWatchInfo beanWatchInfo = new Gson().fromJson(s, new TypeToken<BeanWatchInfo>(){}.getType());
                 Log.i(TAG, "onResponse: 高手关注"+s);
@@ -132,7 +149,14 @@ public class FragmentMasterWatch extends BaseFragment {
             }
         });
     }
-
+    private void hideSwipeRefresh(){
+        ThreadHelper.instance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
     private void responseWatch(BeanWatchInfo beanWatchInfo) {
         for (BeanWatchInfo.ResponseBean bean : beanWatchInfo.getResponse()) {
             if (bean.getStatus() == 0)

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -33,6 +34,7 @@ import com.xkj.trade.mvp.main_trade.activity.v.MainTradeContentActivity;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.ThreadHelper;
+import com.xkj.trade.utils.ToashUtil;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -95,7 +97,14 @@ public class FragmentPendingPosition extends BaseFragment  {
         });
         requestData();
     }
-
+    private void hideSwipeRefresh(){
+        ThreadHelper.instance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
     private void requestData() {
         Map<String,String> map=new TreeMap<>();
         map.put(RequestConstant.LOGIN, AesEncryptionUtil.stringBase64toString(ACache.get(context).getAsString(RequestConstant.ACCOUNT)));
@@ -103,17 +112,24 @@ public class FragmentPendingPosition extends BaseFragment  {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.i(TAG, "onFailure: "+call.request());
+                hideSwipeRefresh();
+                ToashUtil.show(context,"挂单刷新失败", Toast.LENGTH_SHORT);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String re=response.body().string();
                 Log.i(TAG, "onResponse:挂单 "+call.request());
+                hideSwipeRefresh();
+
                 info=new Gson().fromJson(re,BeanPendingPosition.class);
+                if(info.getStatus()==0){
+                    return;
+                }
                 mDataList=info.getData().getList();
 //                SystemUtil.show(re,FragmentPendingPosition.class);
                 responseData();
-                requestSubSymbol();
+//                requestSubSymbol();
             }
         });
     }
@@ -134,7 +150,7 @@ public class FragmentPendingPosition extends BaseFragment  {
         ThreadHelper.instance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mSwipeRefreshLayout.setRefreshing(false);
+
                 mPendingAdapter.setData(mDataList);
                 mPendingAdapter.notifyDataSetChanged();
             }

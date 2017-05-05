@@ -75,7 +75,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
         holder.mName.setText(masterRank.getName());
         holder.mTvCopyCount.setText(String.valueOf(masterRank.getCopynumber()));
         holder.mTvExperienceTime.setText(masterRank.getTradeexperience() + " 天");
-        holder.mTvProfitper.setText(String.valueOf(masterRank.getProfitper()));
+        holder.mTvProfitper.setText(String.valueOf(masterRank.getProfitper())+"%");
         holder.mTvHuiceper.setText(String.valueOf(masterRank.getHuiceper()) + "%");
         holder.mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +131,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                 }
             }
         });
+        holder.mTvRankNumber.setText("前"+mBeanMasterRank.getResponse().size());
         holder.bWatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -333,6 +334,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
             mCoverCopy = (LinearLayout) itemView.findViewById(R.id.ll_cover_copy);
             mCoverUncopy = (RelativeLayout) itemView.findViewById(R.id.rl_cover_uncopy);
             mCoverUncopyPrompt = (TextView) itemView.findViewById(R.id.tv_cover_uncopy_prompt);
+            mTvRankNumber = (TextView) itemView.findViewById(R.id.tv_rank_number);
 
         }
 
@@ -355,6 +357,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
         CustomMasterLink mCustomMasterLink;
         ImageView mIvCopyDown;
         ImageView mIvUncopyDown;
+        TextView mTvRankNumber;
     }
 
     class MasterStatus {

@@ -2,6 +2,7 @@ package com.xkj.trade.mvp.master.rank;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,6 +33,7 @@ public class FragmentMaster extends BaseFragment implements MasterContract.View 
     private RecyclerView mRvMaster;
     private MasterAdapter mMasterAdapter;
     private MasterContract.Presenter mPresenter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
 
     @Nullable
@@ -46,6 +48,13 @@ public class FragmentMaster extends BaseFragment implements MasterContract.View 
         mRvMaster = (RecyclerView) view.findViewById(R.id.rv_master);
         mRvMaster.setLayoutManager(new LinearLayoutManager(context));
         mPresenter = new MasterPresenterImpl(context, this);
+        mSwipeRefreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh_widget);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.requestMasterRank("per");
+            }
+        });
     }
 
     @Override
@@ -76,7 +85,11 @@ public class FragmentMaster extends BaseFragment implements MasterContract.View 
         mHandler.post(new Runnable() {
             @Override
             public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+                if(mMasterAdapter==null)
                 mRvMaster.setAdapter(mMasterAdapter = new MasterAdapter(context, beanMasterRank));
+                else
+                    mMasterAdapter.notifyDataSetChanged();
             }
         });
     }

@@ -2,6 +2,7 @@ package com.xkj.trade.mvp.main_trade;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.xkj.trade.IO.okhttp.MyCallBack;
@@ -28,6 +30,7 @@ import com.xkj.trade.mvp.main_trade.activity.v.MainTradeContentActivity;
 import com.xkj.trade.utils.ACache;
 import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.ThreadHelper;
+import com.xkj.trade.utils.ToashUtil;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -50,6 +53,7 @@ public class FragmentMasterCopy extends BaseFragment {
     private List<BeanMasterMyCopy.ResponseBean> mDataList;
     private BeanAttentionTraderData mData;
     private CopyAdapter mCopyAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,11 +65,19 @@ public class FragmentMasterCopy extends BaseFragment {
     protected void initView() {
         mRecyclerView = (RecyclerView)view.findViewById(R.id.rv_item_content);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        mSwipeRefreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh_widget);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestMasterCopy();
+            }
+        });
+        //未知原因，可能是因为ViewDragHelper和recycle多种嵌套导致fragment高度大于父类。暂不探究原理。代码动态计算高度
+        mSwipeRefreshLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                mRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                mRecyclerView.setLayoutParams(new RelativeLayout.LayoutParams(mRecyclerView.getWidth(),(int) MainTradeContentActivity.descHeight
+                mSwipeRefreshLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                mSwipeRefreshLayout.setLayoutParams(new RelativeLayout.LayoutParams(mSwipeRefreshLayout.getWidth(),(int) MainTradeContentActivity.descHeight
                         -(int)MainTradeContentActivity.flIndicatorHeight));
             }
         });
@@ -81,7 +93,21 @@ public class FragmentMasterCopy extends BaseFragment {
        map.put(RequestConstant.ACCOUNT,ACache.get(context).getAsString(RequestConstant.ACCOUNT));
        OkhttpUtils.enqueue(UrlConstant.URL_MASTER_MY_COPY, map, new MyCallBack() {
            @Override
+           public void onFailure(Call call, IOException e) {
+               super.onFailure(call, e);
+              hideSwipeRefresh();
+               ToashUtil.show(context,"刷新失败", Toast.LENGTH_SHORT);
+           }
+
+           @Override
            public void onResponse(Call call, Response response) throws IOException {
+               ThreadHelper.instance().runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+
+                   }
+               });
+              hideSwipeRefresh();
                String s = AesEncryptionUtil.decodeUnicode(response.body().string());
                Log.i(TAG, "onResponse:高手复制 "+s);
                BeanMasterMyCopy beanMasterMyCopy=new Gson().fromJson(s, BeanMasterMyCopy.class);
@@ -94,6 +120,14 @@ public class FragmentMasterCopy extends BaseFragment {
     }
     private void refresh(){
         ThreadHelper.instance().runOnUiThread(mRunnable);
+    }
+    private void hideSwipeRefresh(){
+        ThreadHelper.instance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void responseMasterCopy(BeanMasterMyCopy beanMasterMyCopy) {

@@ -154,7 +154,7 @@ public class ClosePositionFragment extends BaseFragment {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.i(TAG, "onFailure: 平仓 " + call.request());
-                showFail(getString(R.string.action_fail_please_try_again));
+                showFail();
             }
 
             @Override
@@ -169,7 +169,7 @@ public class ClosePositionFragment extends BaseFragment {
 //                    EventBus.getDefault().post(new BeanBaseResponse());
                     showSucc();
                 }else{
-                    showFail(getString(R.string.action_fail_please_try_again));
+                    showFail("操作未成功：\n"+beanBaseResponse.getMsg());
                 }
             }
         });
