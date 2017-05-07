@@ -73,7 +73,7 @@ public class BeanWatchInfo {
         private int status;
         private String face_url;
         private int copynumber;
-        private int copymoney;
+        private long copymoney;
         private String name;
         private String focusid;
         private double profitper;
@@ -104,7 +104,7 @@ public class BeanWatchInfo {
             this.copynumber = copynumber;
         }
 
-        public int getCopymoney() {
+        public long getCopymoney() {
             return copymoney;
         }
 

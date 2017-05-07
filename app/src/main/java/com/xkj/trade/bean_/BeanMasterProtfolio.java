@@ -114,7 +114,7 @@ public class BeanMasterProtfolio {
             private String totalvolume;
             private float maxvolume;
             private int copynumber;
-            private int copymoney;
+            private long copymoney;
             private String profitper;
             private String winper;
             private String huiceper;
@@ -271,11 +271,11 @@ public class BeanMasterProtfolio {
                 this.copynumber = copynumber;
             }
 
-            public int getCopymoney() {
+            public long getCopymoney() {
                 return copymoney;
             }
 
-            public void setCopymoney(int copymoney) {
+            public void setCopymoney(long copymoney) {
                 this.copymoney = copymoney;
             }
 

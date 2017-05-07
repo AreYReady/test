@@ -11,6 +11,7 @@ import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.mvp.master.rank.contract.MasterContract;
 import com.xkj.trade.mvp.master.rank.presenter.MasterPresenterImpl;
 import com.xkj.trade.utils.ACache;
+import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.SystemUtil;
 
 import java.io.IOException;
@@ -52,9 +53,8 @@ public class MasterModelImpl implements MasterContract.Model{
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String resp = "";
-                Log.i(TAG, "onResponse: "+(resp=response.body().string()));
-               MyApplication.getInstance().rank= new Gson().fromJson(resp, BeanMasterRank.class);
+                String s = AesEncryptionUtil.decodeUnicode(response.body().string());
+               MyApplication.getInstance().rank= new Gson().fromJson(s, BeanMasterRank.class);
                 if(rank.getStatus()==1){
                     mPresenterListener.responseMasterRank(rank);
                 }

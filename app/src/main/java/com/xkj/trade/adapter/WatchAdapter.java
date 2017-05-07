@@ -22,6 +22,7 @@ import com.xkj.trade.bean_notification.NotificationMasterStatus;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
 import com.xkj.trade.utils.ACache;
+import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.SystemUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -172,7 +173,8 @@ public class WatchAdapter extends RecyclerView.Adapter<WatchAdapter.MyViewHolder
         OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW_NOFOCUS, map, new MyCallBack() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-               BeanBaseResponse beanBaseResponse= new Gson().fromJson(response.body().string(),BeanBaseResponse.class);
+                String s = AesEncryptionUtil.decodeUnicode(response.body().string());
+               BeanBaseResponse beanBaseResponse= new Gson().fromJson(s,BeanBaseResponse.class);
                 if(beanBaseResponse.getStatus()==1){
                     for(BeanMasterRank.MasterRank masterRank:rank.getResponse()){
                         if(masterRank.getLogin().equals(focusid)){

@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -83,6 +82,7 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
                 if(listener!=null){
                     if(editText.getText().toString().equals("")||editText.getText().toString().endsWith(".")){
                         amount="0";
+                        editText.setText("0");
                     }
                     handler.sendEmptyMessage(2);
                 }
@@ -98,7 +98,6 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         int eventAction = event.getAction();
-        Log.i(TAG, "onTouch: ");
         switch (v.getId()) {
             case R.id.tv_sub:
                 if (eventAction == MotionEvent.ACTION_DOWN) {
@@ -140,7 +139,6 @@ public class AddSubEditText extends FrameLayout implements View.OnTouchListener 
             while (isOnLongClick) {
                 try {
                     Thread.sleep(50);
-                    Log.i(TAG, "run: ");
                     amount=MoneyUtil.subPriceToString(amount,baseNumber);
                     if(Double.valueOf(amount)>=Double.valueOf(maxPrice)){
                         amount=maxPrice;

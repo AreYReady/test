@@ -3,6 +3,7 @@ package com.xkj.trade.mvp.main_trade;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xkj.trade.IO.okhttp.MyCallBack;
 import com.xkj.trade.IO.okhttp.OkhttpUtils;
 import com.xkj.trade.R;
@@ -29,6 +31,7 @@ import com.xkj.trade.mvp.main_trade.activity.v.MainTradeContentActivity;
 import com.xkj.trade.mvp.master.info.FragmentMasterInfo;
 import com.xkj.trade.mvp.master.info.MasterInfoActivity;
 import com.xkj.trade.utils.ACache;
+import com.xkj.trade.utils.AesEncryptionUtil;
 import com.xkj.trade.utils.ThreadHelper;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -57,6 +60,7 @@ public class FragmentMasterWatch extends BaseFragment {
     private List<BeanWatchInfo.ResponseBean> mDataList;
     private BeanAttentionTraderData mData;
     private WatchAdapter mWatchAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Nullable
     @Override
@@ -70,6 +74,13 @@ public class FragmentMasterWatch extends BaseFragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_item_content);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.setAdapter(mWatchAdapter = new WatchAdapter(context, mDataList));
+        mSwipeRefreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh_widget);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestWatch();
+            }
+        });
         mWatchAdapter.setWacthListener(new WatchAdapter.WatchListener() {
             @Override
             public void unWatch(final int position) {
@@ -103,12 +114,13 @@ public class FragmentMasterWatch extends BaseFragment {
                 }
             }
         });
-        mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        //未知原因，可能是因为ViewDragHelper和recycle多种嵌套导致fragment高度大于父类。暂不探究原理。代码动态计算高度
+        mSwipeRefreshLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                mRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                mRecyclerView.setLayoutParams(new RelativeLayout.LayoutParams(mRecyclerView.getWidth(), (int) MainTradeContentActivity.descHeight
-                        - (int) MainTradeContentActivity.flIndicatorHeight));
+                mSwipeRefreshLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                mSwipeRefreshLayout.setLayoutParams(new RelativeLayout.LayoutParams(mSwipeRefreshLayout.getWidth(),(int) MainTradeContentActivity.descHeight
+                        -(int)MainTradeContentActivity.flIndicatorHeight));
             }
         });
         requestWatch();
@@ -120,16 +132,43 @@ public class FragmentMasterWatch extends BaseFragment {
         map.put(RequestConstant.ACCOUNT, ACache.get(context).getAsString(RequestConstant.ACCOUNT));
         OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW_FOCUS_INFO, map, new MyCallBack() {
             @Override
+            public void onFailure(Call call, IOException e) {
+                super.onFailure(call, e);
+                hideSwipeRefresh();
+            }
+
+            @Override
             public void onResponse(Call call, Response response) throws IOException {
-                BeanWatchInfo beanWatchInfo = new Gson().fromJson(response.body().string(), BeanWatchInfo.class);
+                hideSwipeRefresh();
+                String s = AesEncryptionUtil.decodeUnicode(response.body().string());
+                BeanWatchInfo beanWatchInfo = new Gson().fromJson(s, new TypeToken<BeanWatchInfo>(){}.getType());
+                Log.i(TAG, "onResponse: 高手关注"+s);
                 if (beanWatchInfo.getStatus() == 1) {
                     responseWatch(beanWatchInfo);
+                }else{
+                    if(s.contains("no data")){
+                        mDataList.clear();
+                        ThreadHelper.instance().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mWatchAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
                 }
             }
         });
     }
-
+    private void hideSwipeRefresh(){
+        ThreadHelper.instance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
     private void responseWatch(BeanWatchInfo beanWatchInfo) {
+        mDataList=new ArrayList<>();
         for (BeanWatchInfo.ResponseBean bean : beanWatchInfo.getResponse()) {
             if (bean.getStatus() == 0)
                 mDataList.add(bean);
@@ -177,6 +216,7 @@ public class FragmentMasterWatch extends BaseFragment {
             }
         }
     }
+
     private void notifyDataSetChange(){
         ThreadHelper.instance().runOnUiThread(mRunnable);
     }
@@ -221,9 +261,9 @@ public class FragmentMasterWatch extends BaseFragment {
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    String resp = "";
-                    Log.i(TAG, "onResponse: " + (resp = response.body().string()));
-                    BeanMasterRank info = new Gson().fromJson(resp, BeanMasterRank.class);
+                    String s = response.body().string();
+                    Log.i(TAG, "onResponse:高手排行版" + (s));
+                    BeanMasterRank info = new Gson().fromJson(s, BeanMasterRank.class);
                     if (info.getStatus() == 1) {
                         rank = info;
                     }

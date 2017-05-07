@@ -75,7 +75,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
         holder.mName.setText(masterRank.getName());
         holder.mTvCopyCount.setText(String.valueOf(masterRank.getCopynumber()));
         holder.mTvExperienceTime.setText(masterRank.getTradeexperience() + " 天");
-        holder.mTvProfitper.setText(String.valueOf(masterRank.getProfitper()));
+        holder.mTvProfitper.setText(String.valueOf(masterRank.getProfitper())+"%");
         holder.mTvHuiceper.setText(String.valueOf(masterRank.getHuiceper()) + "%");
         holder.mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +131,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
                 }
             }
         });
+        holder.mTvRankNumber.setText(String.valueOf(position+1));
         holder.bWatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,7 +210,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
             OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW_NOFOCUS, map, new MyCallBack() {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    Log.i(TAG, "onResponse: " + response.body().string());
+                    Log.i(TAG, "onResponse: 取消关注" + response.body().string());
                     ThreadHelper.instance().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -226,7 +227,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
             OkhttpUtils.enqueue(UrlConstant.URL_MASTER_FOLLOW_FOCUS, map, new MyCallBack() {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    Log.i(TAG, "onResponse: " + response.body().string());
+                    Log.i(TAG, "onResponse: 关注" + response.body().string());
                     ThreadHelper.instance().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -249,7 +250,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
             public void onResponse(Call call, Response response) throws IOException {
                BeanBaseResponse info =new Gson().fromJson(response.body().string(),BeanBaseResponse.class);
                 if(info.getStatus()==1){
-                    Log.i(TAG, "onResponse: "+info.toString());
+                    Log.i(TAG, "onResponse:取消复制高手 "+info.toString());
                     rank.setStatus(0);
                         EventBus.getDefault().post(new NotificationMasterStatus(rank.getLogin(),rank.getFstatus(),rank.getStatus()));
 
@@ -274,7 +275,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String s = response.body().string();
-                Log.i(TAG, "onResponse: " + s);
+                Log.i(TAG, "onResponse: 复制" + s);
                 BeanMasterInfo info = new Gson().fromJson(s, BeanMasterInfo.class);
                 map.put(RequestConstant.FOLLOW_ID, ACache.get(context).getAsString(RequestConstant.ACCOUNT));
                 map.put(RequestConstant.COPY_MONEY, info.getResponse().getFollowfunds());
@@ -333,6 +334,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
             mCoverCopy = (LinearLayout) itemView.findViewById(R.id.ll_cover_copy);
             mCoverUncopy = (RelativeLayout) itemView.findViewById(R.id.rl_cover_uncopy);
             mCoverUncopyPrompt = (TextView) itemView.findViewById(R.id.tv_cover_uncopy_prompt);
+            mTvRankNumber = (TextView) itemView.findViewById(R.id.tv_rank_number);
 
         }
 
@@ -355,6 +357,7 @@ public class MasterAdapter extends RecyclerView.Adapter<MasterAdapter.MyHolder> 
         CustomMasterLink mCustomMasterLink;
         ImageView mIvCopyDown;
         ImageView mIvUncopyDown;
+        TextView mTvRankNumber;
     }
 
     class MasterStatus {

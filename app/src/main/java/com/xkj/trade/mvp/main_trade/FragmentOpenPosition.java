@@ -108,7 +108,7 @@ public class FragmentOpenPosition extends BaseFragment {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.i(TAG, "onFailure: "+call.request());
-                mSwipeRefreshLayout.setRefreshing(false);
+                hideSwipeRefresh();
                 ToashUtil.show(context,"获取数据失败，请重试", Toast.LENGTH_SHORT);
             }
 
@@ -117,12 +117,23 @@ public class FragmentOpenPosition extends BaseFragment {
                 String re=response.body().string();
                 Log.i(TAG, "onResponse:持仓数据 "+re);
                 mBeanOpenPosition=new Gson().fromJson(re,BeanOpenPosition.class);
-                requestSubSymbol();
+                hideSwipeRefresh();
+                if(mBeanOpenPosition.getStatus()==0){
+                    return;
+                }
+//                requestSubSymbol();
                 responseData();
             }
         });
     }
-
+    private void hideSwipeRefresh(){
+        ThreadHelper.instance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
     /**
      * 发送订阅所有打开仓类型数据。
      */
@@ -143,7 +154,7 @@ public class FragmentOpenPosition extends BaseFragment {
         ThreadHelper.instance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mSwipeRefreshLayout.setRefreshing(false);
+
                 mDataList=mBeanOpenPosition.getData().getList();
                 EventBus.getDefault().post(new NotificationPositionCount(mDataList.size()));
                 mOpenAdapter.setData(mDataList);

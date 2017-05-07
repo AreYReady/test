@@ -326,6 +326,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
             public boolean onQueryTextChange(String newText) {
                 mFilterDatas = checkFitData(mFilterDatas, mDatas, newText);
                 clearAndAddAll(mDupFilterDatas, mFilterDatas);
+                if(mMyFavoritesAdapter!=null)
                 mMyFavoritesAdapter.notifyDataSetChanged();
                 return true;
             }
@@ -1052,7 +1053,7 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
         }
         //刷新tag数据
         realTimeIndicator(realTimeIndicatorDataMap);
-        if (mMyFavorites.getVisibility() == View.VISIBLE) {
+        if (mMyFavorites!=null&&mMyFavorites.getVisibility() == View.VISIBLE) {
             //刷新我的收藏
             refreshMyFavorites(realTimeDataList.getQuotes());
         }

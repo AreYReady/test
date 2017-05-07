@@ -103,7 +103,12 @@
     <style name="TextDesc">
         <item name="android:textSize">15.0sp</item>
         <item name="android:textColor">@color/common_signin_btn_light_text_disabled</item>
-    </style> <style name="TextDescWhile">
+    </style>
+    <style name="TextDesc_small">
+        <item name="android:textSize">13.0sp</item>
+        <item name="android:textColor">@color/common_signin_btn_light_text_disabled</item>
+    </style>
+     <style name="TextDescWhile">
         <item name="android:textSize">15.0sp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>

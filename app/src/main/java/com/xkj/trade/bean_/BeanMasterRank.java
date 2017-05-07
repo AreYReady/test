@@ -60,7 +60,7 @@ public class BeanMasterRank {
             this.status=status;
             this.login=login;
         }
-        private int copymoney;
+        private long copymoney;
         private int copynumber;
         private String country;
         private String face_url;
@@ -77,7 +77,7 @@ public class BeanMasterRank {
         private String tradeway;
         private List<String> data;
 
-        public int getCopymoney() {
+        public long getCopymoney() {
             return copymoney;
         }
 

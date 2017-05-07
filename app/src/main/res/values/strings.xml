@@ -204,7 +204,7 @@
 请联系支持人员。"</string>
     <string name="failed_to_retrieve_positions">无法检索仓位</string>
     <string name="failed_to_update_pending_order">无法更新挂单</string>
-    <string name="favorites_num">收藏夹 (%s)</string>
+    <string name="favorites_num">收藏夹</string>
     <string name="featured">推荐</string>
     <string name="feedback">反馈</string>
     <string name="fifteen_m">15分</string>

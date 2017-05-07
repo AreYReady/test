@@ -205,9 +205,6 @@ public class DataUtil {
             }
             if (symbol.substring(symbol.length()-3, symbol.length()).equals("USD")) {
                 //直接盘:1手一点的点值为 10美元,
-//                String a=MainTradeContentFrag.realTimeMap.get("XAUUSD").getDigits();
-//                Log.i("getProfit", "getProfit: "+a);
-                int digits=openPrices.length()-openPrices.indexOf(".");
                 return MoneyUtil.moneyFormat(diffSpace*Double.valueOf(Math.pow(10,Double.valueOf(MainTradeContentFrag.mDigitsList.get(symbol)))*Double.valueOf(volume)), 2);
             } else if (symbol.substring(0, 3).equals("USD")) {
                 //间接盘
@@ -229,7 +226,6 @@ public class DataUtil {
                 //交叉盘
                 //例如： EUR/GBP报价为 0.9036, 于此同时 EUR/USD报价为 1.5021,点值计算如下（EUR/GBP最小变动价格为 0.0001）：
 //                标准手一点点差 = （100,000 X 0.0001 X 1.5021）/ 0.9036 = $16.62
-
                 return String.valueOf(MoneyUtil.div(VOLUME_MONEY * Double.valueOf(volume)
                         * diffSpace
                         * (Double.valueOf(bidString)), Double.valueOf(currentPrices), 2));

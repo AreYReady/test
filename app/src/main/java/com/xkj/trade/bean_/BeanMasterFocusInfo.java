@@ -56,8 +56,8 @@ public class BeanMasterFocusInfo {
 
         private int status;
         private String face_url;
-        private int copynumber;
-        private int copymoney;
+        private long copynumber;
+        private long copymoney;
         private String name;
         private String focusid;
         private double profitper;
@@ -79,7 +79,7 @@ public class BeanMasterFocusInfo {
             this.face_url = face_url;
         }
 
-        public int getCopynumber() {
+        public long getCopynumber() {
             return copynumber;
         }
 
@@ -87,7 +87,7 @@ public class BeanMasterFocusInfo {
             this.copynumber = copynumber;
         }
 
-        public int getCopymoney() {
+        public long getCopymoney() {
             return copymoney;
         }
 

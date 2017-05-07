@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape android:shape="rectangle"
+       xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:bottomLeftRadius="90dip"
+             android:topLeftRadius="90dip">
+
+    </corners>
+    <solid android:color="@color/background_show_trade"/>
+</shape>
