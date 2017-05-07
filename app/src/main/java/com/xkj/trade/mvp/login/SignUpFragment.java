@@ -202,7 +202,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
                             });
                         }else{
                             title="注册失败";
-                            showFail();
+                            showFail(String.format(getString(R.string.action_fail),beanSignUpInfo.getTips()!=null?beanSignUpInfo.getTips():beanSignUpInfo.getMsg()));
                         }
                     }
                 });

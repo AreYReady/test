@@ -266,8 +266,7 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String s="";
-                Log.i(TAG, "onResponse: " + call.request());
-                Log.i(TAG, "onResponse: " + (s=response.body().string()));
+                Log.i(TAG, "onResponse:开挂单 " + (s=response.body().string()));
                  beanBaseResponse=new Gson().fromJson(s,BeanBaseResponse.class);
                 if (beanBaseResponse.getStatus() == 1) {
                     EventBus.getDefault().post(new BeanPendingPosition());
@@ -275,7 +274,7 @@ public class CardPendingFrag extends BaseFragment implements View.OnClickListene
                     //发送通知activity关闭
 //                    EventBus.getDefault().post(beanBaseResponse);
                 }else{
-                    showFail();
+                    showFail(String.format(getString(R.string.action_fail),beanBaseResponse.getTips()!=null?beanBaseResponse.getTips():beanBaseResponse.getMsg()));
                 }
             }
         });

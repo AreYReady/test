@@ -12,7 +12,16 @@ public class BeanSignUpInfo
      * msg : success
      * data : {"mt4":{"aid":"158","name":"adfa","login":88058119,"password":"bh492zs","check_status":1,"password_investor":"jdncrx3","create_at":"2017-04-26 09:55:33"}}
      */
+    //后面增加的类
+    public String getTips() {
+        return tips;
+    }
 
+    public void setTips(String tips) {
+        this.tips = tips;
+    }
+
+    String tips;
     private int status;
     private String msg;
     private DataBean data;

@@ -33,7 +33,7 @@ public class UserLoginPresenter {
        result=mUserLoginModel.login(beanLoginData);
     }
     //登入结果处理
-    public void loginResult(final UserLoginModelImpl.ResultEnum mResultEnum){
+    public void loginResult(final UserLoginModelImpl.ResultEnum mResultEnum, final String msg){
         Log.i(TAG, "loginResult: 执行了");
         mHandler.post(new Runnable() {
             @Override
@@ -42,7 +42,7 @@ public class UserLoginPresenter {
                 if(mResultEnum== UserLoginModelImpl.ResultEnum.succ){
                     mLoginActivityInterface.toMainActivity();
                 }else {
-                    mLoginActivityInterface.showFaidPromt(mResultEnum);
+                    mLoginActivityInterface.showFaidPromt(mResultEnum,msg);
                 }
             }
         });

@@ -228,7 +228,7 @@ public class EditPositionFragment extends BaseFragment implements AddSubEditText
                     notificationEditPosition.setOrder(mData.getOrder());
                     showSucc();
                 }else {
-                    showFail();
+                    showFail(String.format(getString(R.string.action_fail),beanBaseResponse.getTips()!=null?beanBaseResponse.getTips():beanBaseResponse.getMsg()));
                 }
             }
         });

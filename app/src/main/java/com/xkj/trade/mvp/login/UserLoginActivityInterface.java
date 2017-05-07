@@ -9,7 +9,7 @@ import android.content.Context;
 
 public interface UserLoginActivityInterface {
     void toMainActivity();
-    void showFaidPromt(UserLoginModelImpl.ResultEnum resultEnum);
+    void showFaidPromt(UserLoginModelImpl.ResultEnum resultEnum,String msg);
     void hintLoading();
     void showLoading();
     Context getContext();

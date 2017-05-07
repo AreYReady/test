@@ -7,16 +7,15 @@ import java.util.List;
  * TODO:
  * {@link com.xkj.trade.mvp.main_trade.fragment_content.v.MainTradeContentFrag#enterOrder(BeanOpenPosition)}}
  */
-public class BeanOpenPosition {
+public class BeanOpenPosition  {
 
     /**
      * status : 1
      * msg : success
      * data : {"total":6,"list":[{"closeprice":"1.05815","cmd":"sell","commission":"0.0","openprice":"1.05960","opentime":"2017-02-14 09:49:02","order":4524102,"profit":"1.45","sl":"0.0","swap":"-0.01","symbol":"EURUSD","tp":"0.0","volume":"0.01","login":"10001"},{"closeprice":"1.05815","cmd":"sell","commission":"0.0","openprice":"1.05960","opentime":"2017-02-14 09:49:07","order":4524103,"profit":"2.90","sl":"0.0","swap":"-0.01","symbol":"EURUSD","tp":"0.0","volume":"0.02","login":"10001"},{"closeprice":"1.05815","cmd":"sell","commission":"0.0","openprice":"1.06285","opentime":"2017-02-14 17:05:15","order":4524111,"profit":"4.70","sl":"0.0","swap":"-0.01","symbol":"EURUSD","tp":"0.0","volume":"0.01","login":"10001"},{"closeprice":"1.05793","cmd":"buy","commission":"0.0","openprice":"1.06303","opentime":"2017-02-14 17:06:43","order":4524112,"profit":"-5.10","sl":"0.0","swap":"-0.02","symbol":"EURUSD","tp":"0.0","volume":"0.01","login":"10001"},{"closeprice":"1.05815","cmd":"sell","commission":"0.0","openprice":"1.06285","opentime":"2017-02-14 17:06:53","order":4524113,"profit":"4.70","sl":"0.0","swap":"-0.01","symbol":"EURUSD","tp":"0.0","volume":"0.01","login":"10001"},{"closeprice":"1.05815","cmd":"sell","commission":"0.0","openprice":"1.05771","opentime":"2017-02-15 11:05:32","order":4524127,"profit":"-0.44","sl":"0.0","swap":"0.0","symbol":"EURUSD","tp":"0.0","volume":"0.01","login":"10001"}]}
      */
-
-    private int status;
-    private String msg;
+    int status;
+    String msg;
     private DataBean data;
 
     public int getStatus() {

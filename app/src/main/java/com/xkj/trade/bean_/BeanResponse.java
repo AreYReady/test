@@ -7,7 +7,7 @@ import org.json.JSONStringer;
  * TODO:返回实体类
  */
 
-public class BeanResponse {
+public class BeanResponse extends BeanBaseResponse{
     int status;
     String msg;
     JSONStringer data;

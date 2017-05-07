@@ -149,7 +149,7 @@ public class DeletePositionFragment extends BaseFragment {
 //                    EventBus.getDefault().post(beanBaseResponse);
                     showSucc();
                 }else{
-                    showFail();
+                    showFail(String.format(getString(R.string.action_fail),beanBaseResponse.getTips()!=null?beanBaseResponse.getTips():beanBaseResponse.getMsg()));
                 }
             }
         });

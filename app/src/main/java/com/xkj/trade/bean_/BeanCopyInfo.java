@@ -14,6 +14,7 @@ public class BeanCopyInfo {
      * response : [{"fstatus":1,"face_url":"","copynumber":6,"copymoney":200,"name":"喵碧咪mt4-01","masterid":"88002253","profitper":-130.01,"huiceper":-103.97}]
      */
 
+
     private int status;
     private List<ResponseBean> response;
 

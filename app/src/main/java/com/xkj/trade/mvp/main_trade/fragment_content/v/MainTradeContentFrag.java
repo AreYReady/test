@@ -677,6 +677,9 @@ public class MainTradeContentFrag extends BaseFragment implements MainTradeFragL
             public void onPageScrollStateChanged(int state) {
                 if (state == ViewPager.SCROLL_STATE_IDLE) {
                     isScroll = false;
+                    if(mPosition>=subSymbols.size()){
+                        mPosition=subSymbols.size()-1;
+                    }
                     if (!symbol.equals(subSymbols.get(mPosition).getSymbol())) {
                         symbol = subSymbols.get(mPosition).getSymbol();
                         MyApplication.getInstance().beanIndicatorData = subSymbols.get(mPosition);

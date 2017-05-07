@@ -60,9 +60,9 @@ public class LoginFragment extends BaseFragment implements UserLoginActivityInte
     }
 
     @Override
-    public void showFaidPromt(UserLoginModelImpl.ResultEnum resultEnum) {
+    public void showFaidPromt(UserLoginModelImpl.ResultEnum resultEnum,String msg) {
         hintLoading();
-        ToashUtil.showShort(context,"登入有问题");
+        ToashUtil.showShort(context,"操作失败   \n"+msg);
     }
 
 

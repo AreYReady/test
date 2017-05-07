@@ -68,6 +68,7 @@
     <string name="account_summary">账户摘要</string>
     <string name="action">操作</string>
     <string name="action_fail_please_try_again">操作失败，请重新操作</string>
+    <string name="action_fail">操作失败\n %s</string>
     <string name="action_succ">操作成功</string>
     <string name="activity">活动</string>
     <string name="all">全部</string>

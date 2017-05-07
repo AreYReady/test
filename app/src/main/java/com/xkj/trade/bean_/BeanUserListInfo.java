@@ -14,7 +14,6 @@ public class BeanUserListInfo extends BeanBaseResponse {
      * msg : success
      * status : 1
      */
-
     private BeanUserList data;
 
     public BeanUserList getData() {

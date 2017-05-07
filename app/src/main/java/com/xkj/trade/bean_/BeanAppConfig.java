@@ -16,6 +16,15 @@ public class BeanAppConfig {
 
     private int status;
     private MsgBean msg;
+    public String getTips() {
+        return tips;
+    }
+
+    public void setTips(String tips) {
+        this.tips = tips;
+    }
+
+    String tips;
 
     public int getStatus() {
         return status;

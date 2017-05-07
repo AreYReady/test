@@ -12,6 +12,16 @@ public class BeanBaseResponse {
     String msg;
     String response;
 
+    public String getTips() {
+        return tips;
+    }
+
+    public void setTips(String tips) {
+        this.tips = tips;
+    }
+
+    String tips;
+
     public int getStatus() {
         return status;
     }

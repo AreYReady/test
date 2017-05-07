@@ -65,6 +65,7 @@ public interface RequestConstant {
     String PHONE="phone";
     String EMAIL="email";
     String LEVERAGE="leverage";
+    String API_TIPS ="apitips";
 
 
 

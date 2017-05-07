@@ -163,6 +163,7 @@ public class DataUtil {
         TreeMap<String, String> map = new TreeMap<>();
         map.put(RequestConstant.API_ID, ACache.get(MyApplication.getInstance().getApplicationContext()).getAsString(RequestConstant.API_ID));
         map.put(RequestConstant.API_TIME, DateUtils.getShowTime(BeanCurrentServerTime.instance.getCurrentServerTime()));
+        map.put(RequestConstant.API_TIPS,"zh-cn");
         return map;
     }
 

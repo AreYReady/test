@@ -13,7 +13,7 @@ import com.xkj.trade.bean.BeanSymbolConfig;
 import com.xkj.trade.bean.BeanUnRegister;
 import com.xkj.trade.bean.BeanUserLoginData;
 import com.xkj.trade.bean.EventBusAllSymbol;
-import com.xkj.trade.bean_.BeanResponse;
+import com.xkj.trade.bean_.BeanBaseResponse;
 import com.xkj.trade.bean_.BeanServerTimeForHttp;
 import com.xkj.trade.constant.CacheKeyConstant;
 import com.xkj.trade.constant.RequestConstant;
@@ -92,7 +92,7 @@ public class UserLoginModelImpl implements UserLoginModel {
                 public void onFailure(Call call, IOException e) {
                     Log.i(TAG, "onFailure: "+call.request()+e.getMessage());
                     mResultEnum=ResultEnum.erro;
-                    mUserLoginPresenter.loginResult(mResultEnum);
+                    mUserLoginPresenter.loginResult(mResultEnum,"连接失败，请检查网络");
                 }
 
                 @Override
@@ -104,7 +104,7 @@ public class UserLoginModelImpl implements UserLoginModel {
                             i--;
                             ACache.get(mContext).put(CacheKeyConstant.CACLE_APP_CONFIG,response.body().string());
                             if(i==0){
-                                mUserLoginPresenter.loginResult(mResultEnum);
+                                mUserLoginPresenter.loginResult(mResultEnum,"");
                             }
                         }
                     });
@@ -114,6 +114,8 @@ public class UserLoginModelImpl implements UserLoginModel {
                     Log.i(TAG, "onResponse: "+s);
                     BeanCurrentServerTime.getInstance(DateUtils.getOrderStartTime(beanServerTimeForHttp.getData(),"yyyyMMddHHmmss"));
                     Log.i(TAG, "onResponse: "+DateUtils.getShowTime(DateUtils.getOrderStartTime(beanServerTimeForHttp.getData(),"yyyyMMddHHmmss")));
+                    Log.i(TAG, "onResponse: "+DateUtils.getOrderStartTime(beanServerTimeForHttp.getData(),"yyyyMMddHHmmss"));
+                    Log.i(TAG, "onResponse: "+DateUtils.getOrderStartTime(beanServerTimeForHttp.getData(),"yyyyMMddHHmmss"));
                     TreeMap<String,String> map=new TreeMap<>();
                     map.put(RequestConstant.ACCOUNT,AesEncryptionUtil.stringBase64toString(beanLoginData.getLogin()));
 //                    map.put(RequestConstant.API_ID, ACache.get(mContext).getAsString(RequestConstant.API_ID));
@@ -127,14 +129,14 @@ public class UserLoginModelImpl implements UserLoginModel {
                         public void onFailure(Call call, IOException e) {
                             Log.i(TAG, "onFailure: 登入失败");
                             mResultEnum=ResultEnum.erro;
-                            mUserLoginPresenter.loginResult(mResultEnum);
+                            mUserLoginPresenter.loginResult(mResultEnum,"连接失败，请检查网络");
                         }
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
 
                             String result;
-                            BeanResponse beanResponse = new Gson().fromJson(result = response.body().string(), BeanResponse.class);
+                            BeanBaseResponse beanResponse = new Gson().fromJson(result = response.body().string(), BeanBaseResponse.class);
                             if(beanResponse.getStatus()==1){
                                 Log.i(TAG, "onResponse: 登入成功"+result);
                                 mResultEnum=ResultEnum.succ;
@@ -144,7 +146,7 @@ public class UserLoginModelImpl implements UserLoginModel {
                             }
                             i--;
                             if(i==0) {
-                                mUserLoginPresenter.loginResult(mResultEnum);
+                                mUserLoginPresenter.loginResult(mResultEnum,beanResponse.getTips()==null?beanResponse.getMsg():beanResponse.getTips());
                             }
                         }
                     });

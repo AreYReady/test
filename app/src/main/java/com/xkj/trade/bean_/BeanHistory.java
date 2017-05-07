@@ -11,6 +11,7 @@ import java.util.List;
 public class BeanHistory{
     int status;
     String msg;
+
     BeanHistoryData data;
 
     public class BeanHistoryData {
