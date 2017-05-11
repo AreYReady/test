@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.xkj.trade.R;
 
@@ -22,8 +23,15 @@ public class LoadingDialog {
     AnimationDrawable animationDrawable;
     private Context mContext;
     LinearLayout layout;
+    public LoadingDialog(Context context){
+        initView(context,null);
+    }
 
     public LoadingDialog(Context context, String msg) {
+        initView(context, msg);
+    }
+
+    private void initView(Context context, String msg) {
         mContext=context;
         // 首先得到整个View
         View view = LayoutInflater.from(context).inflate(
@@ -33,11 +41,13 @@ public class LoadingDialog {
         // 页面中的LoadingView
 //        mLoadingView = (LVCircularRing) view.findViewById(R.id.lv_circularring);
         // 页面中显示文本
-//        TextView loadingText = (TextView) view.findViewById(R.id.loading_text);
+        if(msg!=null) {
+            TextView loadingText = (TextView) view.findViewById(R.id.loading_text);
+            loadingText.setText(msg);
+        }
         ImageView imageView = (ImageView) view.findViewById(R.id.iv_animation);
         animationDrawable = (AnimationDrawable) imageView.getDrawable();
-        // 显示文本
-//        loadingText.setText(msg);
+//         显示文本
         // 创建自定义样式的Dialog
         mLoadingDialog = new Dialog(context, R.style.loading_dialog);
         // 设置返回键无效

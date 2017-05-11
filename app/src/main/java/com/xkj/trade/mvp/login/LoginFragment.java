@@ -78,7 +78,7 @@ public class LoginFragment extends BaseFragment implements UserLoginActivityInte
     @Override
     public void initData() {
         mUserLoginPresenter=new UserLoginPresenter(this,Handler,getContext());
-        ACache.get(context).put(RequestConstant.API_ID,"crm1");
+
     }
 
 

@@ -372,21 +372,21 @@ public class MainTradeContentActivity extends BaseActivity
         }
     }
 
-    @Override
-    protected void hideNetWorkPrompt() {
-        super.hideNetWorkPrompt();
-        if (llNetworkPrompt != null && llNetworkPrompt.getVisibility() != View.GONE) {
-            llNetworkPrompt.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    protected void showNetWorkPrompt() {
-        super.showNetWorkPrompt();
-        if (llNetworkPrompt != null && llNetworkPrompt.getVisibility() != View.VISIBLE) {
-            llNetworkPrompt.setVisibility(View.VISIBLE);
-        }
-    }
+//    @Override
+//    protected void hideNetWorkPrompt() {
+//        super.hideNetWorkPrompt();
+//        if (llNetworkPrompt != null && llNetworkPrompt.getVisibility() != View.GONE) {
+//            llNetworkPrompt.setVisibility(View.GONE);
+//        }
+//    }
+//
+//    @Override
+//    protected void showNetWorkPrompt() {
+//        super.showNetWorkPrompt();
+//        if (llNetworkPrompt != null && llNetworkPrompt.getVisibility() != View.VISIBLE) {
+//            llNetworkPrompt.setVisibility(View.VISIBLE);
+//        }
+//    }
 
     public Handler handler = new Handler() {
         @Override

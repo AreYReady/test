@@ -263,7 +263,7 @@ public class FragmentMasterWatch extends BaseFragment {
                 public void onResponse(Call call, Response response) throws IOException {
                     String s = response.body().string();
                     Log.i(TAG, "onResponse:高手排行版" + (s));
-                    BeanMasterRank info = new Gson().fromJson(s, BeanMasterRank.class);
+                    BeanMasterRank info = new Gson().fromJson(s, new TypeToken<BeanMasterRank>(){}.getType());
                     if (info.getStatus() == 1) {
                         rank = info;
                     }

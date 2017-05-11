@@ -2,19 +2,17 @@ package com.xkj.trade.base;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
-import com.xkj.trade.bean.BeanHeartResponse;
+import com.xkj.trade.IO.okhttp.ChatWebSocket;
 import com.xkj.trade.bean.BeanUnRegister;
-import com.xkj.trade.bean.ResponseEvent;
-import com.xkj.trade.constant.MessageType;
-import com.xkj.trade.handler.HandlerSend;
-import com.xkj.trade.mvp.login.UserLoginPresenter;
+import com.xkj.trade.bean_notification.NotificationConnectStatus;
 import com.xkj.trade.utils.SystemUtil;
+import com.xkj.trade.utils.view.LoadingDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -23,6 +21,7 @@ import org.greenrobot.eventbus.ThreadMode;
 public  abstract class BaseActivity extends AppCompatActivity {
     protected String TAG= SystemUtil.getTAG(this);
     protected Handler mHandler;
+    private LoadingDialog mLoadingDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,50 +61,56 @@ public  abstract class BaseActivity extends AppCompatActivity {
         super.onRestart();
         Log.i(TAG, "onRestart: ");
     }
-
-    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
-    public void getHander(Handler handler){
-        Log.i(TAG, "getHandler: ");
-        mHandler=handler;
-    }
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDisconnectFromServer(String result) {
-        if (result.equalsIgnoreCase(UserLoginPresenter.DISCONNECT_FROM_SERVER)) {
-            showNetWorkPrompt();
-            Log.i(TAG, "onDisconnectFromServer: ");
-            EventBus.getDefault().removeAllStickyEvents();
-            mHandler.sendEmptyMessage(HandlerSend.CONNECT);
+    protected  void notificationConnectStatus(NotificationConnectStatus notificationConnectStatus){
+        switch (notificationConnectStatus.getConnectStatus()){
+            case YES:
+                hideNetWorkPrompt();
+                if(cdt!=null){
+                    cdt.cancel();
+                }
+                break;
+            case NO:
+//                countDonwTime();
+                showNetWorkPrompt();
+                break;
+
         }
     }
-    /**
-     * 客户端主动发送心跳
-     */
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
-    public void sendHeartBeat(BeanHeartResponse beanHeartResponse){
-        if(mHandler!=null){
-            Log.i(TAG, "sendHeartBeat: ");
-            Message message = new Message();
-            message.obj = (MessageType.HEAT);
-            mHandler.sendMessage(message);
-        }
-    }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getRespond(ResponseEvent responseEvent){
-        Log.i(TAG, "getRespond: 登入成功");
-        hideNetWorkPrompt();
-    }
-
     /**
      * 网咯异常，显示提示
      */
     protected  void showNetWorkPrompt(){
-
+        if(mLoadingDialog==null){
+            mLoadingDialog=new LoadingDialog(this,"网络连接失败，正在重新连接中");
+        }
+        if(!mLoadingDialog.isShow()) {
+            mLoadingDialog.show();
+        }
+        ChatWebSocket.getChartWebSocket();
     }
 
     /**
      * 网咯正常，隐藏提示,
      */
     protected void hideNetWorkPrompt(){
+        if(mLoadingDialog!=null&&mLoadingDialog.isShow()){
+            mLoadingDialog.close();
+        }
     }
+    CountDownTimer cdt;
+    private void countDonwTime(){
+        cdt = new CountDownTimer(Integer.MAX_VALUE, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                Log.i(TAG, "onTick: 定时器连接开启");
+                showNetWorkPrompt();
+            }
+            @Override
+            public void onFinish() {
 
+            }
+        };
+        cdt.start();
+    }
 }

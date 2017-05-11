@@ -7,6 +7,7 @@ import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean.BeanUserLoginDataSocket;
 import com.xkj.trade.bean.RealTimeDataList;
 import com.xkj.trade.bean.ResponseEvent;
+import com.xkj.trade.bean_notification.NotificationConnectStatus;
 import com.xkj.trade.constant.MessageType;
 import com.xkj.trade.constant.RequestConstant;
 import com.xkj.trade.constant.UrlConstant;
@@ -59,6 +60,9 @@ public class ChatWebSocket  extends WebSocketListener {
                     Log.i(TAG, "handleResult:发送实时数据=  " + resultMessage);
                     EventBus.getDefault().post(realTimeDataList);
                     break;
+                default:
+                    Log.i(TAG, "onMessage: "+resultMessage);
+                    break;
             }
         }
 
@@ -79,8 +83,11 @@ public class ChatWebSocket  extends WebSocketListener {
 
     @Override
     public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-        Log.i(TAG, "onFailure: ");
+        Log.i(TAG, "onFailure: socket连接失败");
         t.printStackTrace();
+        webSocket.close(1000, null);
+        mChatWebSocket=null;
+        EventBus.getDefault().post(new NotificationConnectStatus(NotificationConnectStatus.ConnectStatus.NO));
     }
 
     /**
@@ -91,6 +98,7 @@ public class ChatWebSocket  extends WebSocketListener {
         Request request = new Request.Builder().url(UrlConstant.WS_URL).build();
         client.newWebSocket(request, this);
         client.dispatcher().executorService().shutdown();
+
     }
 
     /**
@@ -101,6 +109,7 @@ public class ChatWebSocket  extends WebSocketListener {
     public boolean sendMessage(String s){
         if(mWebSocket==null)
             return false;
+        EventBus.getDefault().post(new NotificationConnectStatus(NotificationConnectStatus.ConnectStatus.YES));
         return mWebSocket.send(s);
     }
 
@@ -119,7 +128,6 @@ public class ChatWebSocket  extends WebSocketListener {
             mChatWebSocket =new ChatWebSocket();
             mChatWebSocket.run();
         }
-
         return mChatWebSocket;
     }
 }

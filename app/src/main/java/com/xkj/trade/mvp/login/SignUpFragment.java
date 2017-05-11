@@ -150,6 +150,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
         mPhonePrompt.setText("你输入的电话号码不符合格式，请重新输入");
         mEmailPrompt.setText("你输入的邮箱不符合格式，请重新输入");
         mLoginNamePrompt.setText("昵称不能为空");
+
     }
 
     @Override
@@ -190,8 +191,8 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
                         final BeanSignUpInfo beanSignUpInfo=new Gson().fromJson(response.body().string(), BeanSignUpInfo.class);
                         Log.i(TAG, "onResponse: 注册" +new Gson().toJson(beanSignUpInfo));
                         if(beanSignUpInfo.getStatus()==1){
-                            BeanSignUpInfo.DataBean.Mt4Bean mt4 = beanSignUpInfo.getData().getMt4();
                             title="注册成功";
+                            BeanSignUpInfo.DataBean.Mt4Bean mt4 = beanSignUpInfo.getData().getMt4();
                             showSucc("你的用户名：" + mt4.getName() +
                                     "\n" + "你的账号：" + mt4.getLogin()
                                     + "\n" + "你的密码：" + mt4.getPassword(), new DialogInterface.OnClickListener() {

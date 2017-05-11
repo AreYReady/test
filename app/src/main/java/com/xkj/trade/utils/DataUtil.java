@@ -3,7 +3,6 @@ package com.xkj.trade.utils;
 import android.util.Log;
 
 import com.xkj.trade.R;
-import com.xkj.trade.base.MyApplication;
 import com.xkj.trade.bean.BeanCurrentServerTime;
 import com.xkj.trade.bean.RealTimeDataList;
 import com.xkj.trade.bean_.BeanAllSymbols;
@@ -161,7 +160,7 @@ public class DataUtil {
 
     public static Map<String, String> postMap() {
         TreeMap<String, String> map = new TreeMap<>();
-        map.put(RequestConstant.API_ID, ACache.get(MyApplication.getInstance().getApplicationContext()).getAsString(RequestConstant.API_ID));
+        map.put(RequestConstant.API_ID, "crm1");
         map.put(RequestConstant.API_TIME, DateUtils.getShowTime(BeanCurrentServerTime.instance.getCurrentServerTime()));
         map.put(RequestConstant.API_TIPS,"zh-cn");
         return map;

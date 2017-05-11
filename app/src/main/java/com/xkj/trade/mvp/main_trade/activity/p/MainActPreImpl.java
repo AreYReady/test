@@ -56,11 +56,10 @@ public class MainActPreImpl implements MainTradeActListener.PreListener {
                 cdt = new CountDownTimer(10000, 10000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
-                        Log.i(TAG, "onTick: ");
                     }
                     @Override
                     public void onFinish() {
-                        Log.i(TAG, "onFinish: ");
+                        Log.i(TAG, "onFinish:定时器刷新用户数据 ");
                         mModelListener.sendUserInfo();
                     }
                 };
