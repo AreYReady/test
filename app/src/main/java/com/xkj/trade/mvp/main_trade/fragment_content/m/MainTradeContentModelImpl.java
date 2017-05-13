@@ -114,16 +114,8 @@ public class MainTradeContentModelImpl implements MainTradeFragListener.MainTrad
         Log.i(TAG, "requestSubSymbolsData: ");
         ChatWebSocket chartWebSocket = ChatWebSocket.getChartWebSocket();
         for (String name : symbolsName) {
-
             if (chartWebSocket != null) {
-                if (subOrCancel)
                     chartWebSocket.sendMessage("{\"msg_type\":1010,\"symbol\":\"" + name + "\"}");
-                else {
-                    //后面这个是为了尾部为USD的，都不取消订阅。
-                    if(!name.substring(name.length()-3,name.length()).equals("USD")) {
-                        chartWebSocket.sendMessage("{\"msg_type\":1020,\"symbol\":\"" + name + "\"}");
-                    }
-                }
             }
         }
     }

@@ -143,7 +143,6 @@ public class FragmentOpenPosition extends BaseFragment {
             if(chartWebSocket!=null){
                 if(symbols.get(bean.getSymbol())==null) {
                     symbols.put(bean.getSymbol(),true);
-                    chartWebSocket.sendMessage("{\"msg_type\":1010,\"symbol\":\"" + bean.getSymbol() + "\"}");
                 }
             }
         }

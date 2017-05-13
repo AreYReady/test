@@ -148,7 +148,6 @@ public class EditPositionFragment extends BaseFragment implements AddSubEditText
             BeanAllSymbols.SymbolPrices symbolPrices = realTimeMap.get(mData.getSymbol());
             setHeader(symbolPrices.getSymbol(),symbolPrices.getAsk(),symbolPrices.getBid());
         }
-        requestSubSymbol();
     }
     @Override
     public void amountChange(String amount) {
@@ -185,12 +184,6 @@ public class EditPositionFragment extends BaseFragment implements AddSubEditText
         }
     }
 
-    private void requestSubSymbol() {
-        ChatWebSocket chartWebSocket = ChatWebSocket.getChartWebSocket();
-        if (chartWebSocket != null) {
-            chartWebSocket.sendMessage("{\"msg_type\":1010,\"symbol\":\"" + mData.getSymbol() + "\"}");
-        }
-    }
     private void enterOrder() {
         map = new TreeMap<>();
         map.put(RequestConstant.LOGIN, AesEncryptionUtil.stringBase64toString(ACache.get(context).getAsString(RequestConstant.ACCOUNT)));

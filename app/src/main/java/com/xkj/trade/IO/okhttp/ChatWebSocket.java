@@ -43,7 +43,6 @@ public class ChatWebSocket  extends WebSocketListener {
         mWebSocket =webSocket;
         BeanUserLoginDataSocket beanUserLoginData = new BeanUserLoginDataSocket(Integer.valueOf(ACache.get(MyApplication.getInstance().getApplicationContext()).getAsString(RequestConstant.ACCOUNT)), AesEncryptionUtil.encrypt(ACache.get(MyApplication.getInstance().getApplicationContext()).getAsString(RequestConstant.LOGIN_PASSWORD)), 9988);
         String s = new Gson().toJson(beanUserLoginData, BeanUserLoginDataSocket.class);
-        Log.i(TAG, "connectSocket: "+s);
         sendMessage(s);
     }
 
@@ -53,6 +52,7 @@ public class ChatWebSocket  extends WebSocketListener {
         if (responseEvent != null) {
             switch (responseEvent.getMsg_type()) {
                 case MessageType.TYPE_BINARY_LOGIN_RESULT://登录结果信息
+                    EventBus.getDefault().post(new NotificationConnectStatus(NotificationConnectStatus.ConnectStatus.YES));
                     Log.i(TAG, "handleResult: 登入" + resultMessage);
                     break;
                 case MessageType.TYPE_BINARY_REAL_TIME_LIST://发送实时数据
@@ -109,7 +109,6 @@ public class ChatWebSocket  extends WebSocketListener {
     public boolean sendMessage(String s){
         if(mWebSocket==null)
             return false;
-        EventBus.getDefault().post(new NotificationConnectStatus(NotificationConnectStatus.ConnectStatus.YES));
         return mWebSocket.send(s);
     }
 

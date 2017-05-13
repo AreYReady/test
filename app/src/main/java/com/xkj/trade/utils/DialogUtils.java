@@ -8,7 +8,7 @@ import com.xkj.trade.R;
 
 /**
  * Created by huangsc on 2017-03-06.
- * TODO:
+ * TODO:dialog的工具类
  */
 
 public  class DialogUtils {

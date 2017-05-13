@@ -149,14 +149,8 @@ public class EditPendingPositionFrament extends BaseFragment implements AddSubEd
             }
         });
         mRivTradeSymbol.setImageResource(DataUtil.getImageId(mData.getSymbol()));
-        requestSubSymbol();
     }
-    private void requestSubSymbol() {
-        ChatWebSocket chartWebSocket = ChatWebSocket.getChartWebSocket();
-            if (chartWebSocket != null) {
-                chartWebSocket.sendMessage("{\"msg_type\":1010,\"symbol\":\"" + mData.getSymbol() + "\"}");
-            }
-    }
+
 
     private void enterOrder() {
         final Map<String, String> map = new TreeMap<>();

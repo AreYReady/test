@@ -122,7 +122,6 @@ public class DeletePositionFragment extends BaseFragment {
             BeanAllSymbols.SymbolPrices symbolPrices = realTimeMap.get(mData.getSymbol());
             setHeader(symbolPrices.getSymbol(),symbolPrices.getAsk(),symbolPrices.getBid());
         }
-        requestSubSymbol();
     }
 
     private void enterOrder() {
@@ -161,12 +160,7 @@ public class DeletePositionFragment extends BaseFragment {
         //发送通知activity关闭
         EventBus.getDefault().post(beanBaseResponse);
     }
-    private void requestSubSymbol() {
-        ChatWebSocket chartWebSocket = ChatWebSocket.getChartWebSocket();
-        if (chartWebSocket != null) {
-            chartWebSocket.sendMessage("{\"msg_type\":1010,\"symbol\":\"" + mData.getSymbol() + "\"}");
-        }
-    }
+
 
     @Override
     protected void initData() {

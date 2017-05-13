@@ -35,14 +35,13 @@ public class MainActPreImpl implements MainTradeActListener.PreListener {
 
     @Override
     public void sendUserInfo() {
-        mModelListener.sendUserInfo();
+        //刷新定时器
+        timeCountDown();
     }
 
     @Override
     public void refreshUserInfo(BeanUserListInfo beanUserListInfo) {
         mViewListener.refreshUserInfo(beanUserListInfo);
-        //刷新定时器
-        timeCountDown();
     }
 
     private void timeCountDown() {
@@ -53,14 +52,15 @@ public class MainActPreImpl implements MainTradeActListener.PreListener {
                 if(cdt!=null){
                     cdt.cancel();
                 }
-                cdt = new CountDownTimer(10000, 10000) {
+                cdt = new CountDownTimer(Integer.MAX_VALUE, 10000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
+                        Log.i(TAG, "onFinish:定时器刷新用户数据 ");
+                        mModelListener.sendUserInfo();
                     }
                     @Override
                     public void onFinish() {
-                        Log.i(TAG, "onFinish:定时器刷新用户数据 ");
-                        mModelListener.sendUserInfo();
+
                     }
                 };
                 cdt.start();

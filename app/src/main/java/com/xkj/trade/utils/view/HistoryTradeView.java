@@ -90,9 +90,8 @@ public class HistoryTradeView extends View {
      * 最高价和最低价的差价
      */
     private double blance;
-    private double lastItemOpenPrice;
     private DrawPriceListener mDrawPriceListener;
-
+    private BeanDrawPriceData mBeanDrawPriceData;
     public HistoryTradeView(Context context) {
         this(context, null);
     }
@@ -110,7 +109,6 @@ public class HistoryTradeView extends View {
         void drawPriceData(List<BeanDrawPriceData> drawPriceData);
     }
 
-    private BeanDrawPriceData mBeanDrawPriceData;
 
     public HistoryTradeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -151,29 +149,6 @@ public class HistoryTradeView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-    private int getMySize(int defaultSize, int measureSpec) {
-        int mySize = defaultSize;
-
-        int mode = MeasureSpec.getMode(measureSpec);
-        int size = MeasureSpec.getSize(measureSpec);
-
-        switch (mode) {
-            case MeasureSpec.UNSPECIFIED: {//如果没有指定大小，就设置为默认大小
-                mySize = defaultSize;
-                break;
-            }
-            case MeasureSpec.AT_MOST: {//如果测量模式是最大取值为size
-                //我们将大小取最大值,你也可以取其他值
-                mySize = size;
-                break;
-            }
-            case MeasureSpec.EXACTLY: {//如果是固定的大小，那就不要去改变它
-                mySize = size;
-                break;
-            }
-        }
-        return mySize;
-    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -248,7 +223,6 @@ public class HistoryTradeView extends View {
         }
     }
 
-
     //画线
     private void drawLine(Canvas canvas) {
         if (data != null) {
@@ -256,14 +230,11 @@ public class HistoryTradeView extends View {
             //注意,这里还缺少划线数都是整数,所以需要计算.曲余数,+100;
             int wholeNumber = (int) (price[1] * Math.pow(10, digits));
             Log.i(TAG, "drawLine: " + data.getBarnum() + " " + ints[1] + " " + ints[0]);
-            double remainder = 0.00000000;
-            if(ints[0]==0){
-                Log.i(TAG, "drawLine: ");
-            }
+
             if(Math.pow(10,digits)==0){
                 Log.i(TAG, "drawLine: ");
             }
-            remainder = ((wholeNumber % ints[0]) / Math.pow(10, digits));
+            double   remainder = ((wholeNumber % ints[0]) / Math.pow(10, digits));
 
             Log.i(TAG, "drawLine:显示出来的数据最大最小值 " + price[1] + "  " + price[0]);
 
@@ -273,8 +244,6 @@ public class HistoryTradeView extends View {
             for (int i = 0; i < ints[1]; i++) {
                 if ((int) ((remainder + ints[0] / Math.pow(10, digits) * i) / unit) < showDataHeight) {
                     int i1 = (int) ((remainder + ints[0] / Math.pow(10, digits) * i) / unit);
-//                    String s = MoneyUtil.moneyFormat(((price[1] - remainder - ints[0] * i) / Math.pow(10, digits)), digits);
-                    String s = String.valueOf((int) (price[1] - remainder - ints[0] / Math.pow(10, digits) * i) / Math.pow(10, digits));
                     canvas.drawLine(showDataLeftX, i1, showDataRightX, i1, mGarkPaint);
                     mBeanDrawPriceData = new BeanDrawPriceData();
                     mBeanDrawPriceData.setPriceY(i1);
@@ -294,7 +263,6 @@ public class HistoryTradeView extends View {
                     if(y<showDataHeight) {
                         mBeanDrawPriceData = new BeanDrawPriceData();
                         mBeanDrawPriceData.setPriceY((int) ((price[1] - realTimePrice) / unit));
-                        String temp;
                         mBeanDrawPriceData.setPriceString(String.valueOf(realTimePrice));
                         mDrawPriceDataList.add(mBeanDrawPriceData);
 
@@ -355,7 +323,7 @@ public class HistoryTradeView extends View {
         }
         price = DataUtil.calcMaxMinPrice(data, digits, startIndex, endIndex);
         if(price[0]==0){
-            Log.i(TAG, "decodeHistoryData: ");
+            Log.i(TAG, "decodeHistoryData: 最大值最小值相等，出错");
         }
         blance = MoneyUtil.subPrice(price[1], price[0]);
         showDataHeight = (getMeasuredHeight() - SystemUtil.dp2pxFloat(mContext, TradeDateConstant.showTimeSpace));
@@ -365,18 +333,16 @@ public class HistoryTradeView extends View {
             e.printStackTrace();
         }
         if(unit==0){
-            Log.i(TAG, "decodeHistoryData: ");
+            Log.i(TAG, "decodeHistoryData: 单位价值空间为0");
         }
         unitDataIndex = ((float) getWidth() / (float) data.getBarnum());
         dataBeginTime = data.getList().get(0).getQuoteTime();
         period = data.getPeriod();
-        lastItemOpenPrice=data.getList().get(data.getBarnum()-1).getOpen();
         if (!isReady)
             isReady = true;
     }
     //组装实时数据。
     BeanDrawRealTimePriceData beanDrawRealTimePriceData;
-    BeanHistory.BeanHistoryData.HistoryItem lastHistoryData;
     double realTimePrice = -1;
 
     public BeanDrawRealTimePriceData refreshRealTimePrice(RealTimeDataList.BeanRealTime beanRealTime) {
